@@ -1,44 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Product.Domain.Core.Domain
 {
+    /// <inheritdoc />
     public abstract class Entity : IEntity
     {
-        public string Id { get; protected set; }
+        /// <inheritdoc />
+        public string Id { get; protected set; } = string.Empty;
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             var compareTo = obj as Entity;
 
-            if (ReferenceEquals(this, compareTo)) return true;
-            if (ReferenceEquals(null, compareTo)) return false;
+            if (ReferenceEquals(this, compareTo))
+            {
+                return true;
+            }
 
-            return Id.Equals(compareTo.Id);
+            return ReferenceEquals(null, compareTo) ? false : Id.Equals(compareTo.Id, StringComparison.InvariantCultureIgnoreCase);
         }
 
+        /// <inheritdoc />
         public static bool operator ==(Entity a, Entity b)
         {
             if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
+            {
                 return true;
+            }
 
-            if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
-                return false;
-
-            return a.Equals(b);
+            return ReferenceEquals(a, null) || ReferenceEquals(b, null) ? false : a.Equals(b);
         }
 
+        /// <inheritdoc />
         public static bool operator !=(Entity a, Entity b)
         {
             return !(a == b);
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             return (GetType().GetHashCode() * 907) + Id.GetHashCode();
         }
 
+        /// <inheritdoc />
         public override string ToString()
         {
             return GetType().Name + " [Id=" + Id + "]";

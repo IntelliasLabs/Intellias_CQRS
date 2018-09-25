@@ -1,15 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Product.Domain.Core.Events
 {
+    /// <summary>
+    /// Event storage abstraction
+    /// </summary>
     public interface IEventStore
     {
+        /// <summary>
+        /// Store events
+        /// </summary>
+        /// <param name="events">Events</param>
+        /// <returns>Awaiter</returns>
         Task Save(IEnumerable<IEvent> events);
 
-        Task<IEnumerable<IEvent>> Get(Guid aggregateId, int version);
+        /// <summary>
+        /// Get events for specified version of AR
+        /// </summary>
+        /// <param name="aggregateId">ARID</param>
+        /// <param name="version">ARV</param>
+        /// <returns>Events</returns>
+        Task<IEnumerable<IEvent>> Get(string aggregateId, int version);
     }
 }

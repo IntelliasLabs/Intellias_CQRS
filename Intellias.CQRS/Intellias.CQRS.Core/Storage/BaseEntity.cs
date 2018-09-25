@@ -1,12 +1,13 @@
 ﻿using Intellias.CQRS.Core.Messages;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Intellias.CQRS.Core.Storage
 {
+    /// <summary>
+    /// Base storage entity
+    /// </summary>
     public abstract class BaseEntity
     {
         /// <summary>
@@ -17,37 +18,41 @@ namespace Intellias.CQRS.Core.Storage
         [JsonProperty("id")]
         public virtual string Id { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Partition Key
+        /// </summary>
         [DataType(DataType.Text)]
         [JsonProperty("partitionKey")]
         public string PartitionKey { get; set; } = string.Empty;
 
+        /// <summary>
+        /// DateTime of creation
+        /// </summary>
         [Required]
         [DataType(DataType.DateTime)]
         [JsonProperty("created")]
-        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Created { get; set; } = DateTime.UtcNow;
 
+        /// <summary>
+        /// DateTime of modification
+        /// </summary>
         [DataType(DataType.DateTime)]
         [JsonProperty("modified")]
-        public DateTime Modified { get; set; } = DateTime.Now;
+        public DateTime Modified { get; set; } = DateTime.UtcNow;
 
-        [DataType(DataType.Text)]
-        [JsonProperty("createdBy")]
-        public string CreatedBy { get; set; } = string.Empty;
-
-        [DataType(DataType.Text)]
-        [JsonProperty("modifiedBy")]
-        public string ModifiedBy { get; set; } = string.Empty;
-
+        /// <inheritdoc />
         public static bool operator ==(BaseEntity x, BaseEntity y)
         {
             return Equals(x, y);
         }
 
+        /// <inheritdoc />
         public static bool operator !=(BaseEntity x, BaseEntity y)
         {
             return !(x == y);
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             return Equals(obj as BaseEntity);
@@ -63,6 +68,7 @@ namespace Intellias.CQRS.Core.Storage
             return GetType();
         }
 
+        /// <inheritdoc />
         public virtual bool Equals(BaseEntity other)
         {
             if (other == null)
@@ -88,6 +94,7 @@ namespace Intellias.CQRS.Core.Storage
             return false;
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             return Unified.Decode(Id).GetHashCode();

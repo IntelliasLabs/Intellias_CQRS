@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 
 namespace Product.Domain.Core.Events
 {
+    /// <summary>
+    /// Event handler abstraction
+    /// </summary>
+    /// <typeparam name="T">Type of event</typeparam>
     public interface IEventHandler<T> : IHandler<T, IEventResult> where T : IEvent
     {
         /// <summary>
