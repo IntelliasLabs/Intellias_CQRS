@@ -1,4 +1,4 @@
-﻿namespace Product.Domain.Core.Domain
+﻿namespace Intellias.CQRS.Core.Domain
 {
     /// <inheritdoc />
     public abstract class ValueObject<T> where T : ValueObject<T>

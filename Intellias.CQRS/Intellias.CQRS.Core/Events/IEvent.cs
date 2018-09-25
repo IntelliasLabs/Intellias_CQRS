@@ -1,7 +1,7 @@
-﻿using Product.Domain.Core.Messages;
-using System;
+﻿using System;
+using Intellias.CQRS.Core.Messages;
 
-namespace Product.Domain.Core.Events
+namespace Intellias.CQRS.Core.Events
 {
     /// <summary>
     /// Domain event interface

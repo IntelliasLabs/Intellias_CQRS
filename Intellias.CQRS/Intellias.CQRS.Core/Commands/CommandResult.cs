@@ -1,4 +1,4 @@
-﻿namespace Product.Domain.Core.Commands
+﻿namespace Intellias.CQRS.Core.Commands
 {
     /// <inheritdoc />
     public class CommandResult : ICommandResult

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Product.Domain.Core.Events
+namespace Intellias.CQRS.Core.Events
 {
     /// <inheritdoc />
     public abstract class Event : IEvent

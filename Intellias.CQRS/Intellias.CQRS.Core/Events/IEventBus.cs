@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Product.Domain.Core.Events
+namespace Intellias.CQRS.Core.Events
 {
     /// <summary>
     /// Abstraction of Event Bus

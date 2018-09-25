@@ -1,15 +1,13 @@
 ﻿using System.Threading.Tasks;
-using Product.Domain.Core.Messages;
+using Intellias.CQRS.Core.Messages;
 
-namespace Product.Domain.Core.Commands
+namespace Intellias.CQRS.Core.Commands
 {
-#pragma warning disable SA1629 // Documentation text should end with a period
-                              /// <summary>
-                              /// ICommandHandler interface
-                              /// </summary>
-                              /// <typeparam name="T"></typeparam>
+    /// <summary>
+    /// Command handler abstraction
+    /// </summary>
+    /// <typeparam name="T">Type of command</typeparam>
     public interface ICommandHandler<T> : IHandler<T, ICommandResult>
-#pragma warning restore SA1629 // Documentation text should end with a period
         where T : ICommand
     {
         /// <summary>

@@ -1,11 +1,13 @@
-﻿using Product.Domain.Core.Domain.Exceptions;
-using Product.Domain.Core.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Intellias.CQRS.Core.Domain.Exceptions;
+using Intellias.CQRS.Core.Events;
 
-namespace Product.Domain.Core.Domain
+namespace Intellias.CQRS.Core.Domain
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Base AR abstraction
+    /// </summary>
     public abstract class AggregateRoot : Entity, IAggregateRoot
     {
         private readonly List<Event> _changes = new List<Event>();
@@ -108,7 +110,8 @@ namespace Product.Domain.Core.Domain
         /// <param name="event">Event</param>
         protected virtual void Apply(Event @event)
         {
-            Apply(@event);
+            //TODO: apply event here
+            //Apply(@event);
         }
     }
 }

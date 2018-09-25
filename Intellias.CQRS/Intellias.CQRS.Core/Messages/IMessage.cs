@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Product.Domain.Core.Messages
+﻿namespace Intellias.CQRS.Core.Messages
 {
     /// <summary>
     /// Represents system cross-domain message
