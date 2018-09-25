@@ -8,6 +8,9 @@ namespace Product.Domain.Core.Events
     /// </summary>
     public interface IEvent : IMessage
     {
+        /// <summary>
+        /// Version of AR that generated an event
+        /// </summary>
         int Version { get; set; }
 
         /// <summary>

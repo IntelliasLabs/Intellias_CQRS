@@ -20,13 +20,20 @@ namespace Intellias.CQRS.Core.Messages
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'
         };
 
-        // Generate x64 FNV hash based on random GUID
+        /// <summary>
+        /// Generate x64 FNV hash based on random GUID
+        /// </summary>
+        /// <returns>Guid based FNV hash</returns>
         public static ulong NewHash()
         {
             return NewHash(Guid.NewGuid().ToByteArray());
         }
 
-        // Generate x64 FNV hash based on data bytes
+        /// <summary>
+        /// Generate x64 FNV hash based on data bytes
+        /// </summary>
+        /// <param name="bytes">Source data</param>
+        /// <returns>FNV hash</returns>
         public static ulong NewHash(byte[] bytes)
         {
             var hash = Prime; // fnv prime
@@ -40,32 +47,43 @@ namespace Intellias.CQRS.Core.Messages
             return hash;
         }
 
-        // Generate random x32 hex
+        /// <summary>
+        /// Generate random x32 hex
+        /// </summary>
+        /// <returns>x32 hex based on guid</returns>
         public static string NewCode()
         {
             return NewCode(NewHash());
         }
 
-        // Generate x32 hex from number
-        public static string NewCode(ulong n)
+        /// <summary>
+        /// Generate x32 hex from number
+        /// </summary>
+        /// <param name="hash">hash</param>
+        /// <returns></returns>
+        public static string NewCode(ulong hash)
         {
             var len = 13;
             var ch = new char[len--];
             for (var i = len; i >= 0; i--)
             {
-                var inx = (byte)((uint)(n >> (5 * i)) & 31);
+                var inx = (byte)((uint)(hash >> (5 * i)) & 31);
                 ch[len - i] = symbols[inx];
             }
 
             return new string(ch);
         }
 
-        // Decode x32 hex to number
+        /// <summary>
+        /// Decode x32 hex to number
+        /// </summary>
+        /// <param name="code">Unified code</param>
+        /// <returns>FNV hash</returns>
         public static ulong Decode(string code)
         {
             var shift = 5; // shift for x32 dimensions
             ulong hash = 0;
-            for (int i = 0; i < code.Length; i++)
+            for (var i = 0; i < code.Length; i++)
             {
                 var index = (ulong)Array.IndexOf(symbols, code[i]);
                 var nuim = index << ((code.Length - 1 - i) * shift); // convert dimension to number and add

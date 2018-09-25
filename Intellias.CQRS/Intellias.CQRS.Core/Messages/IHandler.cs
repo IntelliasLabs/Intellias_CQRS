@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Product.Domain.Core.Messages
 {
@@ -9,6 +6,7 @@ namespace Product.Domain.Core.Messages
     /// Defines a handler for a message.
     /// </summary>
     /// <typeparam name="T">Message type being handled</typeparam>
+    /// <typeparam name="TR">Execution result type</typeparam>
     public interface IHandler<T, TR> where T : IMessage where TR : IExecutionResult
     {
         /// <summary>

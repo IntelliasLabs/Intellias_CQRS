@@ -5,18 +5,20 @@ using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Intellias.CQRS.Storage.Azure
 {
+    /// <inheritdoc />
     public class TableStorage<T> : IStorage<T> where T : BaseEntity, new()
     {
         private readonly CloudTableClient client;
         private readonly CloudTable table;
 
+        /// <inheritdoc />
         public TableStorage(StorageCredentials creds)
         {
             var account = new CloudStorageAccount(creds, true);
@@ -36,6 +38,7 @@ namespace Intellias.CQRS.Storage.Azure
             return (response.Result as StorageEntity).GetValue<T>();
         }
 
+        /// <inheritdoc />
         public async Task<T> CreateAsync(T entity)
         {
             if (entity == null)
@@ -56,6 +59,7 @@ namespace Intellias.CQRS.Storage.Azure
             return GetResult(response);
         }
 
+        /// <inheritdoc />
         public async Task<T> DeleteAsync(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -72,11 +76,13 @@ namespace Intellias.CQRS.Storage.Azure
             return GetResult(response);
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
 
         }
 
+        /// <inheritdoc />
         public async Task<T> OneAsync(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -84,7 +90,7 @@ namespace Intellias.CQRS.Storage.Azure
                 throw new ArgumentNullException(nameof(id));
             }
 
-            var op = TableOperation.Retrieve<StorageEntity>(id.ToUpperInvariant().First().ToString(), id.ToUpperInvariant());
+            var op = TableOperation.Retrieve<StorageEntity>(id.ToUpperInvariant().First().ToString(CultureInfo.InvariantCulture), id.ToUpperInvariant());
 
             // Execute the retrieve operation.
             var response = await table.ExecuteAsync(op);
@@ -92,6 +98,7 @@ namespace Intellias.CQRS.Storage.Azure
             return GetResult(response);
         }
 
+        /// <inheritdoc />
         public async Task<IQueryable<T>> QueryAsync(Expression<Func<T, bool>> predicate = null)
         {
             // Construct the query operation for all customer entities where PartitionKey="Smith".
@@ -111,6 +118,7 @@ namespace Intellias.CQRS.Storage.Azure
             return items.AsQueryable();
         }
 
+        /// <inheritdoc />
         public async Task<T> UpdateAsync(T entity)
         {
             if (entity == null)

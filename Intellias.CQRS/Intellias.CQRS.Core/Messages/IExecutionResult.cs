@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Product.Domain.Core.Messages
+﻿namespace Product.Domain.Core.Messages
 {
+    /// <summary>
+    /// Result of handler execution
+    /// </summary>
     public interface IExecutionResult
     {
     }

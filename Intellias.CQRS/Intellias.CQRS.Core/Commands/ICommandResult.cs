@@ -1,10 +1,10 @@
 ﻿using Product.Domain.Core.Messages;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Product.Domain.Core.Commands
 {
+    /// <summary>
+    /// Result of execution command handler
+    /// </summary>
     public interface ICommandResult : IExecutionResult
     {
     }
