@@ -96,7 +96,7 @@ namespace Intellias.CQRS.Storage.Azure
         {
             // Construct the query operation for all customer entities where PartitionKey="Smith".
             var query = new TableQuery<StorageEntity>();
-            // query.Where() use predicate here
+
             TableContinuationToken token = null;
             var items = new List<T>();
 
