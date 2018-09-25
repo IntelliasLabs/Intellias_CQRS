@@ -108,7 +108,8 @@ namespace Intellias.CQRS.Core.Domain
         /// <param name="event">Event</param>
         protected virtual void Apply(Event @event)
         {
-            Apply(@event);
+            //TODO: apply event here
+            //Apply(@event);
         }
     }
 }

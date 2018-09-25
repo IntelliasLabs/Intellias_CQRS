@@ -15,14 +15,13 @@ namespace Intellias.CQRS.Storage.Azure
     /// <inheritdoc />
     public class TableStorage<T> : IStorage<T> where T : BaseEntity, new()
     {
-        private readonly CloudTableClient client;
         private readonly CloudTable table;
 
         /// <inheritdoc />
         public TableStorage(StorageCredentials creds)
         {
             var account = new CloudStorageAccount(creds, true);
-            client = account.CreateCloudTableClient();
+            var client = account.CreateCloudTableClient();
             table = client.GetTableReference(typeof(T).Name);
 
             // Create the CloudTable if it does not exist
@@ -35,7 +34,7 @@ namespace Intellias.CQRS.Storage.Azure
             {
                 return null;
             }
-            return (response.Result as StorageEntity).GetValue<T>();
+            return ((StorageEntity) response.Result).GetValue<T>();
         }
 
         /// <inheritdoc />
