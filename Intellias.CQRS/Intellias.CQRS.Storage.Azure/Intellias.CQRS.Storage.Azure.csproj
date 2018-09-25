@@ -12,4 +12,7 @@
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\Intellias.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
 </Project>
