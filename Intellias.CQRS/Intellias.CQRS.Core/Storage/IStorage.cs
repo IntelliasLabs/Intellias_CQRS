@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -45,6 +46,6 @@ namespace Intellias.CQRS.Core.Storage
         /// </summary>
         /// <param name="predicate">Query filtering predicate for indexed properties</param>
         /// <returns>Data query</returns>
-        Task<IQueryable<T>> QueryAsync(Expression<Func<T, bool>> predicate = null);
+        Task<IReadOnlyCollection<T>> QueryAsync(Expression<Func<T, bool>> predicate = null);
     }
 }

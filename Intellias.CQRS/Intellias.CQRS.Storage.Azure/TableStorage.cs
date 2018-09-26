@@ -98,7 +98,7 @@ namespace Intellias.CQRS.Storage.Azure
         }
 
         /// <inheritdoc />
-        public async Task<IQueryable<T>> QueryAsync(Expression<Func<T, bool>> predicate = null)
+        public async Task<IReadOnlyCollection<T>> QueryAsync(Expression<Func<T, bool>> predicate = null)
         {
             // Construct the query operation for all customer entities where PartitionKey="Smith".
             var query = new TableQuery<StorageEntity>();
@@ -114,7 +114,7 @@ namespace Intellias.CQRS.Storage.Azure
                 items.AddRange(segment.Results.Select(x => x.GetValue<T>()));
             } while (token != null);
 
-            return items.AsQueryable();
+            return items;
         }
 
         /// <inheritdoc />
