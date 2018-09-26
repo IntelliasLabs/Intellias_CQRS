@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Product.Domain.Core.Commands
+namespace Intellias.CQRS.Core.Commands
 {
     /// <summary>
     /// Command bus

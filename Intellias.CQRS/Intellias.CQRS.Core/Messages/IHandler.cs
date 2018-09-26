@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Product.Domain.Core.Messages
+namespace Intellias.CQRS.Core.Messages
 {
     /// <summary>
     /// Defines a handler for a message.

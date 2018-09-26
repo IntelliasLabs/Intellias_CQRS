@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Product.Domain.Core.Domain
+namespace Intellias.CQRS.Core.Domain
 {
     /// <inheritdoc />
     public abstract class Entity : IEntity

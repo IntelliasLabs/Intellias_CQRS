@@ -1,6 +1,6 @@
-﻿using Product.Domain.Core.Messages;
+﻿using Intellias.CQRS.Core.Messages;
 
-namespace Product.Domain.Core.Events
+namespace Intellias.CQRS.Core.Events
 {
     /// <summary>
     /// Result of event handler execution
