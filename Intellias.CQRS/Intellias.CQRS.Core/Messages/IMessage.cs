@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Product.Domain.Core.Messages
+﻿namespace Intellias.CQRS.Core.Messages
 {
     /// <summary>
     /// Represents system cross-domain message
@@ -10,6 +8,6 @@ namespace Product.Domain.Core.Messages
         /// <summary>
         /// Unique system message identifier
         /// </summary>
-        string Id { get; }
+        string AggregateRootId { get; }
     }
 }

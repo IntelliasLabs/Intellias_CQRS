@@ -1,4 +1,4 @@
-﻿namespace Product.Domain.Core.Domain
+﻿namespace Intellias.CQRS.Core.Domain
 {
     /// <summary>
     /// Entity

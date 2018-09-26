@@ -1,4 +1,4 @@
-﻿namespace Product.Domain.Core.Messages
+﻿namespace Intellias.CQRS.Core.Messages
 {
     /// <summary>
     /// Result of handler execution

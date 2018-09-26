@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Product.Domain.Core.Events
+namespace Intellias.CQRS.Core.Events
 {
     /// <summary>
     /// Abstraction of Event Bus
@@ -13,6 +13,6 @@ namespace Product.Domain.Core.Events
         /// <typeparam name="T">Type of event</typeparam>
         /// <param name="event">Event instance</param>
         /// <returns>Task</returns>
-        Task Publish<T>(T @event) where T : IEvent;
+        Task PublishAsync<T>(T @event) where T : IEvent;
     }
 }

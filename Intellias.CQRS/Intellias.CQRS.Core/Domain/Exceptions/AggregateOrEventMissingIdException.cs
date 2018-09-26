@@ -1,6 +1,6 @@
 using System;
 
-namespace Product.Domain.Core.Domain.Exceptions
+namespace Intellias.CQRS.Core.Domain.Exceptions
 {
     /// <inheritdoc />
     public class AggregateOrEventMissingIdException : Exception

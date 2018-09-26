@@ -1,4 +1,4 @@
-﻿namespace Product.Domain.Core.Commands
+﻿namespace Intellias.CQRS.Core.Commands
 {
     /// <inheritdoc />
     public abstract class Command : ICommand
@@ -7,6 +7,6 @@
         public int ExpectedVersion { get; set; }
 
         /// <inheritdoc />
-        public virtual string Id { get; set; }
+        public virtual string AggregateRootId { get; set; }
     }
 }

@@ -1,7 +1,8 @@
-﻿using Product.Domain.Core.Messages;
+﻿using Intellias.CQRS.Core.Messages;
 
-namespace Product.Domain.Core.Commands
+namespace Intellias.CQRS.Core.Commands
 {
+    /// <inheritdoc />
     /// <summary>
     /// Result of execution command handler
     /// </summary>
