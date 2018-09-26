@@ -1,5 +1,6 @@
 ﻿namespace Intellias.CQRS.Core.Domain
 {
+    /// <inheritdoc />
     /// <summary>
     /// AR abstraction
     /// </summary>

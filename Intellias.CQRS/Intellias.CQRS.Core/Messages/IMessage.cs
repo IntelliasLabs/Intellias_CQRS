@@ -8,6 +8,6 @@
         /// <summary>
         /// Unique system message identifier
         /// </summary>
-        string Id { get; }
+        string AggregateRootId { get; }
     }
 }

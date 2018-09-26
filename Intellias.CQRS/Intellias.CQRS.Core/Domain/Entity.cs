@@ -1,12 +1,13 @@
 ﻿using System;
+using Intellias.CQRS.Core.Storage;
 
 namespace Intellias.CQRS.Core.Domain
 {
     /// <inheritdoc />
-    public abstract class Entity : IEntity
+    public abstract class Entity : BaseEntity, IEntity
     {
         /// <inheritdoc />
-        public string Id { get; protected set; } = string.Empty;
+        public override string Id { get; set; } = string.Empty;
 
         /// <inheritdoc />
         public override bool Equals(object obj)
@@ -18,7 +19,9 @@ namespace Intellias.CQRS.Core.Domain
                 return true;
             }
 
-            return ReferenceEquals(null, compareTo) ? false : Id.Equals(compareTo.Id, StringComparison.InvariantCultureIgnoreCase);
+            return ReferenceEquals(null, compareTo) 
+                ? false 
+                : Id.Equals(compareTo.Id, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <inheritdoc />

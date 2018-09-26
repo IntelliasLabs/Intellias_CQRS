@@ -5,9 +5,7 @@ using Intellias.CQRS.Core.Events;
 
 namespace Intellias.CQRS.Core.Domain
 {
-    /// <summary>
-    /// Base AR abstraction
-    /// </summary>
+    /// <inheritdoc cref="IAggregateRoot" />
     public abstract class AggregateRoot : Entity, IAggregateRoot
     {
         private readonly List<Event> _changes = new List<Event>();
@@ -39,13 +37,13 @@ namespace Intellias.CQRS.Core.Domain
                 var i = 0;
                 foreach (var @event in changes)
                 {
-                    if (string.IsNullOrWhiteSpace(@event.Id) && string.IsNullOrWhiteSpace(Id))
+                    if (string.IsNullOrWhiteSpace(@event.AggregateRootId) && string.IsNullOrWhiteSpace(Id))
                     {
                         throw new AggregateOrEventMissingIdException(GetType(), @event.GetType());
                     }
-                    if (string.IsNullOrWhiteSpace(@event.Id))
+                    if (string.IsNullOrWhiteSpace(@event.AggregateRootId))
                     {
-                        @event.Id = Id;
+                        @event.AggregateRootId = Id;
                     }
                     i++;
                     @event.Version = Version + i;
@@ -67,7 +65,7 @@ namespace Intellias.CQRS.Core.Domain
             {
                 if (e.Version != Version + 1)
                 {
-                    throw new EventsOutOfOrderException(e.Id);
+                    throw new EventsOutOfOrderException(e.AggregateRootId);
                 }
                 ApplyChange(e, false);
             }
@@ -98,7 +96,7 @@ namespace Intellias.CQRS.Core.Domain
                 }
                 else
                 {
-                    Id = @event.Id;
+                    Id = @event.AggregateRootId;
                     Version++;
                 }
             }

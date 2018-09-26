@@ -2,6 +2,7 @@
 
 namespace Intellias.CQRS.Core.Commands
 {
+    /// <inheritdoc />
     /// <summary>
     /// Domain command interface
     /// </summary>

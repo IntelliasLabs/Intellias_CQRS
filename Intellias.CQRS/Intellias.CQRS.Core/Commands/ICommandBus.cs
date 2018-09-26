@@ -13,6 +13,6 @@ namespace Intellias.CQRS.Core.Commands
         /// <typeparam name="T">Type of command</typeparam>
         /// <param name="command">Command instance</param>
         /// <returns>Result of command</returns>
-        Task<CommandResult> Send<T>(T command) where T : ICommand;
+        Task<CommandResult> SendAsync<T>(T command) where T : ICommand;
     }
 }

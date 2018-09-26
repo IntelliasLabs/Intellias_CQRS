@@ -13,6 +13,6 @@ namespace Intellias.CQRS.Core.Events
         /// <typeparam name="T">Type of event</typeparam>
         /// <param name="event">Event instance</param>
         /// <returns>Task</returns>
-        Task Publish<T>(T @event) where T : IEvent;
+        Task PublishAsync<T>(T @event) where T : IEvent;
     }
 }
