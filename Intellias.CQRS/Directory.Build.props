@@ -8,10 +8,10 @@
   <PropertyGroup Label="Common properties">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>$(SolutionDir)\Intellias.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Intellias.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup Label="StyleCop config">    
-     <AdditionalFiles Include="$(SolutionDir)\stylecop.json" Link="stylecop.json" />  
+     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />  
   </ItemGroup>
   <ItemGroup Label="Common packages">
     <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.6.1" />
