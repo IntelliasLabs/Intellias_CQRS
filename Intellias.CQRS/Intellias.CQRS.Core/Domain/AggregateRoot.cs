@@ -1,115 +1,104 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Domain
 {
-    /// <inheritdoc cref="IAggregateRoot" />
-    public abstract class AggregateRoot : Entity, IAggregateRoot
+    /// <inheritdoc />
+    public class AggregateRoot : IAggregateRoot
     {
-        private readonly List<Event> _changes = new List<Event>();
+
+        #region Private members
+
+        
+        private readonly List<IEvent> _pendingEvents = new List<IEvent>();
+        private readonly Dictionary<Type, Action<IEvent>> _handlers = new Dictionary<Type, Action<IEvent>>();
 
         /// <inheritdoc />
-        public int Version { get; protected set; }
+        public int Version { get; private set; }
+
+
+        #endregion
+
+        #region Public members
+
+
+        /// <inheritdoc />
+        public string Id { get; }
+
+        /// <inheritdoc />
+        public ReadOnlyCollection<IEvent> Events => _pendingEvents.AsReadOnly();
+
+
+        #endregion
+
+        #region Constructors
+
 
         /// <summary>
-        /// Get uncommited changes to AR store
+        /// Call to empty constructor assembles brand-new Aggregate-root entity
         /// </summary>
-        /// <returns></returns>
-        public Event[] GetUncommittedChanges()
+        protected AggregateRoot()
         {
-            lock (_changes)
-            {
-                return _changes.ToArray();
-            }
+            Id = Unified.NewCode();
         }
 
         /// <summary>
-        /// Flush changes
+        /// Creates an existing aggregate-root
         /// </summary>
-        /// <returns></returns>
-        public Event[] FlushUncommitedChanges()
+        /// <param name="id"></param>
+        protected AggregateRoot(string id)
         {
-            lock (_changes)
+            if (string.IsNullOrEmpty(id))
             {
-                var changes = _changes.ToArray();
-                var i = 0;
-                foreach (var @event in changes)
-                {
-                    if (string.IsNullOrWhiteSpace(@event.AggregateRootId) && string.IsNullOrWhiteSpace(Id))
-                    {
-                        throw new AggregateOrEventMissingIdException(GetType(), @event.GetType());
-                    }
-                    if (string.IsNullOrWhiteSpace(@event.AggregateRootId))
-                    {
-                        @event.AggregateRootId = Id;
-                    }
-                    i++;
-                    @event.Version = Version + i;
-                    @event.Created = DateTime.UtcNow;
-                }
-                Version = Version + _changes.Count;
-                _changes.Clear();
-                return changes;
+                id = Unified.NewCode();
             }
-        }
 
-        /// <summary>
-        /// Load event history
-        /// </summary>
-        /// <param name="history"></param>
-        public void LoadFromHistory(IEnumerable<Event> history)
+            Id = id;
+        }        
+
+
+        #endregion
+
+
+
+     
+        /// <inheritdoc />
+        public void LoadFromHistory(IEnumerable<IEvent> pastEvents)
         {
-            foreach (var e in history)
+            foreach (var e in pastEvents.OrderBy(e=>e.Version))
             {
-                if (e.Version != Version + 1)
+                if (e.Version != ++Version)
                 {
                     throw new EventsOutOfOrderException(e.AggregateRootId);
                 }
-                ApplyChange(e, false);
+                _handlers[e.GetType()].Invoke(e);
             }
+        }
+
+
+        /// <summary>
+        /// Configures a handler for an event. 
+        /// </summary>
+        protected void Handles<TEvent>(Action<TEvent> handler)
+            where TEvent : IEvent
+        {
+            _handlers.Add(typeof(TEvent), @event => handler((TEvent)@event));
         }
 
         /// <summary>
         /// Apply an event
         /// </summary>
         /// <param name="event">Event</param>
-        protected void ApplyChange(Event @event)
+        protected void ApplyChange(IEvent @event)
         {
-            ApplyChange(@event, true);
-        }
-
-        /// <summary>
-        /// Apply new event
-        /// </summary>
-        /// <param name="event">Event</param>
-        /// <param name="isNew">is new?</param>
-        private void ApplyChange(Event @event, bool isNew)
-        {
-            lock (_changes)
-            {
-                Apply(@event);
-                if (isNew)
-                {
-                    _changes.Add(@event);
-                }
-                else
-                {
-                    Id = @event.AggregateRootId;
-                    Version++;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Apply event
-        /// </summary>
-        /// <param name="event">Event</param>
-        protected virtual void Apply(Event @event)
-        {
-            //TODO: apply event here
-            //Apply(@event);
+            @event.Version = ++Version;
+            _handlers[@event.GetType()].Invoke(@event);
+            _pendingEvents.Add(@event);
         }
     }
 }
