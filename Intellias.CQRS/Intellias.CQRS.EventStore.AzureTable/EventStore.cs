@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
+using Intellias.CQRS.EventStore.AzureTable.Extensions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
@@ -43,15 +43,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
         {
             await Task.WhenAll(entity.Events
                 .Select(e => _eventTable.ExecuteAsync(
-                    TableOperation.Insert(
-                        new EventStoreItem
-                        {
-                            PartitionKey = entity.Id,
-                            RowKey = Unified.NewCode(),
-                            Data = JsonConvert.SerializeObject(e, Formatting.Indented),
-                            EventType = e.GetType().AssemblyQualifiedName,
-                            ETag = "*"
-                        }))));
+                    TableOperation.Insert(e.ToStoreItem()))));
         }
 
         /// <inheritdoc />

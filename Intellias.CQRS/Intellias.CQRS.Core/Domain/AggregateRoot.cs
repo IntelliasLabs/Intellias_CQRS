@@ -15,8 +15,8 @@ namespace Intellias.CQRS.Core.Domain
         #region Private members
 
         
-        private readonly List<IEvent> _pendingEvents = new List<IEvent>();
-        private readonly Dictionary<Type, Action<IEvent>> _handlers = new Dictionary<Type, Action<IEvent>>();
+        private readonly List<IEvent> pendingEvents = new List<IEvent>();
+        private readonly Dictionary<Type, Action<IEvent>> handlers = new Dictionary<Type, Action<IEvent>>();
 
         /// <inheritdoc />
         public int Version { get; private set; }
@@ -31,7 +31,7 @@ namespace Intellias.CQRS.Core.Domain
         public string Id { get; }
 
         /// <inheritdoc />
-        public ReadOnlyCollection<IEvent> Events => _pendingEvents.AsReadOnly();
+        public ReadOnlyCollection<IEvent> Events => pendingEvents.AsReadOnly();
 
 
         #endregion
@@ -76,7 +76,7 @@ namespace Intellias.CQRS.Core.Domain
                 {
                     throw new EventsOutOfOrderException(e.AggregateRootId);
                 }
-                _handlers[e.GetType()].Invoke(e);
+                handlers[e.GetType()].Invoke(e);
             }
         }
 
@@ -87,7 +87,7 @@ namespace Intellias.CQRS.Core.Domain
         protected void Handles<TEvent>(Action<TEvent> handler)
             where TEvent : IEvent
         {
-            _handlers.Add(typeof(TEvent), @event => handler((TEvent)@event));
+            handlers.Add(typeof(TEvent), @event => handler((TEvent)@event));
         }
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace Intellias.CQRS.Core.Domain
         protected void ApplyChange(IEvent @event)
         {
             @event.Version = ++Version;
-            _handlers[@event.GetType()].Invoke(@event);
-            _pendingEvents.Add(@event);
+            handlers[@event.GetType()].Invoke(@event);
+            pendingEvents.Add(@event);
         }
     }
 }
