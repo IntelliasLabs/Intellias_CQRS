@@ -15,9 +15,8 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static EventStoreItem ToStoreItem(this IEvent item)
-        {
-            return new EventStoreItem
+        public static EventStoreItem ToStoreItem(this IEvent item) => 
+            new EventStoreItem
             {
                 PartitionKey = item.AggregateRootId,
                 RowKey = Unified.NewCode(),
@@ -25,6 +24,5 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
                 EventType = item.GetType().AssemblyQualifiedName,
                 ETag = "*"
             };
-        }
     }
 }

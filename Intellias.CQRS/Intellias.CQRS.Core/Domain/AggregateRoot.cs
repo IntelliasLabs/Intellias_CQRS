@@ -15,11 +15,10 @@ namespace Intellias.CQRS.Core.Domain
         #region Private members
 
         
+
         private readonly List<IEvent> pendingEvents = new List<IEvent>();
         private readonly Dictionary<Type, Action<IEvent>> handlers = new Dictionary<Type, Action<IEvent>>();
 
-        /// <inheritdoc />
-        public int Version { get; private set; }
 
 
         #endregion
@@ -29,7 +28,8 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <inheritdoc />
         public string Id { get; }
-
+        /// <inheritdoc />
+        public int Version { get; private set; }
         /// <inheritdoc />
         public ReadOnlyCollection<IEvent> Events => pendingEvents.AsReadOnly();
 
