@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
@@ -8,20 +9,34 @@ using Intellias.CQRS.Core.Messages;
 namespace Intellias.CQRS.Core.Domain
 {
     /// <inheritdoc />
-    public abstract class AggregateRoot : IAggregateRoot
+    public class AggregateRoot : IAggregateRoot
     {
-        /// <inheritdoc />
-        public string Id { get; set; }
-        /// <inheritdoc />
-        public int Version { get; protected set; }
 
+        #region Private members
 
+        
         private readonly List<IEvent> _pendingEvents = new List<IEvent>();
+        private readonly Dictionary<Type, Action<IEvent>> _handlers = new Dictionary<Type, Action<IEvent>>();
+
+        /// <inheritdoc />
+        public int Version { get; private set; }
+
+
+        #endregion
+
+        #region Public members
+
+
+        /// <inheritdoc />
+        public string Id { get; }
 
         /// <inheritdoc />
         public ReadOnlyCollection<IEvent> Events => _pendingEvents.AsReadOnly();
 
-        private readonly Dictionary<Type, Action<IEvent>> _handlers = new Dictionary<Type, Action<IEvent>>();
+
+        #endregion
+
+        #region Constructors
 
 
         /// <summary>
@@ -38,20 +53,26 @@ namespace Intellias.CQRS.Core.Domain
         /// <param name="id"></param>
         protected AggregateRoot(string id)
         {
-            if (string.IsNullOrEmpty(Id))
+            if (string.IsNullOrEmpty(id))
             {
                 id = Unified.NewCode();
             }
 
             Id = id;
-        }
+        }        
 
+
+        #endregion
+
+
+
+     
         /// <inheritdoc />
         public void LoadFromHistory(IEnumerable<IEvent> pastEvents)
         {
-            foreach (var e in pastEvents)
+            foreach (var e in pastEvents.OrderBy(e=>e.Version))
             {
-                if (e.Version != Version++)
+                if (e.Version != ++Version)
                 {
                     throw new EventsOutOfOrderException(e.AggregateRootId);
                 }

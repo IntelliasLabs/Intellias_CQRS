@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Domain;
+using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
@@ -40,21 +41,17 @@ namespace Intellias.CQRS.EventStore.AzureTable
         /// <inheritdoc />
         public async Task SaveAsync(IAggregateRoot entity)
         {
-            var items = entity.Events
-                .Select(e => new EventStoreItem
-                {
-                    PartitionKey = e.AggregateRootId,
-                    RowKey = Unified.NewCode(),
-                    Data = JsonConvert.SerializeObject(e, Formatting.Indented),
-                    EventType = e.GetType().Name,
-                    ETag = "*"
-                });
-
-            foreach (var item in items)
-            {
-                var operation = TableOperation.Insert(item);
-                await _eventTable.ExecuteAsync(operation);
-            }
+            await Task.WhenAll(entity.Events
+                .Select(e => _eventTable.ExecuteAsync(
+                    TableOperation.Insert(
+                        new EventStoreItem
+                        {
+                            PartitionKey = entity.Id,
+                            RowKey = Unified.NewCode(),
+                            Data = JsonConvert.SerializeObject(e, Formatting.Indented),
+                            EventType = e.GetType().AssemblyQualifiedName,
+                            ETag = "*"
+                        }))));
         }
 
         /// <inheritdoc />
@@ -77,9 +74,12 @@ namespace Intellias.CQRS.EventStore.AzureTable
 
             } while (continuationToken != null);
 
-            return results
-                .Select(r=>(IEvent)JsonConvert.DeserializeObject(r.Data, Type.GetType(r.EventType)))
-                .ToList();
+            if (!results.Any())
+            {
+                throw new AggregateNotFoundException("Aggregate Id contains no events, so it is not yet created!");
+            }
+
+            return results.Select(item => (IEvent)JsonConvert.DeserializeObject(item.Data, Type.GetType(item.EventType)));
         }
     }
 }
