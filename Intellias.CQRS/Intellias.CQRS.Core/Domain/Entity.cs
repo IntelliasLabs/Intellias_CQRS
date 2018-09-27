@@ -7,9 +7,6 @@ namespace Intellias.CQRS.Core.Domain
     public abstract class Entity : BaseEntity, IEntity
     {
         /// <inheritdoc />
-        public override string Id { get; set; } = string.Empty;
-
-        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             var compareTo = obj as Entity;

@@ -7,6 +7,6 @@
         public int ExpectedVersion { get; set; }
 
         /// <inheritdoc />
-        public virtual string AggregateRootId { get; set; }
+        public string AggregateRootId { get; set; }
     }
 }

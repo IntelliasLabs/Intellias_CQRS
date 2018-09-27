@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Domain;
 
 namespace Intellias.CQRS.Core.Events
 {
@@ -11,16 +12,16 @@ namespace Intellias.CQRS.Core.Events
         /// <summary>
         /// Store events
         /// </summary>
-        /// <param name="events">Events</param>
+        /// <param name="entity">IAggregateRoot</param>
         /// <returns>Awaiter</returns>
-        Task Save(IEnumerable<IEvent> events);
+        Task SaveAsync(IAggregateRoot entity);
 
         /// <summary>
         /// Get events for specified version of AR
         /// </summary>
         /// <param name="aggregateId">ARID</param>
-        /// <param name="version">ARV</param>
+        /// <param name="fromVersion">ARV</param>
         /// <returns>Events</returns>
-        Task<IEnumerable<IEvent>> Get(string aggregateId, int version);
+        Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion);
     }
 }

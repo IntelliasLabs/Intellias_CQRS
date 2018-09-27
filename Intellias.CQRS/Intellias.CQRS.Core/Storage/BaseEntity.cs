@@ -16,7 +16,7 @@ namespace Intellias.CQRS.Core.Storage
         [Key]
         [DataType(DataType.Text)]
         [JsonProperty("id")]
-        public virtual string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// Partition Key
