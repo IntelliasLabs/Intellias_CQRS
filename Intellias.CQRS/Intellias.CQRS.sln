@@ -16,7 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.EventStore.AzureTable", "Intellias.CQRS.EventStore.AzureTable\Intellias.CQRS.EventStore.AzureTable.csproj", "{0EE03140-2422-4D8B-9E8C-1032F6871885}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventStore.AzureTable", "Intellias.CQRS.EventStore.AzureTable\Intellias.CQRS.EventStore.AzureTable.csproj", "{0EE03140-2422-4D8B-9E8C-1032F6871885}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.EventBus.AzureServiceBus", "Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj", "{E7BE0F03-977E-47EC-B26B-742EBA3FC053}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{0EE03140-2422-4D8B-9E8C-1032F6871885}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EE03140-2422-4D8B-9E8C-1032F6871885}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EE03140-2422-4D8B-9E8C-1032F6871885}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7BE0F03-977E-47EC-B26B-742EBA3FC053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7BE0F03-977E-47EC-B26B-742EBA3FC053}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7BE0F03-977E-47EC-B26B-742EBA3FC053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7BE0F03-977E-47EC-B26B-742EBA3FC053}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
