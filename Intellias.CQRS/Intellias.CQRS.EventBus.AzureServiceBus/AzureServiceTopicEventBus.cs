@@ -9,7 +9,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
     /// <summary>
     /// Publishing events to Azure Service Bus
     /// </summary>
-    public class EventBus : IEventBus
+    public class AzureServiceTopicEventBus : IEventBus
     {
 
         #region Private members
@@ -28,7 +28,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         /// </summary>
         /// <param name="connectionString"></param>
         /// <param name="topic"></param>
-        public EventBus(string connectionString, string topic)
+        public AzureServiceTopicEventBus(string connectionString, string topic)
         {
             topicClient = new TopicClient(connectionString, topic);
         }
