@@ -19,22 +19,26 @@ namespace Intellias.CQRS.EventStore.AzureTable
     /// </summary>
     public class AzureTableEventStore : IEventStore
     {
-        private readonly CloudTable _eventTable;
+        private readonly CloudTable eventTable;
+        private readonly IEventBus eventBus;
 
         /// <summary>
         /// EventStore
         /// </summary>
-        /// <param name="connectionString">Azure Table Storage connection string</param>
-        public AzureTableEventStore(string connectionString)
+        /// <param name="storeConnectionString">Azure Table Storage connection string</param>
+        /// <param name="eventBus">Event bus for publishing events</param>
+        public AzureTableEventStore(string storeConnectionString, IEventBus eventBus)
         {
+            this.eventBus = eventBus;
+
             var client = CloudStorageAccount
-                .Parse(connectionString)
+                .Parse(storeConnectionString)
                 .CreateCloudTableClient();
 
-            _eventTable = client.GetTableReference("EventStore");
+            eventTable = client.GetTableReference("EventStore");
 
             // Create the CloudTable if it does not exist
-            _eventTable.CreateIfNotExistsAsync().Wait();
+            eventTable.CreateIfNotExistsAsync().Wait();
         }
 
 
@@ -42,8 +46,14 @@ namespace Intellias.CQRS.EventStore.AzureTable
         public async Task SaveAsync(IAggregateRoot entity)
         {
             await Task.WhenAll(entity.Events
-                .Select(e => _eventTable.ExecuteAsync(
-                    TableOperation.Insert(e.ToStoreItem()))));
+                .Select(SaveAndPublishEventAsync));
+        }
+
+        private async Task SaveAndPublishEventAsync(IEvent @event)
+        {
+            var operation = TableOperation.Insert(@event.ToStoreItem());
+            await eventTable.ExecuteAsync(operation);
+            await eventBus.PublishAsync(@event);
         }
 
         /// <inheritdoc />
@@ -59,7 +69,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
             do
             {
                 var queryResults =
-                    await _eventTable.ExecuteQuerySegmentedAsync(query, continuationToken);
+                    await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken);
 
                 continuationToken = queryResults.ContinuationToken;
                 results.AddRange(queryResults.Results);

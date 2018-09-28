@@ -8,7 +8,7 @@ namespace Intellias.CQRS.Core.Events
     public interface IEventBus
     {
         /// <summary>
-        /// Bublish an event
+        /// Publishing an event
         /// </summary>
         /// <typeparam name="T">Type of event</typeparam>
         /// <param name="event">Event instance</param>
