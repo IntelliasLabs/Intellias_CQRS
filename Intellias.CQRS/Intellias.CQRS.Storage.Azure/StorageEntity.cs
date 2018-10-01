@@ -34,11 +34,10 @@ namespace Intellias.CQRS.Storage.Azure
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T GetValue<T>()
-        {
-            return string.IsNullOrEmpty(Data) 
+        public T GetValue<T>() => 
+            string.IsNullOrEmpty(Data) 
                 ? default(T) 
                 : JsonConvert.DeserializeObject<T>(Data);
-        }
+        
     }
 }
