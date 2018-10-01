@@ -3,7 +3,7 @@ using Intellias.CQRS.Core.Storage;
 
 namespace Intellias.CQRS.Core.Domain
 {
-    /// <inheritdoc />
+    /// <inheritdoc cref="BaseEntity" />
     public abstract class Entity : BaseEntity, IEntity
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace Intellias.CQRS.Core.Domain
                 : Id.Equals(compareTo.Id, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc  cref="BaseEntity" />
         public static bool operator ==(Entity a, Entity b)
         {
             if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
@@ -32,7 +32,7 @@ namespace Intellias.CQRS.Core.Domain
             return ReferenceEquals(a, null) || ReferenceEquals(b, null) ? false : a.Equals(b);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="BaseEntity" />
         public static bool operator !=(Entity a, Entity b)
         {
             return !(a == b);

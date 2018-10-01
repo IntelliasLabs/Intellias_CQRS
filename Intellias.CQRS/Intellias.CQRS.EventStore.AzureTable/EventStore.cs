@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Domain;
@@ -81,7 +80,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
                 throw new AggregateNotFoundException("Aggregate Id contains no events, so it is not yet created!");
             }
 
-            return results.Select(item => (IEvent)JsonConvert.DeserializeObject(item.Data, Type.GetType(item.EventType)));
+            return results.Select(item => (IEvent)JsonConvert.DeserializeObject(item.Data));
         }
     }
 }
