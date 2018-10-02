@@ -17,7 +17,7 @@ namespace Intellias.CQRS.Core.Config
         /// <returns></returns>
         public static void ConfigureJson(this Func<JsonSerializerSettings> config)
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            config = () => new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
                 TypeNameHandling = TypeNameHandling.All,
