@@ -20,7 +20,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
             {
                 PartitionKey = item.AggregateRootId,
                 RowKey = Unified.NewCode(),
-                Data = JsonConvert.SerializeObject(item, Formatting.Indented),
+                Data = JsonConvert.SerializeObject(item),
                 EventType = item.GetType().AssemblyQualifiedName,
                 ETag = "*"
             };

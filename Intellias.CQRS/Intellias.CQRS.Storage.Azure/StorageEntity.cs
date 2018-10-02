@@ -20,22 +20,24 @@ namespace Intellias.CQRS.Storage.Azure
         {
             PartitionKey = entity.Id.ToUpperInvariant().First().ToString(CultureInfo.InvariantCulture);
             RowKey = entity.Id.ToUpperInvariant();
-            Data = JsonConvert.SerializeObject(entity, Formatting.Indented);
+            Data = JsonConvert.SerializeObject(entity);
             ETag = "*";
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Holds the entity data
+        /// </summary>
         public string Data { set; get; }
 
-        /// <inheritdoc />
-        public T GetValue<T>()
-        {
-            if (string.IsNullOrEmpty(Data))
-            {
-                return default(T);
-            }
-
-            return JsonConvert.DeserializeObject<T>(Data);
-        }
+        /// <summary>
+        /// Returns deserialized data object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetValue<T>() => 
+            string.IsNullOrEmpty(Data) 
+                ? default(T) 
+                : JsonConvert.DeserializeObject<T>(Data);
+        
     }
 }
