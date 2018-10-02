@@ -2,13 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Domain;
-using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.EventStore.AzureTable.Documents;
-using Intellias.CQRS.EventStore.AzureTable.Extensions;
+using Intellias.CQRS.EventStore.AzureTable.Repositories;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
 
 namespace Intellias.CQRS.EventStore.AzureTable
 {
@@ -18,7 +14,8 @@ namespace Intellias.CQRS.EventStore.AzureTable
     /// </summary>
     public class AzureTableEventStore : IEventStore
     {
-        private readonly CloudTable eventTable;
+        private readonly AggregateRepository aggregateRepository;
+        private readonly EventRepository eventRepository;
         private readonly IEventBus eventBus;
 
         /// <summary>
@@ -34,53 +31,31 @@ namespace Intellias.CQRS.EventStore.AzureTable
                 .Parse(storeConnectionString)
                 .CreateCloudTableClient();
 
-            eventTable = client.GetTableReference("EventStore");
-
-            // Create the CloudTable if it does not exist
-            eventTable.CreateIfNotExistsAsync().Wait();
+            aggregateRepository = new AggregateRepository(client);
+            eventRepository = new EventRepository(client);
         }
 
 
         /// <inheritdoc />
         public async Task SaveAsync(IAggregateRoot entity)
         {
-            await Task.WhenAll(entity.Events
-                .Select(SaveAndPublishEventAsync));
-        }
+            if (!entity.Events.Any()) { return; }
 
-        private async Task SaveAndPublishEventAsync(IEvent @event)
-        {
-            var operation = TableOperation.Insert(@event.ToStoreItem());
-            await eventTable.ExecuteAsync(operation);
-            await eventBus.PublishAsync(@event);
+            await Task.WhenAll(entity.Events
+                .Select(async e =>
+                {
+                    await eventRepository.InsertEvent(e);
+                    await eventBus.PublishAsync(e);
+                }));
+
+            await aggregateRepository.UpdateAggregateVersion(entity);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int version)
         {
-            var query = new TableQuery<EventStoreItem>()
-                .Where(TableQuery.GenerateFilterCondition("PartitionKey",
-                    QueryComparisons.Equal, aggregateId));
-
-            var results = new List<EventStoreItem>();
-            TableContinuationToken continuationToken = null;
-
-            do
-            {
-                var queryResults =
-                    await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken);
-
-                continuationToken = queryResults.ContinuationToken;
-                results.AddRange(queryResults.Results);
-
-            } while (continuationToken != null);
-
-            if (!results.Any())
-            {
-                throw new AggregateNotFoundException("Aggregate Id contains no events, so it is not yet created!");
-            }
-
-            return results.Select(item => (IEvent)JsonConvert.DeserializeObject(item.Data));
+            // ToDo: Implement snapshot logic here!
+            return await eventRepository.GetEvents(aggregateId/*, version*/);
         }
     }
 }
