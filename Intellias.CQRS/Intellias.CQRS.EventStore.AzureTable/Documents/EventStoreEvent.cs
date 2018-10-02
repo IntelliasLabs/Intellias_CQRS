@@ -3,9 +3,9 @@
 namespace Intellias.CQRS.EventStore.AzureTable.Documents
 {
     /// <summary>
-    /// EventStoreItem
+    /// StoreEventItem
     /// </summary>
-    public class EventStoreItem : TableEntity
+    public class EventStoreEvent : TableEntity
     {
 
         /// <summary>

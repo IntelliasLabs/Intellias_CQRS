@@ -7,22 +7,18 @@ namespace Intellias.CQRS.Core.Config
     /// <summary>
     /// Extensions methods for CQRS config
     /// </summary>
-    public static class CqrsConfigExtensions
+    public static class CqrsSettings
     {
         /// <summary>
         /// Configures JSON serializer globally
         /// Settings will automatically be used by JsonConvert.SerializeObject/DeserializeObject
         /// </summary>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        public static void ConfigureJson(this Func<JsonSerializerSettings> config)
-        {
-            config = () => new JsonSerializerSettings
+        public static Func<JsonSerializerSettings> JsonConfig => 
+            () => new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
                 TypeNameHandling = TypeNameHandling.All,
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-        }
     }
 }

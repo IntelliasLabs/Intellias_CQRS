@@ -1,4 +1,6 @@
-﻿using Intellias.CQRS.Core.Events;
+﻿using System;
+using Intellias.CQRS.Core.Domain;
+using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Newtonsoft.Json;
@@ -11,17 +13,31 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
     public static class EventStoreItemExtensions
     {
         /// <summary>
-        /// Converts an IEvent to Event store item
+        /// Converts AggregateRoot to EventStoreAggregate
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="aggregateRoot"></param>
         /// <returns></returns>
-        public static EventStoreItem ToStoreItem(this IEvent item) => 
-            new EventStoreItem
+        public static EventStoreAggregate ToStoreAggregate(this IAggregateRoot aggregateRoot) =>
+            new EventStoreAggregate
             {
-                PartitionKey = item.AggregateRootId,
+                RowKey = aggregateRoot.Id,
+                PartitionKey = "AR",
+                LastArVersion = aggregateRoot.Version,
+                Timestamp = DateTime.Now,
+                ETag = "*"
+            };
+
+
+        /// <summary>
+        /// Converts an IEvent to EventStoreEvent
+        /// </summary>
+        public static EventStoreEvent ToStoreEvent(this IEvent @event) => 
+            new EventStoreEvent
+            {
+                PartitionKey = @event.AggregateRootId,
                 RowKey = Unified.NewCode(),
-                Data = JsonConvert.SerializeObject(item),
-                EventType = item.GetType().AssemblyQualifiedName,
+                Data = JsonConvert.SerializeObject(@event),
+                EventType = @event.GetType().AssemblyQualifiedName,
                 ETag = "*"
             };
     }
