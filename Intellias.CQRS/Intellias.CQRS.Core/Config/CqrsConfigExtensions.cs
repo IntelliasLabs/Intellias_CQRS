@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Intellias.CQRS.Core.Config
@@ -14,7 +15,7 @@ namespace Intellias.CQRS.Core.Config
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static CqrsConfig ConfigureJson(this CqrsConfig config)
+        public static void ConfigureJson(this Func<JsonSerializerSettings> config)
         {
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
@@ -22,8 +23,6 @@ namespace Intellias.CQRS.Core.Config
                 TypeNameHandling = TypeNameHandling.All,
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-
-            return config;
         }
     }
 }
