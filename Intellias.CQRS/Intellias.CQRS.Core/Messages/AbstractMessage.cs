@@ -1,4 +1,8 @@
-﻿namespace Intellias.CQRS.Core.Messages
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+
+namespace Intellias.CQRS.Core.Messages
 {
     /// <inheritdoc />
     public abstract class AbstractMessage : IMessage
@@ -12,6 +16,9 @@
         }
 
         /// <inheritdoc />
+        [Key]
+        [DataType(DataType.Text)]
+        [JsonProperty("id")]
         public string Id { get; protected set; }
 
         /// <inheritdoc />
@@ -69,7 +76,7 @@
 
             if (!IsTransient(this) &&
                 !IsTransient(other) &&
-                Equals(Id, other.Id))
+                Id.Equals(other.Id, StringComparison.InvariantCultureIgnoreCase))
             {
                 var otherType = other.GetType();
                 var thisType = GetType();

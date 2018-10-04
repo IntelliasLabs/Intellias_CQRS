@@ -5,6 +5,7 @@ using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace Intellias.CQRS.Storage.Azure
 {
     /// <inheritdoc />
-    public class TableStorage<T> : IStorage<T> where T : BaseEntity, new()
+    public class TableStorage<T> : IStorage<T> where T : AbstractMessage, new()
     {
         private readonly CloudTable table;
 
@@ -45,9 +46,9 @@ namespace Intellias.CQRS.Storage.Azure
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            if (string.IsNullOrWhiteSpace(entity.Id))
+            if (entity.Id == null)
             {
-                entity.Id = Unified.NewCode();
+                throw new InvalidConstraintException(nameof(entity.Id));
             }
 
             var op = TableOperation.Insert(new StorageEntity(entity));
