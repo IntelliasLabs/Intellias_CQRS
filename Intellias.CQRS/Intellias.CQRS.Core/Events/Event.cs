@@ -7,6 +7,12 @@ namespace Intellias.CQRS.Core.Events
     public abstract class Event : AbstractMessage, IEvent
     {
         /// <inheritdoc />
+        protected Event()
+        {
+            Id = $"{AggregateRootId}-{Version}";
+        }
+
+        /// <inheritdoc />
         public string AggregateRootId { get; set; }
 
         /// <inheritdoc />

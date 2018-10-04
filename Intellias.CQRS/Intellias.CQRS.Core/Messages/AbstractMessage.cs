@@ -12,6 +12,6 @@
         }
 
         /// <inheritdoc />
-        public string Id { get; }
+        public string Id { get; protected set; }
     }
 }
