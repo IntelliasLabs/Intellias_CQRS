@@ -1,4 +1,5 @@
 ﻿using Intellias.CQRS.Core.Domain;
+using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
 
 namespace Intellias.CQRS.Tests.Core.Entities
@@ -24,19 +25,17 @@ namespace Intellias.CQRS.Tests.Core.Entities
             Handles<TestDeletedEvent>(OnTestDeleted);
         }
 
-
         /// <summary>
         /// Creates an instance
         /// </summary>
-        public void Create(string testData)
+        public void Create(TestCreateCommand command)
         {
             ApplyChange(new TestCreatedEvent
             {
                 AggregateRootId = Id,
-                TestData = testData
+                TestData = command.TestData
             });
         }
-
         ///// <summary>
         ///// Updates the data
         ///// </summary>
