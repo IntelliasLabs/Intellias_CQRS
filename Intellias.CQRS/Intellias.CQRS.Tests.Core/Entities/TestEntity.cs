@@ -36,23 +36,29 @@ namespace Intellias.CQRS.Tests.Core.Entities
                 TestData = command.TestData
             });
         }
-        ///// <summary>
-        ///// Updates the data
-        ///// </summary>
-        ///// <param name="command"></param>
-        //public void Update(TestUpdateCommand command)
-        //{
-        //    ApplyChange(new TestUpdatedEvent(Id));
-        //}
+        /// <summary>
+        /// Updates the data
+        /// </summary>
+        /// <param name="command"></param>
+        public void Update(TestUpdateCommand command)
+        {
+            ApplyChange(new TestUpdatedEvent
+            {
+                AggregateRootId = Id,
+                TestData = command.TestData
+            });
+        }
 
-        ///// <summary>
-        ///// Deactivates an instance
-        ///// </summary>
-        ///// <param name="command"></param>
-        //public void Deactivate(TestDeleteCommand command)
-        //{
-        //    ApplyChange(new TestDeletedEvent(Id));
-        //}
+        /// <summary>
+        /// Deactivates an instance
+        /// </summary>
+        public void Deactivate()
+        {
+            ApplyChange(new TestDeletedEvent
+            {
+                AggregateRootId = Id
+            });
+        }
 
 
 

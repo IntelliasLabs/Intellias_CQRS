@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Entities;
+using Intellias.CQRS.Tests.Core.Events;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -71,11 +73,37 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
             item.Create(new TestCreateCommand
             {
                 AggregateRootId = id,
-                TestData = testData,
-                ExpectedVersion = item.Version
+                TestData = testData
             });
             Store.SaveAsync(item).Wait();
         }
 
+        /// <summary>
+        /// UpdateItem
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="testData"></param>
+        protected void UpdateItem(string id, string testData)
+        {
+            var item = new TestEntity(id);
+
+            // Generating virtual load of events..
+            item.LoadFromHistory(new List<IEvent>
+            {
+                new TestCreatedEvent
+                {
+                    AggregateRootId = id,
+                    Version = 1,
+                    TestData = "Data to be updated...."
+                }
+            });
+
+            item.Update(new TestUpdateCommand
+            {
+                AggregateRootId = id,
+                TestData = testData
+            });
+            Store.SaveAsync(item).Wait();
+        }
     }
 }
