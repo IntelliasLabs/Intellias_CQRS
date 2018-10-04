@@ -3,6 +3,7 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.EventStore.AzureTable.Tests.Core;
+using Intellias.CQRS.Tests.Core.Entities;
 using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
 using Newtonsoft.Json;

@@ -1,5 +1,6 @@
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Tests.Core.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;

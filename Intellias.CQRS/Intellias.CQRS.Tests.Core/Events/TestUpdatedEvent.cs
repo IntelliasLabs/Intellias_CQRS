@@ -1,15 +1,15 @@
 ﻿using Intellias.CQRS.Core.Events;
 
-namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
+namespace Intellias.CQRS.Tests.Core.Events
 {
     /// <inheritdoc />
-    public class TestCreatedEvent : Event
+    public class TestUpdatedEvent : Event
     {
         /// <summary>
-        /// TestCreatedEvent
+        /// TestUpdateEvent
         /// </summary>
         /// <param name="aggregateRootId"></param>
-        public TestCreatedEvent(string aggregateRootId)
+        public TestUpdatedEvent(string aggregateRootId)
         {
             AggregateRootId = aggregateRootId;
         }

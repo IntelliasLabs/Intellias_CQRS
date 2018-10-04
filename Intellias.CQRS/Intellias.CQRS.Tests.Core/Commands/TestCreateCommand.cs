@@ -1,12 +1,12 @@
 ﻿using Intellias.CQRS.Core.Commands;
 
-namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
+namespace Intellias.CQRS.Tests.Core.Commands
 {
     /// <inheritdoc />
-    public class TestDeleteCommand : Command
+    public class TestCreateCommand : Command
     {
         /// <inheritdoc />
-        public TestDeleteCommand(string aggregatedRootId)
+        public TestCreateCommand(string aggregatedRootId)
         {
             AggregateRootId = aggregatedRootId;
         }
