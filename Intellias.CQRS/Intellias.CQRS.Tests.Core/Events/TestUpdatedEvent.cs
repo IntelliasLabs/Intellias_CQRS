@@ -6,15 +6,6 @@ namespace Intellias.CQRS.Tests.Core.Events
     public class TestUpdatedEvent : Event
     {
         /// <summary>
-        /// TestUpdateEvent
-        /// </summary>
-        /// <param name="aggregateRootId"></param>
-        public TestUpdatedEvent(string aggregateRootId)
-        {
-            AggregateRootId = aggregateRootId;
-        }
-
-        /// <summary>
         /// TestData
         /// </summary>
         public string TestData { get; set; }
