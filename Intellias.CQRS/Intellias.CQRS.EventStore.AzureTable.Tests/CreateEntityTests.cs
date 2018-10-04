@@ -45,14 +45,14 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests
             var operation = TableOperation.Retrieve<EventStoreAggregate>(typeof(TestEntity).Name, testId);
             var result = (EventStoreAggregate)AggregateTable.ExecuteAsync(operation).Result.Result;
 
-            Assert.True(result.RowKey == testId && result.LastArVersion == 1);
+            Assert.True(result.LastArVersion == 1, "Test version for aggregated root is not equal 1");
         }
 
         /// <summary>
         /// Check if event serialized 
         /// </summary>
         [Fact]
-        public void ShouldCreateEventRecordWithVersion1()
+        public void ShouldCreateEventRecordWithVersion1AndTestData()
         {
             var query = new TableQuery<EventStoreEvent>()
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, testId));
@@ -61,7 +61,8 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests
             var record = result.First().Data;
             dynamic @event = JsonConvert.DeserializeObject(record);
 
-            Assert.True(@event.Version ==1);
+            Assert.True(@event.Version == 1, "Test version for created event is not equal 1");
+            Assert.True(@event.TestData == testData, "Test data for created event is lost");
         }
     }
 }

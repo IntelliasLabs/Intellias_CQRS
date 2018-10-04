@@ -40,7 +40,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
                 return aggregate;
             }
 
-            var operation = TableOperation.Retrieve<EventStoreAggregate>("AR", entity.Id);
+            var operation = TableOperation.Retrieve<EventStoreAggregate>(entity.GetType().Name, entity.Id);
             var result = await aggregateTable.ExecuteAsync(operation);
             return (EventStoreAggregate)result.Result;
         }
