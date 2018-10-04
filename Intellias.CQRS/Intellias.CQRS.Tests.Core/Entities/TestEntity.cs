@@ -28,11 +28,12 @@ namespace Intellias.CQRS.Tests.Core.Entities
         /// <summary>
         /// Creates an instance
         /// </summary>
-        public void Create()
+        public void Create(string testData)
         {
             ApplyChange(new TestCreatedEvent
             {
-                AggregateRootId = Id
+                AggregateRootId = Id,
+                TestData = testData
             });
         }
 
