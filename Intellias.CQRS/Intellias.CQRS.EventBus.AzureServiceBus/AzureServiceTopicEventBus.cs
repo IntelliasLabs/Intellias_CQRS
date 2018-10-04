@@ -11,17 +11,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
     /// </summary>
     public class AzureServiceTopicEventBus : IEventBus
     {
-
-        #region Private members
-
-        
         private readonly ITopicClient topicClient;
-
-
-        #endregion
-
-        #region Constructors
-
         
         /// <summary>
         /// Creates an instance of EventBus
@@ -33,20 +23,10 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
             topicClient = new TopicClient(connectionString, topic);
         }
 
-
-        #endregion
-
-        #region Implementations
-
-        
         /// <inheritdoc />
         public async Task PublishAsync<T>(T @event) where T : IEvent
         {
             await topicClient.SendAsync(@event.ToBusMessage());
         }
-
-
-        #endregion
-
     }
 }

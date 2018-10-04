@@ -1,6 +1,9 @@
 ﻿namespace Intellias.CQRS.Core.Domain
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Base type for value-objects
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class ValueObject<T> where T : ValueObject<T>
     {
         /// <inheritdoc />
@@ -10,7 +13,11 @@
             return !ReferenceEquals(valueObject, null) && EqualsCore(valueObject);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Base equality method
+        /// </summary>
+        /// <param name="other">Other entity</param>
+        /// <returns>Is equal</returns>
         protected abstract bool EqualsCore(T other);
 
         /// <inheritdoc />
@@ -19,10 +26,18 @@
             return GetHashCodeCore();
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Hash code code generator
+        /// </summary>
+        /// <returns>Hash id</returns>
         protected abstract int GetHashCodeCore();
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Equality operator
+        /// </summary>
+        /// <param name="a">This</param>
+        /// <param name="b">Other</param>
+        /// <returns>Is equal</returns>
         public static bool operator ==(ValueObject<T> a, ValueObject<T> b)
         {
             if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
@@ -38,7 +53,12 @@
             return a.Equals(b);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Inversed equality
+        /// </summary>
+        /// <param name="a">This</param>
+        /// <param name="b">Other</param>
+        /// <returns>Is equal</returns>
         public static bool operator !=(ValueObject<T> a, ValueObject<T> b)
         {
             return !(a == b);

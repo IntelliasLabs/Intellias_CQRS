@@ -1,7 +1,6 @@
 ﻿using System;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Newtonsoft.Json;
 
@@ -21,9 +20,10 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
             new EventStoreAggregate
             {
                 RowKey = aggregateRoot.Id,
-                PartitionKey = "AR",
+                // Use type of agregate as partition key for optimal fetching
+                PartitionKey = aggregateRoot.GetType().Name,
                 LastArVersion = aggregateRoot.Version,
-                Timestamp = DateTime.Now,
+                Timestamp = DateTime.UtcNow,
                 ETag = "*"
             };
 
@@ -35,7 +35,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
             new EventStoreEvent
             {
                 PartitionKey = @event.AggregateRootId,
-                RowKey = Unified.NewCode(),
+                RowKey = @event.Id,
                 Data = JsonConvert.SerializeObject(@event),
                 EventType = @event.GetType().AssemblyQualifiedName,
                 ETag = "*"
