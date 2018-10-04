@@ -1,15 +1,15 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Storage;
-using Intellias.CQRS.Core.Tests.Commands;
 using Intellias.CQRS.Core.Tests.Domain;
+using Intellias.CQRS.Tests.Core.Commands;
 
 namespace Intellias.CQRS.Core.Tests.CommandHandlers
 {
     /// <summary>
     /// Demo command handlers
     /// </summary>
-    public class DemoCommandHandlers : ICommandHandler<DemoCreateCommand>
+    public class DemoCommandHandlers : ICommandHandler<TestCreateCommand>
     {
         private readonly IAggregateStorage<DemoRoot> storage;
 
@@ -27,7 +27,7 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task<ICommandResult> HandleAsync(DemoCreateCommand message)
+        public async Task<ICommandResult> HandleAsync(TestCreateCommand message)
         {
             var ar = new DemoRoot(message);
             await storage.CreateAsync(ar);

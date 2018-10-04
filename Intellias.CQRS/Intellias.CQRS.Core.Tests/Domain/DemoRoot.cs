@@ -1,7 +1,7 @@
 ﻿using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Messages;
-using Intellias.CQRS.Core.Tests.Commands;
-using Intellias.CQRS.Core.Tests.Events;
+using Intellias.CQRS.Tests.Core.Commands;
+using Intellias.CQRS.Tests.Core.Events;
 
 namespace Intellias.CQRS.Core.Tests.Domain
 {
@@ -18,11 +18,11 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// <summary>
         /// 
         /// </summary>
-        public DemoRoot(DemoCreateCommand command)
+        public DemoRoot(TestCreateCommand command)
         {
-            ApplyChange(new DemoCreatedEvent
+            ApplyChange(new TestCreatedEvent
             {
-                NewName = command.Name,
+                TestData = command.TestData,
                 AggregateRootId = Unified.NewCode(),
                 Version = 1
             });
