@@ -5,10 +5,9 @@ namespace Intellias.CQRS.Tests.Core.Commands
     /// <inheritdoc />
     public class TestUpdateCommand : Command
     {
-        /// <inheritdoc />
-        public TestUpdateCommand(string aggregatedRootId)
-        {
-            AggregateRootId = aggregatedRootId;
-        }
+        /// <summary>
+        /// TestData
+        /// </summary>
+        public string TestData { get; set; }
     }
 }

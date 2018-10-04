@@ -17,13 +17,14 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests
     public class WhenEntityCreated : BaseTest
     {
         private readonly string testId = Unified.NewCode();
+        private readonly string testData = "Test Data";
 
         /// <summary>
         /// WhenEntityCreated
         /// </summary>
         public WhenEntityCreated()
         {
-            CreateItem(testId);
+            CreateItem(testId, testData);
         }
 
         /// <summary>

@@ -63,10 +63,11 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
         /// CreateItem
         /// </summary>
         /// <param name="id"></param>
-        protected void CreateItem(string id)
+        /// /// <param name="testData"></param>
+        protected void CreateItem(string id, string testData)
         {
             var item = new TestEntity(id);
-            item.Create();
+            item.Create(testData);
             Store.SaveAsync(item).Wait();
         }
 
