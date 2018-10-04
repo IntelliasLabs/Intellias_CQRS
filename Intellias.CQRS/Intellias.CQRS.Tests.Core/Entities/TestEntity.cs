@@ -30,7 +30,10 @@ namespace Intellias.CQRS.Tests.Core.Entities
         /// </summary>
         public void Create()
         {
-            ApplyChange(new TestCreatedEvent(Id));
+            ApplyChange(new TestCreatedEvent
+            {
+                AggregateRootId = Id
+            });
         }
 
         ///// <summary>
