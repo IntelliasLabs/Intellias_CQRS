@@ -24,6 +24,35 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
         }
 
 
+        /// <summary>
+        /// Creates an instance
+        /// </summary>
+        public void Create()
+        {
+            ApplyChange(new TestCreatedEvent(Id));
+        }
+
+        ///// <summary>
+        ///// Updates the data
+        ///// </summary>
+        ///// <param name="command"></param>
+        //public void Update(TestUpdateCommand command)
+        //{
+        //    ApplyChange(new TestUpdatedEvent(Id));
+        //}
+
+        ///// <summary>
+        ///// Deactivates an instance
+        ///// </summary>
+        ///// <param name="command"></param>
+        //public void Deactivate(TestDeleteCommand command)
+        //{
+        //    ApplyChange(new TestDeletedEvent(Id));
+        //}
+
+
+
+
         private void OnTestCreated(TestCreatedEvent e)
         {
         }
