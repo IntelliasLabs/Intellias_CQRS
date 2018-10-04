@@ -1,10 +1,17 @@
 ﻿using System;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Events
 {
-    /// <inheritdoc />
-    public abstract class Event : IEvent
+    /// <inheritdoc cref="IEvent" />
+    public abstract class Event : AbstractMessage, IEvent
     {
+        /// <inheritdoc />
+        protected Event()
+        {
+            Id = Unified.NewCode(Version);
+        }
+
         /// <inheritdoc />
         public string AggregateRootId { get; set; }
 
@@ -15,6 +22,6 @@ namespace Intellias.CQRS.Core.Events
         /// <summary>
         /// Date and time when event was created
         /// </summary>
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime Created { get; } = DateTime.UtcNow;
     }
 }

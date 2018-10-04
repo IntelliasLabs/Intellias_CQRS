@@ -1,7 +1,9 @@
-﻿namespace Intellias.CQRS.Core.Commands
+﻿using Intellias.CQRS.Core.Messages;
+
+namespace Intellias.CQRS.Core.Commands
 {
-    /// <inheritdoc />
-    public abstract class Command : ICommand
+    /// <inheritdoc cref="ICommand" />
+    public abstract class Command : AbstractMessage, ICommand
     {
         /// <inheritdoc />
         public int ExpectedVersion { get; set; }

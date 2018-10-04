@@ -40,13 +40,23 @@ namespace Intellias.CQRS.Core.Storage
         [JsonProperty("modified")]
         public DateTime Modified { get; set; } = DateTime.UtcNow;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Base equality operator
+        /// </summary>
+        /// <param name="x">This</param>
+        /// <param name="y">Other</param>
+        /// <returns>Is equal</returns>
         public static bool operator ==(BaseEntity x, BaseEntity y)
         {
             return Equals(x, y);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Base inversed equality operator
+        /// </summary>
+        /// <param name="x">This</param>
+        /// <param name="y">Other</param>
+        /// <returns>Is equal</returns>
         public static bool operator !=(BaseEntity x, BaseEntity y)
         {
             return !(x == y);
@@ -68,8 +78,12 @@ namespace Intellias.CQRS.Core.Storage
             return GetType();
         }
 
-        /// <inheritdoc />
-        public virtual bool Equals(BaseEntity other)
+        /// <summary>
+        /// Base equality operator
+        /// </summary>
+        /// <param name="other">Other</param>
+        /// <returns>Is equal</returns>
+        protected virtual bool Equals(BaseEntity other)
         {
             if (other == null)
             {

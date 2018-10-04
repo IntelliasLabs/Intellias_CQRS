@@ -9,6 +9,11 @@ namespace Intellias.CQRS.Core.Events
     public interface IEvent : IMessage
     {
         /// <summary>
+        /// Source Aggregate Root identifier
+        /// </summary>
+        string AggregateRootId { get; }
+
+        /// <summary>
         /// Version of AR that generated an event
         /// </summary>
         int Version { get; set; }
