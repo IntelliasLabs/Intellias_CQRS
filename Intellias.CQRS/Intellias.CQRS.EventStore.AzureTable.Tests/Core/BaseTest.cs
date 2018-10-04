@@ -1,5 +1,6 @@
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
@@ -67,7 +68,12 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
         protected void CreateItem(string id, string testData)
         {
             var item = new TestEntity(id);
-            item.Create(testData);
+            item.Create(new TestCreateCommand
+            {
+                AggregateRootId = id,
+                TestData = testData,
+                ExpectedVersion = item.Version
+            });
             Store.SaveAsync(item).Wait();
         }
 
