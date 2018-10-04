@@ -17,5 +17,10 @@ namespace Intellias.CQRS.EventStore.AzureTable.Documents
         /// Keeps an event type
         /// </summary>
         public string EventType { get; set; }
+
+        /// <summary>
+        /// Version of event
+        /// </summary>
+        public int Version { get; set; }
     }
 }
