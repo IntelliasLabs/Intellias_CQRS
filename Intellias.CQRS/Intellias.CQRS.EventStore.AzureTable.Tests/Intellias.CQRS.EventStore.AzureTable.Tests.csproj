@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Intellias.CQRS.EventStore.AzureTable\Intellias.CQRS.EventStore.AzureTable.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

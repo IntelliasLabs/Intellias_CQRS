@@ -1,6 +1,7 @@
 ﻿using Intellias.CQRS.Core.Domain;
+using Intellias.CQRS.Tests.Core.Events;
 
-namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
+namespace Intellias.CQRS.Tests.Core.Entities
 {
     /// <summary>
     /// Test aggregate root

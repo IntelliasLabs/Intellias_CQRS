@@ -1,6 +1,6 @@
 ﻿using Intellias.CQRS.Core.Commands;
 
-namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
+namespace Intellias.CQRS.Tests.Core.Commands
 {
     /// <inheritdoc />
     public class TestUpdateCommand : Command

@@ -1,6 +1,6 @@
 ﻿using Intellias.CQRS.Core.Events;
 
-namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
+namespace Intellias.CQRS.Tests.Core.Events
 {
     /// <inheritdoc />
     public class TestDeletedEvent : Event
