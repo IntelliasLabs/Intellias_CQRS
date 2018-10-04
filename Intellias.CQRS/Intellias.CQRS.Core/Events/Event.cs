@@ -9,7 +9,7 @@ namespace Intellias.CQRS.Core.Events
         /// <inheritdoc />
         protected Event()
         {
-            Id = $"{AggregateRootId}-{Version}";
+            Id = $"{Version}";
         }
 
         /// <inheritdoc />
