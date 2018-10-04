@@ -22,7 +22,10 @@ namespace Intellias.CQRS.Core.Tests
         {
             var demoCommand = new DemoCreateCommand { Name = "Test data" };
 
+            
             IEventBus eventBus = new InProcessEventBus<DemoCreatedEvent>(new DemoEventHandlers());
+            IEventStore eventStore = new InProcessEventStore(eventBus);
+
 
             ICommandBus commandBus = new InProcessCommandBus<DemoCreateCommand>(new DemoCommandHandlers());
 
