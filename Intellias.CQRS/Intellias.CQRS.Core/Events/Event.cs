@@ -9,7 +9,7 @@ namespace Intellias.CQRS.Core.Events
         /// <inheritdoc />
         protected Event()
         {
-            Id = $"{Version}";
+            Id = Unified.NewCode(Version);
         }
 
         /// <inheritdoc />

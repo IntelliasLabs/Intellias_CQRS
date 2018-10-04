@@ -61,14 +61,54 @@ namespace Intellias.CQRS.Core.Messages
         /// </summary>
         /// <param name="hash">hash</param>
         /// <returns></returns>
-        public static string NewCode(ulong hash)
+        public static string NewCode(ushort hash)
         {
-            var len = 13;
-            var ch = new char[len--];
-            for (var i = len; i >= 0; i--)
+            return NewCode(hash, 4);
+        }
+
+        /// <summary>
+        /// Generate x32 hex from number
+        /// </summary>
+        /// <param name="hash">hash</param>
+        /// <returns></returns>
+        public static string NewCode(short hash)
+        {
+            if (hash < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(hash));
+            }
+
+            return NewCode((ulong)hash, 3);
+        }
+
+        /// <summary>
+        /// Generate x32 hex from number
+        /// </summary>
+        /// <param name="hash">hash</param>
+        /// <returns></returns>
+        public static string NewCode(int hash)
+        {
+            if (hash < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(hash));
+            }
+
+            return NewCode((ulong)hash, 10);
+        }
+
+        /// <summary>
+        /// Generate x32 hex from number
+        /// </summary>
+        /// <param name="hash">hash</param>
+        /// <param name="length">length of code</param>
+        /// <returns></returns>
+        public static string NewCode(ulong hash, int length = 13)
+        {
+            var ch = new char[length--];
+            for (var i = length; i >= 0; i--)
             {
                 var inx = (byte)((uint)(hash >> (5 * i)) & 31);
-                ch[len - i] = symbols[inx];
+                ch[length - i] = symbols[inx];
             }
 
             return new string(ch);
