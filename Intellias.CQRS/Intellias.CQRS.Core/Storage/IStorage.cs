@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Storage
 {
@@ -10,7 +11,7 @@ namespace Intellias.CQRS.Core.Storage
     /// </summary>
     /// <typeparam name="T">Type of contract</typeparam>
     public interface IStorage<T> : IDisposable
-        where T : BaseEntity, new()
+        where T : IMessage, new()
     {
         /// <summary>
         /// Deleting document and saving changes

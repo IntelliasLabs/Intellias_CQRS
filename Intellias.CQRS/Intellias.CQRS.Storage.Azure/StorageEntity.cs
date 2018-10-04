@@ -1,8 +1,8 @@
-﻿using Intellias.CQRS.Core.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using System.Globalization;
 using System.Linq;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Storage.Azure
 {
@@ -16,7 +16,7 @@ namespace Intellias.CQRS.Storage.Azure
         }
 
         /// <inheritdoc />
-        public StorageEntity(BaseEntity entity)
+        public StorageEntity(IMessage entity)
         {
             PartitionKey = entity.Id.ToUpperInvariant().First().ToString(CultureInfo.InvariantCulture);
             RowKey = entity.Id.ToUpperInvariant();
