@@ -1,36 +1,36 @@
 ﻿using Intellias.CQRS.Core.Messages;
 
-namespace Intellias.CQRS.Core.Commands
+namespace Intellias.CQRS.Core.Events
 {
-    /// <inheritdoc cref="ICommandResult" />
-    public class CommandResult : ExecutionResult, ICommandResult
+    /// <inheritdoc cref="IEventResult" />
+    public class EventResult : ExecutionResult, IEventResult
     {
         /// <summary>
         /// Execution Result
         /// </summary>
-        protected CommandResult() { }
+        protected EventResult() { }
 
         /// <summary>
         /// Execution Result
         /// </summary>
         /// <param name="failureReason">Reason of failure</param>
-        protected CommandResult(string failureReason) : base(failureReason)
+        protected EventResult(string failureReason) : base(failureReason)
         {
         }
 
         /// <summary>
         /// Succesful result
         /// </summary>
-        public static CommandResult Success { get; } = new CommandResult();
+        public static EventResult Success { get; } = new EventResult();
 
         /// <summary>
         /// Fail result
         /// </summary>
         /// <param name="reason">Reason of failure</param>
         /// <returns></returns>
-        public static CommandResult Fail(string reason)
+        public static EventResult Fail(string reason)
         {
-            return new CommandResult(reason);
+            return new EventResult(reason);
         }
     }
 }
