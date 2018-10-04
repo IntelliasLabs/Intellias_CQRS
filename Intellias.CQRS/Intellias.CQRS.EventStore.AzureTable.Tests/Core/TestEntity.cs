@@ -22,5 +22,16 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
             Handles<TestUpdatedEvent>(OnTestUpdated);
             Handles<TestDeletedEvent>(OnTestDeleted);
         }
+
+
+        private void OnTestCreated(TestCreatedEvent e)
+        {
+        }
+        private void OnTestUpdated(TestUpdatedEvent e)
+        {
+        }
+        private void OnTestDeleted(TestDeletedEvent e)
+        {
+        }
     }
 }
