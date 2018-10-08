@@ -4,18 +4,24 @@ using System.Threading.Tasks;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 
-namespace Intellias.CQRS.Core.Tests.Fakes
+namespace Intellias.CQRS.Tests.Core.Fakes
 {
-    internal class InProcessEventStore : IEventStore
+    /// <inheritdoc />
+    public class InProcessEventStore : IEventStore
     {
         private readonly IEventBus _publisher;
         private readonly Dictionary<string, List<IEvent>> _inMemoryDb = new Dictionary<string, List<IEvent>>();
 
+        /// <summary>
+        /// Cretes event store
+        /// </summary>
+        /// <param name="bus">event bus</param>
         public InProcessEventStore(IEventBus bus)
         {
             _publisher = bus;
         }
 
+        /// <inheritdoc />
         public async Task SaveAsync(IAggregateRoot entity)
         {
             foreach (var @event in entity.Events)
@@ -31,6 +37,7 @@ namespace Intellias.CQRS.Core.Tests.Fakes
             }
         }
 
+        /// <inheritdoc />
         public Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion)
         {
             _inMemoryDb.TryGetValue(aggregateId, out var events);

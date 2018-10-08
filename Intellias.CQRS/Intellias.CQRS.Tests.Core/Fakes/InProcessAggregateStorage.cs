@@ -6,18 +6,21 @@ using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Storage;
 
-namespace Intellias.CQRS.Core.Tests.Fakes
+namespace Intellias.CQRS.Tests.Core.Fakes
 {
-    internal sealed class InProcessAggregateStorage<T> : IAggregateStorage<T>
+    /// <inheritdoc />
+    public sealed class InProcessAggregateStorage<T> : IAggregateStorage<T>
         where T : IAggregateRoot, new()
     {
         private readonly Dictionary<string, Dictionary<int, IAggregateRoot>> roots = new Dictionary<string, Dictionary<int, IAggregateRoot>>();
 
+        /// <inheritdoc />
         public void Dispose()
         {
             roots.Clear();
         }
 
+        /// <inheritdoc />
         public Task<T> CreateAsync(T entity)
         {
             if (!roots.ContainsKey(entity.Id))
@@ -33,6 +36,7 @@ namespace Intellias.CQRS.Core.Tests.Fakes
             throw new AggregateException();
         }
 
+        /// <inheritdoc />
         public async Task<T> GetAsync(string aggregateId, int version)
         {
             if (!roots.ContainsKey(aggregateId))

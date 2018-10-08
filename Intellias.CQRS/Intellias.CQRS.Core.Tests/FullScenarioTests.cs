@@ -4,9 +4,9 @@ using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Core.Tests.CommandHandlers;
 using Intellias.CQRS.Core.Tests.Domain;
 using Intellias.CQRS.Core.Tests.EventHandlers;
-using Intellias.CQRS.Core.Tests.Fakes;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
+using Intellias.CQRS.Tests.Core.Fakes;
 using Xunit;
 
 namespace Intellias.CQRS.Core.Tests
