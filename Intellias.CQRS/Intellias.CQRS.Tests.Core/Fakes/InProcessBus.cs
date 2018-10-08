@@ -1,19 +1,26 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Messages;
 
-namespace Intellias.CQRS.Core.Tests.Fakes
+namespace Intellias.CQRS.Tests.Core.Fakes
 {
-    internal class InProcessBus : IMessageBus<IMessage, IExecutionResult>
+    /// <inheritdoc />
+    public class InProcessBus : IMessageBus<IMessage, IExecutionResult>
     {
         private readonly IEnumerable<IHandler<IMessage, IExecutionResult>> handlers;
 
+        /// <summary>
+        /// Creates message bus
+        /// </summary>
+        /// <param name="handlers"></param>
         public InProcessBus(params IHandler<IMessage, IExecutionResult>[] handlers)
         {
             this.handlers = handlers;
         }
 
+        /// <inheritdoc />
         public async Task<IExecutionResult> PublishAsync(IMessage msg)
         {
             var results = new List<IExecutionResult>();
@@ -26,7 +33,7 @@ namespace Intellias.CQRS.Core.Tests.Fakes
             // Command result
             if (results.Count == 1)
             {
-                return await Task.FromResult(results[1]);
+                return await Task.FromResult(results.Single());
             }
 
             return await Task.FromResult(CommandResult.Success);
