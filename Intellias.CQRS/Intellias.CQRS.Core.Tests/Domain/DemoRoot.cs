@@ -20,7 +20,7 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// </summary>
         public DemoRoot(TestCreateCommand command)
         {
-            ApplyChange(new TestCreatedEvent
+            PublishEvent(new TestCreatedEvent
             {
                 TestData = command.TestData,
                 AggregateRootId = Unified.NewCode(),
