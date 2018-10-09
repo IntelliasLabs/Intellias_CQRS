@@ -47,7 +47,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
             do
             {
                 var queryResults =
-                    await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken);
+                    await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken).ConfigureAwait(false);
 
                 continuationToken = queryResults.ContinuationToken;
                 results.AddRange(queryResults.Results);
@@ -67,10 +67,10 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// </summary>
         /// <param name="event"></param>
         /// <returns></returns>
-        public async Task InsertEvent(IEvent @event)
+        public Task InsertEvent(IEvent @event)
         {
             var operation = TableOperation.Insert(@event.ToStoreEvent());
-            await eventTable.ExecuteAsync(operation);
+            return eventTable.ExecuteAsync(operation);
         }
 
 

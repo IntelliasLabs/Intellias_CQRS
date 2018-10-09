@@ -31,8 +31,8 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         {
             var ar = new DemoRoot(message);
             
-            await storage.CreateAsync(ar);
-            return await Task.FromResult(CommandResult.Success);
+            await storage.CreateAsync(ar).ConfigureAwait(false);
+            return await Task.FromResult(CommandResult.Success).ConfigureAwait(false);
         }
     }
 }

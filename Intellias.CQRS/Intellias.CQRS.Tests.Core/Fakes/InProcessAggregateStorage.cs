@@ -37,7 +37,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc />
-        public async Task<T> GetAsync(string aggregateId, int version)
+        public Task<T> GetAsync(string aggregateId, int version)
         {
             if (!roots.ContainsKey(aggregateId))
             {
@@ -51,7 +51,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
 
             var root = roots[aggregateId][version];
 
-            return await Task.FromResult((T)root);
+            return Task.FromResult((T)root);
         }
     }
 }

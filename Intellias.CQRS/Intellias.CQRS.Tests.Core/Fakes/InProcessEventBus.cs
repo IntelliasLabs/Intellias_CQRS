@@ -17,14 +17,14 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <param name="handlers">event handlers</param>
         public InProcessEventBus(params IEventHandler<T>[] handlers)
         {
-            bus = new InProcessBus(handlers.Select(h => (IHandler<IMessage, IExecutionResult>)new HandlerWrapper(async msg => await h.HandleAsync((T)msg))).ToArray());
+            bus = new InProcessBus(handlers.Select(h => (IHandler<IMessage, IExecutionResult>)new HandlerWrapper(async msg => await h.HandleAsync((T)msg).ConfigureAwait(false))).ToArray());
         }
 
         /// <inheritdoc />
         public async Task<IEventResult> PublishAsync(IEvent msg)
         {
-            var result = await bus.PublishAsync(msg);
-            return await Task.FromResult((IEventResult)result);
+            var result = await bus.PublishAsync(msg).ConfigureAwait(false);
+            return await Task.FromResult((IEventResult)result).ConfigureAwait(false);
         }
     }
 }

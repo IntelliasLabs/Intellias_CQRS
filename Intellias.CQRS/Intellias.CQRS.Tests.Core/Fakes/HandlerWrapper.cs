@@ -19,10 +19,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc />
-        public async Task<IExecutionResult> HandleAsync(IMessage message)
+        public Task<IExecutionResult> HandleAsync(IMessage message)
         {
-            var result = await handle(message);
-            return await Task.FromResult(result);
+            return handle(message);
         }
     }
 }
