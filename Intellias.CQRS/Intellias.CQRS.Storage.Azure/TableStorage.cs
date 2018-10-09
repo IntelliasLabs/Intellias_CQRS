@@ -128,7 +128,7 @@ namespace Intellias.CQRS.Storage.Azure
 
             if (string.IsNullOrWhiteSpace(entity.Id))
             {
-                throw new ArgumentNullException(nameof(entity.Id));
+                throw new InvalidCastException(nameof(entity.Id));
             }
 
             // Execute the insert operation.
