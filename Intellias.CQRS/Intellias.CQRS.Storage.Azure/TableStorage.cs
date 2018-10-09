@@ -29,7 +29,7 @@ namespace Intellias.CQRS.Storage.Azure
             table.CreateIfNotExistsAsync().Wait();
         }
 
-        private T GetResult(TableResult response)
+        private static T GetResult(TableResult response)
         {
             if (response == null || response.Result == null)
             {

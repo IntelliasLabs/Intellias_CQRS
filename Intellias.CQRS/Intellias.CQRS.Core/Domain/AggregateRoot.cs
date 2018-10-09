@@ -44,9 +44,9 @@ namespace Intellias.CQRS.Core.Domain
         }        
 
         /// <inheritdoc />
-        public void LoadFromHistory(IEnumerable<IEvent> pastEvents)
+        public void LoadFromHistory(IEnumerable<IEvent> events)
         {
-            foreach (var e in pastEvents.OrderBy(e=>e.Version))
+            foreach (var e in events.OrderBy(e=>e.Version))
             {
                 if (e.Version != ++Version)
                 {
