@@ -52,7 +52,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int version)
+        public async Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion)
         {
             // ToDo: Implement snapshot logic here!
             return await eventRepository.GetEvents(aggregateId/*, version*/).ConfigureAwait(false);

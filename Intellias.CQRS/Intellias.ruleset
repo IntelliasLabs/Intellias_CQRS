@@ -2,41 +2,34 @@
 <RuleSet Name="Rules for Code Analysis" ToolsVersion="14.0">
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
     <Rule Id="SA1101" Action="None" />
-    <Rule Id="SA1309" Action="None" />
-    <Rule Id="SA1413" Action="None" />
+    <Rule Id="SA1309" Action="Error" />
+    <Rule Id="SA1413" Action="Error" />
     <Rule Id="SA1623" Action="None" />
     <Rule Id="SA1633" Action="None" />
     <Rule Id="SA1642" Action="None" />
     <Rule Id="SX1101" Action="Error" />
     <Rule Id="SX1309" Action="Error" />
     <Rule Id="SX1309S" Action="Error" />
-    <Rule Id="SA1204" Action="None" />
-    <Rule Id="SA1311" Action="None" />
-    <Rule Id="SA1306" Action="None" />
-    <Rule Id="SA1401" Action="None" />
+    <Rule Id="SA1204" Action="Error" />
+    <Rule Id="SA1311" Action="Error" />
+    <Rule Id="SA1306" Action="Error" />
+    <Rule Id="SA1401" Action="Error" />
     <Rule Id="SA1116" Action="None" />
     <Rule Id="SA1200" Action="None" />
     <Rule Id="SA1202" Action="None" />
-    <Rule Id="SA1652" Action="None" />
+    <Rule Id="SA1652" Action="Error" />
 	<Rule Id="SA1123" Action="Error" />
 	<Rule Id="SA1124" Action="Error" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
     <Rule Id="CA1040" Action="None" />
-    <Rule Id="CA1054" Action="None" />
-    <Rule Id="CA1055" Action="None" />
     <Rule Id="CA1063" Action="Info" />
-    <Rule Id="CA1710" Action="None" />
     <Rule Id="CA1716" Action="None" />
-    <Rule Id="CA1822" Action="None" />
-    <Rule Id="CA2227" Action="None" />
-    <Rule Id="CA1720" Action="None" />
-    <Rule Id="CA1819" Action="None" />
-    <Rule Id="CA1056" Action="None" />
+	<Rule Id="CA1725" Action="Warning" />
+	<Rule Id="CA2240" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="Microsoft.NetCore.Analyzers" RuleNamespace="Microsoft.NetCore.Analyzers">
     <Rule Id="CA1816" Action="None" />
-    <Rule Id="CA2208" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
     <Rule Id="IDE0005" Action="Error" />

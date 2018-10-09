@@ -9,7 +9,6 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
     /// </summary>
     public class DemoEventHandlers : IEventHandler<TestCreatedEvent>
     {
-        #region test
         /// <summary>
         /// Applies create event
         /// </summary>
@@ -19,6 +18,5 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         {
             return await Task.FromResult(EventResult.Success).ConfigureAwait(false);
         }
-#endregion
     }
 }

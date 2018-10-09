@@ -29,7 +29,7 @@ namespace Intellias.CQRS.Storage.Azure
             table.CreateIfNotExistsAsync().Wait();
         }
 
-        private T GetResult(TableResult response)
+        private static T GetResult(TableResult response)
         {
             if (response == null || response.Result == null)
             {
@@ -128,7 +128,7 @@ namespace Intellias.CQRS.Storage.Azure
 
             if (string.IsNullOrWhiteSpace(entity.Id))
             {
-                throw new ArgumentNullException(nameof(entity.Id));
+                throw new InvalidConstraintException(nameof(entity.Id));
             }
 
             // Execute the insert operation.

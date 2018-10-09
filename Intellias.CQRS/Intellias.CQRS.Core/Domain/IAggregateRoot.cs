@@ -23,7 +23,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <summary>
         /// Load event history
         /// </summary>
-        /// <param name="events"></param>
-        void LoadFromHistory(IEnumerable<IEvent> events);
+        /// <param name="history"></param>
+        void LoadFromHistory(IEnumerable<IEvent> history);
     }
 }
