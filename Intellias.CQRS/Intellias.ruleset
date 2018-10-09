@@ -18,6 +18,8 @@
     <Rule Id="SA1200" Action="None" />
     <Rule Id="SA1202" Action="None" />
     <Rule Id="SA1652" Action="None" />
+	<Rule Id="SA1123" Action="Error" />
+	<Rule Id="SA1124" Action="Error" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
     <Rule Id="CA1040" Action="None" />
@@ -27,7 +29,6 @@
     <Rule Id="CA1710" Action="None" />
     <Rule Id="CA1716" Action="None" />
     <Rule Id="CA1822" Action="None" />
-    <Rule Id="CA2007" Action="None" />
     <Rule Id="CA2227" Action="None" />
     <Rule Id="CA1720" Action="None" />
     <Rule Id="CA1819" Action="None" />

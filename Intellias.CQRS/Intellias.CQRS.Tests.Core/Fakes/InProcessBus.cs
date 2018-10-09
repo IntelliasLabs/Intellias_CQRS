@@ -26,17 +26,17 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             var results = new List<IExecutionResult>();
             foreach (var handler in handlers)
             {
-                var result = await handler.HandleAsync(msg);
+                var result = await handler.HandleAsync(msg).ConfigureAwait(false);
                 results.Add(result);
             }
 
             // Command result
             if (results.Count == 1)
             {
-                return await Task.FromResult(results.Single());
+                return await Task.FromResult(results.Single()).ConfigureAwait(false);
             }
 
-            return await Task.FromResult(CommandResult.Success);
+            return await Task.FromResult(CommandResult.Success).ConfigureAwait(false);
         }
     }
 }
