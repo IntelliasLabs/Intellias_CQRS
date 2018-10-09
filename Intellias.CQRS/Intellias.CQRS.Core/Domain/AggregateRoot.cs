@@ -11,20 +11,8 @@ namespace Intellias.CQRS.Core.Domain
     /// <inheritdoc />
     public class AggregateRoot : IAggregateRoot
     {
-
-        #region Private members
-
-        
-
         private readonly List<IEvent> pendingEvents = new List<IEvent>();
         private readonly Dictionary<Type, Action<IEvent>> handlers = new Dictionary<Type, Action<IEvent>>();
-
-
-
-        #endregion
-
-        #region Public members
-
 
         /// <inheritdoc />
         public string Id { get; }
@@ -32,12 +20,6 @@ namespace Intellias.CQRS.Core.Domain
         public int Version { get; private set; }
         /// <inheritdoc />
         public ReadOnlyCollection<IEvent> Events => pendingEvents.AsReadOnly();
-
-
-        #endregion
-
-        #region Constructors
-
 
         /// <summary>
         /// Call to empty constructor assembles brand-new Aggregate-root entity
@@ -61,12 +43,6 @@ namespace Intellias.CQRS.Core.Domain
             Id = id;
         }        
 
-
-        #endregion
-
-
-
-     
         /// <inheritdoc />
         public void LoadFromHistory(IEnumerable<IEvent> pastEvents)
         {
@@ -80,9 +56,8 @@ namespace Intellias.CQRS.Core.Domain
             }
         }
 
-
         /// <summary>
-        /// Configures a handler for an event. 
+        /// Configures a handler method for an event. 
         /// </summary>
         protected void Handles<TEvent>(Action<TEvent> handler)
             where TEvent : IEvent
@@ -94,10 +69,19 @@ namespace Intellias.CQRS.Core.Domain
         /// Apply an event
         /// </summary>
         /// <param name="event">Event</param>
-        protected void ApplyChange(IEvent @event)
+        private void ApplyEvent(IEvent @event)
         {
             @event.Version = ++Version;
             handlers[@event.GetType()].Invoke(@event);
+        }
+
+        /// <summary>
+        /// Apply an event
+        /// </summary>
+        /// <param name="event">Event</param>
+        protected void PublishEvent(IEvent @event)
+        {
+            ApplyEvent(@event);
             pendingEvents.Add(@event);
         }
     }

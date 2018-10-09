@@ -30,6 +30,7 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         public async Task<ICommandResult> HandleAsync(TestCreateCommand message)
         {
             var ar = new DemoRoot(message);
+            
             await storage.CreateAsync(ar);
             return await Task.FromResult(CommandResult.Success);
         }

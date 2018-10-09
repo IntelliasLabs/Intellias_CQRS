@@ -30,7 +30,7 @@ namespace Intellias.CQRS.Tests.Core.Entities
         /// </summary>
         public void Create(TestCreateCommand command)
         {
-            ApplyChange(new TestCreatedEvent
+            PublishEvent(new TestCreatedEvent
             {
                 AggregateRootId = Id,
                 TestData = command.TestData
@@ -42,7 +42,7 @@ namespace Intellias.CQRS.Tests.Core.Entities
         /// <param name="command"></param>
         public void Update(TestUpdateCommand command)
         {
-            ApplyChange(new TestUpdatedEvent
+            PublishEvent(new TestUpdatedEvent
             {
                 AggregateRootId = Id,
                 TestData = command.TestData
@@ -54,14 +54,11 @@ namespace Intellias.CQRS.Tests.Core.Entities
         /// </summary>
         public void Deactivate()
         {
-            ApplyChange(new TestDeletedEvent
+            PublishEvent(new TestDeletedEvent
             {
                 AggregateRootId = Id
             });
         }
-
-
-
 
         private void OnTestCreated(TestCreatedEvent e)
         {
