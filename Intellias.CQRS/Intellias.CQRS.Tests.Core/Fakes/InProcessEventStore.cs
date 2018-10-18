@@ -33,7 +33,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                     _inMemoryDb.Add(@event.Id, list);
                 }
                 list.Add(@event);
-                await _publisher.PublishAsync(@event).ConfigureAwait(false);
+                await _publisher.PublishAsync(@event);
             }
         }
 

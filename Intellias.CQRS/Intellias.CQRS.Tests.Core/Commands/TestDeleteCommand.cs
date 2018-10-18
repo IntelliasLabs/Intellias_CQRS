@@ -5,9 +5,5 @@ namespace Intellias.CQRS.Tests.Core.Commands
     /// <inheritdoc />
     public class TestDeleteCommand : Command
     {
-        /// <summary>
-        /// TestData
-        /// </summary>
-        public string TestData { get; set; }
     }
 }

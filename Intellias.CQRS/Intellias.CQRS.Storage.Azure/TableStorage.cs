@@ -54,7 +54,7 @@ namespace Intellias.CQRS.Storage.Azure
             var op = TableOperation.Insert(new StorageEntity(entity));
 
             // Execute the insert operation.
-            var response = await table.ExecuteAsync(op).ConfigureAwait(false);
+            var response = await table.ExecuteAsync(op);
 
             return GetResult(response);
         }
@@ -67,11 +67,11 @@ namespace Intellias.CQRS.Storage.Azure
                 throw new ArgumentNullException(nameof(id));
             }
 
-            var entity = await OneAsync(id.ToUpperInvariant()).ConfigureAwait(false);
+            var entity = await OneAsync(id.ToUpperInvariant());
 
             var op = TableOperation.Delete(new StorageEntity(entity));
 
-            var response = await table.ExecuteAsync(op).ConfigureAwait(false);
+            var response = await table.ExecuteAsync(op);
 
             return GetResult(response);
         }
@@ -93,7 +93,7 @@ namespace Intellias.CQRS.Storage.Azure
             var op = TableOperation.Retrieve<StorageEntity>(id.ToUpperInvariant().First().ToString(CultureInfo.InvariantCulture), id.ToUpperInvariant());
 
             // Execute the retrieve operation.
-            var response = await table.ExecuteAsync(op).ConfigureAwait(false);
+            var response = await table.ExecuteAsync(op);
 
             return GetResult(response);
         }
@@ -109,7 +109,7 @@ namespace Intellias.CQRS.Storage.Azure
 
             do
             {
-                var segment = await table.ExecuteQuerySegmentedAsync(query, token).ConfigureAwait(false);
+                var segment = await table.ExecuteQuerySegmentedAsync(query, token);
                 token = segment.ContinuationToken;
 
                 items.AddRange(segment.Results.Select(x => x.GetValue<T>()));
@@ -132,7 +132,7 @@ namespace Intellias.CQRS.Storage.Azure
             }
 
             // Execute the insert operation.
-            var response = await table.ExecuteAsync(TableOperation.Replace(new StorageEntity(entity))).ConfigureAwait(false);
+            var response = await table.ExecuteAsync(TableOperation.Replace(new StorageEntity(entity)));
 
             return GetResult(response);
         }

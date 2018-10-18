@@ -1,27 +1,26 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <inheritdoc />
-    public class HandlerWrapper : IHandler<IMessage, IExecutionResult>
+    public class HandlerWrapper<T, TR> : IHandler<IMessage, IExecutionResult> where T :IMessage where TR : IExecutionResult
     {
-        private readonly Func<IMessage, Task<IExecutionResult>> handle;
+        private readonly IHandler<T, TR> handler;
 
         /// <summary>
         /// Constructs handler wrapper from func
         /// </summary>
-        /// <param name="handle"></param>
-        public HandlerWrapper(Func<IMessage, Task<IExecutionResult>> handle)
+        /// <param name="handler"></param>
+        public HandlerWrapper(IHandler<T, TR> handler)
         {
-            this.handle = handle;
+            this.handler = handler;
         }
 
         /// <inheritdoc />
-        public Task<IExecutionResult> HandleAsync(IMessage message)
+        public async Task<IExecutionResult> HandleAsync(IMessage message)
         {
-            return handle(message);
+            return await handler.HandleAsync((T)message);
         }
     }
 }
