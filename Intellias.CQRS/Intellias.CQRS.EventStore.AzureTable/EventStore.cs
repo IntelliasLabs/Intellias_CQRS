@@ -44,18 +44,18 @@ namespace Intellias.CQRS.EventStore.AzureTable
             await Task.WhenAll(entity.Events
                 .Select(async e =>
                 {
-                    await eventRepository.InsertEvent(e).ConfigureAwait(false);
-                    await eventBus.PublishAsync(e).ConfigureAwait(false);
-                })).ConfigureAwait(false);
+                    await eventRepository.InsertEvent(e);
+                    await eventBus.PublishAsync(e);
+                }));
 
-            await aggregateRepository.UpdateAggregateVersion(entity).ConfigureAwait(false);
+            await aggregateRepository.UpdateAggregateVersion(entity);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion)
         {
             // ToDo: Implement snapshot logic here!
-            return await eventRepository.GetEvents(aggregateId/*, version*/).ConfigureAwait(false);
+            return await eventRepository.GetEvents(aggregateId/*, version*/);
         }
     }
 }

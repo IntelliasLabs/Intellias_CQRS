@@ -1,30 +1,36 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <inheritdoc />
-    public class InProcessCommandBus<T> : ICommandBus
-        where T : ICommand,  new()
+    public class InProcessCommandBus : ICommandBus
     {
-        private readonly IMessageBus<IMessage, IExecutionResult> bus;
+        private readonly InProcessBus bus;
 
         /// <summary>
         /// Creates command bus
         /// </summary>
-        /// <param name="handlers">command handlers</param>
-        public InProcessCommandBus(params ICommandHandler<T>[] handlers)
+        public InProcessCommandBus()
         {
-            bus = new InProcessBus(handlers.Select(h => (IHandler<IMessage, IExecutionResult>)new HandlerWrapper(async msg => await h.HandleAsync((T)msg).ConfigureAwait(false))).ToArray());
+            bus = new InProcessBus();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void AddHandler<T>(IHandler<T, ICommandResult> handler) where T : ICommand
+        {
+            bus.AddHandler(handler);
         }
 
         /// <inheritdoc />
         public async Task<ICommandResult> PublishAsync(ICommand msg)
         {
-            var result = await bus.PublishAsync(msg).ConfigureAwait(false);
-            return await Task.FromResult((ICommandResult)result).ConfigureAwait(false);
+            var result = await bus.PublishAsync(msg);
+            return await Task.FromResult((ICommandResult)result);
         }
     }
 }

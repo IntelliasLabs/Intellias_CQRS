@@ -47,7 +47,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
             do
             {
                 var queryResults =
-                    await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken).ConfigureAwait(false);
+                    await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken);
 
                 continuationToken = queryResults.ContinuationToken;
                 results.AddRange(queryResults.Results);

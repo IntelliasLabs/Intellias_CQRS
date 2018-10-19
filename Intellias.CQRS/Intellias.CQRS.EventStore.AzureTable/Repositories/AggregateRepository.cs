@@ -36,12 +36,12 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
             if (entity.Events.First().Version == 1)
             {
                 var aggregate = entity.ToStoreAggregate();
-                await aggregateTable.ExecuteAsync(TableOperation.Insert(aggregate)).ConfigureAwait(false);
+                await aggregateTable.ExecuteAsync(TableOperation.Insert(aggregate));
                 return aggregate;
             }
 
             var operation = TableOperation.Retrieve<EventStoreAggregate>(entity.GetType().Name, entity.Id);
-            var result = await aggregateTable.ExecuteAsync(operation).ConfigureAwait(false);
+            var result = await aggregateTable.ExecuteAsync(operation);
             return (EventStoreAggregate)result.Result;
         }
 
@@ -53,7 +53,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         public async Task<EventStoreAggregate> MergeEventStoreAggregate(EventStoreAggregate aggregate)
         {
             var operation = TableOperation.Merge(aggregate);
-            await aggregateTable.ExecuteAsync(operation).ConfigureAwait(false);
+            await aggregateTable.ExecuteAsync(operation);
             return aggregate;
         }
 
@@ -64,9 +64,9 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// <returns></returns>
         public async Task UpdateAggregateVersion(IAggregateRoot entity)
         {
-            var storeAggregate = await GetEventStoreAggregate(entity).ConfigureAwait(false);
+            var storeAggregate = await GetEventStoreAggregate(entity);
             storeAggregate.LastArVersion = entity.Version;
-            await MergeEventStoreAggregate(storeAggregate).ConfigureAwait(false);
+            await MergeEventStoreAggregate(storeAggregate);
         }
     }
 }

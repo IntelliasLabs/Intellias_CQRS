@@ -16,7 +16,7 @@ namespace Intellias.CQRS.Core.Storage
         /// </summary>
         /// <param name="entity">Entity to Save</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        Task<T> CreateAsync(T entity);
+        Task CreateAsync(T entity);
 
         /// <summary>
         /// Getting one document by native api

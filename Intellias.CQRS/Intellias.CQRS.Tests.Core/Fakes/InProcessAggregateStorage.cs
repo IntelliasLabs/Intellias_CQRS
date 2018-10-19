@@ -21,7 +21,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc />
-        public Task<T> CreateAsync(T entity)
+        public Task CreateAsync(T entity)
         {
             if (!roots.ContainsKey(entity.Id))
             {
@@ -32,8 +32,12 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             {
                 roots[entity.Id].Add(entity.Version, entity);
             }
+            else
+            {
+                throw new AggregateException();
+            }
 
-            throw new AggregateException();
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />

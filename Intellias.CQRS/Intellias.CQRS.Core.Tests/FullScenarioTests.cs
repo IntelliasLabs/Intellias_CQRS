@@ -1,4 +1,3 @@
-using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Core.Tests.CommandHandlers;
@@ -22,17 +21,34 @@ namespace Intellias.CQRS.Core.Tests
         [Fact]
         public void DemoTest()
         {
-            var demoCommand = new TestCreateCommand { TestData = "Test data" };
+            var createCommand = new TestCreateCommand { TestData = "Test data" };
+            var updateCommand = new TestUpdateCommand { TestData = "Test data" };
+            var deactivateCommand = new TestDeleteCommand();
 
-            IEventBus eventBus = new InProcessEventBus<TestCreatedEvent>(new DemoEventHandlers());
+            var eventHandlers = new DemoEventHandlers();
+            var eventBus = new InProcessEventBus();
+            eventBus.AddHandler<TestCreatedEvent>(eventHandlers);
+            eventBus.AddHandler<TestUpdatedEvent>(eventHandlers);
+            eventBus.AddHandler<TestDeletedEvent>(eventHandlers);
+
             IEventStore eventStore = new InProcessEventStore(eventBus);
 
             IAggregateStorage<DemoRoot> rootStorage = new InProcessAggregateStorage<DemoRoot>();
-            ICommandBus commandBus = new InProcessCommandBus<TestCreateCommand>(new DemoCommandHandlers(rootStorage));
 
-            var result = commandBus.PublishAsync(demoCommand);
+            var commandHandlers = new DemoCommandHandlers(rootStorage);
+            var commandBus = new InProcessCommandBus();
+            commandBus.AddHandler<TestCreateCommand>(commandHandlers);
+            commandBus.AddHandler<TestUpdateCommand>(commandHandlers);
+            commandBus.AddHandler<TestDeleteCommand>(commandHandlers);
 
-            Assert.NotNull(result);
+            var createResult = commandBus.PublishAsync(createCommand).Result;
+            Assert.NotNull(createResult);
+
+            //var updateResult = commandBus.PublishAsync(updateCommand).Result;
+            //Assert.NotNull(updateResult);
+
+            //var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
+            //Assert.NotNull(deactivateResult);
         }
     }
 }

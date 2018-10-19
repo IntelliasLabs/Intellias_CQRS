@@ -7,7 +7,9 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
     /// <summary>
     /// Demo command handlers
     /// </summary>
-    public class DemoEventHandlers : IEventHandler<TestCreatedEvent>
+    public class DemoEventHandlers : IEventHandler<TestCreatedEvent>,
+        IEventHandler<TestUpdatedEvent>,
+        IEventHandler<TestDeletedEvent>
     {
         /// <summary>
         /// Applies create event
@@ -16,7 +18,27 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// <returns>Result</returns>
         public async Task<IEventResult> HandleAsync(TestCreatedEvent message)
         {
-            return await Task.FromResult(EventResult.Success).ConfigureAwait(false);
+            return await Task.FromResult(EventResult.Success);
+        }
+
+        /// <summary>
+        /// Applies deleted event
+        /// </summary>
+        /// <param name="message">Event</param>
+        /// <returns>Result</returns>
+        public async Task<IEventResult> HandleAsync(TestDeletedEvent message)
+        {
+            return await Task.FromResult(EventResult.Success);
+        }
+
+        /// <summary>
+        /// Applies updated event
+        /// </summary>
+        /// <param name="message">Event</param>
+        /// <returns>Result</returns>
+        public async Task<IEventResult> HandleAsync(TestUpdatedEvent message)
+        {
+            return await Task.FromResult(EventResult.Success);
         }
     }
 }
