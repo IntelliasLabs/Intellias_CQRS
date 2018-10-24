@@ -1,36 +1,63 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <inheritdoc />
     public class InProcessEventBus : IEventBus
     {
-        private readonly InProcessBus bus;
+        private readonly Dictionary<Type, List<IEventHandler<IEvent>>> funcs;
 
         /// <summary>
-        /// Creates event bus
+        /// Creates message bus
         /// </summary>
         public InProcessEventBus()
         {
-            bus = new InProcessBus();
+            funcs = new Dictionary<Type, List<IEventHandler<IEvent>>>();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void AddHandler<T>(IHandler<T, IEventResult> handler) where T : IEvent
+        public void AddHandler<T>(IEventHandler<T> handler) where T : IEvent
         {
-            bus.AddHandler(handler);
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler));
+            }
+
+            var abstractHandler = (IEventHandler<IEvent>)new EventHandlerWrapper<T>(handler);
+
+            if (funcs.ContainsKey(typeof(T)))
+            {
+                funcs[typeof(T)].Add(abstractHandler);
+            }
+            else
+            {
+                var list = new List<IEventHandler<IEvent>> { abstractHandler };
+                funcs.Add(typeof(T), list);
+            }
         }
 
         /// <inheritdoc />
         public async Task<IEventResult> PublishAsync(IEvent msg)
         {
-            var result = await bus.PublishAsync(msg);
-            return await Task.FromResult((IEventResult)result);
+            if(msg == null)
+            {
+                throw new ArgumentNullException(nameof(msg));
+            }
+
+            var funcsList = funcs[msg.GetType()];
+
+            foreach (var func in funcsList)
+            {
+                await func.HandleAsync(msg);
+            }
+
+            return await Task.FromResult(EventResult.Success);
         }
     }
 }

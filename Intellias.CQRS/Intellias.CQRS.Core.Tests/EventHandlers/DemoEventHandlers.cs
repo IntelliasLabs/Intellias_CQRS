@@ -14,31 +14,31 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// <summary>
         /// Applies create event
         /// </summary>
-        /// <param name="message">Event</param>
+        /// <param name="event">Event</param>
         /// <returns>Result</returns>
-        public async Task<IEventResult> HandleAsync(TestCreatedEvent message)
+        public Task HandleAsync(TestCreatedEvent @event)
         {
-            return await Task.FromResult(EventResult.Success);
+            return Task.FromResult(EventResult.Success);
         }
 
         /// <summary>
         /// Applies deleted event
         /// </summary>
-        /// <param name="message">Event</param>
+        /// <param name="event">Event</param>
         /// <returns>Result</returns>
-        public async Task<IEventResult> HandleAsync(TestDeletedEvent message)
+        public Task HandleAsync(TestDeletedEvent @event)
         {
-            return await Task.FromResult(EventResult.Success);
+            return Task.FromResult(EventResult.Success);
         }
 
         /// <summary>
         /// Applies updated event
         /// </summary>
-        /// <param name="message">Event</param>
+        /// <param name="event">Event</param>
         /// <returns>Result</returns>
-        public async Task<IEventResult> HandleAsync(TestUpdatedEvent message)
+        public Task HandleAsync(TestUpdatedEvent @event)
         {
-            return await Task.FromResult(EventResult.Success);
+            return Task.FromResult(EventResult.Success);
         }
     }
 }

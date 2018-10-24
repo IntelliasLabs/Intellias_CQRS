@@ -1,36 +1,59 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <inheritdoc />
     public class InProcessCommandBus : ICommandBus
     {
-        private readonly InProcessBus bus;
+        private readonly Dictionary<Type, ICommandHandler<ICommand>> funcs;
 
         /// <summary>
         /// Creates command bus
         /// </summary>
         public InProcessCommandBus()
         {
-            bus = new InProcessBus();
+            funcs = new Dictionary<Type, ICommandHandler<ICommand>>();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void AddHandler<T>(IHandler<T, ICommandResult> handler) where T : ICommand
+        public void AddHandler<T>(ICommandHandler<T> handler) where T : ICommand
         {
-            bus.AddHandler(handler);
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler));
+            }
+
+            var abstractHandler = (ICommandHandler<ICommand>)new CommandHandlerWrapper<T>(handler);
+
+            if (funcs.ContainsKey(typeof(T)))
+            {
+                throw new InvalidOperationException($"Command Handler for command {typeof(T)} already exists");
+            }
+            else
+            {
+                funcs.Add(typeof(T), abstractHandler);
+            }
         }
 
         /// <inheritdoc />
         public async Task<ICommandResult> PublishAsync(ICommand msg)
         {
-            var result = await bus.PublishAsync(msg);
-            return await Task.FromResult((ICommandResult)result);
+            if (msg == null)
+            {
+                throw new ArgumentNullException(nameof(msg));
+            }
+
+            var func = funcs[msg.GetType()];
+
+            var result = await func.HandleAsync(msg);
+
+            return await Task.FromResult(result);
         }
     }
 }
