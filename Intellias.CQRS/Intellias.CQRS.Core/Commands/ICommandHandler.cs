@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Commands
 {
@@ -8,8 +7,7 @@ namespace Intellias.CQRS.Core.Commands
     /// Command handler abstraction
     /// </summary>
     /// <typeparam name="T">Type of command</typeparam>
-    public interface ICommandHandler<in T> : IHandler<T>
-        where T : ICommand
+    public interface ICommandHandler<in T> where T : ICommand
     {
         /// <summary>
         ///  Handles a command
