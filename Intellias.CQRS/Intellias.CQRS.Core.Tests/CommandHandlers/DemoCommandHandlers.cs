@@ -27,11 +27,11 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// <summary>
         /// Handels create command
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="command"></param>
         /// <returns></returns>
-        public async Task<ICommandResult> HandleAsync(TestCreateCommand message)
+        public async Task<ICommandResult> HandleAsync(TestCreateCommand command)
         {
-            var ar = new DemoRoot(message);
+            var ar = new DemoRoot(command);
             
             await storage.CreateAsync(ar);
 
@@ -41,13 +41,13 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// <summary>
         /// Handle Test Update Command
         /// </summary>
-        /// <param name="message">command</param>
+        /// <param name="command">command</param>
         /// <returns>result</returns>
-        public async Task<ICommandResult> HandleAsync(TestUpdateCommand message)
+        public async Task<ICommandResult> HandleAsync(TestUpdateCommand command)
         {
-            var root = await storage.GetAsync(message.AggregateRootId, message.ExpectedVersion);
+            var root = await storage.GetAsync(command.AggregateRootId, command.ExpectedVersion);
 
-            var result = root.Update(message);
+            var result = root.Update(command);
 
             return await Task.FromResult(result);
         }
@@ -55,11 +55,11 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// <summary>
         /// Handle Test Delete Command
         /// </summary>
-        /// <param name="message">command</param>
+        /// <param name="command">command</param>
         /// <returns>result</returns>
-        public async Task<ICommandResult> HandleAsync(TestDeleteCommand message)
+        public async Task<ICommandResult> HandleAsync(TestDeleteCommand command)
         {
-            var root = await storage.GetAsync(message.AggregateRootId, message.ExpectedVersion);
+            var root = await storage.GetAsync(command.AggregateRootId, command.ExpectedVersion);
 
             var result = root.Deactivate();
 

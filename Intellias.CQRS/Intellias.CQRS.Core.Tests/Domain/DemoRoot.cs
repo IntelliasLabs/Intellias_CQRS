@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
-using Intellias.CQRS.Core.Commands;
+﻿using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Domain;
-using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
@@ -10,9 +8,9 @@ namespace Intellias.CQRS.Core.Tests.Domain
 {
     /// <inheritdoc />
     public class DemoRoot : AggregateRoot,
-        IEventHandler<TestCreatedEvent>,
-        IEventHandler<TestUpdatedEvent>,
-        IEventHandler<TestDeletedEvent>
+        IEventApplier<TestCreatedEvent>,
+        IEventApplier<TestUpdatedEvent>,
+        IEventApplier<TestDeletedEvent>
     {
         /// <summary>
         /// TestData
@@ -24,9 +22,9 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// </summary>
         public DemoRoot()
         {
-            Handles<TestCreatedEvent>(async x => await HandleAsync(x));
-            Handles<TestUpdatedEvent>(async x => await HandleAsync(x));
-            Handles<TestDeletedEvent>(async x => await HandleAsync(x));
+            Handles<TestCreatedEvent>(e => Apply(e));
+            Handles<TestUpdatedEvent>(e => Apply(e));
+            Handles<TestDeletedEvent>(e => Apply(e));
         }
 
         /// <summary>
@@ -73,33 +71,30 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="event"></param>
         /// <returns></returns>
-        public Task<IEventResult> HandleAsync(TestCreatedEvent message)
+        public void Apply(TestCreatedEvent @event)
         {
-            this.TestData = message.TestData;
-            return Task.FromResult((IEventResult)EventResult.Success);
+            this.TestData = @event.TestData;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="event"></param>
         /// <returns></returns>
-        public Task<IEventResult> HandleAsync(TestUpdatedEvent message)
+        public void Apply(TestUpdatedEvent @event)
         {
-            this.TestData = message.TestData;
-            return Task.FromResult((IEventResult)EventResult.Success);
+            this.TestData = @event.TestData;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="event"></param>
         /// <returns></returns>
-        public Task<IEventResult> HandleAsync(TestDeletedEvent message)
+        public void Apply(TestDeletedEvent @event)
         {
-            return Task.FromResult((IEventResult)EventResult.Success);
         }
     }
 }

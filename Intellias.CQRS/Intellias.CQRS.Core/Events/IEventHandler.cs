@@ -1,4 +1,5 @@
-﻿using Intellias.CQRS.Core.Messages;
+﻿using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Events
 {
@@ -7,8 +8,14 @@ namespace Intellias.CQRS.Core.Events
     /// Event handler abstraction
     /// </summary>
     /// <typeparam name="T">Type of event</typeparam>
-    public interface IEventHandler<in T> : IHandler<T, IEventResult> 
+    public interface IEventHandler<in T> : IHandler<T> 
         where T : IEvent
     {
+        /// <summary>
+        ///  Handles an event
+        /// </summary>
+        /// <param name="event">Event being handled</param>
+        /// <returns>Task that represents handling of message</returns>
+        Task HandleAsync(T @event);
     }
 }
