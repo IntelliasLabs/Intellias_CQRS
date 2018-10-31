@@ -3,7 +3,7 @@
 namespace Intellias.CQRS.Core.Storage
 {
     /// <summary>
-    /// 
+    /// Read Model
     /// </summary>
     public abstract class ReadModelEnvelope
     {
@@ -16,7 +16,7 @@ namespace Intellias.CQRS.Core.Storage
         }
 
         /// <summary>
-        /// 
+        /// Read Model
         /// </summary>
         /// <param name="readModelId"></param>
         /// <param name="version"></param>

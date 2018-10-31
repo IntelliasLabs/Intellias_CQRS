@@ -4,7 +4,7 @@ using Intellias.CQRS.Core.Queries;
 namespace Intellias.CQRS.Core.Storage
 {
     /// <summary>
-    /// 
+    /// Read Model
     /// </summary>
     /// <typeparam name="TReadModel"></typeparam>
     public class ReadCollectionEnvelope<TReadModel> : ReadModelEnvelope

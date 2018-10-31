@@ -3,9 +3,9 @@
 namespace Intellias.CQRS.Core.Storage
 {
     /// <summary>
-    /// 
+    /// Read Model
     /// </summary>
-    /// <typeparam name="TReadModel"></typeparam>
+    /// <typeparam name="TReadModel">Type of ReadModel</typeparam>
     public class ReadModelEnvelope<TReadModel> : ReadModelEnvelope
         where TReadModel : class, IReadModel
     {
@@ -25,7 +25,7 @@ namespace Intellias.CQRS.Core.Storage
         }
 
         /// <summary>
-        /// 
+        /// Read Model
         /// </summary>
         public TReadModel ReadModel { get; }
     }
