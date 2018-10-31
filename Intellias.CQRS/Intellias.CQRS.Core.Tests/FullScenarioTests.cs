@@ -26,7 +26,7 @@ namespace Intellias.CQRS.Core.Tests
         {
             var readModelQueryStore = new Dictionary<string, DemoReadModel>();
             var readModelStore = new DemoReadModelStore(readModelQueryStore);
-            var demoQueryHandler = new DemoQueryExecutor(readModelStore);
+            var demoQueryExecutor = new DemoQueryExecutor(readModelStore);
 
             var createCommand = new TestCreateCommand { TestData = "Test data" };
             var updateCommand = new TestUpdateCommand { TestData = "Test data updated" };
@@ -50,7 +50,7 @@ namespace Intellias.CQRS.Core.Tests
             var createResult = commandBus.PublishAsync(createCommand).Result;
             Assert.NotNull(createResult);
 
-            var queryResult = demoQueryHandler.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
+            var queryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
             Assert.Equal(1, queryResult.Count);
             Assert.Equal(createCommand.TestData, queryResult.First().TestData);
 
@@ -59,7 +59,7 @@ namespace Intellias.CQRS.Core.Tests
             var updateResult = commandBus.PublishAsync(updateCommand).Result;
             Assert.NotNull(updateResult);
 
-            var updatedQueryResult = demoQueryHandler.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
+            var updatedQueryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
             Assert.Equal(updateCommand.TestData, updatedQueryResult.First().TestData);
 
             deactivateCommand.AggregateRootId = updatedQueryResult.First().Id;
@@ -67,7 +67,7 @@ namespace Intellias.CQRS.Core.Tests
             var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
             Assert.NotNull(deactivateResult);
 
-            var queryRemovedResult = demoQueryHandler.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
+            var queryRemovedResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
             Assert.Equal(0, queryRemovedResult.Count);
         }
     }
