@@ -15,7 +15,7 @@ namespace Intellias.CQRS.Core.Domain
         private readonly Dictionary<Type, Action<IEvent>> handlers = new Dictionary<Type, Action<IEvent>>();
 
         /// <inheritdoc />
-        public string Id { get; }
+        public string Id { get; protected set; }
         /// <inheritdoc />
         public int Version { get; private set; }
         /// <inheritdoc />
@@ -81,6 +81,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <param name="event">Event</param>
         protected void PublishEvent(IEvent @event)
         {
+            @event.AggregateRootId = Id;
             ApplyEvent(@event);
             pendingEvents.Add(@event);
         }

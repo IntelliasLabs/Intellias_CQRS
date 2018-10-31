@@ -26,11 +26,11 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         {
             foreach (var @event in entity.Events)
             {
-                _inMemoryDb.TryGetValue(@event.Id, out var list);
+                _inMemoryDb.TryGetValue(@event.AggregateRootId, out var list);
                 if (list == null)
                 {
                     list = new List<IEvent>();
-                    _inMemoryDb.Add(@event.Id, list);
+                    _inMemoryDb.Add(@event.AggregateRootId, list);
                 }
                 list.Add(@event);
                 await _publisher.PublishAsync(@event);

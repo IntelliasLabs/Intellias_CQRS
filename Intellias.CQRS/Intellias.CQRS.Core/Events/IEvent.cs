@@ -11,7 +11,7 @@ namespace Intellias.CQRS.Core.Events
         /// <summary>
         /// Source Aggregate Root identifier
         /// </summary>
-        string AggregateRootId { get; }
+        string AggregateRootId { get; set; }
 
         /// <summary>
         /// Version of AR that generated an event

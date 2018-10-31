@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Storage;
+using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Tests.Domain;
 using Intellias.CQRS.Tests.Core.Commands;
 
@@ -13,15 +13,15 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         ICommandHandler<TestUpdateCommand>,
         ICommandHandler<TestDeleteCommand>
     {
-        private readonly IAggregateStorage<DemoRoot> storage;
+        private readonly IEventStore store;
 
         /// <summary>
         /// Creates an instance of demo command handler
         /// </summary>
-        /// <param name="storage"></param>
-        public DemoCommandHandlers(IAggregateStorage<DemoRoot> storage)
+        /// <param name="store"></param>
+        public DemoCommandHandlers(IEventStore store)
         {
-            this.storage = storage;
+            this.store = store;
         }
 
         /// <summary>
@@ -32,8 +32,8 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         public async Task<ICommandResult> HandleAsync(TestCreateCommand command)
         {
             var ar = new DemoRoot(command);
-            
-            await storage.CreateAsync(ar);
+
+            await store.SaveAsync(ar);
 
             return await Task.FromResult(CommandResult.Success);
         }
@@ -45,9 +45,13 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// <returns>result</returns>
         public async Task<ICommandResult> HandleAsync(TestUpdateCommand command)
         {
-            var root = await storage.GetAsync(command.AggregateRootId, command.ExpectedVersion);
+            var events = await store.GetAsync(command.AggregateRootId, 0);
+            var ar = new DemoRoot();
+            ar.LoadFromHistory(events);
 
-            var result = root.Update(command);
+            var result = ar.Update(command);
+
+            await store.SaveAsync(ar);
 
             return await Task.FromResult(result);
         }
@@ -59,9 +63,13 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// <returns>result</returns>
         public async Task<ICommandResult> HandleAsync(TestDeleteCommand command)
         {
-            var root = await storage.GetAsync(command.AggregateRootId, command.ExpectedVersion);
+            var events = await store.GetAsync(command.AggregateRootId, 0);
+            var ar = new DemoRoot();
+            ar.LoadFromHistory(events);
 
-            var result = root.Deactivate();
+            var result = ar.Deactivate();
+
+            await store.SaveAsync(ar);
 
             return await Task.FromResult(result);
         }
