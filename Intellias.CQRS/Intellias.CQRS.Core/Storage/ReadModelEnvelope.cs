@@ -12,7 +12,7 @@ namespace Intellias.CQRS.Core.Storage
         /// <summary>
         /// Used for collection reads
         /// </summary>
-        public ReadModelEnvelope()
+        protected ReadModelEnvelope()
         {
 
         }

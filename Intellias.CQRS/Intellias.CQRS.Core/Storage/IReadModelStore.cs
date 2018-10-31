@@ -42,10 +42,5 @@ namespace Intellias.CQRS.Core.Storage
         /// </summary>
         /// <returns></returns>
         Task<ReadCollectionEnvelope<IReadOnlyCollection<TReadModel>>> GetAllAsync();
-
-        //Task UpdateAsync(IReadOnlyCollection<ReadModelUpdate> readModelUpdates,
-        //    IReadModelContextFactory readModelContextFactory,
-        //    Func<IReadModelContext, IReadOnlyCollection<IEvent>, ReadModelEnvelope<TReadModel>,
-        //        Task<ReadModelUpdateResult<TReadModel>>> updateReadModel);
     }
 }
