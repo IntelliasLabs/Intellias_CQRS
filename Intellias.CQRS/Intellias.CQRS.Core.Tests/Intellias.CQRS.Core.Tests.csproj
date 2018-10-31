@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="QueryHandlers\" />
-  </ItemGroup>
-
 </Project>

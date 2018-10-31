@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
+using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Core.Tests.Domain;
 using Intellias.CQRS.Tests.Core.Commands;
@@ -14,14 +15,17 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         ICommandHandler<TestDeleteCommand>
     {
         private readonly IAggregateStorage<DemoRoot> storage;
+        private readonly IEventBus eventBus;
 
         /// <summary>
         /// Creates an instance of demo command handler
         /// </summary>
         /// <param name="storage"></param>
-        public DemoCommandHandlers(IAggregateStorage<DemoRoot> storage)
+        /// <param name="eventBus"></param>
+        public DemoCommandHandlers(IAggregateStorage<DemoRoot> storage, IEventBus eventBus)
         {
             this.storage = storage;
+            this.eventBus = eventBus;
         }
 
         /// <summary>
@@ -32,7 +36,12 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         public async Task<ICommandResult> HandleAsync(TestCreateCommand command)
         {
             var ar = new DemoRoot(command);
-            
+
+            foreach (var pendingEvent in ar.Events)
+            {
+                await eventBus.PublishAsync(pendingEvent);
+            }
+
             await storage.CreateAsync(ar);
 
             return await Task.FromResult(CommandResult.Success);
