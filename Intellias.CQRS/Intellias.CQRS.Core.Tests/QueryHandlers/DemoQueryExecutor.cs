@@ -9,8 +9,8 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
     /// <summary>
     /// Query handler
     /// </summary>
-    public class DemoQueryHandler : IQueryHandler<ReadModelByIdQuery<DemoReadModel>, DemoReadModel>,
-        IQueryHandler<ReadAllQuery<DemoReadModel>, IReadOnlyCollection<DemoReadModel>>
+    public class DemoQueryExecutor : IQueryExecutor<ReadModelByIdQuery<DemoReadModel>, DemoReadModel>,
+        IQueryExecutor<ReadAllQuery<DemoReadModel>, IReadOnlyCollection<DemoReadModel>>
     {
         private readonly DemoReadModelStore store;
 
@@ -18,7 +18,7 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
         /// 
         /// </summary>
         /// <param name="store"></param>
-        public DemoQueryHandler(DemoReadModelStore store)
+        public DemoQueryExecutor(DemoReadModelStore store)
         {
             this.store = store;
         }

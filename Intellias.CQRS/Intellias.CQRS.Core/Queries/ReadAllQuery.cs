@@ -18,7 +18,7 @@ namespace Intellias.CQRS.Core.Queries
     /// </summary>
     /// <typeparam name="TReadStore"></typeparam>
     /// <typeparam name="TReadModel"></typeparam>
-    public class ReadAllQueryHandler<TReadStore, TReadModel> : IQueryHandler<ReadAllQuery<TReadModel>, IReadOnlyCollection<TReadModel>>
+    public class ReadAllQueryExecutor<TReadStore, TReadModel> : IQueryExecutor<ReadAllQuery<TReadModel>, IReadOnlyCollection<TReadModel>>
         where TReadStore : IReadModelStore<TReadModel>
         where TReadModel : class, IReadModel
     {
@@ -28,7 +28,7 @@ namespace Intellias.CQRS.Core.Queries
         /// 
         /// </summary>
         /// <param name="readStore"></param>
-        public ReadAllQueryHandler(
+        public ReadAllQueryExecutor(
             TReadStore readStore)
         {
             _readStore = readStore;

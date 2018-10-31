@@ -26,7 +26,7 @@ namespace Intellias.CQRS.Core.Tests
         {
             var readModelQueryStore = new Dictionary<string, DemoReadModel>();
             var readModelStore = new DemoReadModelStore(readModelQueryStore);
-            var demoQueryHandler = new DemoQueryHandler(readModelStore);
+            var demoQueryHandler = new DemoQueryExecutor(readModelStore);
 
             var createCommand = new TestCreateCommand { TestData = "Test data" };
             var updateCommand = new TestUpdateCommand { TestData = "Test data updated" };

@@ -5,7 +5,7 @@ namespace Intellias.CQRS.Core.Queries
     /// <summary>
     /// Query handler
     /// </summary>
-    public interface IQueryHandler
+    public interface IQueryExecutor
     {
     }
 
@@ -14,7 +14,7 @@ namespace Intellias.CQRS.Core.Queries
     /// </summary>
     /// <typeparam name="TQuery"></typeparam>
     /// <typeparam name="TResult"></typeparam>
-    public interface IQueryHandler<in TQuery, TResult> : IQueryHandler
+    public interface IQueryExecutor<in TQuery, TResult> : IQueryExecutor
         where TQuery : IQuery<TResult>
     {
         /// <summary>
