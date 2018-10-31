@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Intellias.CQRS.Core.Queries;
 
 namespace Intellias.CQRS.Core.Storage
 {
@@ -44,28 +42,5 @@ namespace Intellias.CQRS.Core.Storage
         /// 
         /// </summary>
         public long? Version { get; }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TReadModel"></typeparam>
-    public class ReadCollectionEnvelope<TReadModel> : ReadModelEnvelope
-        where TReadModel : class, IReadOnlyCollection<IReadModel>
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="readModel"></param>
-        public ReadCollectionEnvelope(
-            TReadModel readModel)
-        {
-            ReadModel = readModel;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public TReadModel ReadModel { get; }
     }
 }
