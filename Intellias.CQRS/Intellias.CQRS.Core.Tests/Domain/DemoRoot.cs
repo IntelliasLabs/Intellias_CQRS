@@ -32,11 +32,10 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// </summary>
         public DemoRoot(TestCreateCommand command) : this()
         {
+            Id = Unified.NewCode();
             PublishEvent(new TestCreatedEvent
             {
-                TestData = command.TestData,
-                AggregateRootId = Unified.NewCode(),
-                Version = 1
+                TestData = command.TestData
             });
         }
 
@@ -75,7 +74,8 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// <returns></returns>
         public void Apply(TestCreatedEvent @event)
         {
-            this.TestData = @event.TestData;
+            TestData = @event.TestData;
+            Id = @event.AggregateRootId;
         }
 
         /// <summary>

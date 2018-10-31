@@ -31,7 +31,11 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// <returns>Result</returns>
         public Task HandleAsync(TestCreatedEvent @event)
         {
-            store.Add(@event.AggregateRootId, new DemoReadModel{TestData = @event.TestData});
+            store.Add(@event.AggregateRootId, new DemoReadModel
+            {
+                Id = @event.AggregateRootId,
+                TestData = @event.TestData
+            });
             return Task.FromResult(EventResult.Success);
         }
 

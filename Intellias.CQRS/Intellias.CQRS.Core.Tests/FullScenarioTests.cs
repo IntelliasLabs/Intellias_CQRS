@@ -1,9 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries;
-using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Core.Tests.CommandHandlers;
-using Intellias.CQRS.Core.Tests.Domain;
 using Intellias.CQRS.Core.Tests.EventHandlers;
 using Intellias.CQRS.Core.Tests.QueryHandlers;
 using Intellias.CQRS.Tests.Core.Commands;
@@ -30,10 +29,11 @@ namespace Intellias.CQRS.Core.Tests
             var demoQueryHandler = new DemoQueryHandler(readModelStore);
 
             var createCommand = new TestCreateCommand { TestData = "Test data" };
-            var updateCommand = new TestUpdateCommand { TestData = "Test data" };
+            var updateCommand = new TestUpdateCommand { TestData = "Test data updated" };
             var deactivateCommand = new TestDeleteCommand();
 
             var eventHandlers = new DemoEventHandlers(readModelQueryStore);
+
             var eventBus = new InProcessEventBus();
             eventBus.AddHandler<TestCreatedEvent>(eventHandlers);
             eventBus.AddHandler<TestUpdatedEvent>(eventHandlers);
@@ -41,9 +41,7 @@ namespace Intellias.CQRS.Core.Tests
 
             IEventStore eventStore = new InProcessEventStore(eventBus);
 
-            IAggregateStorage<DemoRoot> rootStorage = new InProcessAggregateStorage<DemoRoot>();
-
-            var commandHandlers = new DemoCommandHandlers(rootStorage, eventBus);
+            var commandHandlers = new DemoCommandHandlers(eventStore);
             var commandBus = new InProcessCommandBus();
             commandBus.AddHandler<TestCreateCommand>(commandHandlers);
             commandBus.AddHandler<TestUpdateCommand>(commandHandlers);
@@ -54,12 +52,23 @@ namespace Intellias.CQRS.Core.Tests
 
             var queryResult = demoQueryHandler.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
             Assert.Equal(1, queryResult.Count);
+            Assert.Equal(createCommand.TestData, queryResult.First().TestData);
 
-            //var updateResult = commandBus.PublishAsync(updateCommand).Result;
-            //Assert.NotNull(updateResult);
+            updateCommand.AggregateRootId = queryResult.First().Id;
+            updateCommand.ExpectedVersion = 1;
+            var updateResult = commandBus.PublishAsync(updateCommand).Result;
+            Assert.NotNull(updateResult);
 
-            //var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
-            //Assert.NotNull(deactivateResult);
+            var updatedQueryResult = demoQueryHandler.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
+            Assert.Equal(updateCommand.TestData, updatedQueryResult.First().TestData);
+
+            deactivateCommand.AggregateRootId = updatedQueryResult.First().Id;
+            updateCommand.ExpectedVersion = 1;
+            var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
+            Assert.NotNull(deactivateResult);
+
+            var queryRemovedResult = demoQueryHandler.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
+            Assert.Equal(0, queryRemovedResult.Count);
         }
     }
 }
