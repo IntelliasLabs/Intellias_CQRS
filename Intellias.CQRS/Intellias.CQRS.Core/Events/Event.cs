@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Intellias.CQRS.Core.Messages;
+﻿using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Events
 {
@@ -21,9 +19,6 @@ namespace Intellias.CQRS.Core.Events
         }
 
         /// <inheritdoc />
-        public string AggregateRootId { get; set; }
-
-        /// <inheritdoc />
         public int Version
         {
             get => version;
@@ -33,13 +28,5 @@ namespace Intellias.CQRS.Core.Events
                 Id = Unified.NewCode(Version);
             }
         }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Date and time when event was created
-        /// </summary>
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime Created { get; } = DateTime.UtcNow;
     }
 }
