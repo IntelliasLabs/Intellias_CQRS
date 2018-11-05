@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Core", "Intellias.CQRS.Core\Intellias.CQRS.Core.csproj", "{41AC6C45-8D2E-4ADF-A3BB-60AB94982F37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Storage.Azure", "Intellias.CQRS.Storage.Azure\Intellias.CQRS.Storage.Azure.csproj", "{97833FE4-FA06-41F2-9155-DD810E7A19EE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{66AA23B1-E838-419A-AD8C-253D796AFB39}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -22,9 +20,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventBus.Azu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventStore.AzureTable.Tests", "Intellias.CQRS.EventStore.AzureTable.Tests\Intellias.CQRS.EventStore.AzureTable.Tests.csproj", "{A2856CF4-7A8B-4567-A793-452812BFC268}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.Tests.Core", "Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj", "{5E758EFE-C893-4652-8F4E-D68D407603A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Tests.Core", "Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj", "{5E758EFE-C893-4652-8F4E-D68D407603A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Core.Tests", "Intellias.CQRS.Core.Tests\Intellias.CQRS.Core.Tests.csproj", "{CEADCD47-5BF0-47FC-86FA-706A636B0C7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.CommandBus.Azure", "Intellias.CQRS.CommandBus.Azure\Intellias.CQRS.CommandBus.Azure.csproj", "{C33932AA-646A-4D65-B625-CE38A5A81446}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.CommandBus.Azure.Tests", "Intellias.CQRS.CommandBus.Azure.Tests\Intellias.CQRS.CommandBus.Azure.Tests.csproj", "{7D95D523-E7AA-4485-AA7A-4EF7660FEAC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,10 +38,6 @@ Global
 		{41AC6C45-8D2E-4ADF-A3BB-60AB94982F37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41AC6C45-8D2E-4ADF-A3BB-60AB94982F37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41AC6C45-8D2E-4ADF-A3BB-60AB94982F37}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97833FE4-FA06-41F2-9155-DD810E7A19EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97833FE4-FA06-41F2-9155-DD810E7A19EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97833FE4-FA06-41F2-9155-DD810E7A19EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97833FE4-FA06-41F2-9155-DD810E7A19EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0EE03140-2422-4D8B-9E8C-1032F6871885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0EE03140-2422-4D8B-9E8C-1032F6871885}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EE03140-2422-4D8B-9E8C-1032F6871885}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,6 +58,14 @@ Global
 		{CEADCD47-5BF0-47FC-86FA-706A636B0C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEADCD47-5BF0-47FC-86FA-706A636B0C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEADCD47-5BF0-47FC-86FA-706A636B0C7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C33932AA-646A-4D65-B625-CE38A5A81446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C33932AA-646A-4D65-B625-CE38A5A81446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C33932AA-646A-4D65-B625-CE38A5A81446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C33932AA-646A-4D65-B625-CE38A5A81446}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D95D523-E7AA-4485-AA7A-4EF7660FEAC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D95D523-E7AA-4485-AA7A-4EF7660FEAC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D95D523-E7AA-4485-AA7A-4EF7660FEAC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D95D523-E7AA-4485-AA7A-4EF7660FEAC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
