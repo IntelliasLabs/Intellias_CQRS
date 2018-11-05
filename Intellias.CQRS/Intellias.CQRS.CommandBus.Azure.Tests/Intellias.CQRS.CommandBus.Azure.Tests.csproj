@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Intellias.CQRS.CommandBus.Azure\Intellias.CQRS.CommandBus.Azure.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

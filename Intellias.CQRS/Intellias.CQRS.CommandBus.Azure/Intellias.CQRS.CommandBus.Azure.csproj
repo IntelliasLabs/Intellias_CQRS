@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
