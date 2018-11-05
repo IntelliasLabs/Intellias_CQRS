@@ -11,6 +11,11 @@
         TypeName,
 
         /// <summary>
+        /// TypeName of Agreegate Root
+        /// </summary>
+        AgreegateType,
+
+        /// <summary>
         /// User roles metadata
         /// </summary>
         Roles,
