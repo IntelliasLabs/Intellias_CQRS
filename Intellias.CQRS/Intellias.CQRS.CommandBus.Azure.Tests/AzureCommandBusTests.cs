@@ -34,8 +34,8 @@ namespace Intellias.CQRS.CommandBus.Azure.Tests
                 UserId = "test@user.com"
             };
             cmd.Metadata.Add(MetadataKey.AgreegateType, "competency");
-            var result = commandBus.PublishAsync(cmd).Result;
-            Assert.True(result.IsSuccess);
+            var executionResult = commandBus.PublishAsync(cmd).Result;
+            Assert.True(executionResult.IsSuccess);
         }
     }
 }
