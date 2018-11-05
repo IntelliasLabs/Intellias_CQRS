@@ -12,10 +12,5 @@ namespace Intellias.CQRS.Core.Commands
         /// Expected version of aggregate root
         /// </summary>
         int ExpectedVersion { get; set; }
-
-        /// <summary>
-        /// Target Aggregate Root Identifier, null when creates
-        /// </summary>
-        string AggregateRootId { get; }
     }
 }

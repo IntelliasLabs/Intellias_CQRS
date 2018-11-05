@@ -7,8 +7,5 @@ namespace Intellias.CQRS.Core.Commands
     {
         /// <inheritdoc />
         public int ExpectedVersion { get; set; }
-
-        /// <inheritdoc />
-        public string AggregateRootId { get; set; }
     }
 }

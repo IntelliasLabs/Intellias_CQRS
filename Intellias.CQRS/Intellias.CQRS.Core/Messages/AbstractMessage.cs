@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
@@ -13,6 +14,7 @@ namespace Intellias.CQRS.Core.Messages
         protected AbstractMessage()
         {
             Id = Unified.NewCode();
+            Metadata.Add(MetadataKey.TypeName, GetType().Name);
         }
 
         /// <inheritdoc />
@@ -20,6 +22,18 @@ namespace Intellias.CQRS.Core.Messages
         [DataType(DataType.Text)]
         [JsonProperty("id")]
         public string Id { get; protected set; }
+
+        /// <inheritdoc />
+        [DataType(DataType.Text)]
+        public string AggregateRootId { get; set; }
+
+        /// <inheritdoc />
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime Created { get; } = DateTime.UtcNow;
+
+        /// <inheritdoc />
+        public IDictionary<MetadataKey, string> Metadata { get; } = new Dictionary<MetadataKey, string>();
 
         /// <inheritdoc />
         public override string ToString() => Id;
