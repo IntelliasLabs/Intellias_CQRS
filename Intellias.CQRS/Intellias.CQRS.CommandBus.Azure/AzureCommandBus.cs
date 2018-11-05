@@ -42,7 +42,7 @@ namespace Intellias.CQRS.CommandBus.Azure
 
                 // Save to table for history
                 var operation = TableOperation.Insert(new CommandTableEntity(msg, commandContent));
-                var result = await table.ExecuteAsync(operation);
+                await table.ExecuteAsync(operation);
 
                 await queue.AddMessageAsync(new CloudQueueMessage(commandContent));
             }
