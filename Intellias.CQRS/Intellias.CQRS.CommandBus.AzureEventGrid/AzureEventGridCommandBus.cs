@@ -51,6 +51,14 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
         }
 
         /// <summary>
+        /// Destructor
+        /// </summary>
+        ~AzureEventGridCommandBus()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
         /// Dispose(bool)
         /// </summary>
         /// <param name="disposing"></param>
