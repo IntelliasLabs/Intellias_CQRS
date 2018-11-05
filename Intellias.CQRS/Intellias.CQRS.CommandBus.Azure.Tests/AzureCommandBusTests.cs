@@ -28,7 +28,7 @@ namespace Intellias.CQRS.CommandBus.Azure.Tests
 
             var cmd = new TestUpdateCommand
             {
-                AggregateRootId = "competency.1",
+                AggregateRootId = "12345.1",
                 ExpectedVersion = 1,
                 TestData = "test data string",
                 UserId = "test@user.com"

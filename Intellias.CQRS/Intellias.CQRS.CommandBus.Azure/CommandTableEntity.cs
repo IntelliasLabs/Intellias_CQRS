@@ -18,8 +18,8 @@ namespace Intellias.CQRS.CommandBus.Azure
         public CommandTableEntity(ICommand cmd, string content)
         {
             this.cmd = cmd;
-            PartitionKey = cmd.AggregateRootId;
-            RowKey = $"{cmd.ExpectedVersion}.{cmd.Id}";
+            PartitionKey = cmd.UserId;
+            RowKey = cmd.Id;
             Data = content;
             ETag = "*";
         }
@@ -43,6 +43,11 @@ namespace Intellias.CQRS.CommandBus.Azure
 
         /// <inheritdoc />
         public DateTime Created => cmd.Created;
+
+        /// <summary>
+        /// Aggregate Type
+        /// </summary>
+        public string AggregateType => cmd.Metadata[MetadataKey.AgreegateType];
 
         /// <inheritdoc />
         public IDictionary<MetadataKey, string> Metadata => cmd.Metadata;
