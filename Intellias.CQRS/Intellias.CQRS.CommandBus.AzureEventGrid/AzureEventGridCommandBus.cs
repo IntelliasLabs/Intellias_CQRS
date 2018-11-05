@@ -16,6 +16,8 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
         private readonly IEventGridClient client;
         private readonly Uri topicHostname;
 
+        private bool disposed;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -40,12 +42,36 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
             return await Task.FromResult(CommandResult.Success);
         }
 
-        /// <summary>
-        /// Dispose
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose()
         {
-            client?.Dispose();
+            Dispose(true);
+            // подавляем финализацию
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose(bool)
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed) { return; }
+
+            if (disposing)
+            {
+                // Освобождаем управляемые ресурсы
+                client?.Dispose();
+            }
+
+            // освобождаем неуправляемые объекты
+            disposed = true;
+            
+            //// Обращение к методу Dispose базового класса
+            // No base class implementing IDisposable,
+            // Uncomment if present.
+            //
+            // base.Dispose(disposing);
         }
     }
 }
