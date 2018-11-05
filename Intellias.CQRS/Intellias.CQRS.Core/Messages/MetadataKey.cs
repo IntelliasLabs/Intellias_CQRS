@@ -11,13 +11,13 @@
         TypeName,
 
         /// <summary>
-        /// User Identity
-        /// </summary>
-        UserId,
-
-        /// <summary>
         /// User roles metadata
         /// </summary>
         Roles,
+
+        /// <summary>
+        /// HTTP request headers of command
+        /// </summary>
+        RequestHeaders,
     }
 }

@@ -19,6 +19,11 @@ namespace Intellias.CQRS.Core.Messages
         string AggregateRootId { get; set; }
 
         /// <summary>
+        /// User/Actor identifier
+        /// </summary>
+        string UserId { get; set; }
+
+        /// <summary>
         /// Gets the time stamp for this message creation.
         /// </summary>
         /// <value>a <see cref="DateTime"/> UTC value that represents the point in time where this event occurred.</value>
