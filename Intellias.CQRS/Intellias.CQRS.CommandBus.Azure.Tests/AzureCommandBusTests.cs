@@ -28,14 +28,14 @@ namespace Intellias.CQRS.CommandBus.Azure.Tests
 
             var cmd = new TestUpdateCommand
             {
-                AggregateRootId = "Competency.1",
+                AggregateRootId = "competency.1",
                 ExpectedVersion = 1,
                 TestData = "test data string",
                 UserId = "test@user.com"
             };
-            cmd.Metadata.Add(MetadataKey.AgreegateType, "Competency");
+            cmd.Metadata.Add(MetadataKey.AgreegateType, "competency");
             var result = commandBus.PublishAsync(cmd).Result;
-            Assert.NotNull(result);
+            Assert.True(result.IsSuccess);
         }
     }
 }
