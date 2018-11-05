@@ -11,7 +11,6 @@ namespace Intellias.CQRS.CommandBus.Azure
     /// <inheritdoc />
     public class AzureCommandBus : ICommandBus
     {
-        private readonly CloudStorageAccount storageAccount;
         private readonly CloudTableClient tableClient;
         private readonly CloudQueueClient queueClient;
 
@@ -21,7 +20,6 @@ namespace Intellias.CQRS.CommandBus.Azure
         /// <param name="account"></param>
         public AzureCommandBus(CloudStorageAccount account)
         {
-            storageAccount = account;
             tableClient = account.CreateCloudTableClient();
             queueClient = account.CreateCloudQueueClient();
         }
