@@ -13,7 +13,6 @@ namespace Intellias.CQRS.Core.Messages
         /// </summary>
         protected AbstractMessage()
         {
-            Id = Unified.NewCode();
             Metadata.Add(MetadataKey.TypeName, GetType().Name);
         }
 
@@ -21,7 +20,7 @@ namespace Intellias.CQRS.Core.Messages
         [Key]
         [DataType(DataType.Text)]
         [JsonProperty("id")]
-        public string Id { get; protected set; }
+        public string Id { get; set; }
 
         /// <inheritdoc />
         [DataType(DataType.Text)]

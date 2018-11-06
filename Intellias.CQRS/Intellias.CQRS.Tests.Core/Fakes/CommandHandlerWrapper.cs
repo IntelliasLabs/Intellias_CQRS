@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
@@ -18,7 +19,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc />
-        public Task<ICommandResult> HandleAsync(ICommand command)
+        public Task<IExecutionResult> HandleAsync(ICommand command)
         {
             return handler.HandleAsync((T)command);
         }

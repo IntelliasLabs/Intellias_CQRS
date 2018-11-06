@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
@@ -42,7 +43,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc />
-        public async Task<ICommandResult> PublishAsync(ICommand msg)
+        public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
             if (msg == null)
             {

@@ -1,5 +1,4 @@
-﻿using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Domain;
+﻿using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
@@ -43,11 +42,11 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// 
         /// </summary>
         /// <param name="command"></param>
-        public ICommandResult Update(TestUpdateCommand command)
+        public IExecutionResult Update(TestUpdateCommand command)
         {
             if (command.TestData.Length < 10)
             {
-                return CommandResult.Fail("text too small");
+                return ExecutionResult.Fail("text too small");
             }
 
             PublishEvent(new TestUpdatedEvent
@@ -55,16 +54,16 @@ namespace Intellias.CQRS.Core.Tests.Domain
                 TestData = command.TestData,
             });
 
-            return CommandResult.Success;
+            return ExecutionResult.Success;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public ICommandResult Deactivate()
+        public IExecutionResult Deactivate()
         {
             PublishEvent(new TestDeletedEvent());
-            return CommandResult.Success;
+            return ExecutionResult.Success;
         }
 
         /// <summary>

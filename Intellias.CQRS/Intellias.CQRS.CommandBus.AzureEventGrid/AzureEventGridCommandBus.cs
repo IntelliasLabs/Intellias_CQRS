@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Intellias.CQRS.CommandBus.AzureEventGrid.Extensions;
 using Intellias.CQRS.Core.Commands;
+using Intellias.CQRS.Core.Messages;
 using Microsoft.Azure.EventGrid;
 using Microsoft.Azure.EventGrid.Models;
 
@@ -32,14 +33,14 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
         }
 
         /// <inheritdoc />
-        public async Task<ICommandResult> PublishAsync(ICommand msg)
+        public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
             var commands = new List<EventGridEvent> { msg.ToEventGridCommand() };
 
             await client
                 .PublishEventsAsync(topicHostname.Host, commands)
                 .ConfigureAwait(false);
-            return await Task.FromResult(CommandResult.Success);
+            return await Task.FromResult(ExecutionResult.Success);
         }
 
         /// <inheritdoc />

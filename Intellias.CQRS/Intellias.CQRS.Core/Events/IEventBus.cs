@@ -5,7 +5,7 @@ namespace Intellias.CQRS.Core.Events
     /// <summary>
     /// Abstraction of Event Bus
     /// </summary>
-    public interface IEventBus : IMessageBus<IEvent, IEventResult>
+    public interface IEventBus : IMessageBus<IEvent, IExecutionResult>
     {
     }
 }

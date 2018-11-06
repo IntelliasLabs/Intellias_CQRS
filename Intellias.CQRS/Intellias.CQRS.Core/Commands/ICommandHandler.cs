@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Commands
 {
@@ -14,6 +15,6 @@ namespace Intellias.CQRS.Core.Commands
         /// </summary>
         /// <param name="command">Command being handled</param>
         /// <returns>Task that represents handling of message</returns>
-        Task<ICommandResult> HandleAsync(T command);
+        Task<IExecutionResult> HandleAsync(T command);
     }
 }

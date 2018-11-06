@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
@@ -43,7 +44,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc />
-        public async Task<IEventResult> PublishAsync(IEvent msg)
+        public async Task<IExecutionResult> PublishAsync(IEvent msg)
         {
             if(msg == null)
             {
@@ -57,7 +58,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                 await func.HandleAsync(msg);
             }
 
-            return await Task.FromResult(EventResult.Success);
+            return await Task.FromResult(ExecutionResult.Success);
         }
     }
 }
