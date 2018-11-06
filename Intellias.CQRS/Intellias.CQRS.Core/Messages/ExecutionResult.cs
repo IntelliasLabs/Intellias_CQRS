@@ -1,7 +1,7 @@
 ﻿namespace Intellias.CQRS.Core.Messages
 {
     /// <inheritdoc />
-    public abstract class ExecutionResult : IExecutionResult
+    public class ExecutionResult : IExecutionResult
     {
         /// <summary>
         /// Execution Result
@@ -26,5 +26,20 @@
         /// Is result successful
         /// </summary>
         public bool IsSuccess => string.IsNullOrEmpty(FailureReason);
+
+        /// <summary>
+        /// Succesful result
+        /// </summary>
+        public static ExecutionResult Success { get; } = new ExecutionResult();
+
+        /// <summary>
+        /// Fail result
+        /// </summary>
+        /// <param name="reason">Reason of failure</param>
+        /// <returns></returns>
+        public static ExecutionResult Fail(string reason)
+        {
+            return new ExecutionResult(reason);
+        }
     }
 }

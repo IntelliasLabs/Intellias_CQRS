@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Tests.Domain;
 using Intellias.CQRS.Tests.Core.Commands;
 
@@ -29,13 +30,13 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public async Task<ICommandResult> HandleAsync(TestCreateCommand command)
+        public async Task<IExecutionResult> HandleAsync(TestCreateCommand command)
         {
             var ar = new DemoRoot(command);
 
             await store.SaveAsync(ar);
 
-            return await Task.FromResult(CommandResult.Success);
+            return await Task.FromResult(ExecutionResult.Success);
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// </summary>
         /// <param name="command">command</param>
         /// <returns>result</returns>
-        public async Task<ICommandResult> HandleAsync(TestUpdateCommand command)
+        public async Task<IExecutionResult> HandleAsync(TestUpdateCommand command)
         {
             var events = await store.GetAsync(command.AggregateRootId, 0);
             var ar = new DemoRoot();
@@ -61,7 +62,7 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// </summary>
         /// <param name="command">command</param>
         /// <returns>result</returns>
-        public async Task<ICommandResult> HandleAsync(TestDeleteCommand command)
+        public async Task<IExecutionResult> HandleAsync(TestDeleteCommand command)
         {
             var events = await store.GetAsync(command.AggregateRootId, 0);
             var ar = new DemoRoot();

@@ -25,7 +25,7 @@ namespace Intellias.CQRS.CommandBus.Azure
         }
 
         /// <inheritdoc />
-        public async Task<ICommandResult> PublishAsync(ICommand msg)
+        public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
             try
             {
@@ -48,10 +48,10 @@ namespace Intellias.CQRS.CommandBus.Azure
             }
             catch(StorageException ex)
             {
-                return await Task.FromResult(CommandResult.Fail(ex.Message));
+                return await Task.FromResult(ExecutionResult.Fail(ex.Message));
             }
 
-            return await Task.FromResult(CommandResult.Success);
+            return await Task.FromResult(ExecutionResult.Success);
         }
     }
 }

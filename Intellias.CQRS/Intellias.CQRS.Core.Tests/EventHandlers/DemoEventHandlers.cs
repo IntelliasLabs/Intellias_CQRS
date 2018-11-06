@@ -36,7 +36,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
                 Id = @event.AggregateRootId,
                 TestData = @event.TestData
             });
-            return Task.FromResult(EventResult.Success);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         public Task HandleAsync(TestDeletedEvent @event)
         {
             store.Remove(@event.AggregateRootId);
-            return Task.FromResult(EventResult.Success);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         public Task HandleAsync(TestUpdatedEvent @event)
         {
             store[@event.AggregateRootId].TestData = @event.TestData;
-            return Task.FromResult(EventResult.Success);
+            return Task.CompletedTask;
         }
     }
 }
