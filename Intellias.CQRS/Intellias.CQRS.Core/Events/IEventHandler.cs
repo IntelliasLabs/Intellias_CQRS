@@ -2,7 +2,6 @@
 
 namespace Intellias.CQRS.Core.Events
 {
-    /// <inheritdoc />
     /// <summary>
     /// Event handler abstraction
     /// </summary>

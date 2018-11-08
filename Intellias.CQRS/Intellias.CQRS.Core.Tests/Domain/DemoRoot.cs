@@ -5,7 +5,7 @@ using Intellias.CQRS.Tests.Core.Events;
 
 namespace Intellias.CQRS.Core.Tests.Domain
 {
-    /// <inheritdoc />
+    /// <inheritdoc cref="AggregateRoot"/>
     public class DemoRoot : AggregateRoot,
         IEventApplier<TestCreatedEvent>,
         IEventApplier<TestUpdatedEvent>,
@@ -84,7 +84,7 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// <returns></returns>
         public void Apply(TestUpdatedEvent @event)
         {
-            this.TestData = @event.TestData;
+            TestData = @event.TestData;
         }
 
         /// <summary>
