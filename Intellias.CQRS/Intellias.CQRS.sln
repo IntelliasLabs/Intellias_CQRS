@@ -24,11 +24,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Tests.Core",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Core.Tests", "Intellias.CQRS.Core.Tests\Intellias.CQRS.Core.Tests.csproj", "{CEADCD47-5BF0-47FC-86FA-706A636B0C7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.CommandBus.Azure", "Intellias.CQRS.CommandBus.Azure\Intellias.CQRS.CommandBus.Azure.csproj", "{C33932AA-646A-4D65-B625-CE38A5A81446}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.CommandBus.Azure", "Intellias.CQRS.CommandBus.Azure\Intellias.CQRS.CommandBus.Azure.csproj", "{C33932AA-646A-4D65-B625-CE38A5A81446}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.CommandBus.Azure.Tests", "Intellias.CQRS.CommandBus.Azure.Tests\Intellias.CQRS.CommandBus.Azure.Tests.csproj", "{7D95D523-E7AA-4485-AA7A-4EF7660FEAC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.CommandBus.Azure.Tests", "Intellias.CQRS.CommandBus.Azure.Tests\Intellias.CQRS.CommandBus.Azure.Tests.csproj", "{7D95D523-E7AA-4485-AA7A-4EF7660FEAC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.CommandBus.AzureEventGrid", "Intellias.CQRS.CommandBus.AzureEventGrid\Intellias.CQRS.CommandBus.AzureEventGrid.csproj", "{5BB870AA-8C99-415C-87DE-A3E4898D1B8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.CommandBus.AzureEventGrid", "Intellias.CQRS.CommandBus.AzureEventGrid\Intellias.CQRS.CommandBus.AzureEventGrid.csproj", "{5BB870AA-8C99-415C-87DE-A3E4898D1B8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.EventBus.AzureEventGrid", "Intellias.CQRS.EventBus.AzureEventGrid\Intellias.CQRS.EventBus.AzureEventGrid.csproj", "{5316D70C-4B82-41FA-A747-8A9CA7D7460B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +74,10 @@ Global
 		{5BB870AA-8C99-415C-87DE-A3E4898D1B8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BB870AA-8C99-415C-87DE-A3E4898D1B8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BB870AA-8C99-415C-87DE-A3E4898D1B8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5316D70C-4B82-41FA-A747-8A9CA7D7460B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5316D70C-4B82-41FA-A747-8A9CA7D7460B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5316D70C-4B82-41FA-A747-8A9CA7D7460B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5316D70C-4B82-41FA-A747-8A9CA7D7460B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
