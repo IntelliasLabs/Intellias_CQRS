@@ -3,7 +3,6 @@ using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Commands
 {
-    /// <inheritdoc />
     /// <summary>
     /// Command handler abstraction
     /// </summary>
