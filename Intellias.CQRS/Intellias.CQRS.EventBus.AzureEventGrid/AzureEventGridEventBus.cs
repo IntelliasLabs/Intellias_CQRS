@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Intellias.CQRS.CommandBus.AzureEventGrid.Extensions;
-using Intellias.CQRS.Core.Commands;
+using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.EventBus.AzureEventGrid.Extensions;
 using Microsoft.Azure.EventGrid;
 using Microsoft.Azure.EventGrid.Models;
 
-namespace Intellias.CQRS.CommandBus.AzureEventGrid
+namespace Intellias.CQRS.EventBus.AzureEventGrid
 {
     /// <summary>
     /// AzureEventGrid CommandBus
     /// </summary>
-    public class AzureEventGridCommandBus : ICommandBus, IDisposable
+    public class AzureEventGridEventBus : IEventBus, IDisposable
     {
         private readonly IEventGridClient client;
         private readonly Uri topicHostname;
@@ -24,7 +24,7 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
         /// </summary>
         /// <param name="host"></param>
         /// <param name="key"></param>
-        public AzureEventGridCommandBus(string host, string key)
+        public AzureEventGridEventBus(string host, string key)
         {
             topicHostname = new Uri(host);
 
@@ -33,12 +33,12 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
         }
 
         /// <inheritdoc />
-        public async Task<IExecutionResult> PublishAsync(ICommand msg)
+        public async Task<IExecutionResult> PublishAsync(IEvent msg)
         {
-            var commands = new List<EventGridEvent> { msg.ToEventGridCommand() };
+            var @event = new List<EventGridEvent> { msg.ToEventGridEvent() };
 
             await client
-                .PublishEventsAsync(topicHostname.Host, commands)
+                .PublishEventsAsync(topicHostname.Host, @event)
                 .ConfigureAwait(false);
             return await Task.FromResult(ExecutionResult.Success);
         }
@@ -54,7 +54,7 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
         /// <summary>
         /// Destructor
         /// </summary>
-        ~AzureEventGridCommandBus()
+        ~AzureEventGridEventBus()
         {
             Dispose(false);
         }
@@ -65,7 +65,8 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
-            if (disposed) { return; }
+            if (disposed)
+            { return; }
 
             if (disposing)
             {
@@ -75,7 +76,7 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
 
             // освобождаем неуправляемые объекты
             disposed = true;
-            
+
             /* Обращение к методу Dispose базового класса
              No base class implementing IDisposable,
              Uncomment if present.
