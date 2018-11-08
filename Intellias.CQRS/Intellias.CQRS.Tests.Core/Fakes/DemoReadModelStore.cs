@@ -57,10 +57,10 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<ReadCollectionEnvelope<IReadOnlyCollection<DemoReadModel>>> GetAllAsync()
+        public Task<ReadCollectionEnvelope<DemoReadModel>> GetAllAsync()
         {
             var collection = store.Values;
-            return Task.FromResult(new ReadCollectionEnvelope<IReadOnlyCollection<DemoReadModel>> (collection));
+            return Task.FromResult(new ReadCollectionEnvelope<DemoReadModel> (collection));
         }
     }
 }

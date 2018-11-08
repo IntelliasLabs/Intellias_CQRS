@@ -33,7 +33,7 @@ namespace Intellias.CQRS.Core.Queries
         public async Task<IReadOnlyCollection<TReadModel>> ExecuteQueryAsync(ReadAllQuery<TReadModel> query)
         {
             var readModelEnvelope = await _readStore.GetAllAsync();
-            return readModelEnvelope.ReadModel;
+            return readModelEnvelope.Items;
         }
     }
 }

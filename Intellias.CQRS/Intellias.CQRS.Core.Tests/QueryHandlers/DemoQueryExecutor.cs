@@ -42,7 +42,7 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
         public async Task<IReadOnlyCollection<DemoReadModel>> ExecuteQueryAsync(ReadAllQuery<DemoReadModel> query)
         {
             var collectionEnvelope = await store.GetAllAsync();
-            return collectionEnvelope.ReadModel;
+            return collectionEnvelope.Items;
         }
     }
 }

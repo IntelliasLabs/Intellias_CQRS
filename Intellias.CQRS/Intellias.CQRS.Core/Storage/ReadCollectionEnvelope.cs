@@ -8,21 +8,25 @@ namespace Intellias.CQRS.Core.Storage
     /// </summary>
     /// <typeparam name="TReadModel"></typeparam>
     public class ReadCollectionEnvelope<TReadModel> : ReadModelEnvelope
-        where TReadModel : class, IReadOnlyCollection<IReadModel>
+        where TReadModel : class, IReadModel
     {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="readModel"></param>
-        public ReadCollectionEnvelope(
-            TReadModel readModel)
+        /// <param name="items"></param>
+        public ReadCollectionEnvelope(IReadOnlyCollection<TReadModel> items)
         {
-            ReadModel = readModel;
+            Items = items;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public TReadModel ReadModel { get; }
+        public IReadOnlyCollection<TReadModel> Items { get; }
+
+        /// <summary>
+        /// Total items in collection
+        /// </summary>
+        public int Total { set; get; }
     }
 }

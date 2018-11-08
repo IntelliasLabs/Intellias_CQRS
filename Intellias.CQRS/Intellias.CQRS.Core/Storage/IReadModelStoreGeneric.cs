@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 
 namespace Intellias.CQRS.Core.Storage
@@ -22,6 +21,6 @@ namespace Intellias.CQRS.Core.Storage
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<ReadCollectionEnvelope<IReadOnlyCollection<TReadModel>>> GetAllAsync();
+        Task<ReadCollectionEnvelope<TReadModel>> GetAllAsync();
     }
 }
