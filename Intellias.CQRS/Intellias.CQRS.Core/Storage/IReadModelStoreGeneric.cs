@@ -7,10 +7,8 @@ namespace Intellias.CQRS.Core.Storage
     /// 
     /// </summary>
     /// <typeparam name="TReadModel"></typeparam>
-    /// <typeparam name="TCollectionReadModel"></typeparam>
-    public interface IReadModelStore<TReadModel, TCollectionReadModel> : IReadModelStore
+    public interface IReadModelStore<TReadModel> : IReadModelStore
         where TReadModel : class, IReadModel
-        where TCollectionReadModel: class, IReadModel
     {
         /// <summary>
         /// 
@@ -23,6 +21,6 @@ namespace Intellias.CQRS.Core.Storage
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<TCollectionReadModel> GetAllAsync();
+        Task<CollectionReadModel<TReadModel>> GetAllAsync();
     }
 }

@@ -4,7 +4,7 @@
     /// 
     /// </summary>
     /// <typeparam name="TReadModel"></typeparam>
-    public class ReadAllQuery<TReadModel> : IQuery<TReadModel>
+    public class ReadAllQuery<TReadModel> : IQuery<CollectionReadModel<TReadModel>>
         where TReadModel : class, IReadModel
     {
     }
