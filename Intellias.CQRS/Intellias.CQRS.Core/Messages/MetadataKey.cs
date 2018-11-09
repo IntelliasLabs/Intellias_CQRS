@@ -6,22 +6,27 @@
     public enum MetadataKey
     {
         /// <summary>
-        /// TypeName
+        /// TypeName, should be set by API gateway
         /// </summary>
         TypeName,
 
         /// <summary>
-        /// TypeName of Agreegate Root
+        /// TypeName of Agreegate Root, should be set by API gateway
         /// </summary>
         AgreegateType,
 
         /// <summary>
-        /// User roles metadata
+        /// User identity, should be set by API gateway
+        /// </summary>
+        UserId,
+
+        /// <summary>
+        /// User roles metadata, should be set by API gateway
         /// </summary>
         Roles,
 
         /// <summary>
-        /// HTTP request headers of command
+        /// HTTP request headers of command, should be set by API gateway
         /// </summary>
         RequestHeaders,
     }

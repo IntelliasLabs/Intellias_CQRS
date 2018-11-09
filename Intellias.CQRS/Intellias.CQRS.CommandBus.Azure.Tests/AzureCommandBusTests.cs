@@ -33,10 +33,11 @@ namespace Intellias.CQRS.CommandBus.Azure.Tests
                 AggregateRootId = "12345.1",
                 ExpectedVersion = 1,
                 TestData = "test data string",
-                UserId = "test@user.com",
                 Id = Unified.NewCode()
             };
             cmd.Metadata.Add(MetadataKey.AgreegateType, "competency");
+            cmd.Metadata.Add(MetadataKey.UserId, "test@user.com");
+
             var executionResult = commandBus.PublishAsync(cmd).Result;
             Assert.True(executionResult.IsSuccess);
 

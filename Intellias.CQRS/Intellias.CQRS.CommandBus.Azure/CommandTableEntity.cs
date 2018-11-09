@@ -39,7 +39,7 @@ namespace Intellias.CQRS.CommandBus.Azure
         public string AggregateRootId { get => cmd.AggregateRootId; set => throw new NotSupportedException(); }
 
         /// <inheritdoc />
-        public string UserId { get => cmd.UserId; set => throw new NotSupportedException(); }
+        public string UserId { get => cmd.Metadata[MetadataKey.UserId]; set => throw new NotSupportedException(); }
 
         /// <inheritdoc />
         public DateTime Created => cmd.Created;
