@@ -6,22 +6,20 @@ namespace Intellias.CQRS.Core.Queries
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TReadStore"></typeparam>
     /// <typeparam name="TReadModel"></typeparam>
     /// <typeparam name="TCollectionReadModel"></typeparam>
-    public class ReadAllQueryExecutor<TReadStore, TReadModel, TCollectionReadModel> : IQueryExecutor<ReadAllQuery<TCollectionReadModel>, TCollectionReadModel>
-        where TReadStore : IReadModelStore<TReadModel, TCollectionReadModel>
+    public class ReadAllQueryExecutor<TReadModel, TCollectionReadModel> : IQueryExecutor<ReadAllQuery<TCollectionReadModel>, TCollectionReadModel>
         where TReadModel : class, IReadModel
         where TCollectionReadModel : class, IReadModel
     {
-        private readonly TReadStore _readStore;
+        private readonly IReadModelStore<TReadModel, TCollectionReadModel> _readStore;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="readStore"></param>
         public ReadAllQueryExecutor(
-            TReadStore readStore)
+            IReadModelStore<TReadModel, TCollectionReadModel> readStore)
         {
             _readStore = readStore;
         }
