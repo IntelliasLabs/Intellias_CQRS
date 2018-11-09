@@ -35,11 +35,6 @@ namespace Intellias.CQRS.Core.Messages
         public IDictionary<MetadataKey, string> Metadata { get; } = new Dictionary<MetadataKey, string>();
 
         /// <inheritdoc />
-        [Required]
-        [DataType(DataType.Text)]
-        public string UserId { get; set; }
-
-        /// <inheritdoc />
         public override string ToString() => Id;
 
         /// <summary>
