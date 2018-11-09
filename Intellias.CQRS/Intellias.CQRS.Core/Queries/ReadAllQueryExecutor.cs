@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Storage;
 
 namespace Intellias.CQRS.Core.Queries
@@ -7,20 +6,20 @@ namespace Intellias.CQRS.Core.Queries
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TReadStore"></typeparam>
     /// <typeparam name="TReadModel"></typeparam>
-    public class ReadAllQueryExecutor<TReadStore, TReadModel> : IQueryExecutor<ReadAllQuery<TReadModel>, IReadOnlyCollection<TReadModel>>
-        where TReadStore : IReadModelStore<TReadModel>
+    /// <typeparam name="TCollectionReadModel"></typeparam>
+    public class ReadAllQueryExecutor<TReadModel, TCollectionReadModel> : IQueryExecutor<ReadAllQuery<TCollectionReadModel>, TCollectionReadModel>
         where TReadModel : class, IReadModel
+        where TCollectionReadModel : class, IReadModel
     {
-        private readonly TReadStore _readStore;
+        private readonly IReadModelStore<TReadModel, TCollectionReadModel> _readStore;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="readStore"></param>
         public ReadAllQueryExecutor(
-            TReadStore readStore)
+            IReadModelStore<TReadModel, TCollectionReadModel> readStore)
         {
             _readStore = readStore;
         }
@@ -30,10 +29,10 @@ namespace Intellias.CQRS.Core.Queries
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<IReadOnlyCollection<TReadModel>> ExecuteQueryAsync(ReadAllQuery<TReadModel> query)
+        public async Task<TCollectionReadModel> ExecuteQueryAsync(ReadAllQuery<TCollectionReadModel> query)
         {
-            var readModelEnvelope = await _readStore.GetAllAsync();
-            return readModelEnvelope.ReadModel;
+            var model = await _readStore.GetAllAsync();
+            return model;
         }
     }
 }

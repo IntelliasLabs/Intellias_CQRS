@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Intellias.CQRS.Tests.Core.Queries;
@@ -10,7 +9,7 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
     /// Query handler
     /// </summary>
     public class DemoQueryExecutor : IQueryExecutor<ReadModelByIdQuery<DemoReadModel>, DemoReadModel>,
-        IQueryExecutor<ReadAllQuery<DemoReadModel>, IReadOnlyCollection<DemoReadModel>>
+        IQueryExecutor<ReadAllQuery<DemoCollectionReadModel>, DemoCollectionReadModel>
     {
         private readonly DemoReadModelStore store;
 
@@ -30,8 +29,8 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
         /// <returns></returns>
         public async Task<DemoReadModel> ExecuteQueryAsync(ReadModelByIdQuery<DemoReadModel> query)
         {
-            var readModelEnvelope = await store.GetAsync(query.Id);
-            return readModelEnvelope.ReadModel;
+            var readModel = await store.GetAsync(query.Id);
+            return readModel;
         }
 
         /// <summary>
@@ -39,10 +38,10 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<IReadOnlyCollection<DemoReadModel>> ExecuteQueryAsync(ReadAllQuery<DemoReadModel> query)
+        public async Task<DemoCollectionReadModel> ExecuteQueryAsync(ReadAllQuery<DemoCollectionReadModel> query)
         {
-            var collectionEnvelope = await store.GetAllAsync();
-            return collectionEnvelope.ReadModel;
+            var model = await store.GetAllAsync();
+            return model;
         }
     }
 }
