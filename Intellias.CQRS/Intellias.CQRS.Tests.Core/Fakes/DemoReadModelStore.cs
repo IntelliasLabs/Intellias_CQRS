@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Tests.Core.Queries;
@@ -8,7 +9,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// <summary>
     /// 
     /// </summary>
-    public class DemoReadModelStore : IReadModelStore<DemoReadModel>
+    public class DemoReadModelStore : IReadModelStore<DemoReadModel, DemoCollectionReadModel>
     {
         private readonly Dictionary<string, DemoReadModel> store;
 
@@ -47,20 +48,22 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<ReadModelEnvelope<DemoReadModel>> GetAsync(string id)
+        public Task<DemoReadModel> GetAsync(string id)
         {
             var model = store[id];
-            return Task.FromResult(new ReadModelEnvelope<DemoReadModel>(id, model, null));
+            return Task.FromResult(model);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<ReadCollectionEnvelope<DemoReadModel>> GetAllAsync()
+        public Task<DemoCollectionReadModel> GetAllAsync()
         {
-            var collection = store.Values;
-            return Task.FromResult(new ReadCollectionEnvelope<DemoReadModel> (collection));
+            return Task.FromResult(new DemoCollectionReadModel {
+                Items = store.Values.ToList(),
+                Total = store.Count
+            });
         }
     }
 }

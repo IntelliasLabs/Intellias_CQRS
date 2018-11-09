@@ -50,25 +50,25 @@ namespace Intellias.CQRS.Core.Tests
             var createResult = commandBus.PublishAsync(createCommand).Result;
             Assert.NotNull(createResult);
 
-            var queryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
-            Assert.Equal(1, queryResult.Count);
-            Assert.Equal(createCommand.TestData, queryResult.First().TestData);
+            var queryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoCollectionReadModel>()).Result;
+            Assert.Equal(1, queryResult.Total);
+            Assert.Equal(createCommand.TestData, queryResult.Items.First().TestData);
 
-            updateCommand.AggregateRootId = queryResult.First().Id;
+            updateCommand.AggregateRootId = queryResult.Items.First().Id;
             updateCommand.ExpectedVersion = 1;
             var updateResult = commandBus.PublishAsync(updateCommand).Result;
             Assert.NotNull(updateResult);
 
-            var updatedQueryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
-            Assert.Equal(updateCommand.TestData, updatedQueryResult.First().TestData);
+            var updatedQueryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoCollectionReadModel>()).Result;
+            Assert.Equal(updateCommand.TestData, updatedQueryResult.Items.First().TestData);
 
-            deactivateCommand.AggregateRootId = updatedQueryResult.First().Id;
+            deactivateCommand.AggregateRootId = updatedQueryResult.Items.First().Id;
             updateCommand.ExpectedVersion = 1;
             var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
             Assert.NotNull(deactivateResult);
 
-            var queryRemovedResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
-            Assert.Equal(0, queryRemovedResult.Count);
+            var queryRemovedResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoCollectionReadModel>()).Result;
+            Assert.Equal(0, queryRemovedResult.Items.Count);
         }
     }
 }
