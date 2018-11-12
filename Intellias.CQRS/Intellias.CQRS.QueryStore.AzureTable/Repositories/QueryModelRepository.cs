@@ -10,7 +10,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
     /// <summary>
     /// ReadModelRepository
     /// </summary>
-    public class ReadModelRepository<TReadModel> where TReadModel : class, IReadModel
+    public class QueryModelRepository<TQueryModel> where TQueryModel : class, IQueryModel
     {
         private readonly CloudTable readModelTable;
 
@@ -18,7 +18,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// ReadModelRepository init
         /// </summary>
         /// <param name="table">CloudTable</param>
-        public ReadModelRepository(CloudTable table)
+        public QueryModelRepository(CloudTable table)
         {
             readModelTable = table;
 
@@ -31,16 +31,16 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// </summary>
         /// <param name="readModelId">Id of read model</param>
         /// <returns></returns>
-        public async Task<TReadModel> GetModelAsync(string readModelId)
+        public async Task<TQueryModel> GetModelAsync(string readModelId)
         {
-            var query = new TableQuery<ReadModelTableEntity>()
+            var query = new TableQuery<QueryModelTableEntity>()
                 .Where(TableQuery.GenerateFilterCondition("RowKey",
                     QueryComparisons.Equal, readModelId));
 
             var queryResult = await readModelTable.ExecuteQuerySegmentedAsync(query, null);
             var tableEntity = queryResult.Results.Single();
 
-            return (TReadModel)JsonConvert.DeserializeObject(tableEntity.Data);
+            return (TQueryModel)JsonConvert.DeserializeObject(tableEntity.Data);
             
         }
 
@@ -48,17 +48,17 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// Get CollectionReadModel by Read Model type
         /// </summary>
         /// <returns></returns>
-        public async Task<CollectionReadModel<TReadModel>> GetAllModelsAsync()
+        public async Task<CollectionReadModel<TQueryModel>> GetAllModelsAsync()
         {
-            var query = new TableQuery<ReadModelTableEntity>()
+            var query = new TableQuery<QueryModelTableEntity>()
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey",
-                    QueryComparisons.Equal, typeof(TReadModel).ToString()));
+                    QueryComparisons.Equal, typeof(TQueryModel).ToString()));
 
             var queryResult = await readModelTable.ExecuteQuerySegmentedAsync(query, null);
 
-            var list = queryResult.Results.Select(item => (TReadModel)JsonConvert.DeserializeObject(item.Data)).ToList();
+            var list = queryResult.Results.Select(item => (TQueryModel)JsonConvert.DeserializeObject(item.Data)).ToList();
 
-            return new CollectionReadModel<TReadModel>
+            return new CollectionReadModel<TQueryModel>
             {
                 Items = list,
                 Total = list.Count

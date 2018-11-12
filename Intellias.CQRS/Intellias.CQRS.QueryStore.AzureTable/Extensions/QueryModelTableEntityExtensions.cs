@@ -8,13 +8,13 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
     /// <summary>
     /// Extensions for ReadModelTableEntity
     /// </summary>
-    public static class ReadModelTableEntityExtensions
+    public static class QueryModelTableEntityExtensions
     {
         /// <summary>
         /// Converts an IReadModel to ReadModelTableEntity
         /// </summary>
-        public static ReadModelTableEntity ToStoreEntity(this IReadModel model) => 
-            new ReadModelTableEntity
+        public static QueryModelTableEntity ToStoreEntity(this IQueryModel model) => 
+            new QueryModelTableEntity
             {
                 PartitionKey = model.GetType().Name,
                 RowKey = model.Id,

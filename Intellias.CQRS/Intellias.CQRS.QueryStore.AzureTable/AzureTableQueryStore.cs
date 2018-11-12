@@ -10,18 +10,18 @@ namespace Intellias.CQRS.EventStore.AzureTable
     /// <summary>
     /// Azure Table Read Storage
     /// </summary>
-    public class AzureTableReadStore<TReadModel> : IReadModelStore<TReadModel>
-        where TReadModel : class, IReadModel
+    public class AzureTableQueryStore<TQueryModel> : IReadModelStore<TQueryModel>
+        where TQueryModel : class, IQueryModel
     {
-        private readonly ReadModelRepository<TReadModel> repository;
+        private readonly QueryModelRepository<TQueryModel> repository;
 
         /// <summary>
         /// AzureTableReadStore
         /// </summary>
         /// <param name="cloudTable">Azure Cloud Table c</param>
-        public AzureTableReadStore(CloudTable cloudTable)
+        public AzureTableQueryStore(CloudTable cloudTable)
         {
-            repository = new ReadModelRepository<TReadModel>(cloudTable);
+            repository = new QueryModelRepository<TQueryModel>(cloudTable);
         }
 
         /// <summary>
@@ -29,27 +29,27 @@ namespace Intellias.CQRS.EventStore.AzureTable
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<TReadModel> GetAsync(string id) => await repository.GetModelAsync(id);
+        public async Task<TQueryModel> GetAsync(string id) => await repository.GetModelAsync(id);
 
         /// <summary>
         /// Get collection of read models by type
         /// </summary>
         /// <returns></returns>
-        public async Task<CollectionReadModel<TReadModel>> GetAllAsync() => await repository.GetAllModelsAsync();
+        public async Task<CollectionReadModel<TQueryModel>> GetAllAsync() => await repository.GetAllModelsAsync();
 
         /// <summary>
         /// NOT IMPLEMENTED
         /// </summary>
-        /// <param name="newReadModel"></param>
+        /// <param name="newQueryModel"></param>
         /// <returns></returns>
-        public Task<TReadModel> UpdateAsync(TReadModel newReadModel) => throw new System.NotImplementedException();
+        public Task<TQueryModel> UpdateAsync(TQueryModel newQueryModel) => throw new System.NotImplementedException();
 
         /// <summary>
         /// NOT IMPLENETED
         /// </summary>
         /// <param name="newCollection"></param>
         /// <returns></returns>
-        public Task<CollectionReadModel<TReadModel>> UpdateAllAsync(CollectionReadModel<TReadModel> newCollection)
+        public Task<CollectionReadModel<TQueryModel>> UpdateAllAsync(CollectionReadModel<TQueryModel> newCollection)
             => throw new System.NotImplementedException();
 
         /// <summary>

@@ -71,9 +71,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <summary>
         /// NOT IMPOLEMENTED
         /// </summary>
-        /// <param name="newReadModel"></param>
+        /// <param name="newQueryModel"></param>
         /// <returns></returns>
-        public Task<DemoReadModel> UpdateAsync(DemoReadModel newReadModel)
+        public Task<DemoReadModel> UpdateAsync(DemoReadModel newQueryModel)
         {
             throw new System.NotImplementedException();
         }

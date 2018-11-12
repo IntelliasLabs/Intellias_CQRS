@@ -8,7 +8,7 @@ namespace Intellias.CQRS.Core.Queries
     /// </summary>
     /// <typeparam name="TReadModel"></typeparam>
     public class ReadModelByIdQueryExecutor<TReadModel> : IQueryExecutor<ReadModelByIdQuery<TReadModel>, TReadModel>
-        where TReadModel : class, IReadModel
+        where TReadModel : class, IQueryModel
     {
         private readonly IReadModelStore<TReadModel> _readStore;
 

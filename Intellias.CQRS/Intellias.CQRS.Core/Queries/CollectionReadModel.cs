@@ -6,7 +6,7 @@ namespace Intellias.CQRS.Core.Queries
     /// CollectionReadModel
     /// </summary>
     /// <typeparam name="TReadModel">Read Model</typeparam>
-    public class CollectionReadModel<TReadModel> where TReadModel : class, IReadModel
+    public class CollectionReadModel<TReadModel> where TReadModel : class, IQueryModel
     {
         /// <summary>
         /// Model Items

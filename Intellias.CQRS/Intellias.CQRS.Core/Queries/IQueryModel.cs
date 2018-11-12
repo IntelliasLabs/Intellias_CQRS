@@ -3,7 +3,7 @@
     /// <summary>
     /// Read model
     /// </summary>
-    public interface IReadModel
+    public interface IQueryModel
     {
         /// <summary>
         /// Generic Id of read model

@@ -5,7 +5,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Documents
     /// <summary>
     /// TableEntity for Read model
     /// </summary>
-    public class ReadModelTableEntity : TableEntity
+    public class QueryModelTableEntity : TableEntity
     {
 
         /// <summary>
