@@ -2,31 +2,26 @@
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.EventStore.AzureTable.Repositories;
-using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Intellias.CQRS.EventStore.AzureTable
 {
     /// <inheritdoc />
     /// <summary>
-    /// Azure Table Storage event store
+    /// Azure Table Read Storage
     /// </summary>
-    public class AzureTableEventStore<TReadModel> : IReadModelStore<TReadModel>
+    public class AzureTableReadStore<TReadModel> : IReadModelStore<TReadModel>
         where TReadModel : class, IReadModel
     {
         private readonly ReadModelRepository<TReadModel> repository;
 
         /// <summary>
-        /// AzureTableEventStore
+        /// AzureTableReadStore
         /// </summary>
-        /// <param name="storeConnectionString">Azure Table Storage connection string</param>
-        /// <param name="eventStoreName">name of the Azure Table Storage in Azure</param>
-        public AzureTableEventStore(string storeConnectionString, string eventStoreName)
+        /// <param name="cloudTable">Azure Cloud Table c</param>
+        public AzureTableReadStore(CloudTable cloudTable)
         {
-            var client = CloudStorageAccount
-                .Parse(storeConnectionString)
-                .CreateCloudTableClient();
-
-            repository = new ReadModelRepository<TReadModel>(client, eventStoreName);
+            repository = new ReadModelRepository<TReadModel>(cloudTable);
         }
 
         // WARNING! I'm not sure that we need to imlement such methods

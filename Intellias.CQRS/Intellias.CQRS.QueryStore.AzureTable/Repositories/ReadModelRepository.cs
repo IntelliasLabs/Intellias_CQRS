@@ -17,11 +17,10 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// <summary>
         /// ReadModelRepository init
         /// </summary>
-        /// <param name="client">CloudTableClient to Azure</param>
-        /// <param name="tableName">name of the table of Read Models</param>
-        public ReadModelRepository(CloudTableClient client, string tableName)
+        /// <param name="table">CloudTable</param>
+        public ReadModelRepository(CloudTable table)
         {
-            readModelTable = client.GetTableReference(tableName);
+            readModelTable = table;
 
             // Create the CloudTable if it does not exist
             readModelTable.CreateIfNotExistsAsync().Wait();
