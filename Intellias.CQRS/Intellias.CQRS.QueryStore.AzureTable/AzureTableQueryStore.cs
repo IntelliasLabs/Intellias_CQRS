@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.EventStore.AzureTable.Repositories;
@@ -49,7 +50,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
         /// </summary>
         /// <param name="newCollection"></param>
         /// <returns></returns>
-        public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(CollectionQueryModel<TQueryModel> newCollection)
+        public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(IEnumerable<TQueryModel> newCollection)
             => throw new System.NotImplementedException();
 
         /// <summary>
@@ -64,5 +65,25 @@ namespace Intellias.CQRS.EventStore.AzureTable
         /// </summary>
         /// <returns></returns>
         public Task DeleteAllAsync() => throw new System.NotImplementedException();
+
+        /// <summary>
+        /// NOT IMPLEMENTED
+        /// </summary>
+        /// <param name="newQueryModel"></param>
+        /// <returns></returns>
+        public Task<TQueryModel> CreateAsync(TQueryModel newQueryModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// NOT IMPLEMENTED
+        /// </summary>
+        /// <param name="newCollection"></param>
+        /// <returns></returns>
+        public Task<CollectionQueryModel<TQueryModel>> CreateAllAsync(IEnumerable<TQueryModel> newCollection)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 
 namespace Intellias.CQRS.Core.Storage
@@ -24,6 +25,19 @@ namespace Intellias.CQRS.Core.Storage
         Task<CollectionQueryModel<TQueryModel>> GetAllAsync();
 
         /// <summary>
+        /// Creates one read model
+        /// </summary>
+        /// <param name="newQueryModel"></param>
+        /// <returns></returns>
+        Task<TQueryModel> CreateAsync(TQueryModel newQueryModel);
+
+        /// <summary>
+        /// Creates collection of read models
+        /// </summary>
+        /// <returns></returns>
+        Task<CollectionQueryModel<TQueryModel>> CreateAllAsync(IEnumerable<TQueryModel> newCollection);
+
+        /// <summary>
         /// Update one read model
         /// </summary>
         /// <param name="newQueryModel"></param>
@@ -34,6 +48,6 @@ namespace Intellias.CQRS.Core.Storage
         /// Update collection of read models
         /// </summary>
         /// <returns></returns>
-        Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(CollectionQueryModel<TQueryModel> newCollection);
+        Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(IEnumerable<TQueryModel> newCollection);
     }
 }

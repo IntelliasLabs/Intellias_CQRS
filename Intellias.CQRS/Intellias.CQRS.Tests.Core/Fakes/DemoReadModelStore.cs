@@ -83,7 +83,27 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="newCollection"></param>
         /// <returns></returns>
-        public Task<CollectionQueryModel<DemoQueryModel>> UpdateAllAsync(CollectionQueryModel<DemoQueryModel> newCollection)
+        public Task<CollectionQueryModel<DemoQueryModel>> UpdateAllAsync(IEnumerable<DemoQueryModel> newCollection)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// NOT IMPOLEMENTED
+        /// </summary>
+        /// <param name="newQueryModel"></param>
+        /// <returns></returns>
+        public Task<DemoQueryModel> CreateAsync(DemoQueryModel newQueryModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// NOT IMPOLEMENTED
+        /// </summary>
+        /// <param name="newCollection"></param>
+        /// <returns></returns>
+        public Task<CollectionQueryModel<DemoQueryModel>> CreateAllAsync(IEnumerable<DemoQueryModel> newCollection)
         {
             throw new System.NotImplementedException();
         }
