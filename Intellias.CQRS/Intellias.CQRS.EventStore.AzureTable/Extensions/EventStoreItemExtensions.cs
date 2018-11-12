@@ -27,7 +27,6 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
                 ETag = "*"
             };
 
-
         /// <summary>
         /// Converts an IEvent to EventStoreEvent
         /// </summary>

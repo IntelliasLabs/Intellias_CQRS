@@ -5,5 +5,9 @@
     /// </summary>
     public interface IReadModel
     {
+        /// <summary>
+        /// Generic Id of read model
+        /// </summary>
+        string Id { get; set; }
     }
 }
