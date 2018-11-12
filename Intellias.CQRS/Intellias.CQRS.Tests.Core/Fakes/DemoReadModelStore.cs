@@ -67,5 +67,25 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                 Total = store.Count
             });
         }
+
+        /// <summary>
+        /// NOT IMPOLEMENTED
+        /// </summary>
+        /// <param name="newReadModel"></param>
+        /// <returns></returns>
+        public Task<DemoReadModel> UpdateAsync(DemoReadModel newReadModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// NOT IMPOLEMENTED
+        /// </summary>
+        /// <param name="newCollection"></param>
+        /// <returns></returns>
+        public Task<CollectionReadModel<DemoReadModel>> UpdateAllAsync(CollectionReadModel<DemoReadModel> newCollection)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

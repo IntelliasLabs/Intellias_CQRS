@@ -24,26 +24,6 @@ namespace Intellias.CQRS.EventStore.AzureTable
             repository = new ReadModelRepository<TReadModel>(cloudTable);
         }
 
-        // WARNING! I'm not sure that we need to imlement such methods
-        /// <summary>
-        /// NOT IMPLEMENTED
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public Task DeleteAsync(string id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// NOT IMPLEMENTED
-        /// </summary>
-        /// <returns></returns>
-        public Task DeleteAllAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
         /// <summary>
         /// Get TReadModel by Id
         /// </summary>
@@ -56,5 +36,33 @@ namespace Intellias.CQRS.EventStore.AzureTable
         /// </summary>
         /// <returns></returns>
         public async Task<CollectionReadModel<TReadModel>> GetAllAsync() => await repository.GetAllModelsAsync();
+
+        /// <summary>
+        /// NOT IMPLEMENTED
+        /// </summary>
+        /// <param name="newReadModel"></param>
+        /// <returns></returns>
+        public Task<TReadModel> UpdateAsync(TReadModel newReadModel) => throw new System.NotImplementedException();
+
+        /// <summary>
+        /// NOT IMPLENETED
+        /// </summary>
+        /// <param name="newCollection"></param>
+        /// <returns></returns>
+        public Task<CollectionReadModel<TReadModel>> UpdateAllAsync(CollectionReadModel<TReadModel> newCollection)
+            => throw new System.NotImplementedException();
+
+        /// <summary>
+        /// NOT IMPLEMENTED
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Task DeleteAsync(string id) => throw new System.NotImplementedException();
+
+        /// <summary>
+        /// NOT IMPLEMENTED
+        /// </summary>
+        /// <returns></returns>
+        public Task DeleteAllAsync() => throw new System.NotImplementedException();
     }
 }

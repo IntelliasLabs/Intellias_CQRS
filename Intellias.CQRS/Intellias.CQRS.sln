@@ -34,8 +34,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventBus.Azu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.QueryStore.AzureTable", "Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj", "{BE47C4EF-40EF-4D89-B2B0-ABB0A4FCD318}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.QueryStore.AzureTable.Tests1", "Intellias.CQRS.QueryStore.AzureTable.Tests\Intellias.CQRS.QueryStore.AzureTable.Tests1.csproj", "{157BE891-C511-479A-AA29-9920F34E743A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.AzureTable.Core", "Intellias.CQRS.AzureTable.Core\Intellias.CQRS.AzureTable.Core.csproj", "{09B0904F-947F-4E48-9B44-87F87D96E179}"
 EndProject
 Global
@@ -88,10 +86,6 @@ Global
 		{BE47C4EF-40EF-4D89-B2B0-ABB0A4FCD318}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE47C4EF-40EF-4D89-B2B0-ABB0A4FCD318}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE47C4EF-40EF-4D89-B2B0-ABB0A4FCD318}.Release|Any CPU.Build.0 = Release|Any CPU
-		{157BE891-C511-479A-AA29-9920F34E743A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{157BE891-C511-479A-AA29-9920F34E743A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{157BE891-C511-479A-AA29-9920F34E743A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{157BE891-C511-479A-AA29-9920F34E743A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{09B0904F-947F-4E48-9B44-87F87D96E179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{09B0904F-947F-4E48-9B44-87F87D96E179}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09B0904F-947F-4E48-9B44-87F87D96E179}.Release|Any CPU.ActiveCfg = Release|Any CPU

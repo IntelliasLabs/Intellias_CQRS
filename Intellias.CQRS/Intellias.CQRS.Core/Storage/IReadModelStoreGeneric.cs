@@ -22,5 +22,18 @@ namespace Intellias.CQRS.Core.Storage
         /// </summary>
         /// <returns></returns>
         Task<CollectionReadModel<TReadModel>> GetAllAsync();
+
+        /// <summary>
+        /// Update one read model
+        /// </summary>
+        /// <param name="newReadModel"></param>
+        /// <returns></returns>
+        Task<TReadModel> UpdateAsync(TReadModel newReadModel);
+
+        /// <summary>
+        /// Update collection of read models
+        /// </summary>
+        /// <returns></returns>
+        Task<CollectionReadModel<TReadModel>> UpdateAllAsync(CollectionReadModel<TReadModel> newCollection);
     }
 }
