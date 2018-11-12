@@ -1,9 +1,9 @@
 ﻿using System;
 using Intellias.CQRS.Core.Queries;
-using Intellias.CQRS.EventStore.AzureTable.Documents;
+using Intellias.CQRS.QueryStore.AzureTable.Documents;
 using Newtonsoft.Json;
 
-namespace Intellias.CQRS.EventStore.AzureTable.Extensions
+namespace Intellias.CQRS.QueryStore.AzureTable.Extensions
 {
     /// <summary>
     /// Extensions for ReadModelTableEntity

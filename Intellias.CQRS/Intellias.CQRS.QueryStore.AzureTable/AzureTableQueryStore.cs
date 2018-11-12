@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
-using Intellias.CQRS.EventStore.AzureTable.Repositories;
+using Intellias.CQRS.QueryStore.AzureTable.Repositories;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace Intellias.CQRS.EventStore.AzureTable
+namespace Intellias.CQRS.QueryStore.AzureTable
 {
     /// <inheritdoc />
     /// <summary>

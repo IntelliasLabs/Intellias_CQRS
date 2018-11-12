@@ -38,7 +38,9 @@ namespace Intellias.CQRS.CommandBus.Azure
         /// <inheritdoc />
         public string AggregateRootId { get => cmd.AggregateRootId; set => throw new NotSupportedException(); }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// UserId shortcut from metadata
+        /// </summary>
         public string UserId { get => cmd.Metadata[MetadataKey.UserId]; set => throw new NotSupportedException(); }
 
         /// <inheritdoc />
