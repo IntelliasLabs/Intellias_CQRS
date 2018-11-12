@@ -24,7 +24,7 @@ namespace Intellias.CQRS.Core.Tests
         [Fact]
         public void DemoTest()
         {
-            var readModelQueryStore = new Dictionary<string, DemoReadModel>();
+            var readModelQueryStore = new Dictionary<string, DemoQueryModel>();
             var readModelStore = new DemoReadModelStore(readModelQueryStore);
             var demoQueryExecutor = new DemoQueryExecutor(readModelStore);
 
@@ -50,7 +50,7 @@ namespace Intellias.CQRS.Core.Tests
             var createResult = commandBus.PublishAsync(createCommand).Result;
             Assert.NotNull(createResult);
 
-            var queryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
+            var queryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoQueryModel>()).Result;
             Assert.Equal(1, queryResult.Total);
             Assert.Equal(createCommand.TestData, queryResult.Items.First().TestData);
 
@@ -59,7 +59,7 @@ namespace Intellias.CQRS.Core.Tests
             var updateResult = commandBus.PublishAsync(updateCommand).Result;
             Assert.NotNull(updateResult);
 
-            var updatedQueryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
+            var updatedQueryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoQueryModel>()).Result;
             Assert.Equal(updateCommand.TestData, updatedQueryResult.Items.First().TestData);
 
             deactivateCommand.AggregateRootId = updatedQueryResult.Items.First().Id;
@@ -67,7 +67,7 @@ namespace Intellias.CQRS.Core.Tests
             var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
             Assert.NotNull(deactivateResult);
 
-            var queryRemovedResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoReadModel>()).Result;
+            var queryRemovedResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoQueryModel>()).Result;
             Assert.Equal(0, queryRemovedResult.Items.Count);
         }
     }

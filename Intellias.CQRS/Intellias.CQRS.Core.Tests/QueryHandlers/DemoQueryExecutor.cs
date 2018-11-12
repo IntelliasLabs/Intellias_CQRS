@@ -8,8 +8,8 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
     /// <summary>
     /// Query handler
     /// </summary>
-    public class DemoQueryExecutor : IQueryExecutor<ReadModelByIdQuery<DemoReadModel>, DemoReadModel>,
-        IQueryExecutor<ReadAllQuery<DemoReadModel>, CollectionReadModel<DemoReadModel>>
+    public class DemoQueryExecutor : IQueryExecutor<ReadModelByIdQuery<DemoQueryModel>, DemoQueryModel>,
+        IQueryExecutor<ReadAllQuery<DemoQueryModel>, CollectionQueryModel<DemoQueryModel>>
     {
         private readonly DemoReadModelStore store;
 
@@ -27,7 +27,7 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<DemoReadModel> ExecuteQueryAsync(ReadModelByIdQuery<DemoReadModel> query)
+        public async Task<DemoQueryModel> ExecuteQueryAsync(ReadModelByIdQuery<DemoQueryModel> query)
         {
             var readModel = await store.GetAsync(query.Id);
             return readModel;
@@ -38,7 +38,7 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<CollectionReadModel<DemoReadModel>> ExecuteQueryAsync(ReadAllQuery<DemoReadModel> query)
+        public async Task<CollectionQueryModel<DemoQueryModel>> ExecuteQueryAsync(ReadAllQuery<DemoQueryModel> query)
         {
             var model = await store.GetAllAsync();
             return model;

@@ -5,7 +5,7 @@ namespace Intellias.CQRS.Tests.Core.Queries
     /// <summary>
     /// 
     /// </summary>
-    public class DemoReadModel : IReadModel
+    public class DemoQueryModel : IQueryModel
     {
         /// <summary>
         /// 

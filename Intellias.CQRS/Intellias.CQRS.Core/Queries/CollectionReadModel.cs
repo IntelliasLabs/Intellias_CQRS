@@ -5,13 +5,13 @@ namespace Intellias.CQRS.Core.Queries
     /// <summary>
     /// CollectionReadModel
     /// </summary>
-    /// <typeparam name="TReadModel">Read Model</typeparam>
-    public class CollectionReadModel<TReadModel> where TReadModel : class, IReadModel
+    /// <typeparam name="TQueryModel">Read Model</typeparam>
+    public class CollectionQueryModel<TQueryModel> where TQueryModel : class, IQueryModel
     {
         /// <summary>
         /// Model Items
         /// </summary>
-        public IReadOnlyCollection<TReadModel> Items { set; get; }
+        public IReadOnlyCollection<TQueryModel> Items { set; get; }
 
         /// <summary>
         /// Total count of items

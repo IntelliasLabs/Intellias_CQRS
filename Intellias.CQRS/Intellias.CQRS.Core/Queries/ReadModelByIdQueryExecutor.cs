@@ -6,18 +6,18 @@ namespace Intellias.CQRS.Core.Queries
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TReadModel"></typeparam>
-    public class ReadModelByIdQueryExecutor<TReadModel> : IQueryExecutor<ReadModelByIdQuery<TReadModel>, TReadModel>
-        where TReadModel : class, IReadModel
+    /// <typeparam name="TQueryModel"></typeparam>
+    public class ReadModelByIdQueryExecutor<TQueryModel> : IQueryExecutor<ReadModelByIdQuery<TQueryModel>, TQueryModel>
+        where TQueryModel : class, IQueryModel
     {
-        private readonly IReadModelStore<TReadModel> _readStore;
+        private readonly IQueryModelStore<TQueryModel> _readStore;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="readStore"></param>
         public ReadModelByIdQueryExecutor(
-            IReadModelStore<TReadModel> readStore)
+            IQueryModelStore<TQueryModel> readStore)
         {
             _readStore = readStore;
         }
@@ -27,7 +27,7 @@ namespace Intellias.CQRS.Core.Queries
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<TReadModel> ExecuteQueryAsync(ReadModelByIdQuery<TReadModel> query)
+        public async Task<TQueryModel> ExecuteQueryAsync(ReadModelByIdQuery<TQueryModel> query)
         {
             var readModel = await _readStore.GetAsync(query.Id);
             return readModel;
