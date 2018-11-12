@@ -5,9 +5,9 @@ namespace Intellias.CQRS.Core.Queries
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TReadModel"></typeparam>
-    public class ReadModelByIdQuery<TReadModel> : IQuery<TReadModel>
-        where TReadModel : class, IQueryModel
+    /// <typeparam name="TQueryModel"></typeparam>
+    public class ReadModelByIdQuery<TQueryModel> : IQuery<TQueryModel>
+        where TQueryModel : class, IQueryModel
     {
         /// <summary>
         /// 

@@ -5,7 +5,7 @@ namespace Intellias.CQRS.Core.Storage
     /// <summary>
     /// Read Model Storage
     /// </summary>
-    public interface IReadModelStore
+    public interface IQueryModelStore
     {
         /// <summary>
         /// Delete Read Model Item

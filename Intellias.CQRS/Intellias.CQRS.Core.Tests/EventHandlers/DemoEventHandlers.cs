@@ -13,13 +13,13 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         IEventHandler<TestUpdatedEvent>,
         IEventHandler<TestDeletedEvent>
     {
-        private readonly Dictionary<string, DemoReadModel> store;
+        private readonly Dictionary<string, DemoQueryModel> store;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="store"></param>
-        public DemoEventHandlers(Dictionary<string, DemoReadModel> store)
+        public DemoEventHandlers(Dictionary<string, DemoQueryModel> store)
         {
             this.store = store;
         }
@@ -31,7 +31,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// <returns>Result</returns>
         public Task HandleAsync(TestCreatedEvent @event)
         {
-            store.Add(@event.AggregateRootId, new DemoReadModel
+            store.Add(@event.AggregateRootId, new DemoQueryModel
             {
                 Id = @event.AggregateRootId,
                 TestData = @event.TestData

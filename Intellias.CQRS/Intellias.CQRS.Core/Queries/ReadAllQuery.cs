@@ -3,9 +3,9 @@
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TReadModel"></typeparam>
-    public class ReadAllQuery<TReadModel> : IQuery<CollectionReadModel<TReadModel>>
-        where TReadModel : class, IQueryModel
+    /// <typeparam name="TQueryModel"></typeparam>
+    public class ReadAllQuery<TQueryModel> : IQuery<CollectionQueryModel<TQueryModel>>
+        where TQueryModel : class, IQueryModel
     {
     }
 }

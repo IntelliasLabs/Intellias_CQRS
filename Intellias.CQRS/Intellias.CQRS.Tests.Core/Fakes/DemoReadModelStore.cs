@@ -10,15 +10,15 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// <summary>
     /// 
     /// </summary>
-    public class DemoReadModelStore : IReadModelStore<DemoReadModel>
+    public class DemoReadModelStore : IQueryModelStore<DemoQueryModel>
     {
-        private readonly Dictionary<string, DemoReadModel> store;
+        private readonly Dictionary<string, DemoQueryModel> store;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="store"></param>
-        public DemoReadModelStore(Dictionary<string, DemoReadModel> store)
+        public DemoReadModelStore(Dictionary<string, DemoQueryModel> store)
         {
             this.store = store;
         }
@@ -49,7 +49,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<DemoReadModel> GetAsync(string id)
+        public Task<DemoQueryModel> GetAsync(string id)
         {
             var model = store[id];
             return Task.FromResult(model);
@@ -59,9 +59,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<CollectionReadModel<DemoReadModel>> GetAllAsync()
+        public Task<CollectionQueryModel<DemoQueryModel>> GetAllAsync()
         {
-            return Task.FromResult(new CollectionReadModel<DemoReadModel>
+            return Task.FromResult(new CollectionQueryModel<DemoQueryModel>
             {
                 Items = store.Values.ToList(),
                 Total = store.Count
@@ -73,7 +73,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="newQueryModel"></param>
         /// <returns></returns>
-        public Task<DemoReadModel> UpdateAsync(DemoReadModel newQueryModel)
+        public Task<DemoQueryModel> UpdateAsync(DemoQueryModel newQueryModel)
         {
             throw new System.NotImplementedException();
         }
@@ -83,7 +83,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="newCollection"></param>
         /// <returns></returns>
-        public Task<CollectionReadModel<DemoReadModel>> UpdateAllAsync(CollectionReadModel<DemoReadModel> newCollection)
+        public Task<CollectionQueryModel<DemoQueryModel>> UpdateAllAsync(CollectionQueryModel<DemoQueryModel> newCollection)
         {
             throw new System.NotImplementedException();
         }

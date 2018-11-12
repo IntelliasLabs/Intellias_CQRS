@@ -10,7 +10,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
     /// <summary>
     /// Azure Table Read Storage
     /// </summary>
-    public class AzureTableQueryStore<TQueryModel> : IReadModelStore<TQueryModel>
+    public class AzureTableQueryStore<TQueryModel> : IQueryModelStore<TQueryModel>
         where TQueryModel : class, IQueryModel
     {
         private readonly QueryModelRepository<TQueryModel> repository;
@@ -25,17 +25,17 @@ namespace Intellias.CQRS.EventStore.AzureTable
         }
 
         /// <summary>
-        /// Get TReadModel by Id
+        /// Get TQueryModel by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<TQueryModel> GetAsync(string id) => await repository.GetModelAsync(id);
 
         /// <summary>
-        /// Get collection of read models by type
+        /// Get collection of query models by type
         /// </summary>
         /// <returns></returns>
-        public async Task<CollectionReadModel<TQueryModel>> GetAllAsync() => await repository.GetAllModelsAsync();
+        public async Task<CollectionQueryModel<TQueryModel>> GetAllAsync() => await repository.GetAllModelsAsync();
 
         /// <summary>
         /// NOT IMPLEMENTED
@@ -49,7 +49,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
         /// </summary>
         /// <param name="newCollection"></param>
         /// <returns></returns>
-        public Task<CollectionReadModel<TQueryModel>> UpdateAllAsync(CollectionReadModel<TQueryModel> newCollection)
+        public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(CollectionQueryModel<TQueryModel> newCollection)
             => throw new System.NotImplementedException();
 
         /// <summary>
