@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
-using Intellias.CQRS.EventStore.AzureTable.Documents;
+using Intellias.CQRS.QueryStore.AzureTable.Documents;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 
-namespace Intellias.CQRS.EventStore.AzureTable.Repositories
+namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
 {
     /// <summary>
     /// ReadModelRepository
