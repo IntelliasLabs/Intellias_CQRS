@@ -72,7 +72,5 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
             var operation = TableOperation.Insert(@event.ToStoreEvent());
             return eventTable.ExecuteAsync(operation);
         }
-
-
     }
 }

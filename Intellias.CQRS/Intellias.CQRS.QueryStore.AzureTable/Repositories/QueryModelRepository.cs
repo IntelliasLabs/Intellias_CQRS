@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.QueryStore.AzureTable.Documents;
+using Intellias.CQRS.QueryStore.AzureTable.Extensions;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 
@@ -34,16 +35,13 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         /// <returns></returns>
         public async Task<TQueryModel> GetModelAsync(string readModelId)
         {
-            var query = new TableQuery<QueryModelTableEntity>()
-                .Where(TableQuery.GenerateFilterCondition("RowKey",
-                    QueryComparisons.Equal, readModelId));
+            var operation = 
+                TableOperation.Retrieve<QueryModelTableEntity>(typeof(TQueryModel).Name, readModelId);
 
             var queryResult = 
-                await queryTable.ExecuteQuerySegmentedAsync(query, null);
+                await queryTable.ExecuteAsync(operation);
 
-            var tableEntity = queryResult.Results.Single();
-
-            return (TQueryModel)JsonConvert.DeserializeObject(tableEntity.Data);
+            return (TQueryModel)queryResult.Result ?? throw new KeyNotFoundException();
         }
 
         /// <summary>
@@ -78,6 +76,62 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
                 Items = list,
                 Total = list.Count
             };
+        }
+
+        /// <summary>
+        /// Insert query model to table
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<TQueryModel> InsertModelAsync(IQueryModel model)
+        {
+            var operation = TableOperation.Insert(model.ToStoreEntity());
+            var result = await queryTable.ExecuteAsync(operation);
+            return (TQueryModel)result.Result;
+        }
+
+        /// <summary>
+        /// UpdateModelAsync
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<TQueryModel> UpdateModelAsync(TQueryModel model)
+        {
+            // Getting entity
+            var record = await RetrieveRecord(model.Id);
+
+            var updateOperation = TableOperation.Replace(record);
+            var result = await queryTable.ExecuteAsync(updateOperation);
+            return (TQueryModel)result.Result;
+        }
+
+
+        /// <summary>
+        /// DeleteModel
+        /// </summary>
+        /// <param name="readModelId"></param>
+        /// <returns></returns>
+        public async Task DeleteModelAsync(string readModelId)
+        {
+            // Getting entity
+            var record = await RetrieveRecord(readModelId);
+
+            // Removing
+            var deleteOperation = TableOperation.Delete(record);
+            await queryTable.ExecuteAsync(deleteOperation);
+        }
+
+
+        private async Task<QueryModelTableEntity> RetrieveRecord(string id)
+        {
+            var readOperation =
+                TableOperation.Retrieve<QueryModelTableEntity>(typeof(TQueryModel).Name, id);
+            var queryResult = await queryTable.ExecuteAsync(readOperation);
+
+            var entity = (QueryModelTableEntity)queryResult.Result;
+            if (entity == null) { throw new KeyNotFoundException(); }
+
+            return entity;
         }
     }
 }
