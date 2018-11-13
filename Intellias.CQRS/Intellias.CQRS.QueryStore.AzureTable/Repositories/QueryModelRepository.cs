@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.QueryStore.AzureTable.Documents;
@@ -12,18 +13,18 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
     /// </summary>
     public class QueryModelRepository<TQueryModel> where TQueryModel : class, IQueryModel
     {
-        private readonly CloudTable queryModelTable;
+        private readonly CloudTable queryTable;
 
         /// <summary>
         /// ReadModelRepository init
         /// </summary>
-        /// <param name="table">CloudTable</param>
-        public QueryModelRepository(CloudTable table)
+        /// <param name="client"></param>
+        public QueryModelRepository(CloudTableClient client)
         {
-            queryModelTable = table;
+            queryTable = client.GetTableReference(typeof(TQueryModel).Name);
 
             // Create the CloudTable if it does not exist
-            queryModelTable.CreateIfNotExistsAsync().Wait();
+            queryTable.CreateIfNotExistsAsync().Wait();
         }
 
         /// <summary>
@@ -37,11 +38,12 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
                 .Where(TableQuery.GenerateFilterCondition("RowKey",
                     QueryComparisons.Equal, readModelId));
 
-            var queryResult = await queryModelTable.ExecuteQuerySegmentedAsync(query, null);
+            var queryResult = 
+                await queryTable.ExecuteQuerySegmentedAsync(query, null);
+
             var tableEntity = queryResult.Results.Single();
 
             return (TQueryModel)JsonConvert.DeserializeObject(tableEntity.Data);
-            
         }
 
         /// <summary>
@@ -54,9 +56,22 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey",
                     QueryComparisons.Equal, typeof(TQueryModel).ToString()));
 
-            var queryResult = await queryModelTable.ExecuteQuerySegmentedAsync(query, null);
+            var results = new List<QueryModelTableEntity>();
+            TableContinuationToken continuationToken = null;
 
-            var list = queryResult.Results.Select(item => (TQueryModel)JsonConvert.DeserializeObject(item.Data)).ToList();
+            do
+            {
+                var queryResults =
+                    await queryTable.ExecuteQuerySegmentedAsync(query, continuationToken);
+
+                continuationToken = queryResults.ContinuationToken;
+                results.AddRange(queryResults.Results);
+
+            } while (continuationToken != null);
+
+            var list = results
+                .Select(item => (TQueryModel)JsonConvert.DeserializeObject(item.Data))
+                .ToList();
 
             return new CollectionQueryModel<TQueryModel>
             {

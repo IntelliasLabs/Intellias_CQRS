@@ -8,7 +8,8 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
     /// <summary>
     /// Query handler
     /// </summary>
-    public class DemoQueryExecutor : IQueryExecutor<ReadModelByIdQuery<DemoQueryModel>, DemoQueryModel>,
+    public class DemoQueryExecutor : 
+        IQueryExecutor<ReadModelByIdQuery<DemoQueryModel>, DemoQueryModel>,
         IQueryExecutor<ReadAllQuery<DemoQueryModel>, CollectionQueryModel<DemoQueryModel>>
     {
         private readonly DemoReadModelStore store;

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.QueryStore.AzureTable.Repositories;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.WindowsAzure.Storage;
 
 namespace Intellias.CQRS.QueryStore.AzureTable
 {
@@ -19,10 +19,14 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         /// <summary>
         /// AzureTableReadStore
         /// </summary>
-        /// <param name="cloudTable">Azure Cloud Table c</param>
-        public AzureTableQueryStore(CloudTable cloudTable)
+        /// <param name="storeConnectionString"></param>
+        public AzureTableQueryStore(string storeConnectionString)
         {
-            repository = new QueryModelRepository<TQueryModel>(cloudTable);
+            var client = CloudStorageAccount
+                .Parse(storeConnectionString)
+                .CreateCloudTableClient();
+
+            repository = new QueryModelRepository<TQueryModel>(client);
         }
 
         /// <summary>
