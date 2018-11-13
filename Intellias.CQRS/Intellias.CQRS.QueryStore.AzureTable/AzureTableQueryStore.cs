@@ -19,13 +19,10 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         /// <summary>
         /// AzureTableReadStore
         /// </summary>
-        /// <param name="storeConnectionString"></param>
-        public AzureTableQueryStore(string storeConnectionString)
+        /// <param name="account"></param>
+        public AzureTableQueryStore(CloudStorageAccount account)
         {
-            var client = CloudStorageAccount
-                .Parse(storeConnectionString)
-                .CreateCloudTableClient();
-
+            var client = account.CreateCloudTableClient();
             repository = new QueryModelRepository<TQueryModel>(client);
         }
 
