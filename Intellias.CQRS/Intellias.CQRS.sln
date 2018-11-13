@@ -32,9 +32,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.CommandBus.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventBus.AzureEventGrid", "Intellias.CQRS.EventBus.AzureEventGrid\Intellias.CQRS.EventBus.AzureEventGrid.csproj", "{5316D70C-4B82-41FA-A747-8A9CA7D7460B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.QueryStore.AzureTable", "Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj", "{BE47C4EF-40EF-4D89-B2B0-ABB0A4FCD318}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.QueryStore.AzureTable", "Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj", "{BE47C4EF-40EF-4D89-B2B0-ABB0A4FCD318}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.AzureTable.Core", "Intellias.CQRS.AzureTable.Core\Intellias.CQRS.AzureTable.Core.csproj", "{09B0904F-947F-4E48-9B44-87F87D96E179}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.AzureTable.Core", "Intellias.CQRS.AzureTable.Core\Intellias.CQRS.AzureTable.Core.csproj", "{09B0904F-947F-4E48-9B44-87F87D96E179}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.QueryStore.AzureTable.Tests", "Intellias.CQRS.QueryStore.AzureTable.Tests\Intellias.CQRS.QueryStore.AzureTable.Tests.csproj", "{B1477651-3330-4E4A-9CC0-0937BEA7A051}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +92,10 @@ Global
 		{09B0904F-947F-4E48-9B44-87F87D96E179}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09B0904F-947F-4E48-9B44-87F87D96E179}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09B0904F-947F-4E48-9B44-87F87D96E179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1477651-3330-4E4A-9CC0-0937BEA7A051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1477651-3330-4E4A-9CC0-0937BEA7A051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1477651-3330-4E4A-9CC0-0937BEA7A051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1477651-3330-4E4A-9CC0-0937BEA7A051}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

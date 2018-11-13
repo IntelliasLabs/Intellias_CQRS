@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.QueryStore.AzureTable.Documents;
 using Intellias.CQRS.QueryStore.AzureTable.Extensions;
@@ -41,7 +42,10 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
             var queryResult = 
                 await queryTable.ExecuteAsync(operation);
 
-            return (TQueryModel)queryResult.Result ?? throw new KeyNotFoundException();
+            var modelJson = ((QueryModelTableEntity)queryResult.Result).Data;
+            var model = JsonConvert.DeserializeObject<TQueryModel>(modelJson, CqrsSettings.JsonConfig());
+
+            return model ?? throw new KeyNotFoundException();
         }
 
         /// <summary>
@@ -52,7 +56,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         {
             var query = new TableQuery<QueryModelTableEntity>()
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey",
-                    QueryComparisons.Equal, typeof(TQueryModel).ToString()));
+                    QueryComparisons.Equal, typeof(TQueryModel).Name));
 
             var results = new List<QueryModelTableEntity>();
             TableContinuationToken continuationToken = null;
@@ -68,7 +72,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
             } while (continuationToken != null);
 
             var list = results
-                .Select(item => (TQueryModel)JsonConvert.DeserializeObject(item.Data))
+                .Select(item => JsonConvert.DeserializeObject<TQueryModel>(item.Data, CqrsSettings.JsonConfig()))
                 .ToList();
 
             return new CollectionQueryModel<TQueryModel>
