@@ -3,22 +3,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
-using Intellias.CQRS.Tests.Core.Queries;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <summary>
     /// 
     /// </summary>
-    public class DemoReadModelStore : IQueryModelStore<DemoQueryModel>
+    public class FakeQueryModelStore<TQueryModel> : IQueryModelStore<TQueryModel>
+        where TQueryModel: class, IQueryModel
     {
-        private readonly Dictionary<string, DemoQueryModel> store;
+        private readonly Dictionary<string, TQueryModel> store;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="store"></param>
-        public DemoReadModelStore(Dictionary<string, DemoQueryModel> store)
+        public FakeQueryModelStore(Dictionary<string, TQueryModel> store)
         {
             this.store = store;
         }
@@ -49,7 +49,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<DemoQueryModel> GetAsync(string id)
+        public Task<TQueryModel> GetAsync(string id)
         {
             var model = store[id];
             return Task.FromResult(model);
@@ -59,9 +59,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<CollectionQueryModel<DemoQueryModel>> GetAllAsync()
+        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync()
         {
-            return Task.FromResult(new CollectionQueryModel<DemoQueryModel>
+            return Task.FromResult(new CollectionQueryModel<TQueryModel>
             {
                 Items = store.Values.ToList(),
                 Total = store.Count
@@ -73,7 +73,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="newQueryModel"></param>
         /// <returns></returns>
-        public Task<DemoQueryModel> UpdateAsync(DemoQueryModel newQueryModel)
+        public Task<TQueryModel> UpdateAsync(TQueryModel newQueryModel)
         {
             throw new System.NotImplementedException();
         }
@@ -83,7 +83,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="newCollection"></param>
         /// <returns></returns>
-        public Task<CollectionQueryModel<DemoQueryModel>> UpdateAllAsync(IEnumerable<DemoQueryModel> newCollection)
+        public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(IEnumerable<TQueryModel> newCollection)
         {
             throw new System.NotImplementedException();
         }
@@ -93,7 +93,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="newQueryModel"></param>
         /// <returns></returns>
-        public Task<DemoQueryModel> CreateAsync(DemoQueryModel newQueryModel)
+        public Task<TQueryModel> CreateAsync(TQueryModel newQueryModel)
         {
             throw new System.NotImplementedException();
         }
@@ -103,7 +103,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="newCollection"></param>
         /// <returns></returns>
-        public Task<CollectionQueryModel<DemoQueryModel>> CreateAllAsync(IEnumerable<DemoQueryModel> newCollection)
+        public Task<CollectionQueryModel<TQueryModel>> CreateAllAsync(IEnumerable<TQueryModel> newCollection)
         {
             throw new System.NotImplementedException();
         }

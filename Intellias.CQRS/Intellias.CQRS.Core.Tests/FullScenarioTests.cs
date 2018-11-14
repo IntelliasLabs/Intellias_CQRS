@@ -4,7 +4,7 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Tests.CommandHandlers;
 using Intellias.CQRS.Core.Tests.EventHandlers;
-using Intellias.CQRS.Core.Tests.QueryHandlers;
+using Intellias.CQRS.Core.Tests.Queries;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Fakes;
@@ -25,8 +25,8 @@ namespace Intellias.CQRS.Core.Tests
         public void DemoTest()
         {
             var readModelQueryStore = new Dictionary<string, DemoQueryModel>();
-            var readModelStore = new DemoReadModelStore(readModelQueryStore);
-            var demoQueryExecutor = new DemoQueryExecutor(readModelStore);
+            var readModelStore = new FakeQueryModelStore<DemoQueryModel>(readModelQueryStore);
+            var demoQueryExecutor = new FakeQueryExecutor<DemoQueryModel>(readModelStore);
 
             var createCommand = new TestCreateCommand { TestData = "Test data" };
             var updateCommand = new TestUpdateCommand { TestData = "Test data updated" };

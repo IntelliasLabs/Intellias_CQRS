@@ -1,24 +1,25 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Tests.Core.Fakes;
-using Intellias.CQRS.Tests.Core.Queries;
 
-namespace Intellias.CQRS.Core.Tests.QueryHandlers
+namespace Intellias.CQRS.Core.Tests.Queries
 {
     /// <summary>
-    /// Query handler
+    /// Query executor
     /// </summary>
-    public class DemoQueryExecutor : 
-        IQueryExecutor<ReadModelByIdQuery<DemoQueryModel>, DemoQueryModel>,
-        IQueryExecutor<ReadAllQuery<DemoQueryModel>, CollectionQueryModel<DemoQueryModel>>
+    public class FakeQueryExecutor<TQueryModel> : 
+        IQueryExecutor<ReadModelByIdQuery<TQueryModel>, TQueryModel>,
+        IQueryExecutor<ReadAllQuery<TQueryModel>, CollectionQueryModel<TQueryModel>>
+        where TQueryModel : class, IQueryModel
+
     {
-        private readonly DemoReadModelStore store;
+        private readonly FakeQueryModelStore<TQueryModel> store;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="store"></param>
-        public DemoQueryExecutor(DemoReadModelStore store)
+        public FakeQueryExecutor(FakeQueryModelStore<TQueryModel> store)
         {
             this.store = store;
         }
@@ -28,7 +29,7 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<DemoQueryModel> ExecuteQueryAsync(ReadModelByIdQuery<DemoQueryModel> query)
+        public async Task<TQueryModel> ExecuteQueryAsync(ReadModelByIdQuery<TQueryModel> query)
         {
             var readModel = await store.GetAsync(query.Id);
             return readModel;
@@ -39,7 +40,7 @@ namespace Intellias.CQRS.Core.Tests.QueryHandlers
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<CollectionQueryModel<DemoQueryModel>> ExecuteQueryAsync(ReadAllQuery<DemoQueryModel> query)
+        public async Task<CollectionQueryModel<TQueryModel>> ExecuteQueryAsync(ReadAllQuery<TQueryModel> query)
         {
             var model = await store.GetAllAsync();
             return model;
