@@ -24,7 +24,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        /// Deletes all TQueryModels
         /// </summary>
         /// <returns></returns>
         public Task DeleteAllAsync()
@@ -34,7 +34,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        /// Deletes TQueryModel
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -45,7 +45,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        /// Gets TQueryModel
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -56,7 +56,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        /// Gets all TQueryModels
         /// </summary>
         /// <returns></returns>
         public Task<CollectionQueryModel<TQueryModel>> GetAllAsync()
@@ -69,43 +69,68 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// NOT IMPOLEMENTED
+        /// Updates TQueryModelby Id
         /// </summary>
         /// <param name="newQueryModel"></param>
         /// <returns></returns>
         public Task<TQueryModel> UpdateAsync(TQueryModel newQueryModel)
         {
-            throw new System.NotImplementedException();
+            store[newQueryModel.Id] = newQueryModel;
+
+            return Task.FromResult(newQueryModel);
         }
 
         /// <summary>
-        /// NOT IMPOLEMENTED
+        /// Updates collection of TQueryModel by Ids
         /// </summary>
         /// <param name="newCollection"></param>
         /// <returns></returns>
         public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(IEnumerable<TQueryModel> newCollection)
         {
-            throw new System.NotImplementedException();
+            foreach (var item in newCollection)
+            {
+                store[item.Id] = item;
+            }
+
+            var list = newCollection.ToList();
+            return Task.FromResult(new CollectionQueryModel<TQueryModel>
+            {
+                Items = list,
+                Total = list.Count
+            });
         }
 
         /// <summary>
-        /// NOT IMPOLEMENTED
+        /// Creates TQueryModel
         /// </summary>
         /// <param name="newQueryModel"></param>
         /// <returns></returns>
         public Task<TQueryModel> CreateAsync(TQueryModel newQueryModel)
         {
-            throw new System.NotImplementedException();
+            store.Add(newQueryModel.Id, newQueryModel);
+
+            return Task.FromResult(newQueryModel);
         }
 
         /// <summary>
-        /// NOT IMPOLEMENTED
+        /// Creates collection of TQueryModels
         /// </summary>
         /// <param name="newCollection"></param>
         /// <returns></returns>
         public Task<CollectionQueryModel<TQueryModel>> CreateAllAsync(IEnumerable<TQueryModel> newCollection)
         {
-            throw new System.NotImplementedException();
+            foreach (var item in newCollection)
+            {
+                store.Add(item.Id, item);
+            }
+
+            var list = newCollection.ToList();
+
+            return Task.FromResult(new CollectionQueryModel<TQueryModel>
+            {
+                Items = list,
+                Total = list.Count
+            });
         }
     }
 }
