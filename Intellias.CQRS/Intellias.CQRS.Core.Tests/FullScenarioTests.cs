@@ -23,15 +23,14 @@ namespace Intellias.CQRS.Core.Tests
         [Fact]
         public void DemoTest()
         {
-            var readModelQueryStore = new Dictionary<string, DemoQueryModel>();
-            var readModelStore = new FakeQueryModelStore<DemoQueryModel>(readModelQueryStore);
+            var readModelStore = new InProcessQueryStore<DemoQueryModel>();
             var demoQueryExecutor = new FakeQueryExecutor<DemoQueryModel>(readModelStore);
 
             var createCommand = new TestCreateCommand { TestData = "Test data" };
             var updateCommand = new TestUpdateCommand { TestData = "Test data updated" };
             var deactivateCommand = new TestDeleteCommand();
 
-            var eventHandlers = new DemoEventHandlers(readModelQueryStore);
+            var eventHandlers = new DemoEventHandlers(readModelStore);
 
             var eventBus = new InProcessEventBus();
             eventBus.AddHandler<TestCreatedEvent>(eventHandlers);

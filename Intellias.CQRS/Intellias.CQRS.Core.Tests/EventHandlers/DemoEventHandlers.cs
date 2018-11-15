@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Queries;
 
@@ -13,13 +13,13 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         IEventHandler<TestUpdatedEvent>,
         IEventHandler<TestDeletedEvent>
     {
-        private readonly Dictionary<string, DemoQueryModel> store;
+        private readonly IQueryModelStore<DemoQueryModel> store;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="store"></param>
-        public DemoEventHandlers(Dictionary<string, DemoQueryModel> store)
+        public DemoEventHandlers(IQueryModelStore<DemoQueryModel> store)
         {
             this.store = store;
         }
@@ -31,12 +31,11 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// <returns>Result</returns>
         public Task HandleAsync(TestCreatedEvent @event)
         {
-            store.Add(@event.AggregateRootId, new DemoQueryModel
+            return store.CreateAsync(new DemoQueryModel
             {
                 Id = @event.AggregateRootId,
                 TestData = @event.TestData
             });
-            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -46,8 +45,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// <returns>Result</returns>
         public Task HandleAsync(TestDeletedEvent @event)
         {
-            store.Remove(@event.AggregateRootId);
-            return Task.CompletedTask;
+            return store.DeleteAsync(@event.AggregateRootId);
         }
 
         /// <summary>
@@ -57,8 +55,11 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// <returns>Result</returns>
         public Task HandleAsync(TestUpdatedEvent @event)
         {
-            store[@event.AggregateRootId].TestData = @event.TestData;
-            return Task.CompletedTask;
+            return store.UpdateAsync(new DemoQueryModel
+            {
+                Id = @event.AggregateRootId,
+                TestData = @event.TestData
+            });
         }
     }
 }
