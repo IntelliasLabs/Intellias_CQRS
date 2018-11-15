@@ -85,16 +85,13 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <returns></returns>
         public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(IEnumerable<TQueryModel> newCollection)
         {
-            foreach (var item in newCollection)
-            {
-                store[item.Id] = item;
-            }
+            var queryModels = newCollection.ToList();
+            queryModels.ForEach(item => store[item.Id] = item);
 
-            var list = newCollection.ToList();
             return Task.FromResult(new CollectionQueryModel<TQueryModel>
             {
-                Items = list,
-                Total = list.Count
+                Items = queryModels,
+                Total = queryModels.Count
             });
         }
 
@@ -116,17 +113,13 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <returns></returns>
         public Task<CollectionQueryModel<TQueryModel>> CreateAllAsync(IEnumerable<TQueryModel> newCollection)
         {
-            foreach (var item in newCollection)
-            {
-                store.Add(item.Id, item);
-            }
-
-            var list = newCollection.ToList();
+            var queryModels = newCollection.ToList();
+            queryModels.ForEach(item => store.Add(item.Id, item));
 
             return Task.FromResult(new CollectionQueryModel<TQueryModel>
             {
-                Items = list,
-                Total = list.Count
+                Items = queryModels,
+                Total = queryModels.Count
             });
         }
     }
