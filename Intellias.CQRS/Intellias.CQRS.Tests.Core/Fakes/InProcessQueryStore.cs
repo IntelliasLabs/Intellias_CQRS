@@ -9,7 +9,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// <summary>
     /// 
     /// </summary>
-    public class FakeQueryModelStore<TQueryModel> : IQueryModelStore<TQueryModel>
+    public class InProcessQueryStore<TQueryModel> : IQueryModelStore<TQueryModel>
         where TQueryModel: class, IQueryModel
     {
         private readonly Dictionary<string, TQueryModel> store;
@@ -17,10 +17,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="store"></param>
-        public FakeQueryModelStore(Dictionary<string, TQueryModel> store)
+        public InProcessQueryStore()
         {
-            this.store = store;
+            store = new Dictionary<string, TQueryModel>();
         }
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        /// DeleteAsync
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -45,7 +44,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        /// GetAsync
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -69,13 +68,14 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// NOT IMPOLEMENTED
+        /// UpdateAsync
         /// </summary>
         /// <param name="newQueryModel"></param>
         /// <returns></returns>
         public Task<TQueryModel> UpdateAsync(TQueryModel newQueryModel)
         {
-            throw new System.NotImplementedException();
+            store[newQueryModel.Id] = newQueryModel;
+            return Task.FromResult(newQueryModel);
         }
 
         /// <summary>
@@ -89,13 +89,14 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// NOT IMPOLEMENTED
+        /// CreateAsync
         /// </summary>
         /// <param name="newQueryModel"></param>
         /// <returns></returns>
         public Task<TQueryModel> CreateAsync(TQueryModel newQueryModel)
         {
-            throw new System.NotImplementedException();
+            store.Add(newQueryModel.Id, newQueryModel);
+            return Task.FromResult(newQueryModel);
         }
 
         /// <summary>

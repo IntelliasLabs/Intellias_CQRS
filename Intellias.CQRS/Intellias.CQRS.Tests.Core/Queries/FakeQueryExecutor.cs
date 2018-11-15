@@ -13,13 +13,13 @@ namespace Intellias.CQRS.Core.Tests.Queries
         where TQueryModel : class, IQueryModel
 
     {
-        private readonly FakeQueryModelStore<TQueryModel> store;
+        private readonly InProcessQueryStore<TQueryModel> store;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="store"></param>
-        public FakeQueryExecutor(FakeQueryModelStore<TQueryModel> store)
+        public FakeQueryExecutor(InProcessQueryStore<TQueryModel> store)
         {
             this.store = store;
         }
