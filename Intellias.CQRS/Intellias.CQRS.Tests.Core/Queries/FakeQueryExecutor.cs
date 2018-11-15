@@ -7,9 +7,7 @@ namespace Intellias.CQRS.Core.Tests.Queries
     /// <summary>
     /// Query executor
     /// </summary>
-    public class FakeQueryExecutor<TQueryModel> : 
-        IQueryExecutor<ReadModelByIdQuery<TQueryModel>, TQueryModel>,
-        IQueryExecutor<ReadAllQuery<TQueryModel>, CollectionQueryModel<TQueryModel>>
+    public class FakeQueryExecutor<TQueryModel> : IReadQueryExecutor<TQueryModel>
         where TQueryModel : class, IQueryModel
 
     {
@@ -27,23 +25,14 @@ namespace Intellias.CQRS.Core.Tests.Queries
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<TQueryModel> ExecuteQueryAsync(ReadModelByIdQuery<TQueryModel> query)
-        {
-            var readModel = await store.GetAsync(query.Id);
-            return readModel;
-        }
+        public async Task<CollectionQueryModel<TQueryModel>> GetAllAsync() => await store.GetAllAsync();
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="query"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<CollectionQueryModel<TQueryModel>> ExecuteQueryAsync(ReadAllQuery<TQueryModel> query)
-        {
-            var model = await store.GetAllAsync();
-            return model;
-        }
+        public async Task<TQueryModel> GetByIdAsync(string id) => await store.GetAsync(id);
     }
 }

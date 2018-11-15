@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Tests.CommandHandlers;
 using Intellias.CQRS.Core.Tests.EventHandlers;
 using Intellias.CQRS.Core.Tests.Queries;
@@ -50,7 +49,7 @@ namespace Intellias.CQRS.Core.Tests
             var createResult = commandBus.PublishAsync(createCommand).Result;
             Assert.NotNull(createResult);
 
-            var queryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoQueryModel>()).Result;
+            var queryResult = demoQueryExecutor.GetAllAsync().Result;
             Assert.Equal(1, queryResult.Total);
             Assert.Equal(createCommand.TestData, queryResult.Items.First().TestData);
 
@@ -59,7 +58,7 @@ namespace Intellias.CQRS.Core.Tests
             var updateResult = commandBus.PublishAsync(updateCommand).Result;
             Assert.NotNull(updateResult);
 
-            var updatedQueryResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoQueryModel>()).Result;
+            var updatedQueryResult = demoQueryExecutor.GetAllAsync().Result;
             Assert.Equal(updateCommand.TestData, updatedQueryResult.Items.First().TestData);
 
             deactivateCommand.AggregateRootId = updatedQueryResult.Items.First().Id;
@@ -67,7 +66,7 @@ namespace Intellias.CQRS.Core.Tests
             var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
             Assert.NotNull(deactivateResult);
 
-            var queryRemovedResult = demoQueryExecutor.ExecuteQueryAsync(new ReadAllQuery<DemoQueryModel>()).Result;
+            var queryRemovedResult = demoQueryExecutor.GetAllAsync().Result;
             Assert.Equal(0, queryRemovedResult.Items.Count);
         }
     }
