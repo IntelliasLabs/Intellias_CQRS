@@ -1,4 +1,6 @@
-﻿namespace Intellias.CQRS.Core.Messages
+﻿using System.Collections.Generic;
+
+namespace Intellias.CQRS.Core.Messages
 {
     /// <inheritdoc />
     public class ExecutionResult : IExecutionResult
@@ -41,5 +43,10 @@
         {
             return new ExecutionResult(reason);
         }
+
+        /// <summary>
+        /// Contains metadata, which describes execution process
+        /// </summary>
+        public Dictionary<string, object> ExecutionMetadata { get; } = new Dictionary<string, object>();
     }
 }
