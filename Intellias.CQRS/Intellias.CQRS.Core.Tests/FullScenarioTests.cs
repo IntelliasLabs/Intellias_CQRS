@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Tests.CommandHandlers;
