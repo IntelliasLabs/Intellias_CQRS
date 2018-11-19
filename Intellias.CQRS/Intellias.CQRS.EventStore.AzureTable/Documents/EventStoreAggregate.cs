@@ -17,5 +17,10 @@ namespace Intellias.CQRS.EventStore.AzureTable.Documents
         /// Last version of aggregate root snapshot
         /// </summary>
         public int LastSnapshotVersion { get; set; }
+
+        /// <summary>
+        /// Keeps an aggregate ParentId if exists
+        /// </summary>
+        public string ParentId { get; set; }
     }
 }
