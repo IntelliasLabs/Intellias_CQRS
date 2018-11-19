@@ -132,5 +132,10 @@ namespace Intellias.CQRS.Core.Messages
 
             return hash;
         }
+
+        /// <summary>
+        /// Dummy
+        /// </summary>
+        public static string Dummy => "0000000000";
     }
 }
