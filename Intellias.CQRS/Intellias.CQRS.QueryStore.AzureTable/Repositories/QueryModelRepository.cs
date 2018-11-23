@@ -13,7 +13,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
     /// <summary>
     /// ReadModelRepository
     /// </summary>
-    public class QueryModelRepository<TQueryModel> where TQueryModel : class, IQueryModel
+    public class QueryModelRepository<TQueryModel> where TQueryModel : AbstractQueryModel
     {
         private readonly CloudTable queryTable;
 
@@ -87,7 +87,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<TQueryModel> InsertModelAsync(IQueryModel model)
+        public async Task<TQueryModel> InsertModelAsync(TQueryModel model)
         {
             var operation = TableOperation.Insert(model.ToStoreEntity());
             var result = await queryTable.ExecuteAsync(operation);

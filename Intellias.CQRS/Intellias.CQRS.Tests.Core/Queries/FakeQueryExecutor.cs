@@ -8,7 +8,7 @@ namespace Intellias.CQRS.Core.Tests.Queries
     /// Query executor
     /// </summary>
     public class FakeQueryExecutor<TQueryModel> : IReadQueryExecutor<TQueryModel>
-        where TQueryModel : class, IQueryModel
+        where TQueryModel : AbstractQueryModel
 
     {
         private readonly InProcessQueryStore<TQueryModel> store;

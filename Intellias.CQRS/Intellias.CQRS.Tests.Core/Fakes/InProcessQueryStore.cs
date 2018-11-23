@@ -10,7 +10,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// 
     /// </summary>
     public class InProcessQueryStore<TQueryModel> : IQueryModelStore<TQueryModel>
-        where TQueryModel: class, IQueryModel
+        where TQueryModel: AbstractQueryModel
     {
         private readonly Dictionary<string, TQueryModel> store;
 

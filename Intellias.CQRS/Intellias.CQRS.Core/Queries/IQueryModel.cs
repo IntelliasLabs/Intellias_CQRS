@@ -1,9 +1,9 @@
 ﻿namespace Intellias.CQRS.Core.Queries
 {
     /// <summary>
-    /// Read model
+    /// Read model interface
     /// </summary>
-    public interface IQueryModel
+    internal interface IQueryModel
     {
         /// <summary>
         /// Generic Id of read model
