@@ -1,15 +1,16 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Storage;
+using Intellias.CQRS.Core.Tests.Queries;
 using Intellias.CQRS.Tests.Core.Events;
-using Intellias.CQRS.Tests.Core.Queries;
 
 namespace Intellias.CQRS.Core.Tests.EventHandlers
 {
     /// <summary>
     /// Demo command handlers
     /// </summary>
-    public class DemoEventHandlers : IEventHandler<TestCreatedEvent>,
+    public class DemoEventHandlers : 
+        IEventHandler<TestCreatedEvent>,
         IEventHandler<TestUpdatedEvent>,
         IEventHandler<TestDeletedEvent>
     {

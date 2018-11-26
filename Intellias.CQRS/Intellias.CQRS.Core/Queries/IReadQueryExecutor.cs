@@ -6,7 +6,7 @@ namespace Intellias.CQRS.Core.Queries
     /// Generic query executor for read operations
     /// </summary>
     /// <typeparam name="TQueryModel"></typeparam>
-    public interface IReadQueryExecutor<TQueryModel> where TQueryModel : AbstractQueryModel
+    public interface IReadQueryExecutor<TQueryModel> where TQueryModel : class, IQueryModel
     {
         /// <summary>
         /// Get query model by Id

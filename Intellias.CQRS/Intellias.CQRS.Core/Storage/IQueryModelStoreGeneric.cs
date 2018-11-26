@@ -9,7 +9,7 @@ namespace Intellias.CQRS.Core.Storage
     /// </summary>
     /// <typeparam name="TQueryModel"></typeparam>
     public interface IQueryModelStore<TQueryModel> : IQueryModelStore
-        where TQueryModel: AbstractQueryModel
+        where TQueryModel: IQueryModel
     {
         /// <summary>
         /// 

@@ -12,7 +12,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
     /// Azure Table Read Storage
     /// </summary>
     public class AzureTableQueryStore<TQueryModel> : IQueryModelStore<TQueryModel>
-        where TQueryModel : AbstractQueryModel
+        where TQueryModel : class, IQueryModel
     {
         private readonly QueryModelRepository<TQueryModel> repository;
 

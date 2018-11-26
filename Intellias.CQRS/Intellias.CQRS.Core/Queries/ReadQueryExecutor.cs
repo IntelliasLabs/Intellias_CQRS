@@ -9,7 +9,7 @@ namespace Intellias.CQRS.Core.Queries
     /// </summary>
     /// <typeparam name="TQueryModel"></typeparam>
     public class ReadQueryExecutor<TQueryModel> : IReadQueryExecutor<TQueryModel>
-        where TQueryModel : AbstractQueryModel
+        where TQueryModel : class, IQueryModel
     {
         private readonly IQueryModelStore<TQueryModel> _readStore;
 

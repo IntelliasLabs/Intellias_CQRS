@@ -3,7 +3,7 @@
     /// <summary>
     /// Read model interface
     /// </summary>
-    internal interface IQueryModel
+    public interface IQueryModel
     {
         /// <summary>
         /// Generic Id of read model

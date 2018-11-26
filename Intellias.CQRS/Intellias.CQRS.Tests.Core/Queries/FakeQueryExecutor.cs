@@ -2,13 +2,13 @@
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Tests.Core.Fakes;
 
-namespace Intellias.CQRS.Core.Tests.Queries
+namespace Intellias.CQRS.Tests.Core.Queries
 {
     /// <summary>
     /// Query executor
     /// </summary>
     public class FakeQueryExecutor<TQueryModel> : IReadQueryExecutor<TQueryModel>
-        where TQueryModel : AbstractQueryModel
+        where TQueryModel : class, IQueryModel
 
     {
         private readonly InProcessQueryStore<TQueryModel> store;

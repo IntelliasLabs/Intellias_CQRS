@@ -1,7 +1,7 @@
 using System.Linq;
 using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Tests.Queries;
 using Intellias.CQRS.QueryStore.AzureTable.Tests.Core;
-using Intellias.CQRS.Tests.Core.Queries;
 using Xunit;
 
 namespace Intellias.CQRS.QueryStore.AzureTable.Tests

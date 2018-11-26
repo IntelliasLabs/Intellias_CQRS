@@ -13,7 +13,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
     /// <summary>
     /// ReadModelRepository
     /// </summary>
-    public class QueryModelRepository<TQueryModel> where TQueryModel : AbstractQueryModel
+    public class QueryModelRepository<TQueryModel> where TQueryModel : class, IQueryModel
     {
         private readonly CloudTable queryTable;
 
