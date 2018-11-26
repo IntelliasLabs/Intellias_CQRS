@@ -8,7 +8,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Tests.Core
     /// <summary>
     /// Base class for Azure Table Storage Query tests
     /// </summary>
-    public class BaseQueryTest<TQueryModel> where TQueryModel : AbstractQueryModel
+    public class BaseQueryTest<TQueryModel> where TQueryModel : class, IQueryModel
     {
         /// <summary>
         /// Query Model Store
