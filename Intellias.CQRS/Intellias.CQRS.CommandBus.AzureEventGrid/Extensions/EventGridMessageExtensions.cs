@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using Intellias.CQRS.Core.Commands;
+using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Messages;
 using Microsoft.Azure.EventGrid.Models;
+using Newtonsoft.Json;
 
 namespace Intellias.CQRS.CommandBus.AzureEventGrid.Extensions
 {
@@ -22,7 +24,7 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid.Extensions
                 Id = Unified.NewCode(),
                 Subject = "IntelliGrowth.Command",
                 EventType = command.GetType().Name,
-                Data = command,
+                Data = JsonConvert.SerializeObject(command, CqrsSettings.JsonConfig()),
                 EventTime = DateTime.Now,
                 DataVersion = command.ExpectedVersion.ToString(CultureInfo.InvariantCulture)
             };
