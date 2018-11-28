@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
@@ -59,7 +60,9 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
                 throw new AggregateNotFoundException("Aggregate Id contains no events, so it is not yet created!");
             }
 
-            return results.Select(item => (IEvent)JsonConvert.DeserializeObject(item.Data));
+            return results
+                .Select(item => 
+                    JsonConvert.DeserializeObject<IEvent>(item.Data, CqrsSettings.JsonConfig()));
         }
 
         /// <summary>
