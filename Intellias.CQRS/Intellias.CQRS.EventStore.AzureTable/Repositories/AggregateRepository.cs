@@ -20,7 +20,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// <param name="client"></param>
         public AggregateRepository(CloudTableClient client)
         {
-            aggregateTable = client.GetTableReference("AggregateStore");
+            aggregateTable = client.GetTableReference("#AggregateStore");
             // Create the CloudTable if it does not exist
             aggregateTable.CreateIfNotExistsAsync().Wait();
         }

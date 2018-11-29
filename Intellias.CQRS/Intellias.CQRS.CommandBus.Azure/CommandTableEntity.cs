@@ -19,6 +19,7 @@ namespace Intellias.CQRS.CommandBus.Azure
         {
             this.cmd = cmd;
             PartitionKey = cmd.AggregateRootId;
+            CorrelationId = cmd.CorrelationId;
             RowKey = cmd.Id;
             Data = content;
             ETag = "*";
@@ -31,6 +32,9 @@ namespace Intellias.CQRS.CommandBus.Azure
 
         /// <inheritdoc />
         public string Id => cmd.Id;
+
+        /// <inheritdoc />
+        public string CorrelationId { get => cmd.CorrelationId; set => throw new NotSupportedException(); }
 
         /// <inheritdoc />
         public int ExpectedVersion { get => cmd.ExpectedVersion; set => throw new NotSupportedException(); }
