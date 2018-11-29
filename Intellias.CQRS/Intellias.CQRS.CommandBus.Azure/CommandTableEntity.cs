@@ -19,7 +19,6 @@ namespace Intellias.CQRS.CommandBus.Azure
         {
             this.cmd = cmd;
             PartitionKey = cmd.AggregateRootId;
-            CorrelationId = cmd.CorrelationId;
             RowKey = cmd.Id;
             Data = content;
             ETag = "*";
