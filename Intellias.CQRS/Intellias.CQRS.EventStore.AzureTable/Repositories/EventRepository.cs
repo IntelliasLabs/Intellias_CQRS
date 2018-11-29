@@ -24,7 +24,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// <param name="client"></param>
         public EventRepository(CloudTableClient client)
         {
-            eventTable = client.GetTableReference("#EventStore");
+            eventTable = client.GetTableReference("EventStore");
 
             // Create the CloudTable if it does not exist
             eventTable.CreateIfNotExistsAsync().Wait();

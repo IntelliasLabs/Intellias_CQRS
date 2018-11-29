@@ -18,7 +18,7 @@ namespace Intellias.CQRS.CommandStore.AzureTable.Repositories
         /// <param name="client"></param>
         public CommandRepository(CloudTableClient client)
         {
-            commandTable = client.GetTableReference("#CommandStore");
+            commandTable = client.GetTableReference("CommandStore");
             // Create the CloudTable if it does not exist
             commandTable.CreateIfNotExistsAsync().Wait();
         }
