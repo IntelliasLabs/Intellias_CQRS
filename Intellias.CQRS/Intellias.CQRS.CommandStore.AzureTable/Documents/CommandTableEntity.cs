@@ -8,7 +8,7 @@ namespace Intellias.CQRS.CommandStore.AzureTable.Documents
     public class CommandTableEntity : TableEntity
     {
         /// <summary>
-        /// Keeps serialized event itself
+        /// Keeps serialized command itself
         /// </summary>
         public string Data { get; set; }
 
@@ -18,8 +18,8 @@ namespace Intellias.CQRS.CommandStore.AzureTable.Documents
         public string CommandType { get; set; }
 
         /// <summary>
-        /// Version of command
+        /// Expected version of command
         /// </summary>
-        public int Version { get; set; }
+        public int ExpectedVersion { get; set; }
     }
 }

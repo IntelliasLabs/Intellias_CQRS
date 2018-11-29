@@ -22,7 +22,7 @@ namespace Intellias.CQRS.CommandStore.AzureTable.Extensions
             PartitionKey = command.AggregateRootId,
             RowKey = command.Id,
             CommandType = command.GetType().Name,
-            Version = command.ExpectedVersion,
+            ExpectedVersion = command.ExpectedVersion,
             Data = JsonConvert.SerializeObject(command, CqrsSettings.JsonConfig()),
             ETag = "*",
             Timestamp = DateTimeOffset.UtcNow
