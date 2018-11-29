@@ -19,6 +19,9 @@ namespace Intellias.CQRS.Core.Events
         }
 
         /// <inheritdoc />
+        public string SourceId { get; set; }
+
+        /// <inheritdoc />
         public int Version
         {
             get => version;

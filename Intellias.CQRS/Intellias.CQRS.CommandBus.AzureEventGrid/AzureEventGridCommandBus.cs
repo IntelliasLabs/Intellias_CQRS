@@ -16,6 +16,7 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
     {
         private readonly IEventGridClient client;
         private readonly Uri topicHostname;
+        private readonly ICommandStore commandStore;
 
         private bool disposed;
 
@@ -24,10 +25,12 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
         /// </summary>
         /// <param name="host"></param>
         /// <param name="key"></param>
-        public AzureEventGridCommandBus(string host, string key)
+        /// <param name="commandStore"></param>
+        public AzureEventGridCommandBus(string host, string key, ICommandStore commandStore)
         {
-            topicHostname = new Uri(host);
+            this.commandStore = commandStore;
 
+            topicHostname = new Uri(host);
             var topicCredentials = new TopicCredentials(key);
             client = new EventGridClient(topicCredentials);
         }
@@ -35,6 +38,7 @@ namespace Intellias.CQRS.CommandBus.AzureEventGrid
         /// <inheritdoc />
         public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
+            await commandStore.SaveAsync(msg);
             var commands = new List<EventGridEvent> { msg.ToEventGridCommand() };
 
             await client

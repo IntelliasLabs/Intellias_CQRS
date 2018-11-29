@@ -33,6 +33,9 @@ namespace Intellias.CQRS.CommandBus.Azure
         public string Id => cmd.Id;
 
         /// <inheritdoc />
+        public string CorrelationId { get => cmd.CorrelationId; set => throw new NotSupportedException(); }
+
+        /// <inheritdoc />
         public int ExpectedVersion { get => cmd.ExpectedVersion; set => throw new NotSupportedException(); }
 
         /// <inheritdoc />

@@ -36,7 +36,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.QueryStore.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.AzureTable.Core", "Intellias.CQRS.AzureTable.Core\Intellias.CQRS.AzureTable.Core.csproj", "{09B0904F-947F-4E48-9B44-87F87D96E179}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.QueryStore.AzureTable.Tests", "Intellias.CQRS.QueryStore.AzureTable.Tests\Intellias.CQRS.QueryStore.AzureTable.Tests.csproj", "{B1477651-3330-4E4A-9CC0-0937BEA7A051}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.QueryStore.AzureTable.Tests", "Intellias.CQRS.QueryStore.AzureTable.Tests\Intellias.CQRS.QueryStore.AzureTable.Tests.csproj", "{B1477651-3330-4E4A-9CC0-0937BEA7A051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.CommandStore.AzureTable", "Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj", "{3DD22AEC-D602-4980-9D67-B9FF9AD6BB5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +98,10 @@ Global
 		{B1477651-3330-4E4A-9CC0-0937BEA7A051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1477651-3330-4E4A-9CC0-0937BEA7A051}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1477651-3330-4E4A-9CC0-0937BEA7A051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DD22AEC-D602-4980-9D67-B9FF9AD6BB5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DD22AEC-D602-4980-9D67-B9FF9AD6BB5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DD22AEC-D602-4980-9D67-B9FF9AD6BB5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DD22AEC-D602-4980-9D67-B9FF9AD6BB5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
