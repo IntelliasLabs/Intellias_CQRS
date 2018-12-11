@@ -21,7 +21,8 @@ namespace Intellias.CQRS.Core.Extensions
             var @event = new E
             {
                 AggregateRootId = c.AggregateRootId,
-                Version = c.ExpectedVersion
+                Version = c.ExpectedVersion,
+                SourceId = c.Id
             };
 
             @event.CopyMetadataFrom(c);
