@@ -12,14 +12,8 @@ namespace Intellias.CQRS.Core.Domain
         private readonly Dictionary<Type, Action<IEvent>> handlers = new Dictionary<Type, Action<IEvent>>();
 
         /// <summary>
-        /// Aggregate State
+        /// Version of aggregate state
         /// </summary>
-        protected AggregateState()
-        {
-
-        }
-
-        /// <inheritdoc />
         public int Version { get; private set; }
 
         /// <summary>

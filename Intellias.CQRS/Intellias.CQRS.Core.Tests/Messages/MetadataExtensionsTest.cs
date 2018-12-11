@@ -28,8 +28,8 @@ namespace Intellias.CQRS.Core.Tests.Messages
             ev.Metadata[MetadataKey.TypeName].Should().Be(typeof(TestCreatedEvent).Name);
             ev.Metadata[MetadataKey.AgreegateType].Should().Be(cmd.Metadata[MetadataKey.AgreegateType]);
             ev.Metadata[MetadataKey.UserId].Should().Be(cmd.Metadata[MetadataKey.UserId]);
-            ev.Metadata.TryGetValue(MetadataKey.RequestHeaders, out var rh).Should().BeFalse();
-            ev.Metadata.TryGetValue(MetadataKey.Roles, out var roles).Should().BeFalse();
+            ev.Metadata.TryGetValue(MetadataKey.RequestHeaders, out _).Should().BeFalse();
+            ev.Metadata.TryGetValue(MetadataKey.Roles, out _).Should().BeFalse();
         }
 
         /// <summary>
