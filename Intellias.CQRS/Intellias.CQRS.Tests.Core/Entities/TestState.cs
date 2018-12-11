@@ -41,6 +41,7 @@ namespace Intellias.CQRS.Tests.Core.Entities
         /// <inheritdoc />
         public void Apply(TestDeletedEvent @event)
         {
+            // Not changing state
         }
     }
 }
