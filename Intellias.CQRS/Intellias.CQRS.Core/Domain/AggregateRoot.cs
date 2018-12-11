@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Intellias.CQRS.Core.Domain.Exceptions;
@@ -9,17 +8,23 @@ using Intellias.CQRS.Core.Messages;
 namespace Intellias.CQRS.Core.Domain
 {
     /// <inheritdoc />
-    public class AggregateRoot : IAggregateRoot
+    public class AggregateRoot<T> : IAggregateRoot where T : AggregateState, new()
     {
         private readonly List<IEvent> pendingEvents = new List<IEvent>();
-        private readonly Dictionary<Type, Action<IEvent>> handlers = new Dictionary<Type, Action<IEvent>>();
+
+        /// <summary>
+        /// Current State of Aggregate
+        /// </summary>
+        protected T State { get; private set; } = new T();
 
         /// <inheritdoc />
         public string Id { get; protected set; }
-        /// <inheritdoc />
-        public int Version { get; private set; }
+
         /// <inheritdoc />
         public ReadOnlyCollection<IEvent> Events => pendingEvents.AsReadOnly();
+
+        /// <inheritdoc />
+        public int Version => State.Version;
 
         /// <summary>
         /// Call to empty constructor assembles brand-new Aggregate-root entity
@@ -48,31 +53,14 @@ namespace Intellias.CQRS.Core.Domain
         {
             foreach (var e in history.OrderBy(e=>e.Version))
             {
-                if (e.Version != ++Version)
+                // Event should always equal next state version
+                if (e.Version != State.Version + 1)
                 {
                     throw new EventsOutOfOrderException(e.AggregateRootId);
                 }
-                handlers[e.GetType()].Invoke(e);
+                Id = e.AggregateRootId;
+                State.ApplyEvent(e);
             }
-        }
-
-        /// <summary>
-        /// Configures a handler method for an event. 
-        /// </summary>
-        protected void Handles<TEvent>(Action<TEvent> handler)
-            where TEvent : IEvent
-        {
-            handlers.Add(typeof(TEvent), @event => handler((TEvent)@event));
-        }
-
-        /// <summary>
-        /// Apply an event
-        /// </summary>
-        /// <param name="event">Event</param>
-        private void ApplyEvent(IEvent @event)
-        {
-            @event.Version = ++Version;
-            handlers[@event.GetType()].Invoke(@event);
         }
 
         /// <summary>
@@ -82,7 +70,7 @@ namespace Intellias.CQRS.Core.Domain
         protected void PublishEvent(IEvent @event)
         {
             @event.AggregateRootId = Id;
-            ApplyEvent(@event);
+            State.ApplyEvent(@event);
             pendingEvents.Add(@event);
         }
     }
