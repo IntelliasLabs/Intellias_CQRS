@@ -3,22 +3,22 @@ using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
 
-namespace Intellias.CQRS.Core.Tests.Domain
+namespace Intellias.CQRS.Tests.Core.Domain
 {
     /// <inheritdoc cref="IAggregateRoot"/>
-    public class DemoRoot : AggregateRoot<DemoState>
+    public class TestRoot : AggregateRoot<TestState>
     {
         /// <summary>
         /// 
         /// </summary>
-        public DemoRoot(string id) : base(id)
+        public TestRoot(string id) : base(id)
         {
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public DemoRoot(TestCreateCommand command) : base(command.AggregateRootId)
+        public TestRoot(TestCreateCommand command) : base(command.AggregateRootId)
         {
             PublishEvent(new TestCreatedEvent
             {

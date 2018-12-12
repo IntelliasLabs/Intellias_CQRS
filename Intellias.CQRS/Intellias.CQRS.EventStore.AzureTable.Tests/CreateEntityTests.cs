@@ -3,7 +3,7 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.EventStore.AzureTable.Tests.Core;
-using Intellias.CQRS.Tests.Core.Entities;
+using Intellias.CQRS.Tests.Core.Domain;
 using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
 using Newtonsoft.Json;
@@ -42,7 +42,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests
         [Fact]
         public void ShouldCreateAggregateRootRecordWithVersion1()
         {
-            var operation = TableOperation.Retrieve<EventStoreAggregate>(typeof(TestEntity).Name, testId);
+            var operation = TableOperation.Retrieve<EventStoreAggregate>(typeof(TestRoot).Name, testId);
             var result = (EventStoreAggregate)AggregateTable.ExecuteAsync(operation).Result.Result;
 
             Assert.True(result.LastArVersion == 1, "Test version for aggregated root is not equal 1");

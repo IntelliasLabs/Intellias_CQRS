@@ -1,8 +1,9 @@
 using System.Linq;
+using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Tests.CommandHandlers;
 using Intellias.CQRS.Core.Tests.EventHandlers;
-using Intellias.CQRS.Core.Tests.Queries;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Fakes;
@@ -17,54 +18,92 @@ namespace Intellias.CQRS.Core.Tests
     public class FullScenarioTests
     {
         /// <summary>
-        /// Full demo test
+        /// Write Side Command Bus
         /// </summary>
-        [Fact]
-        public void DemoTest()
+        private readonly ICommandBus commandBus;
+
+        /// <summary>
+        /// Read Side Query Executor
+        /// </summary>
+        private readonly IReadQueryExecutor<TestQueryModel> queryExecutor;
+
+        /// <summary>
+        /// Setup test infrastructure
+        /// </summary>
+        public FullScenarioTests()
         {
-            var readModelStore = new InProcessQueryStore<DemoQueryModel>();
-            var demoQueryExecutor = new FakeQueryExecutor<DemoQueryModel>(readModelStore);
+            // Prepare query storage
+            var queryStore = new InProcessQueryStore<TestQueryModel>();
+            queryExecutor = new FakeQueryExecutor<TestQueryModel>(queryStore);
 
-            var createCommand = new TestCreateCommand { TestData = "Test data" };
-            var updateCommand = new TestUpdateCommand { TestData = "Test data updated" };
-            var deactivateCommand = new TestDeleteCommand();
+            // Attach event handlers to query store
+            var eventHandlers = new DemoEventHandlers(queryStore);
 
-            var eventHandlers = new DemoEventHandlers(readModelStore);
-
+            // Create event bus and subscribe handlers to it
             var eventBus = new InProcessEventBus();
             eventBus.AddHandler<TestCreatedEvent>(eventHandlers);
             eventBus.AddHandler<TestUpdatedEvent>(eventHandlers);
             eventBus.AddHandler<TestDeletedEvent>(eventHandlers);
 
+            // Register event store to populate events into event bus
             IEventStore eventStore = new InProcessEventStore(eventBus);
 
+            // Attach event store to command handlers
             var commandHandlers = new DemoCommandHandlers(eventStore);
-            var commandBus = new InProcessCommandBus();
-            commandBus.AddHandler<TestCreateCommand>(commandHandlers);
-            commandBus.AddHandler<TestUpdateCommand>(commandHandlers);
-            commandBus.AddHandler<TestDeleteCommand>(commandHandlers);
 
+            // Create command bus and subscribe command handlers
+            var inProcCommandBus = new InProcessCommandBus();
+            inProcCommandBus.AddHandler<TestCreateCommand>(commandHandlers);
+            inProcCommandBus.AddHandler<TestUpdateCommand>(commandHandlers);
+            inProcCommandBus.AddHandler<TestDeleteCommand>(commandHandlers);
+
+            // Set command bus instance
+            commandBus = inProcCommandBus;
+        }
+
+        /// <summary>
+        /// Full demo test
+        /// </summary>
+        [Fact]
+        public void DemoTest()
+        {
+            // Send command to create aggregate
+            var createCommand = new TestCreateCommand { TestData = "Test data" };
             var createResult = commandBus.PublishAsync(createCommand).Result;
             Assert.NotNull(createResult);
 
-            var queryResult = demoQueryExecutor.GetAllAsync().Result;
+            // Get read query
+            var queryResult = queryExecutor.GetAllAsync().Result;
+            var firstItem = queryResult.Items.First();
             Assert.Equal(1, queryResult.Total);
-            Assert.Equal(createCommand.TestData, queryResult.Items.First().TestData);
+            Assert.Equal(createCommand.TestData, firstItem.TestData);
 
-            updateCommand.AggregateRootId = queryResult.Items.First().Id;
-            updateCommand.ExpectedVersion = 1;
+            // Update aggregate using previous query
+            var updateCommand = new TestUpdateCommand
+            {
+                TestData = "Test data updated",
+                AggregateRootId = firstItem.Id,
+                ExpectedVersion = firstItem.Version
+            };
             var updateResult = commandBus.PublishAsync(updateCommand).Result;
             Assert.NotNull(updateResult);
 
-            var updatedQueryResult = demoQueryExecutor.GetAllAsync().Result;
-            Assert.Equal(updateCommand.TestData, updatedQueryResult.Items.First().TestData);
+            // Check if item was updated
+            var updatedQueryResult = queryExecutor.GetAllAsync().Result;
+            var updatedFirstItem = updatedQueryResult.Items.First();
+            Assert.Equal(updateCommand.TestData, updatedFirstItem.TestData);
 
-            deactivateCommand.AggregateRootId = updatedQueryResult.Items.First().Id;
-            deactivateCommand.ExpectedVersion = 2;
+            // Deactivate aggregate using previous query
+            var deactivateCommand = new TestDeleteCommand
+            {
+                AggregateRootId = updatedFirstItem.Id,
+                ExpectedVersion = updatedFirstItem.Version
+            };
             var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
             Assert.NotNull(deactivateResult);
 
-            var queryRemovedResult = demoQueryExecutor.GetAllAsync().Result;
+            // Check if there is no elements in read query
+            var queryRemovedResult = queryExecutor.GetAllAsync().Result;
             Assert.Equal(0, queryRemovedResult.Items.Count);
         }
     }

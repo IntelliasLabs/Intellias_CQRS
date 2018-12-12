@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Tests.Core.Commands;
-using Intellias.CQRS.Tests.Core.Entities;
+using Intellias.CQRS.Tests.Core.Domain;
 using Intellias.CQRS.Tests.Core.Events;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
@@ -69,8 +69,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
         /// /// <param name="testData"></param>
         protected void CreateItem(string id, string testData)
         {
-            var item = new TestEntity(id);
-            item.Create(new TestCreateCommand
+            var item = new TestRoot(new TestCreateCommand
             {
                 AggregateRootId = id,
                 TestData = testData
@@ -85,7 +84,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
         /// <param name="testData"></param>
         protected void UpdateItem(string id, string testData)
         {
-            var item = new TestEntity(id);
+            var item = new TestRoot(id);
 
             // Generating virtual load of events..
             item.LoadFromHistory(new List<IEvent>
