@@ -60,7 +60,7 @@ namespace Intellias.CQRS.Core.Tests
             Assert.Equal(updateCommand.TestData, updatedQueryResult.Items.First().TestData);
 
             deactivateCommand.AggregateRootId = updatedQueryResult.Items.First().Id;
-            updateCommand.ExpectedVersion = 1;
+            deactivateCommand.ExpectedVersion = 2;
             var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
             Assert.NotNull(deactivateResult);
 

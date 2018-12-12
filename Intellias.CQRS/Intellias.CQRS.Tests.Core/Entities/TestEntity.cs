@@ -7,7 +7,7 @@ namespace Intellias.CQRS.Tests.Core.Entities
     /// <summary>
     /// Test aggregate root
     /// </summary>
-    public class TestEntity : AggregateRoot
+    public class TestEntity : AggregateRoot<TestState>
     {
         /// <summary>
         /// Do not allow to create objects without Id
@@ -20,9 +20,7 @@ namespace Intellias.CQRS.Tests.Core.Entities
         /// <param name="id"></param>
         public TestEntity(string id) : base(id)
         {
-            Handles<TestCreatedEvent>(OnTestCreated);
-            Handles<TestUpdatedEvent>(OnTestUpdated);
-            Handles<TestDeletedEvent>(OnTestDeleted);
+            
         }
 
         /// <summary>
@@ -58,16 +56,6 @@ namespace Intellias.CQRS.Tests.Core.Entities
             {
                 AggregateRootId = Id
             });
-        }
-
-        private void OnTestCreated(TestCreatedEvent e)
-        {
-        }
-        private void OnTestUpdated(TestUpdatedEvent e)
-        {
-        }
-        private void OnTestDeleted(TestDeletedEvent e)
-        {
         }
     }
 }

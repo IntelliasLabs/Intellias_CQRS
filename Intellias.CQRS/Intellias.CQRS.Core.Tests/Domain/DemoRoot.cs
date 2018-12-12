@@ -5,31 +5,21 @@ using Intellias.CQRS.Tests.Core.Events;
 
 namespace Intellias.CQRS.Core.Tests.Domain
 {
-    /// <inheritdoc cref="AggregateRoot"/>
-    public class DemoRoot : AggregateRoot,
-        IEventApplier<TestCreatedEvent>,
-        IEventApplier<TestUpdatedEvent>,
-        IEventApplier<TestDeletedEvent>
+    /// <inheritdoc cref="IAggregateRoot"/>
+    public class DemoRoot : AggregateRoot<DemoState>
     {
         /// <summary>
-        /// TestData
-        /// </summary>
-        public string TestData { get; private set; }
-
-        /// <summary>
-        /// Creates demo root
+        /// 
         /// </summary>
         public DemoRoot()
         {
-            Handles<TestCreatedEvent>(e => Apply(e));
-            Handles<TestUpdatedEvent>(e => Apply(e));
-            Handles<TestDeletedEvent>(e => Apply(e));
+
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public DemoRoot(TestCreateCommand command) : this()
+        public DemoRoot(TestCreateCommand command)
         {
             Id = Unified.NewCode();
             PublishEvent(new TestCreatedEvent
@@ -64,36 +54,6 @@ namespace Intellias.CQRS.Core.Tests.Domain
         {
             PublishEvent(new TestDeletedEvent());
             return ExecutionResult.Success;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public void Apply(TestCreatedEvent @event)
-        {
-            TestData = @event.TestData;
-            Id = @event.AggregateRootId;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public void Apply(TestUpdatedEvent @event)
-        {
-            TestData = @event.TestData;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="event"></param>
-        /// <returns></returns>
-        public void Apply(TestDeletedEvent @event)
-        {
         }
     }
 }
