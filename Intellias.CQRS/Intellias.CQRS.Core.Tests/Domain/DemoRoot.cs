@@ -11,17 +11,15 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// <summary>
         /// 
         /// </summary>
-        public DemoRoot()
+        public DemoRoot(string id) : base(id)
         {
-
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public DemoRoot(TestCreateCommand command)
+        public DemoRoot(TestCreateCommand command) : base(command.AggregateRootId)
         {
-            Id = Unified.NewCode();
             PublishEvent(new TestCreatedEvent
             {
                 TestData = command.TestData

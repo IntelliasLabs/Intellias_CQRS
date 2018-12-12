@@ -10,11 +10,6 @@ namespace Intellias.CQRS.Tests.Core.Entities
     public class TestEntity : AggregateRoot<TestState>
     {
         /// <summary>
-        /// Do not allow to create objects without Id
-        /// </summary>
-        protected TestEntity() { }
-
-        /// <summary>
         /// Main constructor of the class
         /// </summary>
         /// <param name="id"></param>
