@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Domain
 {
@@ -15,7 +15,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <summary>
         /// Current State of Aggregate
         /// </summary>
-        protected T State { get; private set; } = new T();
+        protected T State { get; } = new T();
 
         /// <inheritdoc />
         public string Id { get; protected set; }
@@ -27,14 +27,6 @@ namespace Intellias.CQRS.Core.Domain
         public int Version => State.Version;
 
         /// <summary>
-        /// Call to empty constructor assembles brand-new Aggregate-root entity
-        /// </summary>
-        protected AggregateRoot()
-        {
-            Id = Unified.NewCode();
-        }
-
-        /// <summary>
         /// Creates an existing aggregate-root
         /// </summary>
         /// <param name="id"></param>
@@ -42,7 +34,7 @@ namespace Intellias.CQRS.Core.Domain
         {
             if (string.IsNullOrEmpty(id))
             {
-                id = Unified.NewCode();
+                throw new NullReferenceException("AR Id can not be null");
             }
 
             Id = id;
@@ -58,7 +50,7 @@ namespace Intellias.CQRS.Core.Domain
                 {
                     throw new EventsOutOfOrderException(e.AggregateRootId);
                 }
-                Id = e.AggregateRootId;
+
                 State.ApplyEvent(e);
             }
         }

@@ -32,6 +32,8 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         /// <returns></returns>
         public async Task<IExecutionResult> HandleAsync(TestCreateCommand command)
         {
+            command.AggregateRootId = Unified.NewCode();
+
             var ar = new DemoRoot(command);
 
             await store.SaveAsync(ar);
@@ -47,7 +49,7 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         public async Task<IExecutionResult> HandleAsync(TestUpdateCommand command)
         {
             var events = await store.GetAsync(command.AggregateRootId, 0);
-            var ar = new DemoRoot();
+            var ar = new DemoRoot(command.AggregateRootId);
             ar.LoadFromHistory(events);
 
             var result = ar.Update(command);
@@ -65,7 +67,7 @@ namespace Intellias.CQRS.Core.Tests.CommandHandlers
         public async Task<IExecutionResult> HandleAsync(TestDeleteCommand command)
         {
             var events = await store.GetAsync(command.AggregateRootId, 0);
-            var ar = new DemoRoot();
+            var ar = new DemoRoot(command.AggregateRootId);
             ar.LoadFromHistory(events);
 
             var result = ar.Deactivate();
