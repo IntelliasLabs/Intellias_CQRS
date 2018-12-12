@@ -34,7 +34,7 @@ namespace Intellias.CQRS.Core.Domain
         {
             if (string.IsNullOrEmpty(id))
             {
-                throw new NullReferenceException("AR Id can not be null");
+                throw new ArgumentNullException(nameof(id));
             }
 
             Id = id;
