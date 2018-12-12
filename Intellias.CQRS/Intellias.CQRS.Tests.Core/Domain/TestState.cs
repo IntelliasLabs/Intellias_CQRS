@@ -41,6 +41,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
         /// <inheritdoc />
         public void Apply(TestDeletedEvent @event)
         {
+            // There nothing to do for now, item is deactivated
         }
     }
 }
