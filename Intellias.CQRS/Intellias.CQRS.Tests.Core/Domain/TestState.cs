@@ -1,12 +1,12 @@
 ﻿using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Tests.Core.Events;
 
-namespace Intellias.CQRS.Core.Tests.Domain
+namespace Intellias.CQRS.Tests.Core.Domain
 {
     /// <summary>
     /// Demo State
     /// </summary>
-    public class DemoState : AggregateState,
+    public class TestState : AggregateState,
         IEventApplier<TestCreatedEvent>,
         IEventApplier<TestUpdatedEvent>,
         IEventApplier<TestDeletedEvent>
@@ -19,7 +19,7 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// <summary>
         /// Demo State
         /// </summary>
-        public DemoState()
+        public TestState()
         {
             Handles<TestCreatedEvent>(Apply);
             Handles<TestUpdatedEvent>(Apply);
@@ -41,6 +41,7 @@ namespace Intellias.CQRS.Core.Tests.Domain
         /// <inheritdoc />
         public void Apply(TestDeletedEvent @event)
         {
+            // There nothing to do for now, item is deactivated
         }
     }
 }

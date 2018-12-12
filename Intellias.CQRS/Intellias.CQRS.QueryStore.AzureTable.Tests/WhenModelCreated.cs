@@ -1,7 +1,7 @@
 using System.Linq;
 using Intellias.CQRS.Core.Messages;
-using Intellias.CQRS.Core.Tests.Queries;
 using Intellias.CQRS.QueryStore.AzureTable.Tests.Core;
+using Intellias.CQRS.Tests.Core.Queries;
 using Xunit;
 
 namespace Intellias.CQRS.QueryStore.AzureTable.Tests
@@ -9,16 +9,16 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Tests
     /// <summary>
     /// CRUDTest
     /// </summary>
-    public class WhenModelCreated : BaseQueryTest<DemoQueryModel>
+    public class WhenModelCreated : BaseQueryTest<TestQueryModel>
     {
-        private readonly DemoQueryModel model;
+        private readonly TestQueryModel model;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public WhenModelCreated()
         {
-            model = new DemoQueryModel
+            model = new TestQueryModel
             {
                 Id = Unified.NewCode(),
                 TestData = "TestData"

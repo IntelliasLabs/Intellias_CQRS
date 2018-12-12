@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Storage;
-using Intellias.CQRS.Core.Tests.Queries;
 using Intellias.CQRS.Tests.Core.Events;
+using Intellias.CQRS.Tests.Core.Queries;
 
 namespace Intellias.CQRS.Core.Tests.EventHandlers
 {
@@ -14,13 +14,13 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         IEventHandler<TestUpdatedEvent>,
         IEventHandler<TestDeletedEvent>
     {
-        private readonly IQueryModelStore<DemoQueryModel> store;
+        private readonly IQueryModelStore<TestQueryModel> store;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="store"></param>
-        public DemoEventHandlers(IQueryModelStore<DemoQueryModel> store)
+        public DemoEventHandlers(IQueryModelStore<TestQueryModel> store)
         {
             this.store = store;
         }
@@ -32,10 +32,11 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// <returns>Result</returns>
         public Task HandleAsync(TestCreatedEvent @event)
         {
-            return store.CreateAsync(new DemoQueryModel
+            return store.CreateAsync(new TestQueryModel
             {
                 Id = @event.AggregateRootId,
-                TestData = @event.TestData
+                TestData = @event.TestData,
+                Version = @event.Version
             });
         }
 
@@ -56,10 +57,11 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// <returns>Result</returns>
         public Task HandleAsync(TestUpdatedEvent @event)
         {
-            return store.UpdateAsync(new DemoQueryModel
+            return store.UpdateAsync(new TestQueryModel
             {
                 Id = @event.AggregateRootId,
-                TestData = @event.TestData
+                TestData = @event.TestData,
+                Version = @event.Version
             });
         }
     }
