@@ -27,6 +27,10 @@ namespace Intellias.CQRS.Core.Messages
         public string AggregateRootId { get; set; }
 
         /// <inheritdoc />
+        [DataType(DataType.Text)]
+        public string CorrelationId { get; set; }
+
+        /// <inheritdoc />
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime Created { get; } = DateTime.UtcNow;

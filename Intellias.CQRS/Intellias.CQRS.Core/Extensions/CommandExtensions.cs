@@ -22,7 +22,8 @@ namespace Intellias.CQRS.Core.Extensions
             {
                 AggregateRootId = c.AggregateRootId,
                 Version = c.ExpectedVersion,
-                SourceId = c.Id
+                SourceId = c.Id,
+                CorrelationId = c.CorrelationId
             };
 
             @event.CopyMetadataFrom(c);
