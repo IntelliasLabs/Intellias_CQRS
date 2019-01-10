@@ -22,17 +22,20 @@ namespace Intellias.CQRS.Tests.Core.Queries
             this.store = store;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<CollectionQueryModel<TQueryModel>> GetAllAsync() => await store.GetAllAsync();
+        /// <inheritdoc />
+        public Task<TQueryModel> GetByIdAsync(string parentId, string id) =>
+            store.GetAsync(parentId, id);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<TQueryModel> GetByIdAsync(string id) => await store.GetAsync(id);
+        /// <inheritdoc />
+        public Task<TQueryModel> GetByIdAsync(string id) => 
+            store.GetAsync(id);
+
+        /// <inheritdoc />
+        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync() => 
+            store.GetAllAsync();
+
+        /// <inheritdoc />
+        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync(string parentId) =>
+            store.GetAllAsync(parentId);
     }
 }

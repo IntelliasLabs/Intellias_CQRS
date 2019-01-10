@@ -16,7 +16,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Extensions
         public static QueryModelTableEntity ToStoreEntity(this IQueryModel model) => 
             new QueryModelTableEntity
             {
-                PartitionKey = model.GetType().Name,
+                PartitionKey = model.ParentId,
                 RowKey = model.Id,
                 Data = JsonConvert.SerializeObject(model),
                 Timestamp = DateTime.UtcNow,

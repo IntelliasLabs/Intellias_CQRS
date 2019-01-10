@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.QueryStore.AzureTable.Repositories;
@@ -27,19 +28,27 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         }
 
         /// <summary>
-        /// Get TQueryModel by Id
+        /// Get root TQueryModel by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<TQueryModel> GetAsync(string id) => 
-            repository.GetModelAsync(id);
+        public Task<TQueryModel> GetAsync(string id) =>
+            GetAsync(Unified.Dummy, id);
+
+        /// <inheritdoc />
+        public Task<TQueryModel> GetAsync(string parentId, string id) =>
+            repository.GetModelAsync(parentId, id);
 
         /// <summary>
-        /// Get collection of query models by type
+        /// Get collection of root query models
         /// </summary>
         /// <returns></returns>
-        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync() => 
-            repository.GetAllModelsAsync();
+        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync() =>
+            GetAllAsync(Unified.Dummy);
+
+        /// <inheritdoc />
+        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync(string parentId) =>
+            repository.GetAllModelsAsync(parentId);
 
         /// <summary>
         /// UpdateAsync
@@ -57,13 +66,17 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(IEnumerable<TQueryModel> newCollection)
             => throw new System.NotImplementedException();
 
+        /// <inheritdoc />
+        public Task DeleteAsync(string parentId, string id) =>
+            repository.DeleteModelAsync(parentId, id);
+
         /// <summary>
         /// DeleteAsync
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public Task DeleteAsync(string id) =>
-            repository.DeleteModelAsync(id);
+            DeleteAsync(Unified.Dummy, id);
 
         /// <summary>
         /// NOT IMPLEMENTED

@@ -10,6 +10,9 @@ namespace Intellias.CQRS.Tests.Core.Queries
         /// <inheritdoc />
         public string Id { set; get; }
 
+        /// <inheritdoc />
+        public string ParentId { get; set; }
+
         /// <summary>
         /// TestData
         /// </summary>

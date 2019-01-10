@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Storage;
 
 namespace Intellias.CQRS.Core.Queries
@@ -24,27 +24,21 @@ namespace Intellias.CQRS.Core.Queries
         }
 
 
-        /// <summary>
-        /// Get all TQueryModels async
-        /// </summary>
-        /// <returns></returns>
-        public async Task<CollectionQueryModel<TQueryModel>> GetAllAsync() => await _readStore.GetAllAsync();
+        /// <inheritdoc />
+        public Task<TQueryModel> GetByIdAsync(string parentId, string id) =>
+            _readStore.GetAsync(parentId, id);
 
-        /// <summary>
-        /// Get TQueryModel by Id async
-        /// </summary>
-        /// <param name="id">TQueryModel Id</param>
-        /// <returns></returns>
-        public Task<TQueryModel> GetByIdAsync(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
+        /// <inheritdoc />
+        public Task<TQueryModel> GetByIdAsync(string id) =>
+            GetByIdAsync(Unified.Dummy, id);
 
-            return GetByIdInternalAsync(id);
-        }
 
-        private async Task<TQueryModel> GetByIdInternalAsync(string id) => await _readStore.GetAsync(id);
+        /// <inheritdoc />
+        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync(string parentId) =>
+            _readStore.GetAllAsync(parentId);
+
+        /// <inheritdoc />
+        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync() => 
+            _readStore.GetAllAsync();
     }
 }

@@ -21,6 +21,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Tests
             model = new TestQueryModel
             {
                 Id = Unified.NewCode(),
+                ParentId = Unified.Dummy,
                 TestData = "TestData"
             };
 

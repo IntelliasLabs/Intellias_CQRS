@@ -32,12 +32,13 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         /// <summary>
         /// GetModel By Id
         /// </summary>
-        /// <param name="readModelId">Id of read model</param>
+        /// <param name="parentId"></param>
+        /// <param name="id">Id of read model</param>
         /// <returns></returns>
-        public async Task<TQueryModel> GetModelAsync(string readModelId)
+        public async Task<TQueryModel> GetModelAsync(string parentId, string id)
         {
             var operation = 
-                TableOperation.Retrieve<QueryModelTableEntity>(typeof(TQueryModel).Name, readModelId);
+                TableOperation.Retrieve<QueryModelTableEntity>(parentId, id);
 
             var queryResult = 
                 await queryTable.ExecuteAsync(operation);
@@ -51,12 +52,13 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         /// <summary>
         /// Get CollectionReadModel by Read Model type
         /// </summary>
+        /// <param name="parentId"></param>
         /// <returns></returns>
-        public async Task<CollectionQueryModel<TQueryModel>> GetAllModelsAsync()
+        public async Task<CollectionQueryModel<TQueryModel>> GetAllModelsAsync(string parentId)
         {
             var query = new TableQuery<QueryModelTableEntity>()
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey",
-                    QueryComparisons.Equal, typeof(TQueryModel).Name));
+                    QueryComparisons.Equal, parentId));
 
             var results = new List<QueryModelTableEntity>();
             TableContinuationToken continuationToken = null;
@@ -102,7 +104,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         public async Task<TQueryModel> UpdateModelAsync(TQueryModel model)
         {
             // Getting entity
-            var record = await RetrieveRecord(model.Id);
+            var record = await RetrieveRecord(model.ParentId, model.Id);
 
             var updateOperation = TableOperation.Replace(record);
             var result = await queryTable.ExecuteAsync(updateOperation);
@@ -113,12 +115,13 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         /// <summary>
         /// DeleteModel
         /// </summary>
-        /// <param name="readModelId"></param>
+        /// <param name="parentId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public async Task DeleteModelAsync(string readModelId)
+        public async Task DeleteModelAsync(string parentId, string id)
         {
             // Getting entity
-            var record = await RetrieveRecord(readModelId);
+            var record = await RetrieveRecord(parentId, id);
 
             // Removing
             var deleteOperation = TableOperation.Delete(record);
@@ -126,10 +129,10 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         }
 
 
-        private async Task<QueryModelTableEntity> RetrieveRecord(string id)
+        private async Task<QueryModelTableEntity> RetrieveRecord(string parentId, string id)
         {
             var readOperation =
-                TableOperation.Retrieve<QueryModelTableEntity>(typeof(TQueryModel).Name, id);
+                TableOperation.Retrieve<QueryModelTableEntity>(parentId, id);
             var queryResult = await queryTable.ExecuteAsync(readOperation);
 
             var entity = (QueryModelTableEntity)queryResult.Result;

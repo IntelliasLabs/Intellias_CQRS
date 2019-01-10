@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Queries;
@@ -35,6 +36,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
             return store.CreateAsync(new TestQueryModel
             {
                 Id = @event.AggregateRootId,
+                ParentId = Unified.Dummy,
                 TestData = @event.TestData,
                 Version = @event.Version
             });
@@ -60,6 +62,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
             return store.UpdateAsync(new TestQueryModel
             {
                 Id = @event.AggregateRootId,
+                ParentId = Unified.Dummy,
                 TestData = @event.TestData,
                 Version = @event.Version
             });

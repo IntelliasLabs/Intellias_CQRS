@@ -10,6 +10,13 @@ namespace Intellias.CQRS.Core.Storage
         /// <summary>
         /// Delete Read Model Item
         /// </summary>
+        /// <param name="parentId"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task DeleteAsync(string parentId, string id);
+        /// <summary>
+        /// Delete Read Model Item
+        /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         Task DeleteAsync(string id);
