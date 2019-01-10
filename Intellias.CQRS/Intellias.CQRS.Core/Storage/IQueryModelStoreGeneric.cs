@@ -12,17 +12,31 @@ namespace Intellias.CQRS.Core.Storage
         where TQueryModel: IQueryModel
     {
         /// <summary>
-        /// 
+        /// Returns the root node with particular ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         Task<TQueryModel> GetAsync(string id);
 
         /// <summary>
-        /// 
+        /// Returns the child node with particular ID
+        /// </summary>
+        /// <param name="parentId"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<TQueryModel> GetAsync(string parentId, string id);
+
+        /// <summary>
+        /// Returns all root items in catalog
         /// </summary>
         /// <returns></returns>
         Task<CollectionQueryModel<TQueryModel>> GetAllAsync();
+
+        /// <summary>
+        /// Returns children of some parent node
+        /// </summary>
+        /// <returns></returns>
+        Task<CollectionQueryModel<TQueryModel>> GetAllAsync(string parentId);
 
         /// <summary>
         /// Creates one read model
