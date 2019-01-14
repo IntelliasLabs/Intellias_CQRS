@@ -132,6 +132,21 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
             await queryTable.ExecuteAsync(deleteOperation);
         }
 
+        /// <summary>
+        /// Verify if exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> Exists(string id)
+        {
+            var filterString = new TableQuery<QueryModelTableEntity>()
+                    .Where(TableQuery.GenerateFilterCondition("RowKey",
+                     QueryComparisons.Equal, id));
+
+            var possibleTableEntity = await queryTable.ExecuteQuerySegmentedAsync(filterString, null);
+
+            return possibleTableEntity.Results.Any();
+        }
 
         private async Task<QueryModelTableEntity> RetrieveRecord(string parentId, string id)
         {

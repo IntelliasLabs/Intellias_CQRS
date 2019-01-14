@@ -12,6 +12,13 @@ namespace Intellias.CQRS.Core.Storage
         where TQueryModel: IQueryModel
     {
         /// <summary>
+        /// Returns if the entity exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> ExistsAsync(string id);
+
+        /// <summary>
         /// Returns the root node with particular ID
         /// </summary>
         /// <param name="id"></param>

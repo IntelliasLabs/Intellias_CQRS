@@ -153,5 +153,8 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                 Total = queryModels.Count
             });
         }
+
+        /// <inheritdoc />
+        public Task<bool> ExistsAsync(string id) => Task.FromResult(store.Any(kvp => kvp.Key.Value == id));
     }
 }

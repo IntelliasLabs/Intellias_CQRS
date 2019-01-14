@@ -101,5 +101,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         {
             throw new System.NotImplementedException();
         }
+
+        /// <inheritdoc /> 
+        public Task<bool> ExistsAsync(string id) => repository.Exists(id);
     }
 }

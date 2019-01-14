@@ -25,9 +25,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Tests
                 TestData = "TestData"
             };
 
-            Store.CreateAsync(model);
+            Store.CreateAsync(model).Wait();
         }
-
 
         /// <summary>
         /// ShouldBeAvailableInGetById
