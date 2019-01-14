@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Config;
@@ -105,6 +106,9 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         {
             // Getting entity
             var record = await RetrieveRecord(model.ParentId, model.Id);
+
+            record.Data = JsonConvert.SerializeObject(model, CqrsSettings.JsonConfig());
+            record.Timestamp = DateTime.UtcNow;
 
             var updateOperation = TableOperation.Replace(record);
             var result = await queryTable.ExecuteAsync(updateOperation);

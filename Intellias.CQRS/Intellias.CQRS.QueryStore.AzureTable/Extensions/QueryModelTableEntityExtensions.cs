@@ -1,4 +1,5 @@
 ﻿using System;
+using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.QueryStore.AzureTable.Documents;
 using Newtonsoft.Json;
@@ -18,7 +19,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Extensions
             {
                 PartitionKey = model.ParentId,
                 RowKey = model.Id,
-                Data = JsonConvert.SerializeObject(model),
+                Data = JsonConvert.SerializeObject(model, CqrsSettings.JsonConfig()),
                 Timestamp = DateTime.UtcNow,
                 ETag = "*"
             };
