@@ -93,8 +93,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         public async Task<TQueryModel> InsertModelAsync(TQueryModel model)
         {
             var operation = TableOperation.Insert(model.ToStoreEntity());
-            var result = await queryTable.ExecuteAsync(operation);
-            return (TQueryModel)result.Result;
+            await queryTable.ExecuteAsync(operation);
+            return model;
         }
 
         /// <summary>
@@ -111,8 +111,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
             record.Timestamp = DateTime.UtcNow;
 
             var updateOperation = TableOperation.Replace(record);
-            var result = await queryTable.ExecuteAsync(updateOperation);
-            return (TQueryModel)result.Result;
+            await queryTable.ExecuteAsync(updateOperation);
+            return model;
         }
 
 
