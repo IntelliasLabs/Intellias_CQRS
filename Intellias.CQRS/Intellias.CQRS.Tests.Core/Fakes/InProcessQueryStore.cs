@@ -154,7 +154,19 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             });
         }
 
-        /// <inheritdoc />
-        public Task<bool> ExistsAsync(string id) => Task.FromResult(store.Any(kvp => kvp.Key.Value == id));
+        /// <inheritdoc href="IQueryModelStore"/>
+        public Task<TQueryModel> CreateOrUpdateAsync(TQueryModel newQueryModel)
+        {
+            if (store.ContainsValue(newQueryModel))
+            {
+                UpdateAsync(newQueryModel);
+            }
+            else
+            {
+                CreateAsync(newQueryModel);
+            }
+
+            return Task.FromResult(newQueryModel);
+        }
     }
 }

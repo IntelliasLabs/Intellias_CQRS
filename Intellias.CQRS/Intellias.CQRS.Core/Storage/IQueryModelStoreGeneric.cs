@@ -12,13 +12,6 @@ namespace Intellias.CQRS.Core.Storage
         where TQueryModel: IQueryModel
     {
         /// <summary>
-        /// Returns if the entity exists
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        Task<bool> ExistsAsync(string id);
-
-        /// <summary>
         /// Returns the root node with particular ID
         /// </summary>
         /// <param name="id"></param>
@@ -51,6 +44,13 @@ namespace Intellias.CQRS.Core.Storage
         /// <param name="newQueryModel"></param>
         /// <returns></returns>
         Task<TQueryModel> CreateAsync(TQueryModel newQueryModel);
+
+        /// <summary>
+        /// Creates if doesn't exist or updates if exists one read model
+        /// </summary>
+        /// <param name="newQueryModel"></param>
+        /// <returns></returns>
+        Task<TQueryModel> CreateOrUpdateAsync(TQueryModel newQueryModel);
 
         /// <summary>
         /// Creates collection of read models

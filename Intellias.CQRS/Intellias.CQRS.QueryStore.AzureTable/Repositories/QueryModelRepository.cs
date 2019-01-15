@@ -115,7 +115,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
             return model;
         }
 
-
         /// <summary>
         /// DeleteModel
         /// </summary>
@@ -133,19 +132,16 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         }
 
         /// <summary>
-        /// Verify if exists
+        /// Insert if doesn't exist and update if exists
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<bool> Exists(string id)
+        public async Task<TQueryModel> InsertOrUpdateAsync(TQueryModel model)
         {
-            var filterString = new TableQuery<QueryModelTableEntity>()
-                    .Where(TableQuery.GenerateFilterCondition("RowKey",
-                     QueryComparisons.Equal, id));
+            var operation = TableOperation.InsertOrReplace(model.ToStoreEntity());
+            await queryTable.ExecuteAsync(operation);
 
-            var possibleTableEntity = await queryTable.ExecuteQuerySegmentedAsync(filterString, null);
-
-            return possibleTableEntity.Results.Any();
+            return model;
         }
 
         private async Task<QueryModelTableEntity> RetrieveRecord(string parentId, string id)
