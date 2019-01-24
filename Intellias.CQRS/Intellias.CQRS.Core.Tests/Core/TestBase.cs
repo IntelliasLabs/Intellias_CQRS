@@ -33,8 +33,7 @@ namespace Intellias.CQRS.Core.Tests.Core
 
         private void IocRegistrations(ServiceCollection services)
         {
-            services.AddSingleton<HandlersDependancyResolver>();
-
+            services.AddHandlerManager<DemoEventHandlers>();
             services.AddTransient<DemoEventHandlers>();
 
             var queryStoreMock = Mock.Of<IQueryModelStore<TestQueryModel>>();
