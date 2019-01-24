@@ -16,7 +16,19 @@
   <ItemGroup>
     <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="2.10.0" />
     <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Features" Version="2.10.0" />
+    <PackageReference Update="Microsoft.CodeQuality.Analyzers" Version="2.6.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="Microsoft.NetCore.Analyzers" Version="2.6.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Update="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Update="Text.Analyzers" Version="2.6.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
