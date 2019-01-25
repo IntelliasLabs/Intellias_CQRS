@@ -22,9 +22,9 @@ namespace Intellias.CQRS.Core.Tests
         {
             var @event = new TestCreatedEvent();
 
-            var resolver = ServiceProvider.GetService<EventHandlerDependencyResolver>();
+            var resolver = ServiceProvider.GetService<HandlerDependencyResolver>();
 
-            var result = resolver.Resolve(@event).ToList();
+            var result = resolver.ResolveEvent(@event).ToList();
 
             Assert.True(result.Any(), "Handlers not found in assembly");
             Assert.True(result.First().GetType() == typeof(DemoEventHandlers));
@@ -39,10 +39,10 @@ namespace Intellias.CQRS.Core.Tests
         {
             var @event = new TestDeletedEvent();
 
-            var resolver = ServiceProvider.GetService<EventHandlerDependencyResolver>();
+            var resolver = ServiceProvider.GetService<HandlerDependencyResolver>();
 
             Assert.Throws<ArgumentNullException>(() => 
-                resolver.Resolve(@event).ToList());
+                resolver.ResolveEvent(@event).ToList());
         }
     }
 }
