@@ -43,7 +43,7 @@ namespace Intellias.CQRS.Core.Tools
 
             var handlerType = typeof(IEventHandler<T>);
 
-            return Select<T, IEventHandler<T>> (handlerType);
+            return Select<IEventHandler<T>> (handlerType);
         }
 
         /// <summary>
@@ -61,17 +61,17 @@ namespace Intellias.CQRS.Core.Tools
 
             var handlerType = typeof(ICommandHandler<T>);
 
-            return Select<T, ICommandHandler<T>>(handlerType);
+            return Select<ICommandHandler<T>>(handlerType);
         }
 
-        private IEnumerable<TRt> Select<T, TRt>(Type handlerType) => 
+        private IEnumerable<THandlerType> Select<THandlerType>(Type handlerType) => 
             AssemblyResolver
                 .Assembly
                 .GetTypes()
                 .Where(handlerType.IsAssignableFrom)
                 .Select(type =>
                 {
-                    var service = (TRt)Service.GetService(type);
+                    var service = (THandlerType)Service.GetService(type);
 
                     if (service == null)
                     {
