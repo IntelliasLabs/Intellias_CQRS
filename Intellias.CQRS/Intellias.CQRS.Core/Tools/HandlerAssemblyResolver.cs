@@ -6,7 +6,7 @@ namespace Intellias.CQRS.Core.Tools
     /// <summary>
     /// Used to return assembly of handler
     /// </summary>
-    public class EventHandlerAssemblyResolver
+    public class HandlerAssemblyResolver
     {
         /// <summary>
         /// Keeps handlers assembly
@@ -17,7 +17,7 @@ namespace Intellias.CQRS.Core.Tools
         /// Ctor
         /// </summary>
         /// <param name="service"></param>
-        public EventHandlerAssemblyResolver(Func<Assembly> service)
+        public HandlerAssemblyResolver(Func<Assembly> service)
         {
             Assembly = service();
         }

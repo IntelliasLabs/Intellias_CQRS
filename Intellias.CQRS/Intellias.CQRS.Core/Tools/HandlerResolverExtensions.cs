@@ -3,9 +3,9 @@
 namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
-    /// 
+    /// HandlerResolverExtensions
     /// </summary>
-    public static class EventHandlerResolverExtensions
+    public static class HandlerResolverExtensions
     {
         /// <summary>
         /// AddHandlerManager
@@ -14,9 +14,9 @@ namespace Intellias.CQRS.Core.Tools
         public static void AddHandlerManager<T>(this IServiceCollection services)
         {
             services.AddTransient(_ =>
-                new EventHandlerAssemblyResolver(() => typeof(T).Assembly));
-            services.AddSingleton<EventHandlerDependencyResolver>();
-            services.AddSingleton<EventHandlerManager>();
+                new HandlerAssemblyResolver(() => typeof(T).Assembly));
+            services.AddSingleton<HandlerDependencyResolver>();
+            services.AddSingleton<HandlerManager>();
         }
     }
 }
