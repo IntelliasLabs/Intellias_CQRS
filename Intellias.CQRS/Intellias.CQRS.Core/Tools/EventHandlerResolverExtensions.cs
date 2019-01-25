@@ -16,6 +16,7 @@ namespace Intellias.CQRS.Core.Tools
             services.AddTransient(_ =>
                 new EventHandlerAssemblyResolver(() => typeof(T).Assembly));
             services.AddSingleton<EventHandlerDependencyResolver>();
+            services.AddSingleton<EventHandlerManager>();
         }
     }
 }
