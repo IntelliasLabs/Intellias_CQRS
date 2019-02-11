@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Events
 {
@@ -13,6 +14,6 @@ namespace Intellias.CQRS.Core.Events
         /// </summary>
         /// <param name="event">Event being handled</param>
         /// <returns>Task that represents handling of message</returns>
-        Task HandleAsync(T @event);
+        Task<IExecutionResult> HandleAsync(T @event);
     }
 }
