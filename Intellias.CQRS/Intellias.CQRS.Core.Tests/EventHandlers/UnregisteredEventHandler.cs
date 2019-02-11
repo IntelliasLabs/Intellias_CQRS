@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Events;
 
 namespace Intellias.CQRS.Core.Tests.EventHandlers
@@ -15,7 +16,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// </summary>
         /// <param name="event"></param>
         /// <returns></returns>
-        public Task HandleAsync(TestDeletedEvent @event) =>
-            Task.CompletedTask;
+        public async Task<IExecutionResult> HandleAsync(TestDeletedEvent @event) =>
+            await Task.FromResult(ExecutionResult.Success);
     }
 }

@@ -31,15 +31,17 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// </summary>
         /// <param name="event">Event</param>
         /// <returns>Result</returns>
-        public Task HandleAsync(TestCreatedEvent @event)
+        public async Task<IExecutionResult> HandleAsync(TestCreatedEvent @event)
         {
-            return store.CreateAsync(new TestQueryModel
+            await store.CreateAsync(new TestQueryModel
             {
                 Id = @event.AggregateRootId,
                 ParentId = Unified.Dummy,
                 TestData = @event.TestData,
                 Version = @event.Version
             });
+
+            return ExecutionResult.Success;
         }
 
         /// <summary>
@@ -47,9 +49,11 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// </summary>
         /// <param name="event">Event</param>
         /// <returns>Result</returns>
-        public Task HandleAsync(TestDeletedEvent @event)
+        public async Task<IExecutionResult> HandleAsync(TestDeletedEvent @event)
         {
-            return store.DeleteAsync(@event.AggregateRootId);
+            await store.DeleteAsync(@event.AggregateRootId);
+
+            return ExecutionResult.Success;
         }
 
         /// <summary>
@@ -57,15 +61,17 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// </summary>
         /// <param name="event">Event</param>
         /// <returns>Result</returns>
-        public Task HandleAsync(TestUpdatedEvent @event)
+        public async Task<IExecutionResult> HandleAsync(TestUpdatedEvent @event)
         {
-            return store.UpdateAsync(new TestQueryModel
+            await store.UpdateAsync(new TestQueryModel
             {
                 Id = @event.AggregateRootId,
                 ParentId = Unified.Dummy,
                 TestData = @event.TestData,
                 Version = @event.Version
             });
+
+            return ExecutionResult.Success;
         }
     }
 }

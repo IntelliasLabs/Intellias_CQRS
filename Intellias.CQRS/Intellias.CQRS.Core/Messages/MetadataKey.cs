@@ -29,5 +29,10 @@
         /// HTTP request headers of command, should be set by API gateway
         /// </summary>
         RequestHeaders,
+
+        /// <summary>
+        /// State of process manager
+        /// </summary>
+        ProcessState
     }
 }
