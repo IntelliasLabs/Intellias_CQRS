@@ -1,26 +1,17 @@
-﻿using System.Collections.Generic;
-using Intellias.CQRS.Core.Commands;
+﻿using System.Threading.Tasks;
 
 namespace Intellias.CQRS.Core.Processes
 {
     /// <summary>
-    /// IProcessManager
+    /// IProcessManagerDataContext
     /// </summary>
-    public interface IProcessManager
+    /// <typeparam name="T"></typeparam>
+    public interface IProcessManager<in T>
+        where T : class, IProcess
     {
         /// <summary>
-        /// Gets the process manager identifier.
+        /// Apply process changes
         /// </summary>
-        string Id { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the process manager workflow is completed and the state can be archived.
-        /// </summary>
-        bool Completed { get; }
-
-        /// <summary>
-        /// Gets a collection of commands that need to be sent when the state of the process manager is persisted.
-        /// </summary>
-        IEnumerable<ICommand> Commands { get; }
+        Task ApplyAsync(T process);
     }
 }
