@@ -12,13 +12,13 @@ namespace Intellias.CQRS.Core.Extensions
         /// <summary>
         /// Converts common command data to event
         /// </summary>
-        /// <typeparam name="E">event without specific properties</typeparam>
+        /// <typeparam name="TEvent">event without specific properties</typeparam>
         /// <param name="c">command</param>
         /// <returns></returns>
-        public static E ToSimpleDomainEvent<E>(this Command c)
-            where E : Event, new()
+        public static TEvent ToSimpleDomainEvent<TEvent>(this Command c)
+            where TEvent : Event, new()
         {
-            var @event = new E
+            var @event = new TEvent
             {
                 AggregateRootId = c.AggregateRootId,
                 Version = c.ExpectedVersion,
@@ -29,6 +29,22 @@ namespace Intellias.CQRS.Core.Extensions
             @event.CopyMetadataFrom(c);
 
             return @event;
+        }
+
+        /// <summary>
+        /// Converts some ProcessCommand type to another
+        /// </summary>
+        /// <typeparam name="TCommand"></typeparam>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public static TCommand ToType<TCommand>(this ProcessCommand command)
+            where TCommand: ProcessCommand, new()
+        {
+            var result = ((AbstractMessage)command).ToType<TCommand>();
+            result.ExpectedVersion = command.ExpectedVersion;
+            result.Process = command.Process;
+
+            return result;
         }
     }
 }
