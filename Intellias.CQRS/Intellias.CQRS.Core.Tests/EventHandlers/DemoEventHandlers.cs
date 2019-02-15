@@ -31,7 +31,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// </summary>
         /// <param name="event">Event</param>
         /// <returns>Result</returns>
-        public async Task<IExecutionResult> HandleAsync(TestCreatedEvent @event)
+        public async Task HandleAsync(TestCreatedEvent @event)
         {
             await store.CreateAsync(new TestQueryModel
             {
@@ -40,8 +40,6 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
                 TestData = @event.TestData,
                 Version = @event.Version
             });
-
-            return ExecutionResult.Success;
         }
 
         /// <summary>
@@ -49,11 +47,9 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// </summary>
         /// <param name="event">Event</param>
         /// <returns>Result</returns>
-        public async Task<IExecutionResult> HandleAsync(TestDeletedEvent @event)
+        public async Task HandleAsync(TestDeletedEvent @event)
         {
             await store.DeleteAsync(@event.AggregateRootId);
-
-            return ExecutionResult.Success;
         }
 
         /// <summary>
@@ -61,7 +57,7 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
         /// </summary>
         /// <param name="event">Event</param>
         /// <returns>Result</returns>
-        public async Task<IExecutionResult> HandleAsync(TestUpdatedEvent @event)
+        public async Task HandleAsync(TestUpdatedEvent @event)
         {
             await store.UpdateAsync(new TestQueryModel
             {
@@ -70,8 +66,6 @@ namespace Intellias.CQRS.Core.Tests.EventHandlers
                 TestData = @event.TestData,
                 Version = @event.Version
             });
-
-            return ExecutionResult.Success;
         }
     }
 }
