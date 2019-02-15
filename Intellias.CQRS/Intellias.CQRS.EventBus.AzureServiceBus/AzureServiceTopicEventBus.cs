@@ -10,7 +10,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
     /// <summary>
     /// Publishing events to Azure Service Bus
     /// </summary>
-    public class AzureServiceTopicEventBus : IEventBus
+    public class AzureServiceTopicEventBus : IMessageBus<IEvent, IExecutionResult>
     {
         private readonly ITopicClient topicClient;
         
