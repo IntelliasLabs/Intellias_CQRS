@@ -28,5 +28,10 @@ namespace Intellias.CQRS.Core.Processes
         /// Gets a collection of events that need to be sent when the state of the process manager is persisted.
         /// </summary>
         IEnumerable<IEvent> Events { get; }
+
+        /// <summary>
+        /// Gets a collection of events that need to be sent to outside world.
+        /// </summary>
+        IEnumerable<IEvent> Reports { get; }
     }
 }

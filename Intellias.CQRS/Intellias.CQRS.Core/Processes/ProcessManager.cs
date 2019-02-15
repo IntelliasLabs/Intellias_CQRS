@@ -13,12 +13,15 @@ namespace Intellias.CQRS.Core.Processes
         /// </summary>
         /// <param name="commandBus"></param>
         /// <param name="eventBus"></param>
+        /// <param name="reportBus"></param>
         public ProcessManager(
             ICommandBus commandBus, 
-            IEventBus eventBus)
+            IEventBus eventBus, 
+            IReportBus reportBus)
         {
             CommandBus = commandBus;
             EventBus = eventBus;
+            ReportBus = reportBus;
         }
 
         /// <summary>
@@ -31,6 +34,11 @@ namespace Intellias.CQRS.Core.Processes
         /// </summary>
         protected IEventBus EventBus { get; }
 
+        /// <summary>
+        /// EventBus
+        /// </summary>
+        protected IReportBus ReportBus { get; }
+
         /// <inheritdoc />
         public async Task ApplyAsync(T process)
         {
@@ -38,6 +46,8 @@ namespace Intellias.CQRS.Core.Processes
             await Task.WhenAll(process.Commands.Select(command => CommandBus.PublishAsync(command)));
             // send all events
             await Task.WhenAll(process.Events.Select(@event => EventBus.PublishAsync(@event)));
+            // send all reports
+            await Task.WhenAll(process.Reports.Select(@event => ReportBus.PublishAsync(@event)));
         }
     }
 }
