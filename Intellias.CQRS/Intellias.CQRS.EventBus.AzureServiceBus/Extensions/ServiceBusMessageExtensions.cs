@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 
 namespace Intellias.CQRS.EventBus.AzureServiceBus.Extensions
 {
+    /// <summary>
+    /// ServiceBusMessageExtensions
+    /// </summary>
     internal static class ServiceBusMessageExtensions
     {
         public static Message ToBusMessage(this IEvent @event) => 
