@@ -5,7 +5,7 @@ using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Domain;
 
-namespace Intellias.CQRS.Core.Tests.CommandHandlers
+namespace Intellias.CQRS.Tests.CommandHandlers
 {
     /// <summary>
     /// Demo command handlers

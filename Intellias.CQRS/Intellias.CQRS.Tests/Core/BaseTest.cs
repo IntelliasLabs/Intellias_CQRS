@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.EventStore.AzureTable;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Domain;
 using Intellias.CQRS.Tests.Core.Events;
@@ -10,7 +11,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
 using Newtonsoft.Json;
 
-namespace Intellias.CQRS.EventStore.AzureTable.Tests.Core
+namespace Intellias.CQRS.Tests.Core
 {
     /// <summary>
     /// Keeps all init data
