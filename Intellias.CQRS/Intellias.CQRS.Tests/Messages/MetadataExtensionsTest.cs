@@ -4,7 +4,7 @@ using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
 using Xunit;
 
-namespace Intellias.CQRS.Core.Tests.Messages
+namespace Intellias.CQRS.Tests.Messages
 {
     /// <summary>
     /// 

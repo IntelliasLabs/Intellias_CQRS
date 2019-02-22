@@ -2,7 +2,7 @@
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Tests.Core.Events;
 
-namespace Intellias.CQRS.Core.Tests.EventHandlers
+namespace Intellias.CQRS.Tests.EventHandlers
 {
     /// <summary>
     /// Please DO NOT register this class in DI services

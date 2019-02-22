@@ -1,11 +1,11 @@
 ﻿using Intellias.CQRS.Core.Storage;
-using Intellias.CQRS.Core.Tests.EventHandlers;
 using Intellias.CQRS.Core.Tools;
 using Intellias.CQRS.Tests.Core.Queries;
+using Intellias.CQRS.Tests.EventHandlers;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
-namespace Intellias.CQRS.Core.Tests.Core
+namespace Intellias.CQRS.Tests.Core
 {
     /// <summary>
     /// TestBase

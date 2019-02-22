@@ -2,15 +2,15 @@ using System.Linq;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries;
-using Intellias.CQRS.Core.Tests.CommandHandlers;
-using Intellias.CQRS.Core.Tests.EventHandlers;
+using Intellias.CQRS.Tests.CommandHandlers;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Intellias.CQRS.Tests.Core.Queries;
+using Intellias.CQRS.Tests.EventHandlers;
 using Xunit;
 
-namespace Intellias.CQRS.Core.Tests
+namespace Intellias.CQRS.Tests
 {
     /// <summary>
     /// Full CQRS scenario test
