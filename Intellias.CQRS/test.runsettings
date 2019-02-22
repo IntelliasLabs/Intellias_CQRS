@@ -15,13 +15,13 @@
                 <ModulePath>.*Tests.dll</ModulePath>
               </Exclude>
             </ModulePaths>
- 
+
             <!-- We recommend you do not change the following values: -->
             <UseVerifiableInstrumentation>True</UseVerifiableInstrumentation>
             <AllowLowIntegrityProcesses>True</AllowLowIntegrityProcesses>
             <CollectFromChildProcesses>True</CollectFromChildProcesses>
             <CollectAspDotNet>False</CollectAspDotNet>
- 
+
           </CodeCoverage>
         </Configuration>
       </DataCollector>

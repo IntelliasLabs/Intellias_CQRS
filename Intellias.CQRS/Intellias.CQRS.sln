@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Intellias.CQRS.sln.DotSettings = Intellias.CQRS.sln.DotSettings
 		Intellias.ruleset = Intellias.ruleset
 		stylecop.json = stylecop.json
+		test.runsettings = test.runsettings
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventStore.AzureTable", "Intellias.CQRS.EventStore.AzureTable\Intellias.CQRS.EventStore.AzureTable.csproj", "{0EE03140-2422-4D8B-9E8C-1032F6871885}"
