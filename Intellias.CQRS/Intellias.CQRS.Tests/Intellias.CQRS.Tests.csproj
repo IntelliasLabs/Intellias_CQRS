@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="test.runsettings" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="test.runsettings" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="15.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
