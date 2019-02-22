@@ -4,6 +4,7 @@
     <Company>Intellias</Company>
     <Copyright>Copyright © Intellias 2018</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <DebugType>Full</DebugType>
   </PropertyGroup>
   <PropertyGroup Label="Common properties">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

@@ -1,9 +1,10 @@
 ﻿using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
+using Intellias.CQRS.QueryStore.AzureTable;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 
-namespace Intellias.CQRS.QueryStore.AzureTable.Tests.Core
+namespace Intellias.CQRS.Tests.Core
 {
     /// <summary>
     /// Base class for Azure Table Storage Query tests
