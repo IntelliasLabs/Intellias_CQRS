@@ -32,7 +32,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
         /// Converts an IEvent to EventStoreEvent
         /// </summary>
         /// <param name="event">event</param>
-        public static EventStoreEvent ToStoreEvent(this IEvent @event) => 
+        public static EventStoreEvent ToStoreEvent(this IEvent @event) =>
             new EventStoreEvent
             {
                 PartitionKey = @event.AggregateRootId,
