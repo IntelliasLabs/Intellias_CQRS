@@ -18,21 +18,25 @@
     <Rule Id="SA1200" Action="None" />
     <Rule Id="SA1202" Action="None" />
     <Rule Id="SA1652" Action="Error" />
-	<Rule Id="SA1123" Action="Error" />
-	<Rule Id="SA1124" Action="Error" />
+    <Rule Id="SA1123" Action="Error" />
+    <Rule Id="SA1124" Action="Error" />
+  </Rules>
+  <Rules AnalyzerId="CodeCracker.CSharp" RuleNamespace="CodeCracker.CSharp">
+    <Rule Id="CC0057" Action="Info" />
+    <Rule Id="CC0091" Action="Info" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
     <Rule Id="CA1040" Action="None" />
     <Rule Id="CA1063" Action="Info" />
     <Rule Id="CA1716" Action="None" />
-	<Rule Id="CA1725" Action="Warning" />
-	<Rule Id="CA2007" Action="None" />
-	<Rule Id="CA2240" Action="Warning" />
+    <Rule Id="CA1725" Action="Warning" />
+    <Rule Id="CA2007" Action="None" />
+    <Rule Id="CA2240" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="Microsoft.NetCore.Analyzers" RuleNamespace="Microsoft.NetCore.Analyzers">
     <Rule Id="CA1816" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
     <Rule Id="IDE0005" Action="Error" />
-  </Rules> 
+  </Rules>
 </RuleSet>

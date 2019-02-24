@@ -20,8 +20,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        /// Add event handler
         /// </summary>
+        /// <param name="handler">event handler</param>
         /// <typeparam name="T"></typeparam>
         public void AddHandler<T>(IEventHandler<T> handler) where T : IEvent
         {
@@ -46,11 +47,6 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <inheritdoc />
         public async Task<IExecutionResult> PublishAsync(IEvent msg)
         {
-            if(msg == null)
-            {
-                throw new ArgumentNullException(nameof(msg));
-            }
-
             var funcsList = funcs[msg.GetType()];
 
             foreach (var func in funcsList)

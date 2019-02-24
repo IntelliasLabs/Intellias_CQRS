@@ -21,5 +21,6 @@
     <PackageReference Include="Text.Analyzers" Version="2.6.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="2.9" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9" />
+    <PackageReference Include="codecracker.CSharp" Version="1.1.0" />
   </ItemGroup>
 </Project>

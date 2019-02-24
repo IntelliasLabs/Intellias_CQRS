@@ -17,12 +17,13 @@ namespace Intellias.CQRS.Core.Domain
         public int Version { get; private set; }
 
         /// <summary>
-        /// Configures a handler method for an event. 
+        /// Configures a handler method for an event.
         /// </summary>
+        /// <param name="handler">event handler</param>
         protected void Handles<TEvent>(Action<TEvent> handler)
             where TEvent : IEvent
         {
-            handlers.Add(typeof(TEvent), @event => handler((TEvent)@event));
+            handlers.Add(typeof(TEvent), @event => handler?.Invoke((TEvent)@event));
         }
 
         /// <summary>

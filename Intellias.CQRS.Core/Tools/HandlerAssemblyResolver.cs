@@ -19,7 +19,7 @@ namespace Intellias.CQRS.Core.Tools
         /// <param name="service"></param>
         public HandlerAssemblyResolver(Func<Assembly> service)
         {
-            Assembly = service();
+            Assembly = service?.Invoke();
         }
     }
 }

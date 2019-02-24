@@ -20,8 +20,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
+        /// <param name="handler">command handler</param>
         /// <typeparam name="T"></typeparam>
         public void AddHandler<T>(ICommandHandler<T> handler) where T : ICommand
         {
@@ -45,11 +46,6 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <inheritdoc />
         public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
-            if (msg == null)
-            {
-                throw new ArgumentNullException(nameof(msg));
-            }
-
             var func = funcs[msg.GetType()];
 
             var result = await func.HandleAsync(msg);

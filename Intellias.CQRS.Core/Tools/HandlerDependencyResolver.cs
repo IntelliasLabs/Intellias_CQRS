@@ -7,24 +7,24 @@ using Intellias.CQRS.Core.Events;
 namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
-    /// Used to return all handler instanses from handler's assembly 
+    /// Used to return all handler instanses from handler's assembly
     /// </summary>
     public class HandlerDependencyResolver
     {
-        private IServiceProvider Service { get; }
-        private HandlerAssemblyResolver AssemblyResolver { get; }
+        private readonly IServiceProvider serviceProvider;
+        private readonly HandlerAssemblyResolver assemblyResolver;
 
         /// <summary>
         /// Ctor
         /// </summary>
-        /// <param name="service"></param>
+        /// <param name="serviceProvider"></param>
         /// <param name="assemblyResolver"></param>
         public HandlerDependencyResolver(
-            IServiceProvider service,
+            IServiceProvider serviceProvider,
             HandlerAssemblyResolver assemblyResolver)
         {
-            Service = service;
-            AssemblyResolver = assemblyResolver;
+            this.serviceProvider = serviceProvider;
+            this.assemblyResolver = assemblyResolver;
         }
 
 
@@ -64,14 +64,14 @@ namespace Intellias.CQRS.Core.Tools
             return Select<ICommandHandler<T>>(handlerType);
         }
 
-        private IEnumerable<THandlerType> Select<THandlerType>(Type handlerType) => 
-            AssemblyResolver
+        private IEnumerable<THandlerType> Select<THandlerType>(Type handlerType) =>
+            assemblyResolver
                 .Assembly
                 .GetTypes()
                 .Where(handlerType.IsAssignableFrom)
                 .Select(type =>
                 {
-                    var service = (THandlerType)Service.GetService(type);
+                    var service = (THandlerType)serviceProvider.GetService(type);
 
                     if (service == null)
                     {

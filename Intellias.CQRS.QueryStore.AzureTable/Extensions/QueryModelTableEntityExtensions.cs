@@ -14,7 +14,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Extensions
         /// <summary>
         /// Converts an IReadModel to ReadModelTableEntity
         /// </summary>
-        public static QueryModelTableEntity ToStoreEntity(this IQueryModel model) => 
+        /// <param name="model">query model</param>
+        public static QueryModelTableEntity ToStoreEntity(this IQueryModel model) =>
             new QueryModelTableEntity
             {
                 PartitionKey = model.ParentId,
