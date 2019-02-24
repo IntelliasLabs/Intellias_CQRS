@@ -20,7 +20,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        /// Add event handler
         /// </summary>
         /// <param name="handler">event handler</param>
         /// <typeparam name="T"></typeparam>
