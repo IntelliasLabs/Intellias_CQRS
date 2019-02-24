@@ -7,7 +7,6 @@
     <DebugType>Full</DebugType>
   </PropertyGroup>
   <PropertyGroup Label="Common properties">
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>..\Intellias.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
