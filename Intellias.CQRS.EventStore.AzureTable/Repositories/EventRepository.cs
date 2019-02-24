@@ -53,7 +53,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
 
             } while (continuationToken != null);
 
-            return results.Select(item =>JsonConvert.DeserializeObject<IEvent>(item.Data, CqrsSettings.JsonConfig()));
+            return results.Select(item => JsonConvert.DeserializeObject<IEvent>(item.Data, CqrsSettings.JsonConfig()));
         }
 
         /// <summary>

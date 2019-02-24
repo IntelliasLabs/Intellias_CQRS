@@ -20,10 +20,10 @@ namespace Intellias.CQRS.Core.Domain
         public string Id { get; protected set; }
 
         /// <inheritdoc />
-        public ReadOnlyCollection<IEvent> Events =>pendingEvents.AsReadOnly();
+        public ReadOnlyCollection<IEvent> Events => pendingEvents.AsReadOnly();
 
         /// <inheritdoc />
-        public int Version =>State.Version;
+        public int Version => State.Version;
 
         /// <summary>
         /// Creates an existing aggregate-root
@@ -42,7 +42,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <inheritdoc />
         public void LoadFromHistory(IEnumerable<IEvent> history)
         {
-            foreach (var e in history.OrderBy(e =>e.Version))
+            foreach (var e in history.OrderBy(e => e.Version))
             {
                 // Event should always equal next state version
                 if (e.Version != State.Version + 1)

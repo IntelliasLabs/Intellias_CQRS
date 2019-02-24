@@ -102,7 +102,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             throw new System.NotImplementedException();
         }
 
-        /// <inheritdoc href="IQueryModelStore"/> 
-        public Task<TQueryModel> CreateOrUpdateAsync(TQueryModel newQueryModel) =>repository.InsertOrUpdateAsync(newQueryModel);
+        /// <inheritdoc href="IQueryModelStore"/>
+        public Task<TQueryModel> CreateOrUpdateAsync(TQueryModel newQueryModel) => repository.InsertOrUpdateAsync(newQueryModel);
     }
 }

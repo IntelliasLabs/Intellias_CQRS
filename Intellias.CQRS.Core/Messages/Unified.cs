@@ -136,6 +136,6 @@ namespace Intellias.CQRS.Core.Messages
         /// <summary>
         /// Dummy
         /// </summary>
-        public static string Dummy =>"0000000000";
+        public static string Dummy => "0000000000";
     }
 }

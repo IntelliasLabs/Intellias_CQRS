@@ -24,7 +24,7 @@ namespace Intellias.CQRS.Core.Events
         /// <inheritdoc />
         public int Version
         {
-            get =>version;
+            get => version;
             set
             {
                 version = value;

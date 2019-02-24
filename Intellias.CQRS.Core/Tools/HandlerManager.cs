@@ -6,12 +6,11 @@ using Intellias.CQRS.Core.Events;
 namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
-    /// Handles event for all 
+    /// Handles event for all
     /// </summary>
     public class HandlerManager
-        
     {
-        private HandlerDependencyResolver Resolver { get; }
+        private readonly HandlerDependencyResolver resolver;
 
         /// <summary>
         /// Handler Manager
@@ -19,7 +18,7 @@ namespace Intellias.CQRS.Core.Tools
         /// <param name="resolver"></param>
         public HandlerManager(HandlerDependencyResolver resolver)
         {
-            Resolver = resolver;
+            this.resolver = resolver;
         }
 
 
@@ -30,7 +29,7 @@ namespace Intellias.CQRS.Core.Tools
         /// <param name="event"></param>
         /// <returns></returns>
         public Task HandleEventAsync<T>(T @event) where T : IEvent =>
-            Task.WhenAll(Resolver.ResolveEvent(@event).Select(handler => handler.HandleAsync(@event)));
+            Task.WhenAll(resolver.ResolveEvent(@event).Select(handler => handler.HandleAsync(@event)));
 
         /// <summary>
         /// HandleCommandAsync
@@ -39,6 +38,6 @@ namespace Intellias.CQRS.Core.Tools
         /// <param name="command"></param>
         /// <returns></returns>
         public Task HandleCommandAsync<T>(T command) where T : ICommand =>
-            Task.WhenAll(Resolver.ResolveCommand(command).Select(handler => handler.HandleAsync(command)));
+            Task.WhenAll(resolver.ResolveCommand(command).Select(handler => handler.HandleAsync(command)));
     }
 }

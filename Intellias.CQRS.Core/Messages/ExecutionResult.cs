@@ -27,7 +27,7 @@ namespace Intellias.CQRS.Core.Messages
         /// <summary>
         /// Is result successful
         /// </summary>
-        public bool IsSuccess =>string.IsNullOrEmpty(FailureReason);
+        public bool IsSuccess => string.IsNullOrEmpty(FailureReason);
 
         /// <summary>
         /// Succesful result

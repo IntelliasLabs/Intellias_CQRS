@@ -48,7 +48,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
                     await eventBus.PublishAsync(e);
                 }));
 
-            await aggregateRepository.UpdateAggregateVersion(entity);
+            await aggregateRepository.UpdateAggregateVersionAsync(entity);
         }
 
         /// <inheritdoc />

@@ -38,11 +38,9 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         /// <returns></returns>
         public async Task<TQueryModel> GetModelAsync(string parentId, string id)
         {
-            var operation = 
-                TableOperation.Retrieve<QueryModelTableEntity>(parentId, id);
+            var operation = TableOperation.Retrieve<QueryModelTableEntity>(parentId, id);
 
-            var queryResult = 
-                await queryTable.ExecuteAsync(operation);
+            var queryResult = await queryTable.ExecuteAsync(operation);
 
             var modelJson = ((QueryModelTableEntity)queryResult.Result).Data;
             var model = JsonConvert.DeserializeObject<TQueryModel>(modelJson, CqrsSettings.JsonConfig());
@@ -75,7 +73,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
             } while (continuationToken != null);
 
             var list = results
-                .Select(item =>JsonConvert.DeserializeObject<TQueryModel>(item.Data, CqrsSettings.JsonConfig()))
+                .Select(item => JsonConvert.DeserializeObject<TQueryModel>(item.Data, CqrsSettings.JsonConfig()))
                 .ToList();
 
             return new CollectionQueryModel<TQueryModel>
@@ -105,7 +103,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         public async Task<TQueryModel> UpdateModelAsync(TQueryModel model)
         {
             // Getting entity
-            var record = await RetrieveRecord(model.ParentId, model.Id);
+            var record = await RetrieveRecordAsync(model.ParentId, model.Id);
 
             record.Data = JsonConvert.SerializeObject(model, CqrsSettings.JsonConfig());
             record.Timestamp = DateTime.UtcNow;
@@ -124,7 +122,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
         public async Task DeleteModelAsync(string parentId, string id)
         {
             // Getting entity
-            var record = await RetrieveRecord(parentId, id);
+            var record = await RetrieveRecordAsync(parentId, id);
 
             // Removing
             var deleteOperation = TableOperation.Delete(record);
@@ -144,7 +142,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
             return model;
         }
 
-        private async Task<QueryModelTableEntity> RetrieveRecord(string parentId, string id)
+        private async Task<QueryModelTableEntity> RetrieveRecordAsync(string parentId, string id)
         {
             var readOperation =
                 TableOperation.Retrieve<QueryModelTableEntity>(parentId, id);
