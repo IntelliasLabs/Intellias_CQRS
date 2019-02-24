@@ -20,11 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Intellias.CQRS.AzureTable.Core\Intellias.CQRS.AzureTable.Core.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.CommandBus.AzureEventGrid\Intellias.CQRS.CommandBus.AzureEventGrid.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.EventBus.AzureEventGrid\Intellias.CQRS.EventBus.AzureEventGrid.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />

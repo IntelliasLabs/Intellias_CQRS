@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Config;
-using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.EventStore.AzureTable.Extensions;
@@ -54,11 +53,6 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
                 results.AddRange(queryResults.Results);
 
             } while (continuationToken != null);
-
-            if (!results.Any())
-            {
-                throw new AggregateNotFoundException("Aggregate Id contains no events, so it is not yet created!");
-            }
 
             return results
                 .Select(item => 
