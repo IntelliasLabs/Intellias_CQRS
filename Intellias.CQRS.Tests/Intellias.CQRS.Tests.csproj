@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <DebugType>Full</DebugType>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -20,11 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Intellias.CQRS.AzureTable.Core\Intellias.CQRS.AzureTable.Core.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.CommandBus.AzureEventGrid\Intellias.CQRS.CommandBus.AzureEventGrid.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.EventBus.AzureEventGrid\Intellias.CQRS.EventBus.AzureEventGrid.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />
@@ -47,7 +45,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Update="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Update="Text.Analyzers" Version="2.6.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

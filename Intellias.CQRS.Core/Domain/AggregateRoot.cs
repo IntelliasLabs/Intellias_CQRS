@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Intellias.CQRS.Core.Domain.Exceptions;
 using Intellias.CQRS.Core.Events;
 
 namespace Intellias.CQRS.Core.Domain
@@ -43,12 +42,12 @@ namespace Intellias.CQRS.Core.Domain
         /// <inheritdoc />
         public void LoadFromHistory(IEnumerable<IEvent> history)
         {
-            foreach (var e in history.OrderBy(e=>e.Version))
+            foreach (var e in history.OrderBy(e => e.Version))
             {
                 // Event should always equal next state version
                 if (e.Version != State.Version + 1)
                 {
-                    throw new EventsOutOfOrderException(e.AggregateRootId);
+                    throw new DataMisalignedException($"Misaligned event version {e.Version} of {e.AggregateRootId} aggregate");
                 }
 
                 State.ApplyEvent(e);
