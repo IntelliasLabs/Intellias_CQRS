@@ -82,7 +82,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         /// NOT IMPLEMENTED
         /// </summary>
         /// <returns></returns>
-        public Task DeleteAllAsync() =>throw new System.NotImplementedException();
+        public Task DeleteAllAsync() => throw new System.NotImplementedException();
 
         /// <summary>
         /// CreateAsync
