@@ -46,11 +46,6 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <inheritdoc />
         public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
-            if (msg == null)
-            {
-                throw new ArgumentNullException(nameof(msg));
-            }
-
             var func = funcs[msg.GetType()];
 
             var result = await func.HandleAsync(msg);

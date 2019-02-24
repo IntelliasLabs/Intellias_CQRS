@@ -47,11 +47,6 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <inheritdoc />
         public async Task<IExecutionResult> PublishAsync(IEvent msg)
         {
-            if(msg == null)
-            {
-                throw new ArgumentNullException(nameof(msg));
-            }
-
             var funcsList = funcs[msg.GetType()];
 
             foreach (var func in funcsList)
