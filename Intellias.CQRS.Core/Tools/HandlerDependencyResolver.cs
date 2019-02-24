@@ -7,7 +7,7 @@ using Intellias.CQRS.Core.Events;
 namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
-    /// Used to return all handler instanses from handler's assembly 
+    /// Used to return all handler instanses from handler's assembly
     /// </summary>
     public class HandlerDependencyResolver
     {
@@ -64,7 +64,7 @@ namespace Intellias.CQRS.Core.Tools
             return Select<ICommandHandler<T>>(handlerType);
         }
 
-        private IEnumerable<THandlerType> Select<THandlerType>(Type handlerType) => 
+        private IEnumerable<THandlerType> Select<THandlerType>(Type handlerType) =>
             assemblyResolver
                 .Assembly
                 .GetTypes()
@@ -76,6 +76,11 @@ namespace Intellias.CQRS.Core.Tools
                     if (service == null)
                     {
                         throw new ArgumentNullException($"'{nameof(service)}'. Type '{type.Name}' cannot be resolved by service provider.");
+                    }
+
+                    if(!(service is THandlerType))
+                    {
+                        throw new InvalidCastException($"'{nameof(service)}'. Type '{type.Name}' cannot be casted to {typeof(THandlerType)}.");
                     }
 
                     return service;
