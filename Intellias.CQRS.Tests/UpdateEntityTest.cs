@@ -35,7 +35,7 @@ namespace Intellias.CQRS.Tests
         [Fact]
         public void ShouldCallTwiceServiceBusPublishMethod()
         {
-            BusMock.Verify(x => x.PublishAsync(It.IsAny<IEvent>()), Times.Exactly(2));
+            BusMock.Verify(x =>x.PublishAsync(It.IsAny<IEvent>()), Times.Exactly(2));
         }
 
         /// <summary>

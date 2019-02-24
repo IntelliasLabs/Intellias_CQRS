@@ -75,7 +75,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Repositories
             } while (continuationToken != null);
 
             var list = results
-                .Select(item => JsonConvert.DeserializeObject<TQueryModel>(item.Data, CqrsSettings.JsonConfig()))
+                .Select(item =>JsonConvert.DeserializeObject<TQueryModel>(item.Data, CqrsSettings.JsonConfig()))
                 .ToList();
 
             return new CollectionQueryModel<TQueryModel>

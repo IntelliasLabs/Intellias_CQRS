@@ -14,7 +14,7 @@ namespace Intellias.CQRS.Core.Messages
         private const ulong Offset = 1099511628211U;
 
         // Set of symbols used for numeric dimensions transcoding
-        private static char[] symbols =
+        private static readonly char[] symbols =
         {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V'
@@ -121,7 +121,7 @@ namespace Intellias.CQRS.Core.Messages
         /// <returns>FNV hash</returns>
         public static ulong Decode(string code)
         {
-            var shift = 5; // shift for x32 dimensions
+            const int shift = 5; // shift for x32 dimensions
             ulong hash = 0;
             for (var i = 0; i < code.Length; i++)
             {
@@ -136,6 +136,6 @@ namespace Intellias.CQRS.Core.Messages
         /// <summary>
         /// Dummy
         /// </summary>
-        public static string Dummy => "0000000000";
+        public static string Dummy =>"0000000000";
     }
 }

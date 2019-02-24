@@ -23,7 +23,7 @@ namespace Intellias.CQRS.Core.Domain
         protected void Handles<TEvent>(Action<TEvent> handler)
             where TEvent : IEvent
         {
-            handlers.Add(typeof(TEvent), @event => handler?.Invoke((TEvent)@event));
+            handlers.Add(typeof(TEvent), @event =>handler?.Invoke((TEvent)@event));
         }
 
         /// <summary>

@@ -19,7 +19,7 @@ namespace Intellias.CQRS.Tests.Core.ValueObjects
         public string PostCode { set; get; }
 
         /// <inheritdoc />
-        protected override bool EqualsCore(Address other) => string.Equals(AddressLine, other.AddressLine, StringComparison.InvariantCulture);
+        protected override bool EqualsCore(Address other) =>string.Equals(AddressLine, other.AddressLine, StringComparison.InvariantCulture);
 
         /// <inheritdoc />
         protected override int GetHashCodeCore()

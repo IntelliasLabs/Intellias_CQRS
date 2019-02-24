@@ -16,7 +16,7 @@ namespace Intellias.CQRS.Core.Messages
         public static void CopyMetadataFrom(this AbstractMessage to, AbstractMessage from)
         {
             var namesWithoutTypeName = from.Metadata.Keys
-                .Where(e => e != MetadataKey.TypeName);
+                .Where(e =>e != MetadataKey.TypeName);
 
             foreach (var key in namesWithoutTypeName)
             {

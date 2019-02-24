@@ -14,7 +14,7 @@ namespace Intellias.CQRS.Core.Messages
         string Id { get; }
 
         /// <summary>
-        /// Id of operation (Operation can consist of several commands / events). 
+        /// Id of operation (Operation can consist of several commands / events).
         /// Used for operations tracking or operation rejecting for example
         /// </summary>
         string CorrelationId { get; set; }

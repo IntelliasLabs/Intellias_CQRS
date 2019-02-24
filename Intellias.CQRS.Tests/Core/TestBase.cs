@@ -31,13 +31,13 @@ namespace Intellias.CQRS.Tests.Core
                 .BuildServiceProvider();
         }
 
-        private void IocRegistrations(ServiceCollection services)
+        private static void IocRegistrations(ServiceCollection services)
         {
             services.AddHandlerManager<DemoEventHandlers>();
             services.AddTransient<DemoEventHandlers>();
 
             var queryStoreMock = Mock.Of<IQueryModelStore<TestQueryModel>>();
-            services.AddTransient(_ => queryStoreMock);
+            services.AddTransient(_ =>queryStoreMock);
         }
     }
 }

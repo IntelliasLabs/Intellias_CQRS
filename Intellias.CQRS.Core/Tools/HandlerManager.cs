@@ -14,7 +14,7 @@ namespace Intellias.CQRS.Core.Tools
         private HandlerDependencyResolver Resolver { get; }
 
         /// <summary>
-        /// 
+        /// Handler Manager
         /// </summary>
         /// <param name="resolver"></param>
         public HandlerManager(HandlerDependencyResolver resolver)

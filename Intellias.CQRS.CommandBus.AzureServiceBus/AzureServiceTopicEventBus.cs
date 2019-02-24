@@ -22,8 +22,8 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus
         /// <param name="topic"></param>
         /// <param name="commandStore"></param>
         public AzureServiceTopicCommandBus(
-            string connectionString, 
-            string topic, 
+            string connectionString,
+            string topic,
             ICommandStore commandStore)
         {
             this.commandStore = commandStore;

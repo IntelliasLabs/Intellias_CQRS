@@ -13,8 +13,8 @@ namespace Intellias.CQRS.Core.Config
         /// Configures JSON serializer globally
         /// Settings will automatically be used by JsonConvert.SerializeObject/DeserializeObject
         /// </summary>
-        public static Func<JsonSerializerSettings> JsonConfig => 
-            () => new JsonSerializerSettings
+        public static Func<JsonSerializerSettings> JsonConfig =>
+            () =>new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
                 TypeNameHandling = TypeNameHandling.All,
