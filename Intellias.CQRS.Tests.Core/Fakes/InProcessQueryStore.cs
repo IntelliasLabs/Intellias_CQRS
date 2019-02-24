@@ -86,8 +86,8 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public Task<CollectionQueryModel<TQueryModel>> GetAllAsync(string parentId)
         {
             var qmList = store
-                .Where(kvp =>kvp.Key.Key == parentId)
-                .Select(kvp =>kvp.Value)
+                .Where(kvp => kvp.Key.Key == parentId)
+                .Select(kvp => kvp.Value)
                 .ToList();
 
             return Task.FromResult(new CollectionQueryModel<TQueryModel>
@@ -145,7 +145,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public Task<CollectionQueryModel<TQueryModel>> CreateAllAsync(IEnumerable<TQueryModel> newCollection)
         {
             var queryModels = newCollection.ToList();
-            queryModels.ForEach(item =>store.Add(new KeyValuePair<string, string>(item.ParentId, item.Id), item));
+            queryModels.ForEach(item => store.Add(new KeyValuePair<string, string>(item.ParentId, item.Id), item));
 
             return Task.FromResult(new CollectionQueryModel<TQueryModel>
             {

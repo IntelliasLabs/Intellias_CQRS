@@ -37,7 +37,7 @@ namespace Intellias.CQRS.Tests.Core
             services.AddTransient<DemoEventHandlers>();
 
             var queryStoreMock = Mock.Of<IQueryModelStore<TestQueryModel>>();
-            services.AddTransient(_ =>queryStoreMock);
+            services.AddTransient(_ => queryStoreMock);
         }
     }
 }

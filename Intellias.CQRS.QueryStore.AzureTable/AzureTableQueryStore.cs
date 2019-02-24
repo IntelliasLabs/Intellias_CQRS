@@ -64,7 +64,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         /// <param name="newCollection"></param>
         /// <returns></returns>
         public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(IEnumerable<TQueryModel> newCollection)
-            =>throw new System.NotImplementedException();
+            => throw new System.NotImplementedException();
 
         /// <inheritdoc />
         public Task DeleteAsync(string parentId, string id) =>
