@@ -15,8 +15,8 @@ namespace Intellias.CQRS.Core.Processes
         /// <param name="eventBus"></param>
         /// <param name="reportBus"></param>
         public ProcessManager(
-            ICommandBus commandBus, 
-            IEventBus eventBus, 
+            ICommandBus commandBus,
+            IEventBus eventBus,
             IReportBus reportBus)
         {
             CommandBus = commandBus;

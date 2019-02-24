@@ -37,7 +37,7 @@ namespace Intellias.CQRS.Core.Domain
             }
 
             Id = id;
-        }        
+        }
 
         /// <inheritdoc />
         public void LoadFromHistory(IEnumerable<IEvent> history)

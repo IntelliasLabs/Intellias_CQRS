@@ -5,7 +5,7 @@ using Intellias.CQRS.Core.Queries;
 namespace Intellias.CQRS.Core.Storage
 {
     /// <summary>
-    /// 
+    /// IQueryModelStore
     /// </summary>
     /// <typeparam name="TQueryModel"></typeparam>
     public interface IQueryModelStore<TQueryModel> : IQueryModelStore

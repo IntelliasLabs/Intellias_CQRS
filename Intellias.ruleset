@@ -38,5 +38,6 @@
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
     <Rule Id="IDE0005" Action="Error" />
+    <Rule Id="IDE1006" Action="None" />
   </Rules>
 </RuleSet>

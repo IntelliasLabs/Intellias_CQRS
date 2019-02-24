@@ -41,7 +41,7 @@ namespace Intellias.CQRS.Tests
 
             var resolver = ServiceProvider.GetService<HandlerDependencyResolver>();
 
-            Assert.Throws<ArgumentNullException>(() => 
+            Assert.Throws<ArgumentNullException>(() =>
                 resolver.ResolveEvent(@event).ToList());
         }
     }

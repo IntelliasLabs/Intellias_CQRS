@@ -14,7 +14,7 @@ namespace Intellias.CQRS.Tests.Core.Queries
         private readonly InProcessQueryStore<TQueryModel> store;
 
         /// <summary>
-        /// 
+        /// FakeQueryExecutor
         /// </summary>
         /// <param name="store"></param>
         public FakeQueryExecutor(InProcessQueryStore<TQueryModel> store)
@@ -27,11 +27,11 @@ namespace Intellias.CQRS.Tests.Core.Queries
             store.GetAsync(parentId, id);
 
         /// <inheritdoc />
-        public Task<TQueryModel> GetByIdAsync(string id) => 
+        public Task<TQueryModel> GetByIdAsync(string id) =>
             store.GetAsync(id);
 
         /// <inheritdoc />
-        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync() => 
+        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync() =>
             store.GetAllAsync();
 
         /// <inheritdoc />

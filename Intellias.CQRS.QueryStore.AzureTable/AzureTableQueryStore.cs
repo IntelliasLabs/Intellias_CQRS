@@ -55,7 +55,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         /// </summary>
         /// <param name="newQueryModel"></param>
         /// <returns></returns>
-        public Task<TQueryModel> UpdateAsync(TQueryModel newQueryModel) => 
+        public Task<TQueryModel> UpdateAsync(TQueryModel newQueryModel) =>
             repository.UpdateModelAsync(newQueryModel);
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         /// <param name="newCollection"></param>
         /// <returns></returns>
         public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(IEnumerable<TQueryModel> newCollection)
-            => throw new System.NotImplementedException();
+            =>throw new System.NotImplementedException();
 
         /// <inheritdoc />
         public Task DeleteAsync(string parentId, string id) =>
@@ -102,7 +102,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             throw new System.NotImplementedException();
         }
 
-        /// <inheritdoc href="IQueryModelStore"/> 
+        /// <inheritdoc href="IQueryModelStore"/>
         public Task<TQueryModel> CreateOrUpdateAsync(TQueryModel newQueryModel) => repository.InsertOrUpdateAsync(newQueryModel);
     }
 }

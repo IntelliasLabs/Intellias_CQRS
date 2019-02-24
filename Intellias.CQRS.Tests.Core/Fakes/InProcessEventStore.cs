@@ -41,7 +41,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion)
         {
             _inMemoryDb.TryGetValue(aggregateId, out var events);
-            return Task.FromResult(events?.Where(x => x.Version > fromVersion) ?? new List<IEvent>());
+            return Task.FromResult(events?.Where(x =>x.Version > fromVersion) ?? new List<IEvent>());
         }
     }
 }

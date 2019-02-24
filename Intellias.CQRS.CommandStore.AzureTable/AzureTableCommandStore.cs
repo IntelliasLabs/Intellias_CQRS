@@ -24,7 +24,7 @@ namespace Intellias.CQRS.CommandStore.AzureTable
         }
 
         /// <inheritdoc />
-        public Task SaveAsync(ICommand command) => 
+        public Task SaveAsync(ICommand command) =>
             commandRepository.InsertCommandAsync(command);
     }
 }

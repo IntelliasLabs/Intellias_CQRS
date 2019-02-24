@@ -14,7 +14,7 @@ namespace Intellias.CQRS.Core.Queries
         private readonly IQueryModelStore<TQueryModel> _readStore;
 
         /// <summary>
-        /// 
+        /// Read Query Executor
         /// </summary>
         /// <param name="readStore"></param>
         public ReadQueryExecutor(
@@ -38,7 +38,7 @@ namespace Intellias.CQRS.Core.Queries
             _readStore.GetAllAsync(parentId);
 
         /// <inheritdoc />
-        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync() => 
+        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync() =>
             _readStore.GetAllAsync();
     }
 }
