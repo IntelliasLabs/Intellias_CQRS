@@ -20,8 +20,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
+        /// <param name="handler">todo: describe handler parameter on AddHandler</param>
         /// <typeparam name="T"></typeparam>
         public void AddHandler<T>(ICommandHandler<T> handler) where T : ICommand
         {
