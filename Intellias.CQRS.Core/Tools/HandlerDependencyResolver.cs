@@ -78,11 +78,6 @@ namespace Intellias.CQRS.Core.Tools
                         throw new ArgumentNullException($"'{nameof(service)}'. Type '{type.Name}' cannot be resolved by service provider.");
                     }
 
-                    if(!(service is THandlerType))
-                    {
-                        throw new InvalidCastException($"'{nameof(service)}'. Type '{type.Name}' cannot be casted to {typeof(THandlerType)}.");
-                    }
-
                     return service;
                 });
     }
