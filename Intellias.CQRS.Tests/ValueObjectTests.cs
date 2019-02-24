@@ -1,12 +1,13 @@
-﻿using Intellias.CQRS.Tests.Core.ValueObjects;
+﻿using Intellias.CQRS.Tests.Core;
+using Intellias.CQRS.Tests.Core.ValueObjects;
 using Xunit;
 
-namespace Intellias.CQRS.Tests.Core
+namespace Intellias.CQRS.Tests
 {
     public class ValueObjectTests : BaseTest
     {
         [Fact]
-        public void ShouldBeAvailableInGetById()
+        public void ValueObjectEqualityTest()
         {
             var address1 = new Address {
                 AddressLine = "test1"
