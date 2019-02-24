@@ -34,7 +34,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// </summary>
         /// <param name="aggregateId"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<IEvent>> GetEvents(string aggregateId/*, int version*/)
+        public async Task<IEnumerable<IEvent>> GetEventsAsync(string aggregateId/*, int version*/)
         {
             var query = new TableQuery<EventStoreEvent>()
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey",
@@ -57,11 +57,11 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         }
 
         /// <summary>
-        /// InsertEvent
+        /// Insert Event
         /// </summary>
         /// <param name="event"></param>
         /// <returns></returns>
-        public Task InsertEvent(IEvent @event)
+        public Task InsertEventAsync(IEvent @event)
         {
             var operation = TableOperation.Insert(@event.ToStoreEvent());
             return eventTable.ExecuteAsync(operation);

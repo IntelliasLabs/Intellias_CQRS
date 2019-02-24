@@ -11,8 +11,8 @@ namespace Intellias.CQRS.Core.Tools
     /// </summary>
     public class HandlerDependencyResolver
     {
-        private IServiceProvider Service { get; }
-        private HandlerAssemblyResolver AssemblyResolver { get; }
+        private readonly IServiceProvider service;
+        private readonly HandlerAssemblyResolver assemblyResolver;
 
         /// <summary>
         /// Ctor
@@ -23,8 +23,8 @@ namespace Intellias.CQRS.Core.Tools
             IServiceProvider service,
             HandlerAssemblyResolver assemblyResolver)
         {
-            Service = service;
-            AssemblyResolver = assemblyResolver;
+            this.service = service;
+            this.assemblyResolver = assemblyResolver;
         }
 
 
@@ -65,13 +65,13 @@ namespace Intellias.CQRS.Core.Tools
         }
 
         private IEnumerable<THandlerType> Select<THandlerType>(Type handlerType) => 
-            AssemblyResolver
+            assemblyResolver
                 .Assembly
                 .GetTypes()
                 .Where(handlerType.IsAssignableFrom)
                 .Select(type =>
                 {
-                    var service = (THandlerType)Service.GetService(type);
+                    var service = (THandlerType)this.service.GetService(type);
 
                     if (service == null)
                     {

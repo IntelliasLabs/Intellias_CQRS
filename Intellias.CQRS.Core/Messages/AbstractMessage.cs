@@ -41,28 +41,6 @@ namespace Intellias.CQRS.Core.Messages
         /// <inheritdoc />
         public override string ToString() => Id;
 
-        /// <summary>
-        /// Base equality operator
-        /// </summary>
-        /// <param name="x">This</param>
-        /// <param name="y">Other</param>
-        /// <returns>Is equal</returns>
-        public static bool operator ==(AbstractMessage x, AbstractMessage y)
-        {
-            return Equals(x, y);
-        }
-
-        /// <summary>
-        /// Base inversed equality operator
-        /// </summary>
-        /// <param name="x">This</param>
-        /// <param name="y">Other</param>
-        /// <returns>Is equal</returns>
-        public static bool operator !=(AbstractMessage x, AbstractMessage y)
-        {
-            return !(x == y);
-        }
-
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
