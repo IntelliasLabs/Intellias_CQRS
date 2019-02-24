@@ -34,7 +34,6 @@ namespace Intellias.CQRS.EventStore.AzureTable.Repositories
         /// </summary>
         /// <param name="aggregateId"></param>
         /// <returns></returns>
-        // ToDo: Implement snapshot logic here!
         public async Task<IEnumerable<IEvent>> GetEvents(string aggregateId/*, int version*/)
         {
             var query = new TableQuery<EventStoreEvent>()
