@@ -71,7 +71,7 @@ namespace Intellias.CQRS.Core.Tools
                 .Where(handlerType.IsAssignableFrom)
                 .Select(type =>
                 {
-                    var service = (THandlerType)this.serviceProvider.GetService(type);
+                    var service = (THandlerType)serviceProvider.GetService(type);
 
                     if (service == null)
                     {
