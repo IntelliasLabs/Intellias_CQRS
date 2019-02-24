@@ -19,7 +19,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <summary>
         /// Configures a handler method for an event.
         /// </summary>
-        /// <param name="handler">todo: describe handler parameter on Handles</param>
+        /// <param name="handler">event handler</param>
         protected void Handles<TEvent>(Action<TEvent> handler)
             where TEvent : IEvent
         {

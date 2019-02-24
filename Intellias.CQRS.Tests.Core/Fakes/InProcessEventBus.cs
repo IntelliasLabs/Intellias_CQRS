@@ -22,7 +22,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="handler">todo: describe handler parameter on AddHandler</param>
+        /// <param name="handler">event handler</param>
         /// <typeparam name="T"></typeparam>
         public void AddHandler<T>(IEventHandler<T> handler) where T : IEvent
         {

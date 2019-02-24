@@ -31,7 +31,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
         /// <summary>
         /// Converts an IEvent to EventStoreEvent
         /// </summary>
-        /// <param name="event">todo: describe event parameter on ToStoreEvent</param>
+        /// <param name="event">event</param>
         public static EventStoreEvent ToStoreEvent(this IEvent @event) => 
             new EventStoreEvent
             {
