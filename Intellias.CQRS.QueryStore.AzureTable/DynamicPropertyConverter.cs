@@ -19,12 +19,13 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
         public static Dictionary<string, EntityProperty> Flatten(object root)
         {
+            var propertyDictionary = new Dictionary<string, EntityProperty>();
+
             if (root == null)
             {
-                return null;
+                return propertyDictionary;
             }
 
-            var propertyDictionary = new Dictionary<string, EntityProperty>();
             var antecedents = new HashSet<object>(new ObjectReferenceEqualityComparer());
             return Flatten(propertyDictionary, root, string.Empty, antecedents) ? propertyDictionary : null;
         }
@@ -64,7 +65,59 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                     }
                     else
                     {
-                        goto label_6;
+                        var properties = (IEnumerable<PropertyInfo>)type.GetProperties();
+                        if (!properties.Any())
+                        {
+                            throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Unsupported type : {0} encountered during conversion to EntityProperty. Object Path: {1}", new object[2]
+                            {
+                   type,
+                   objectPath
+                            }));
+                        }
+
+                        var processed = false;
+                        if (!type.IsValueType)
+                        {
+                            if (antecedents.Contains(current))
+                            {
+                                throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Recursive reference detected. Object Path: {0} Property Type: {1}.", new object[2]
+                                {
+                         objectPath,
+                         type
+                                }));
+                            }
+
+                            antecedents.Add(current);
+                            processed = true;
+                        }
+
+                        var successful = properties.Where(propertyInfo => !ShouldSkip(propertyInfo)).All(propertyInfo =>
+                        {
+                            if (propertyInfo.Name.Contains(DefaultPropertyNameDelimiter))
+                            {
+                                throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Property delimiter: {0} exists in property name: {1}. Object Path: {2}", DefaultPropertyNameDelimiter, propertyInfo.Name, objectPath));
+                            }
+
+                            object current1;
+                            try
+                            {
+                                current1 = propertyInfo.GetValue(current, null);
+                            }
+                            catch (Exception)
+                            {
+                                current1 = string.Format(CultureInfo.InvariantCulture, "<|>jsonSerializedIEnumerableProperty<|>={0}", new object[1]
+                                {
+                        JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())
+                                });
+                            }
+                            return Flatten(propertyDictionary, current1, string.IsNullOrWhiteSpace(objectPath) ? propertyInfo.Name : objectPath + DefaultPropertyNameDelimiter + propertyInfo.Name, antecedents);
+                        });
+                        if (processed)
+                        {
+                            antecedents.Remove(current);
+                        }
+
+                        return successful;
                     }
                 }
                 else
@@ -73,61 +126,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 }
             }
             propertyDictionary.Add(objectPath, propertyWithType);
-            return true;
-        label_6:
-            var properties = (IEnumerable<PropertyInfo>)type.GetProperties();
-            if (!properties.Any())
-            {
-                throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Unsupported type : {0} encountered during conversion to EntityProperty. Object Path: {1}", new object[2]
-                {
-                   type,
-                   objectPath
-                }));
-            }
-
-            var processed = false;
-            if (!type.IsValueType)
-            {
-                if (antecedents.Contains(current))
-                {
-                    throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Recursive reference detected. Object Path: {0} Property Type: {1}.", new object[2]
-                    {
-                         objectPath,
-                         type
-                    }));
-                }
-
-                antecedents.Add(current);
-                processed = true;
-            }
-
-            var successful = properties.Where(propertyInfo => !ShouldSkip(propertyInfo)).All(propertyInfo =>
-            {
-                if (propertyInfo.Name.Contains(DefaultPropertyNameDelimiter))
-                {
-                    throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Property delimiter: {0} exists in property name: {1}. Object Path: {2}", DefaultPropertyNameDelimiter, propertyInfo.Name, objectPath));
-                }
-
-                object current1;
-                try
-                {
-                    current1 = propertyInfo.GetValue(current, null);
-                }
-                catch (Exception)
-                {
-                    current1 = string.Format(CultureInfo.InvariantCulture, "<|>jsonSerializedIEnumerableProperty<|>={0}", new object[1]
-                    {
-                        JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())
-                    });
-                }
-                return Flatten(propertyDictionary, current1, string.IsNullOrWhiteSpace(objectPath) ? propertyInfo.Name : objectPath + DefaultPropertyNameDelimiter + propertyInfo.Name, antecedents);
-            });
-            if (processed)
-            {
-                antecedents.Remove(current);
-            }
-
-            return successful;
+            return true;   
         }
 
         private static EntityProperty CreateEntityPropertyWithType(object value, Type type)

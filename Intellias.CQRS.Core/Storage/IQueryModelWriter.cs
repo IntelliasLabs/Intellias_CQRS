@@ -6,7 +6,7 @@ namespace Intellias.CQRS.Core.Storage
     /// <summary>
     /// IQueryModelWriter - used by event handlers to build query model
     /// </summary>
-    public interface IQueryModelWriter<TQueryModel> where TQueryModel : IQueryModel
+    public interface IQueryModelWriter<in TQueryModel> where TQueryModel : IQueryModel
     {
         /// <summary>
         /// Delete Read Model Item
