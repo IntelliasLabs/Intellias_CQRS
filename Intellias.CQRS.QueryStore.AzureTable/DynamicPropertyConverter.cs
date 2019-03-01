@@ -57,21 +57,14 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 {
                     if (current is IEnumerable)
                     {
-                        current = string.Format(CultureInfo.InvariantCulture, "<|>jsonSerializedIEnumerableProperty<|>={0}", new object[]
-                        {
-                            JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())
-                        });
+                        current = $"<|>jsonSerializedIEnumerableProperty<|>={JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
                     }
                     else
                     {
                         var properties = (IEnumerable<PropertyInfo>)type.GetProperties();
                         if (!properties.Any())
                         {
-                            throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Unsupported type : {0} encountered during conversion to EntityProperty. Object Path: {1}", new object[]
-                            {
-                   type,
-                   objectPath
-                            }));
+                            throw new SerializationException($"Unsupported type : {type} encountered during conversion to EntityProperty. Object Path: {objectPath}");
                         }
 
                         var processed = false;
@@ -79,11 +72,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                         {
                             if (antecedents.Contains(current))
                             {
-                                throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Recursive reference detected. Object Path: {0} Property Type: {1}.", new object[]
-                                {
-                         objectPath,
-                         type
-                                }));
+                                throw new SerializationException($"Recursive reference detected. Object Path: {objectPath} Property Type: {type}.");
                             }
 
                             antecedents.Add(current);
@@ -94,7 +83,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                         {
                             if (propertyInfo.Name.Contains(DefaultPropertyNameDelimiter))
                             {
-                                throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Property delimiter: {0} exists in property name: {1}. Object Path: {2}", DefaultPropertyNameDelimiter, propertyInfo.Name, objectPath));
+                                throw new SerializationException($"Property delimiter: {DefaultPropertyNameDelimiter} exists in property name: {propertyInfo.Name}. Object Path: {objectPath}");
                             }
 
                             object current1;
@@ -104,10 +93,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                             }
                             catch (Exception)
                             {
-                                current1 = string.Format(CultureInfo.InvariantCulture, "<|>jsonSerializedIEnumerableProperty<|>={0}", new object[]
-                                {
-                        JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())
-                                });
+                                current1 = $"<|>jsonSerializedIEnumerableProperty<|>={JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
                             }
                             return Flatten(propertyDictionary, current1, string.IsNullOrWhiteSpace(objectPath) ? propertyInfo.Name : objectPath + DefaultPropertyNameDelimiter + propertyInfo.Name, antecedents);
                         });
@@ -125,7 +111,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 }
             }
             propertyDictionary.Add(objectPath, propertyWithType);
-            return true;   
+            return true;
         }
 
         private static EntityProperty CreateEntityPropertyWithType(object value, Type type)
