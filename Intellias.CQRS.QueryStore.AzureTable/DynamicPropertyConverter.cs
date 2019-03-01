@@ -15,7 +15,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 {
     internal static class DynamicPropertyConverter
     {
-        public const string DefaultPropertyNameDelimiter = "_";
+        private const string DefaultPropertyNameDelimiter = "_";
 
         public static Dictionary<string, EntityProperty> Flatten(object root)
         {
@@ -38,7 +38,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             }
 
             var uninitializedObject = (T)FormatterServices.GetUninitializedObject(typeof(T));
-            return ((IEnumerable<KeyValuePair<string, EntityProperty>>)flattenedEntityProperties).Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
+            return flattenedEntityProperties.Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
         }
 
         private static bool Flatten(Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, HashSet<object> antecedents)
@@ -48,17 +48,16 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 return true;
             }
 
-            Type type;
             EntityProperty propertyWithType;
             while (true)
             {
-                type = current.GetType();
+                var type = current.GetType();
                 propertyWithType = CreateEntityPropertyWithType(current, type);
                 if (propertyWithType == null)
                 {
                     if (current is IEnumerable)
                     {
-                        current = string.Format(CultureInfo.InvariantCulture, "<|>jsonSerializedIEnumerableProperty<|>={0}", new object[1]
+                        current = string.Format(CultureInfo.InvariantCulture, "<|>jsonSerializedIEnumerableProperty<|>={0}", new object[]
                         {
                             JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())
                         });
@@ -68,7 +67,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                         var properties = (IEnumerable<PropertyInfo>)type.GetProperties();
                         if (!properties.Any())
                         {
-                            throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Unsupported type : {0} encountered during conversion to EntityProperty. Object Path: {1}", new object[2]
+                            throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Unsupported type : {0} encountered during conversion to EntityProperty. Object Path: {1}", new object[]
                             {
                    type,
                    objectPath
@@ -80,7 +79,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                         {
                             if (antecedents.Contains(current))
                             {
-                                throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Recursive reference detected. Object Path: {0} Property Type: {1}.", new object[2]
+                                throw new SerializationException(string.Format(CultureInfo.InvariantCulture, "Recursive reference detected. Object Path: {0} Property Type: {1}.", new object[]
                                 {
                          objectPath,
                          type
@@ -105,7 +104,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                             }
                             catch (Exception)
                             {
-                                current1 = string.Format(CultureInfo.InvariantCulture, "<|>jsonSerializedIEnumerableProperty<|>={0}", new object[1]
+                                current1 = string.Format(CultureInfo.InvariantCulture, "<|>jsonSerializedIEnumerableProperty<|>={0}", new object[]
                                 {
                         JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())
                                 });
@@ -143,7 +142,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             if (type == typeof(byte))
             {
-                return new EntityProperty(new byte[1]
+                return new EntityProperty(new[]
                 {
                     (byte) value
                 });
@@ -151,7 +150,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             if (type == typeof(bool))
             {
-                return new EntityProperty(new bool?((bool)value));
+                return new EntityProperty((bool)value);
             }
 
             if (type == typeof(bool?))
@@ -161,7 +160,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             if (type == typeof(DateTime))
             {
-                return new EntityProperty(new DateTime?((DateTime)value));
+                return new EntityProperty((DateTime)value);
             }
 
             if (type == typeof(DateTime?))
@@ -171,7 +170,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             if (type == typeof(DateTimeOffset))
             {
-                return new EntityProperty(new DateTimeOffset?((DateTimeOffset)value));
+                return new EntityProperty((DateTimeOffset)value);
             }
 
             if (type == typeof(DateTimeOffset?))
@@ -181,7 +180,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             if (type == typeof(double))
             {
-                return new EntityProperty(new double?((double)value));
+                return new EntityProperty((double)value);
             }
 
             if (type == typeof(double?))
@@ -196,12 +195,12 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             if (type == typeof(Guid))
             {
-                return new EntityProperty(new Guid?((Guid)value));
+                return new EntityProperty((Guid)value);
             }
 
             if (type == typeof(int))
             {
-                return new EntityProperty(new int?((int)value));
+                return new EntityProperty((int)value);
             }
 
             if (type == typeof(int?))
@@ -211,17 +210,17 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             if (type == typeof(uint))
             {
-                return new EntityProperty(new int?((int)Convert.ToUInt32(value, CultureInfo.InvariantCulture)));
+                return new EntityProperty((int)Convert.ToUInt32(value, CultureInfo.InvariantCulture));
             }
 
             if (type == typeof(uint?))
             {
-                return new EntityProperty(new int?((int)Convert.ToUInt32(value, CultureInfo.InvariantCulture)));
+                return new EntityProperty((int)Convert.ToUInt32(value, CultureInfo.InvariantCulture));
             }
 
             if (type == typeof(long))
             {
-                return new EntityProperty(new long?((long)value));
+                return new EntityProperty((long)value);
             }
 
             if (type == typeof(long?))
@@ -231,12 +230,12 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             if (type == typeof(ulong))
             {
-                return new EntityProperty(new long?((long)Convert.ToUInt64(value, CultureInfo.InvariantCulture)));
+                return new EntityProperty((long)Convert.ToUInt64(value, CultureInfo.InvariantCulture));
             }
 
             if (type == typeof(ulong?))
             {
-                return new EntityProperty(new long?((long)Convert.ToUInt64(value, CultureInfo.InvariantCulture)));
+                return new EntityProperty((long)Convert.ToUInt64(value, CultureInfo.InvariantCulture));
             }
 
             if (type.IsEnum)
@@ -272,7 +271,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             try
             {
                 var tupleStack = new Stack<Tuple<object, object, PropertyInfo>>();
-                var strArray = propertyPath.Split(new string[1]
+                var strArray = propertyPath.Split(new[]
                 {
                     DefaultPropertyNameDelimiter
                 }, StringSplitOptions.RemoveEmptyEntries);
@@ -281,29 +280,37 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 for (var index = 0; index < strArray.Length - 1; ++index)
                 {
                     var property = obj.GetType().GetProperty(strArray[index]);
-                    var uninitializedObject = property.GetValue(obj, null);
-                    var propertyType = property.PropertyType;
-                    if (uninitializedObject == null)
+                    if (property != null)
                     {
-                        uninitializedObject = FormatterServices.GetUninitializedObject(propertyType);
-                        property.SetValue(obj, ChangeType(uninitializedObject, property.PropertyType), null);
+                        var uninitializedObject = property.GetValue(obj, null);
+                        var propertyType = property.PropertyType;
+                        if (uninitializedObject == null)
+                        {
+                            uninitializedObject = FormatterServices.GetUninitializedObject(propertyType);
+                            property.SetValue(obj, ChangeType(uninitializedObject, property.PropertyType), null);
+                        }
+                        if (flag || propertyType.IsValueType)
+                        {
+                            flag = true;
+                            tupleStack.Push(new Tuple<object, object, PropertyInfo>(uninitializedObject, obj, property));
+                        }
+                        obj = uninitializedObject;
                     }
-                    if (flag || propertyType.IsValueType)
-                    {
-                        flag = true;
-                        tupleStack.Push(new Tuple<object, object, PropertyInfo>(uninitializedObject, obj, property));
-                    }
-                    obj = uninitializedObject;
                 }
-                var property1 = obj.GetType().GetProperty(((IEnumerable<string>)strArray).Last());
-                var str2 = (propertyValue as string);
-                if (str2 != null && property1.PropertyType != typeof(string) && str2.StartsWith("<|>jsonSerializedIEnumerableProperty<|>=", StringComparison.InvariantCulture))
+                var property1 = obj.GetType().GetProperty(strArray.Last());
+                if (property1 != null &&
+                    propertyValue is string listProp &&
+                    property1.PropertyType != typeof(string) &&
+                    listProp.StartsWith("<|>jsonSerializedIEnumerableProperty<|>=", StringComparison.InvariantCulture))
                 {
-                    property1.SetValue(obj, Deserialise(str2.Substring("<|>jsonSerializedIEnumerableProperty<|>=".Length), property1.PropertyType), null);
+                    property1.SetValue(obj, Deserialise(listProp.Substring("<|>jsonSerializedIEnumerableProperty<|>=".Length), property1.PropertyType), null);
                 }
                 else
                 {
-                    property1.SetValue(obj, ChangeType(propertyValue, property1.PropertyType), null);
+                    if (property1 != null)
+                    {
+                        property1.SetValue(obj, ChangeType(propertyValue, property1.PropertyType), null);
+                    }
                 }
 
                 var propertyValue1 = obj;
@@ -383,9 +390,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
         private class ObjectReferenceEqualityComparer : IEqualityComparer<object>
         {
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-            public bool Equals(object x, object y)
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+            bool IEqualityComparer<object>.Equals(object x, object y)
             {
                 return x == y;
             }
