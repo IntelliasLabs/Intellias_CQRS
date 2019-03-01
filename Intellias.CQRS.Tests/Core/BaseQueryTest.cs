@@ -1,5 +1,4 @@
 ﻿using Intellias.CQRS.Core.Queries;
-using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.QueryStore.AzureTable;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
@@ -14,7 +13,7 @@ namespace Intellias.CQRS.Tests.Core
         /// <summary>
         /// Query Model Store
         /// </summary>
-        protected IQueryModelStore<TQueryModel> Store { get; }
+        protected TableQueryModelStorage<TQueryModel> Store { get; }
 
         /// <summary>
         /// Constructor
@@ -26,7 +25,7 @@ namespace Intellias.CQRS.Tests.Core
                 .Build();
 
             var storeConnectionString = configuration.GetConnectionString("TableStorageConnection");
-            Store = new AzureTableQueryStore<TQueryModel>(CloudStorageAccount.Parse(storeConnectionString));
+            Store = new TableQueryModelStorage<TQueryModel>(CloudStorageAccount.Parse(storeConnectionString));
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Intellias.CQRS.Tests
         }
 
         /// <summary>
-        /// Check if event serialized 
+        /// Check if event serialized
         /// </summary>
         [Fact]
         public void ShouldCreateEventRecordWithVersion1AndTestData()

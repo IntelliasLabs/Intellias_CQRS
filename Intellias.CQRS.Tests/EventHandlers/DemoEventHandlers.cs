@@ -15,13 +15,13 @@ namespace Intellias.CQRS.Tests.EventHandlers
         IEventHandler<TestUpdatedEvent>,
         IEventHandler<TestDeletedEvent>
     {
-        private readonly IQueryModelStore<TestQueryModel> store;
+        private readonly IQueryModelWriter<TestQueryModel> store;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="store"></param>
-        public DemoEventHandlers(IQueryModelStore<TestQueryModel> store)
+        public DemoEventHandlers(IQueryModelWriter<TestQueryModel> store)
         {
             this.store = store;
         }

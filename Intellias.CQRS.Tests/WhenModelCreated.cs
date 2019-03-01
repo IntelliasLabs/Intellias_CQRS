@@ -47,7 +47,7 @@ namespace Intellias.CQRS.Tests
         [Fact]
         public void ShouldBeAvailableInGetAll()
         {
-            var resultList = Store.GetAllAsync().Result.Items;
+            var resultList = Store.GetAllAsync().Result;
             var result = resultList.FirstOrDefault(x => x.Id == model.Id);
 
             Assert.True(result != null, "Item is not present in DB");

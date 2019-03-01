@@ -14,10 +14,5 @@
         /// Version of Query Model
         /// </summary>
         int Version { get; set; }
-
-        /// <summary>
-        /// Generic parent item identifier
-        /// </summary>
-        string ParentId { get; set; }
     }
 }

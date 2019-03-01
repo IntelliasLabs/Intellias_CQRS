@@ -9,14 +9,14 @@ namespace Intellias.CQRS.Tests.Core.Domain
     public class TestRoot : AggregateRoot<TestState>
     {
         /// <summary>
-        /// 
+        /// TestRoot
         /// </summary>
         public TestRoot(string id) : base(id)
         {
         }
 
         /// <summary>
-        /// 
+        /// TestRoot
         /// </summary>
         public TestRoot(TestCreateCommand command) : base(command.AggregateRootId)
         {
@@ -27,9 +27,9 @@ namespace Intellias.CQRS.Tests.Core.Domain
         }
 
         /// <summary>
-        /// 
+        /// Update
         /// </summary>
-        /// <param name="command"></param>
+        /// <param name="command">TestUpdateCommand</param>
         public IExecutionResult Update(TestUpdateCommand command)
         {
             if (command.TestData.Length < 10)
@@ -46,7 +46,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
         }
 
         /// <summary>
-        /// 
+        /// Deactivate
         /// </summary>
         public IExecutionResult Deactivate()
         {
