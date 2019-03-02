@@ -18,7 +18,10 @@ namespace Intellias.CQRS.Core.Config
             {
                 Formatting = Formatting.Indented,
                 TypeNameHandling = TypeNameHandling.All,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                DateParseHandling = DateParseHandling.DateTimeOffset,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc
             };
     }
 }

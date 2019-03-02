@@ -1,42 +1,35 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <summary>
-    /// 
+    /// InProcessQueryStore
     /// </summary>
-    public class InProcessQueryStore<TQueryModel> : IQueryModelStore<TQueryModel>
+    public class InProcessQueryStore<TQueryModel> : IQueryModelReader<TQueryModel>,
+        IQueryModelWriter<TQueryModel>
         where TQueryModel: class, IQueryModel
     {
-        private readonly Dictionary<KeyValuePair<string, string>, TQueryModel> store;
+        private readonly Dictionary<string, TQueryModel> store;
 
         /// <summary>
-        /// 
+        /// InProcessQueryStore
         /// </summary>
         public InProcessQueryStore()
         {
-            store = new Dictionary<KeyValuePair<string, string>, TQueryModel>();
+            store = new Dictionary<string, TQueryModel>();
         }
 
         /// <summary>
         /// Deletes all TQueryModels
         /// </summary>
         /// <returns></returns>
-        public Task DeleteAllAsync()
+        public Task ClearAsync()
         {
             store.Clear();
-            return Task.CompletedTask;
-        }
-
-        /// <inheritdoc />
-        public Task DeleteAsync(string parentId, string id)
-        {
-            store.Remove(new KeyValuePair<string, string>(parentId, id));
             return Task.CompletedTask;
         }
 
@@ -47,7 +40,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <returns></returns>
         public Task DeleteAsync(string id)
         {
-            store.Remove(new KeyValuePair<string, string>(Unified.Dummy, id));
+            store.Remove(id);
             return Task.CompletedTask;
         }
 
@@ -58,14 +51,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <returns></returns>
         public Task<TQueryModel> GetAsync(string id)
         {
-            var model = store[new KeyValuePair<string, string>(Unified.Dummy, id)];
-            return Task.FromResult(model);
-        }
-
-        /// <inheritdoc />
-        public Task<TQueryModel> GetAsync(string parentId, string id)
-        {
-            var model = store[new KeyValuePair<string, string>(parentId, id)];
+            var model = store[id];
             return Task.FromResult(model);
         }
 
@@ -73,100 +59,31 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// Gets all TQueryModels
         /// </summary>
         /// <returns></returns>
-        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<TQueryModel>> GetAllAsync()
         {
-            return Task.FromResult(new CollectionQueryModel<TQueryModel>
-            {
-                Items = store.Values.ToList(),
-                Total = store.Count
-            });
-        }
-
-        /// <inheritdoc />
-        public Task<CollectionQueryModel<TQueryModel>> GetAllAsync(string parentId)
-        {
-            var qmList = store
-                .Where(kvp => kvp.Key.Key == parentId)
-                .Select(kvp => kvp.Value)
-                .ToList();
-
-            return Task.FromResult(new CollectionQueryModel<TQueryModel>
-            {
-                Items = qmList,
-                Total = qmList.Count
-            });
+            return await Task.FromResult(store.Values.ToList().AsReadOnly());
         }
 
         /// <summary>
         /// Updates TQueryModelby Id
         /// </summary>
-        /// <param name="newQueryModel"></param>
+        /// <param name="queryModel"></param>
         /// <returns></returns>
-        public Task<TQueryModel> UpdateAsync(TQueryModel newQueryModel)
+        public Task UpdateAsync(TQueryModel queryModel)
         {
-            store[new KeyValuePair<string, string>(newQueryModel.ParentId, newQueryModel.Id)] = newQueryModel;
-            return Task.FromResult(newQueryModel);
-        }
-
-        /// <summary>
-        /// Updates collection of TQueryModel by Ids
-        /// </summary>
-        /// <param name="newCollection"></param>
-        /// <returns></returns>
-        public Task<CollectionQueryModel<TQueryModel>> UpdateAllAsync(IEnumerable<TQueryModel> newCollection)
-        {
-            var queryModels = newCollection.ToList();
-            queryModels.ForEach(item =>
-                store[new KeyValuePair<string, string>(item.ParentId, item.Id)] = item);
-
-            return Task.FromResult(new CollectionQueryModel<TQueryModel>
-            {
-                Items = queryModels,
-                Total = queryModels.Count
-            });
+            store[queryModel.Id] = queryModel;
+            return Task.FromResult(queryModel);
         }
 
         /// <summary>
         /// Creates TQueryModel
         /// </summary>
-        /// <param name="newQueryModel"></param>
+        /// <param name="queryModel"></param>
         /// <returns></returns>
-        public Task<TQueryModel> CreateAsync(TQueryModel newQueryModel)
+        public Task CreateAsync(TQueryModel queryModel)
         {
-            store.Add(new KeyValuePair<string, string>(newQueryModel.ParentId, newQueryModel.Id), newQueryModel);
-            return Task.FromResult(newQueryModel);
-        }
-
-        /// <summary>
-        /// Creates collection of TQueryModels
-        /// </summary>
-        /// <param name="newCollection"></param>
-        /// <returns></returns>
-        public Task<CollectionQueryModel<TQueryModel>> CreateAllAsync(IEnumerable<TQueryModel> newCollection)
-        {
-            var queryModels = newCollection.ToList();
-            queryModels.ForEach(item => store.Add(new KeyValuePair<string, string>(item.ParentId, item.Id), item));
-
-            return Task.FromResult(new CollectionQueryModel<TQueryModel>
-            {
-                Items = queryModels,
-                Total = queryModels.Count
-            });
-        }
-
-        /// <inheritdoc href="IQueryModelStore"/>
-        public Task<TQueryModel> CreateOrUpdateAsync(TQueryModel newQueryModel)
-        {
-            if (store.ContainsValue(newQueryModel))
-            {
-                UpdateAsync(newQueryModel);
-            }
-            else
-            {
-                CreateAsync(newQueryModel);
-            }
-
-            return Task.FromResult(newQueryModel);
+            store.Add(queryModel.Id, queryModel);
+            return Task.FromResult(queryModel);
         }
     }
 }

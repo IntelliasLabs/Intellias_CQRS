@@ -1,7 +1,7 @@
 using System.Linq;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Queries;
+using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Tests.CommandHandlers;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
@@ -25,7 +25,7 @@ namespace Intellias.CQRS.Tests
         /// <summary>
         /// Read Side Query Executor
         /// </summary>
-        private readonly IReadQueryExecutor<TestQueryModel> queryExecutor;
+        private readonly IQueryModelReader<TestQueryModel> queryReader;
 
         /// <summary>
         /// Setup test infrastructure
@@ -34,7 +34,6 @@ namespace Intellias.CQRS.Tests
         {
             // Prepare query storage
             var queryStore = new InProcessQueryStore<TestQueryModel>();
-            queryExecutor = new FakeQueryExecutor<TestQueryModel>(queryStore);
 
             // Attach event handlers to query store
             var eventHandlers = new DemoEventHandlers(queryStore);
@@ -59,6 +58,7 @@ namespace Intellias.CQRS.Tests
 
             // Set command bus instance
             commandBus = inProcCommandBus;
+            queryReader = queryStore;
         }
 
         /// <summary>
@@ -73,9 +73,9 @@ namespace Intellias.CQRS.Tests
             Assert.NotNull(createResult);
 
             // Get read query
-            var queryResult = queryExecutor.GetAllAsync().Result;
-            var firstItem = queryResult.Items.First();
-            Assert.Equal(1, queryResult.Total);
+            var queryResult = queryReader.GetAllAsync().Result;
+            var firstItem = queryResult.First();
+            Assert.Equal(1, queryResult.Count);
             Assert.Equal(createCommand.TestData, firstItem.TestData);
 
             // Update aggregate using previous query
@@ -89,8 +89,8 @@ namespace Intellias.CQRS.Tests
             Assert.NotNull(updateResult);
 
             // Check if item was updated
-            var updatedQueryResult = queryExecutor.GetAllAsync().Result;
-            var updatedFirstItem = updatedQueryResult.Items.First();
+            var updatedQueryResult = queryReader.GetAllAsync().Result;
+            var updatedFirstItem = updatedQueryResult.First();
             Assert.Equal(updateCommand.TestData, updatedFirstItem.TestData);
 
             // Deactivate aggregate using previous query
@@ -103,8 +103,8 @@ namespace Intellias.CQRS.Tests
             Assert.NotNull(deactivateResult);
 
             // Check if there is no elements in read query
-            var queryRemovedResult = queryExecutor.GetAllAsync().Result;
-            Assert.Equal(0, queryRemovedResult.Items.Count);
+            var queryRemovedResult = queryReader.GetAllAsync().Result;
+            Assert.Equal(0, queryRemovedResult.Count);
         }
     }
 }
