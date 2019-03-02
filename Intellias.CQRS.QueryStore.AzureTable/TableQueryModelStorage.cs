@@ -40,7 +40,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             var entity = (DynamicTableEntity)queryResult.Result;
             if (entity == null)
-            { throw new KeyNotFoundException(); }
+            { throw new KeyNotFoundException(id); }
 
             return entity;
         }
@@ -121,9 +121,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             // Getting entity
             var entity = await RetrieveEntityAsync(id);
 
-            var model = DynamicPropertyConverter.ConvertBack<TQueryModel>(entity.Properties);
-
-            return model ?? throw new KeyNotFoundException();
+            return DynamicPropertyConverter.ConvertBack<TQueryModel>(entity.Properties);
         }
 
         /// <inheritdoc />
