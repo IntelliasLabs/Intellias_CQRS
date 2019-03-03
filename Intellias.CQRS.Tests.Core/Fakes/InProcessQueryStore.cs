@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
@@ -18,9 +19,8 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <summary>
         /// InProcessQueryStore
         /// </summary>
-        public InProcessQueryStore()
+        public InProcessQueryStore(Dictionary<Type, Dictionary<string, object>> tables)
         {
-            var tables = InProcessQueryStoreInstance.Tables;
             var has = tables.ContainsKey(typeof(TQueryModel));
             if(has)
             {
