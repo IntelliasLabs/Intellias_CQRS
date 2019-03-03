@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Tests.CommandHandlers;
 using Intellias.CQRS.Tests.Core.Commands;
@@ -22,7 +20,7 @@ namespace Intellias.CQRS.Tests
         /// <summary>
         /// Write Side Command Bus
         /// </summary>
-        private readonly ICommandBus commandBus;
+        private readonly InProcessCommandBus commandBus;
 
         /// <summary>
         /// Read Side Query Executor
@@ -48,19 +46,17 @@ namespace Intellias.CQRS.Tests
             eventBus.AddHandler<TestDeletedEvent>(eventHandlers);
 
             // Register event store to populate events into event bus
-            IEventStore eventStore = new InProcessEventStore(eventBus);
+            var eventStore = new InProcessEventStore(eventBus);
 
             // Attach event store to command handlers
             var commandHandlers = new DemoCommandHandlers(eventStore);
 
             // Create command bus and subscribe command handlers
-            var inProcCommandBus = new InProcessCommandBus();
-            inProcCommandBus.AddHandler<TestCreateCommand>(commandHandlers);
-            inProcCommandBus.AddHandler<TestUpdateCommand>(commandHandlers);
-            inProcCommandBus.AddHandler<TestDeleteCommand>(commandHandlers);
+            commandBus = new InProcessCommandBus();
+            commandBus.AddHandler<TestCreateCommand>(commandHandlers);
+            commandBus.AddHandler<TestUpdateCommand>(commandHandlers);
+            commandBus.AddHandler<TestDeleteCommand>(commandHandlers);
 
-            // Set command bus instance
-            commandBus = inProcCommandBus;
             queryReader = queryStore;
         }
 

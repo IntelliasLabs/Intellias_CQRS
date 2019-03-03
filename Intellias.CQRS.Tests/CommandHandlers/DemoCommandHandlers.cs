@@ -10,20 +10,17 @@ namespace Intellias.CQRS.Tests.CommandHandlers
     /// <summary>
     /// Demo command handlers
     /// </summary>
-    public class DemoCommandHandlers : ICommandHandler<TestCreateCommand>,
+    public class DemoCommandHandlers : AbstractCommandHandler,
+        ICommandHandler<TestCreateCommand>,
         ICommandHandler<TestUpdateCommand>,
         ICommandHandler<TestDeleteCommand>
     {
-        private readonly IEventStore store;
-
         /// <summary>
         /// Creates an instance of demo command handler
         /// </summary>
         /// <param name="store"></param>
-        public DemoCommandHandlers(IEventStore store)
-        {
-            this.store = store;
-        }
+        public DemoCommandHandlers(IEventStore store) : base(store)
+        { }
 
         /// <summary>
         /// Handels create command
@@ -48,10 +45,7 @@ namespace Intellias.CQRS.Tests.CommandHandlers
         /// <returns>result</returns>
         public async Task<IExecutionResult> HandleAsync(TestUpdateCommand command)
         {
-            var events = await store.GetAsync(command.AggregateRootId, 0);
-            var ar = new TestRoot(command.AggregateRootId);
-            ar.LoadFromHistory(events);
-
+            var ar = await GetAggregateAsync<TestRoot, TestState>(command.AggregateRootId);
             var result = ar.Update(command);
 
             await store.SaveAsync(ar);
@@ -66,10 +60,7 @@ namespace Intellias.CQRS.Tests.CommandHandlers
         /// <returns>result</returns>
         public async Task<IExecutionResult> HandleAsync(TestDeleteCommand command)
         {
-            var events = await store.GetAsync(command.AggregateRootId, 0);
-            var ar = new TestRoot(command.AggregateRootId);
-            ar.LoadFromHistory(events);
-
+            var ar = await GetAggregateAsync<TestRoot, TestState>(command.AggregateRootId);
             var result = ar.Deactivate();
 
             await store.SaveAsync(ar);
