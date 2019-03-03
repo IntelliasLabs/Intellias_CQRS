@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
@@ -13,14 +14,23 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         IQueryModelWriter<TQueryModel>
         where TQueryModel: class, IQueryModel
     {
-        private readonly Dictionary<string, TQueryModel> store;
+        private readonly Dictionary<string, object> store;
 
         /// <summary>
         /// InProcessQueryStore
         /// </summary>
-        public InProcessQueryStore()
+        public InProcessQueryStore(Dictionary<Type, Dictionary<string, object>> tables)
         {
-            store = new Dictionary<string, TQueryModel>();
+            var has = tables.ContainsKey(typeof(TQueryModel));
+            if(has)
+            {
+                store = tables[typeof(TQueryModel)];
+            }
+            else
+            {
+                store = new Dictionary<string, object>();
+                tables.Add(typeof(TQueryModel), store);
+            }
         }
 
         /// <summary>
@@ -52,7 +62,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public Task<TQueryModel> GetAsync(string id)
         {
             var model = store[id];
-            return Task.FromResult(model);
+            return Task.FromResult(model as TQueryModel);
         }
 
         /// <summary>
@@ -61,7 +71,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <returns></returns>
         public async Task<IReadOnlyCollection<TQueryModel>> GetAllAsync()
         {
-            return await Task.FromResult(store.Values.ToList().AsReadOnly());
+            return await Task.FromResult(store.Values.Cast<TQueryModel>().ToList().AsReadOnly());
         }
 
         /// <summary>

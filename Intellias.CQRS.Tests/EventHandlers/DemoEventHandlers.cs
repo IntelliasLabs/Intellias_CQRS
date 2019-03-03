@@ -10,7 +10,7 @@ namespace Intellias.CQRS.Tests.EventHandlers
     /// <summary>
     /// Demo command handlers
     /// </summary>
-    public class DemoEventHandlers : 
+    public class DemoEventHandlers :
         IEventHandler<TestCreatedEvent>,
         IEventHandler<TestUpdatedEvent>,
         IEventHandler<TestDeletedEvent>
@@ -18,7 +18,7 @@ namespace Intellias.CQRS.Tests.EventHandlers
         private readonly IQueryModelWriter<TestQueryModel> store;
 
         /// <summary>
-        /// 
+        /// DemoEventHandlers
         /// </summary>
         /// <param name="store"></param>
         public DemoEventHandlers(IQueryModelWriter<TestQueryModel> store)
