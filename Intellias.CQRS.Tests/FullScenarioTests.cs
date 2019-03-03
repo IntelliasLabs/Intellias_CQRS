@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
@@ -33,7 +35,8 @@ namespace Intellias.CQRS.Tests
         public FullScenarioTests()
         {
             // Prepare query storage
-            var queryStore = new InProcessQueryStore<TestQueryModel>();
+            var tables = new Dictionary<Type, Dictionary<string, object>>();
+            var queryStore = new InProcessQueryStore<TestQueryModel>(tables);
 
             // Attach event handlers to query store
             var eventHandlers = new DemoEventHandlers(queryStore);
