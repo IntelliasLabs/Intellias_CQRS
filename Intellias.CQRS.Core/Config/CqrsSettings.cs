@@ -10,6 +10,14 @@ namespace Intellias.CQRS.Core.Config
     public static class CqrsSettings
     {
         /// <summary>
+        /// CqrsSettings
+        /// </summary>
+        static CqrsSettings()
+        {
+            JsonConvert.DefaultSettings = JsonConfig;
+        }
+
+        /// <summary>
         /// Configures JSON serializer globally
         /// Settings will automatically be used by JsonConvert.SerializeObject/DeserializeObject
         /// </summary>
