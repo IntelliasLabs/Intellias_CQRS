@@ -60,7 +60,7 @@ namespace Intellias.CQRS.Tests.Core
                 .CreateCloudTableClient();
 
             AggregateTable = tableClient.GetTableReference("AggregateStore");
-            EventTable = tableClient.GetTableReference("EventStore");
+            EventTable = tableClient.GetTableReference(nameof(EventStore));
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Intellias.CQRS.Core.Storage;
+﻿using System.Reflection;
+using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Core.Tools;
 using Intellias.CQRS.Tests.Core.Queries;
 using Intellias.CQRS.Tests.EventHandlers;
@@ -33,7 +34,7 @@ namespace Intellias.CQRS.Tests.Core
 
         private static void IocRegistrations(ServiceCollection services)
         {
-            services.AddHandlerManager<DemoEventHandlers>();
+            services.AddHandlerManager(Assembly.GetExecutingAssembly());
             services.AddTransient<DemoEventHandlers>();
 
             var queryReaderMock = Mock.Of<IQueryModelReader<TestQueryModel>>();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
 
@@ -12,19 +13,19 @@ namespace Intellias.CQRS.Core.Tools
     public class HandlerDependencyResolver
     {
         private readonly IServiceProvider serviceProvider;
-        private readonly HandlerAssemblyResolver assemblyResolver;
+        private readonly IEnumerable<Assembly> assemblies;
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="serviceProvider"></param>
-        /// <param name="assemblyResolver"></param>
+        /// <param name="assemblies"></param>
         public HandlerDependencyResolver(
             IServiceProvider serviceProvider,
-            HandlerAssemblyResolver assemblyResolver)
+            IEnumerable<Assembly> assemblies)
         {
             this.serviceProvider = serviceProvider;
-            this.assemblyResolver = assemblyResolver;
+            this.assemblies = assemblies;
         }
 
 
@@ -65,20 +66,19 @@ namespace Intellias.CQRS.Core.Tools
         }
 
         private IEnumerable<THandlerType> Select<THandlerType>(Type handlerType) =>
-            assemblyResolver
-                .Assembly
-                .GetTypes()
-                .Where(handlerType.IsAssignableFrom)
-                .Select(type =>
+            assemblies
+            .SelectMany(a => a.GetTypes())
+            .Where(handlerType.IsAssignableFrom)
+            .Select(type =>
+            {
+                var service = (THandlerType)serviceProvider.GetService(type);
+
+                if (service == null)
                 {
-                    var service = (THandlerType)serviceProvider.GetService(type);
+                    throw new ArgumentNullException($"'{nameof(service)}'. Type '{type.Name}' cannot be resolved by service provider.");
+                }
 
-                    if (service == null)
-                    {
-                        throw new ArgumentNullException($"'{nameof(service)}'. Type '{type.Name}' cannot be resolved by service provider.");
-                    }
-
-                    return service;
-                });
+                return service;
+            });
     }
 }
