@@ -39,8 +39,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             var queryResult = await queryTable.ExecuteAsync(readOperation);
 
             var entity = (DynamicTableEntity)queryResult.Result;
-            if (entity == null)
-            { throw new KeyNotFoundException(id); }
+            if (entity == null) { throw new KeyNotFoundException(id); }
 
             return entity;
         }
