@@ -3,7 +3,6 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.Tests.Core;
-using Intellias.CQRS.Tests.Core.Domain;
 using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
 using Newtonsoft.Json;
@@ -36,18 +35,6 @@ namespace Intellias.CQRS.Tests
         public void ShouldCallTwiceServiceBusPublishMethod()
         {
             BusMock.Verify(x => x.PublishAsync(It.IsAny<IEvent>()), Times.Exactly(2));
-        }
-
-        /// <summary>
-        /// Check is AggregateRoot record present
-        /// </summary>
-        [Fact]
-        public void ShouldCreateAggregateRootRecordWithVersion2()
-        {
-            var operation = TableOperation.Retrieve<EventStoreAggregate>(typeof(TestRoot).Name, testId);
-            var result = (EventStoreAggregate)AggregateTable.ExecuteAsync(operation).Result.Result;
-
-            Assert.True(result.LastArVersion == 2, "Test version for aggregated root is not equal 2");
         }
 
         /// <summary>

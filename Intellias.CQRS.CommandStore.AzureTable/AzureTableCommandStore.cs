@@ -1,14 +1,15 @@
 ﻿using System.Threading.Tasks;
-using Intellias.CQRS.CommandStore.AzureTable.Repositories;
+using Intellias.CQRS.CommandStore.AzureTable.Extensions;
 using Intellias.CQRS.Core.Commands;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Intellias.CQRS.CommandStore.AzureTable
 {
     /// <inheritdoc />
     public class AzureTableCommandStore : ICommandStore
     {
-        private readonly CommandRepository commandRepository;
+        private readonly CloudTable commandTable;
 
         /// <summary>
         /// Constructor
@@ -20,11 +21,20 @@ namespace Intellias.CQRS.CommandStore.AzureTable
                 .Parse(storeConnectionString)
                 .CreateCloudTableClient();
 
-            commandRepository = new CommandRepository(client);
+            commandTable = client.GetTableReference(nameof(CommandStore));
+            // Create the CloudTable if it does not exist
+            commandTable.CreateIfNotExistsAsync().Wait();
         }
 
-        /// <inheritdoc />
-        public Task SaveAsync(ICommand command) =>
-            commandRepository.InsertCommandAsync(command);
+        /// <summary>
+        /// InsertCommand
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public Task SaveAsync(ICommand command)
+        {
+            var operation = TableOperation.Insert(command.ToStoreCommand());
+            return commandTable.ExecuteAsync(operation);
+        }
     }
 }
