@@ -6,7 +6,6 @@ using Intellias.CQRS.EventStore.AzureTable;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Domain;
 using Intellias.CQRS.Tests.Core.Events;
-using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
@@ -22,7 +21,7 @@ namespace Intellias.CQRS.Tests.Core
         static BaseTest()
         {
             // Used to start azure storage emulator process on testing agent
-            Process.Start(@"C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator\AzureStorageEmulator.exe", "start").WaitForExit();
+            Process.Start(@"C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator\AzureStorageEmulator.exe", "start")?.WaitForExit();
         }
 
         /// <summary>
@@ -51,10 +50,6 @@ namespace Intellias.CQRS.Tests.Core
         public BaseTest()
         {
             JsonConvert.DefaultSettings = CqrsSettings.JsonConfig;
-
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", false, true)
-                .Build();
 
             BusMock = new Mock<IEventBus>();
 
