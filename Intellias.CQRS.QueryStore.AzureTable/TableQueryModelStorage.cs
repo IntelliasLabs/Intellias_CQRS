@@ -64,16 +64,11 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             var query = new TableQuery<DynamicTableEntity>();
             var result = await queryTable.ExecuteQuerySegmentedAsync(query, null);
 
-            // Create the batch operation.
-            var batchDeleteOperation = new TableBatchOperation();
-
-            foreach (var row in result)
+            foreach (var entity in result)
             {
-                batchDeleteOperation.Delete(row);
+                var operation = TableOperation.Delete(entity);
+                await queryTable.ExecuteAsync(operation);
             }
-
-            // Execute the batch operation.
-            await queryTable.ExecuteBatchAsync(batchDeleteOperation);
         }
 
         /// <inheritdoc />

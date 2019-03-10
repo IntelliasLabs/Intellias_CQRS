@@ -24,15 +24,13 @@ namespace Intellias.CQRS.EventStore.AzureTable
         /// <summary>
         /// EventStore
         /// </summary>
-        /// <param name="storeConnectionString">Azure Table Storage connection string</param>
+        /// <param name="account">Azure Table Storage Account</param>
         /// <param name="eventBus">Event bus for publishing events</param>
-        public AzureTableEventStore(string storeConnectionString, IEventBus eventBus)
+        public AzureTableEventStore(CloudStorageAccount account, IEventBus eventBus)
         {
             this.eventBus = eventBus;
 
-            var client = CloudStorageAccount
-                .Parse(storeConnectionString)
-                .CreateCloudTableClient();
+            var client = account.CreateCloudTableClient();
 
             eventTable = client.GetTableReference(nameof(EventStore));
 

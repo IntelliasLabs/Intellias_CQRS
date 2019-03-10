@@ -1,11 +1,11 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Domain;
 using Intellias.CQRS.Tests.Core.Events;
-using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
@@ -18,6 +18,12 @@ namespace Intellias.CQRS.Tests.Core
     /// </summary>
     public class BaseTest
     {
+        static BaseTest()
+        {
+            // Used to start azure storage emulator process on testing agent
+            Process.Start(@"C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator\AzureStorageEmulator.exe", "start")?.WaitForExit();
+        }
+
         /// <summary>
         /// EventStore
         /// </summary>
@@ -45,19 +51,11 @@ namespace Intellias.CQRS.Tests.Core
         {
             JsonConvert.DefaultSettings = CqrsSettings.JsonConfig;
 
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", false, true)
-                .Build();
-
-            var storeConnectionString = configuration.GetConnectionString("TableStorageConnection");
-
             BusMock = new Mock<IEventBus>();
 
-            Store = new AzureTableEventStore(storeConnectionString, BusMock.Object);
+            Store = new AzureTableEventStore(CloudStorageAccount.DevelopmentStorageAccount, BusMock.Object);
 
-            var tableClient = CloudStorageAccount
-                .Parse(storeConnectionString)
-                .CreateCloudTableClient();
+            var tableClient = CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient();
 
             AggregateTable = tableClient.GetTableReference("AggregateStore");
             EventTable = tableClient.GetTableReference(nameof(EventStore));
