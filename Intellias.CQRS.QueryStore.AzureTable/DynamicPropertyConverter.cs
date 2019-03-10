@@ -16,6 +16,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable
     internal static class DynamicPropertyConverter
     {
         private const string DefaultPropertyNameDelimiter = "_";
+        private const string JsonEnumerationPrefix = "<|>jsonSerializedIEnumerableProperty<|>=";
+
         private static readonly Dictionary<Type, Func<object, EntityProperty>> propTypes = new Dictionary<Type, Func<object, EntityProperty>>
         {
             { typeof(string), val => new EntityProperty((string)val) },
@@ -45,30 +47,30 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
         public static Dictionary<string, EntityProperty> Flatten(object root)
         {
-            var propertyDictionary = new Dictionary<string, EntityProperty>();
+            var dict = new Dictionary<string, EntityProperty>();
 
             if (root == null)
             {
-                return propertyDictionary;
+                return dict;
             }
 
             var antecedents = new HashSet<object>(new ObjectReferenceEqualityComparer());
-            return Flatten(propertyDictionary, root, string.Empty, antecedents) ? propertyDictionary : throw new InvalidOperationException($"Can not flatten {root}");
+            return Flatten(dict, root, string.Empty, antecedents) ? dict : throw new InvalidOperationException($"Can not flatten {root}");
         }
 
-        public static T ConvertBack<T>(IDictionary<string, EntityProperty> flattenedEntityProperties)
+        public static T ConvertBack<T>(IDictionary<string, EntityProperty> properties)
             where T : new()
         {
-            if (flattenedEntityProperties == null)
+            if (properties == null)
             {
                 return new T();
             }
 
             var uninitializedObject = (T)FormatterServices.GetUninitializedObject(typeof(T));
-            return flattenedEntityProperties.Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
+            return properties.Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
         }
 
-        private static bool Flatten(Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, HashSet<object> antecedents)
+        private static bool Flatten(Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, ISet<object> antecedents)
         {
             if (current == null)
             {
@@ -84,7 +86,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 {
                     if (current is IEnumerable)
                     {
-                        current = $"<|>jsonSerializedIEnumerableProperty<|>={JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
+                        current = $"{JsonEnumerationPrefix}{JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
                     }
                     else
                     {
@@ -106,11 +108,11 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                             processed = true;
                         }
 
-                        var successful = properties.Where(propertyInfo => !ShouldSkip(propertyInfo)).All(propertyInfo =>
+                        var successful = properties.Where(propertyInfo => !ShouldSkip(propertyInfo)).All(propInfo =>
                         {
-                            var current1 = FlattenProperty(propertyInfo, current);
+                            var next = FlattenProperty(propInfo, current);
 
-                            return Flatten(propertyDictionary, current1, string.IsNullOrWhiteSpace(objectPath) ? propertyInfo.Name : objectPath + DefaultPropertyNameDelimiter + propertyInfo.Name, antecedents);
+                            return Flatten(propertyDictionary, next, string.IsNullOrWhiteSpace(objectPath) ? propInfo.Name : objectPath + DefaultPropertyNameDelimiter + propInfo.Name, antecedents);
                         });
                         if (processed)
                         {
@@ -143,7 +145,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             }
             catch (Exception)
             {
-                value = $"<|>jsonSerializedIEnumerableProperty<|>={JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
+                value = $"{JsonEnumerationPrefix}{JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
             }
 
             return value;
@@ -205,20 +207,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                     }
                 }
                 var property1 = obj.GetType().GetProperty(strArray.Last());
-                if (property1 != null &&
-                    propertyValue is string listProp &&
-                    property1.PropertyType != typeof(string) &&
-                    listProp.StartsWith("<|>jsonSerializedIEnumerableProperty<|>=", StringComparison.InvariantCulture))
-                {
-                    property1.SetValue(obj, Deserialise(listProp.Substring("<|>jsonSerializedIEnumerableProperty<|>=".Length), property1.PropertyType), null);
-                }
-                else
-                {
-                    if (property1 != null)
-                    {
-                        property1.SetValue(obj, ChangeType(propertyValue, property1.PropertyType), null);
-                    }
-                }
+                SetPropertyValue(property1, obj, propertyValue);
 
                 var propertyValue1 = obj;
                 while ((uint)tupleStack.Count > 0U)
@@ -234,6 +223,25 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 var data = ex.Data;
                 data["ObjectRecompositionError"] = data["ObjectRecompositionError"]+ $"Exception thrown while trying to set property value. Property Path: {propertyPath} Property Value: {propertyValue}. Exception Message: {ex.Message}";
                 throw;
+            }
+        }
+
+        private static void SetPropertyValue(PropertyInfo propertyInfo, object obj, object value)
+        {
+            if (propertyInfo != null)
+            {
+                if (value is string listProp &&
+                    propertyInfo.PropertyType != typeof(string) &&
+                    listProp.StartsWith(JsonEnumerationPrefix, StringComparison.InvariantCulture))
+                {
+                    propertyInfo.SetValue(obj,
+                        Deserialise(listProp.Substring(JsonEnumerationPrefix.Length), propertyInfo.PropertyType),
+                        null);
+                }
+                else
+                {
+                    propertyInfo.SetValue(obj, ChangeType(value, propertyInfo.PropertyType), null);
+                }
             }
         }
 
