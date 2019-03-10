@@ -10,6 +10,6 @@ namespace Intellias.CQRS.Core.Commands
         /// <summary>
         /// Process-manager's state
         /// </summary>
-        public IProcess Process { get; set; }
+        public IProcess? Process { get; set; }
     }
 }

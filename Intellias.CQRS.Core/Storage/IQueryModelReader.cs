@@ -7,7 +7,7 @@ namespace Intellias.CQRS.Core.Storage
     /// <summary>
     /// IQueryModelReader - used to read query model
     /// </summary>
-    public interface IQueryModelReader<TQueryModel> where TQueryModel : IQueryModel
+    public interface IQueryModelReader<TQueryModel> where TQueryModel : IQueryModel, new()
     {
         /// <summary>
         /// Returns the query model item by Id

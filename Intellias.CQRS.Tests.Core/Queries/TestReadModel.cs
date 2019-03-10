@@ -8,17 +8,17 @@ namespace Intellias.CQRS.Tests.Core.Queries
     public class TestQueryModel : IQueryModel
     {
         /// <inheritdoc />
-        public string Id { set; get; }
+        public string Id { set; get; } = string.Empty;
 
         /// <summary>
         /// ParentId
         /// </summary>
-        public string ParentId { get; set; }
+        public string ParentId { get; set; } = string.Empty;
 
         /// <summary>
         /// TestData
         /// </summary>
-        public string TestData { set; get; }
+        public string TestData { set; get; } = string.Empty;
 
         /// <summary>
         /// Version of query model

@@ -27,14 +27,15 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             }
 
             var antecedents = new HashSet<object>(new ObjectReferenceEqualityComparer());
-            return Flatten(propertyDictionary, root, string.Empty, antecedents) ? propertyDictionary : null;
+            return Flatten(propertyDictionary, root, string.Empty, antecedents) ? propertyDictionary : throw new InvalidOperationException($"Can not flatten {root}");
         }
 
         public static T ConvertBack<T>(IDictionary<string, EntityProperty> flattenedEntityProperties)
+            where T : new()
         {
             if (flattenedEntityProperties == null)
             {
-                return default(T);
+                return new T();
             }
 
             var uninitializedObject = (T)FormatterServices.GetUninitializedObject(typeof(T));
@@ -48,7 +49,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 return true;
             }
 
-            EntityProperty propertyWithType;
+            EntityProperty? propertyWithType;
             while (true)
             {
                 var type = current.GetType();
@@ -114,7 +115,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return true;
         }
 
-        private static EntityProperty CreateEntityPropertyWithType(object value, Type type)
+        private static EntityProperty? CreateEntityPropertyWithType(object value, Type type)
         {
             if (type == typeof(string))
             {

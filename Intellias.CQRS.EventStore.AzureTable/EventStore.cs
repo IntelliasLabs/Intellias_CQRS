@@ -61,7 +61,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
                     QueryComparisons.Equal, aggregateId));
 
             var results = new List<EventStoreEvent>();
-            TableContinuationToken continuationToken = null;
+            TableContinuationToken? continuationToken = null;
 
             do
             {

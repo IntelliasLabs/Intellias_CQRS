@@ -12,7 +12,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// </summary>
     public class InProcessQueryStore<TQueryModel> : IQueryModelReader<TQueryModel>,
         IQueryModelWriter<TQueryModel>
-        where TQueryModel: class, IQueryModel
+        where TQueryModel: class, IQueryModel, new()
     {
         private readonly Dictionary<string, object> store;
 
@@ -62,7 +62,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public Task<TQueryModel> GetAsync(string id)
         {
             var model = store[id];
-            return Task.FromResult(model as TQueryModel);
+            return Task.FromResult((TQueryModel)model);
         }
 
         /// <summary>

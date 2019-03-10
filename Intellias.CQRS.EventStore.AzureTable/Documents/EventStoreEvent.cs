@@ -11,12 +11,12 @@ namespace Intellias.CQRS.EventStore.AzureTable.Documents
         /// <summary>
         /// Keeps serialized event itself
         /// </summary>
-        public string Data { get; set; }
+        public string Data { get; set; } = string.Empty;
 
         /// <summary>
         /// Keeps an event type
         /// </summary>
-        public string EventType { get; set; }
+        public string EventType { get; set; } = string.Empty;
 
         /// <summary>
         /// Version of event

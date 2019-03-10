@@ -39,9 +39,10 @@ namespace Intellias.CQRS.Core.Commands
             var ctor = type.GetConstructor(new[] { typeof(string) })
                 ?? throw new ArgumentNullException($"'{typeof(T)}' should have constructor with string parameter that is id of AR");
 
-            var aggregateRoot = ctor.Invoke(new object[] { aggregateRootId }) as T;
+            var aggregateRoot = (T)ctor.Invoke(new object[] { aggregateRootId });
 
             await FillAggregateHistoryAsync(aggregateRoot);
+
             return aggregateRoot;
         }
 

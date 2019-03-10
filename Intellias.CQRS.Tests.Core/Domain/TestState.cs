@@ -14,7 +14,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
         /// <summary>
         /// TestData
         /// </summary>
-        public string TestData { get; private set; }
+        public string TestData { get; private set; } = string.Empty;
 
         /// <summary>
         /// Demo State

@@ -16,7 +16,7 @@ namespace Intellias.CQRS.Tests.Core.ValueObjects
         /// <summary>
         /// Post Code
         /// </summary>
-        public string PostCode { set; get; }
+        public string PostCode { set; get; } = string.Empty;
 
         /// <inheritdoc />
         protected override bool EqualsCore(Address other) => string.Equals(AddressLine, other.AddressLine, StringComparison.InvariantCulture);
