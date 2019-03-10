@@ -70,8 +70,10 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return properties.Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
         }
 
-        private static bool FlattenWithType(IEnumerable<PropertyInfo> properties, Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, ISet<object> antecedents, Type type)
+        private static bool FlattenWithType(Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, ISet<object> antecedents, Type type)
         {
+            var properties = (IEnumerable<PropertyInfo>)type.GetProperties();
+
             if (!properties.Any())
             {
                 throw new SerializationException($"Unsupported type : {type} encountered during conversion to EntityProperty. Object Path: {objectPath}");
@@ -123,8 +125,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                     }
                     else
                     {
-                        var properties = (IEnumerable<PropertyInfo>)type.GetProperties();
-                        return FlattenWithType(properties, propertyDictionary, current, objectPath, antecedents, type);
+                        return FlattenWithType(propertyDictionary, current, objectPath, antecedents, type);
                     }
                 }
                 else
