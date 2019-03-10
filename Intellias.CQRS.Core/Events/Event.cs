@@ -19,7 +19,7 @@ namespace Intellias.CQRS.Core.Events
         }
 
         /// <inheritdoc />
-        public string SourceId { get; set; }
+        public string SourceId { get; set; } = string.Empty;
 
         /// <inheritdoc />
         public int Version

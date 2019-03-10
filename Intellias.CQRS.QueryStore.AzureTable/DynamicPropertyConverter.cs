@@ -16,32 +16,96 @@ namespace Intellias.CQRS.QueryStore.AzureTable
     internal static class DynamicPropertyConverter
     {
         private const string DefaultPropertyNameDelimiter = "_";
+        private const string JsonEnumerationPrefix = "<|>jsonSerializedIEnumerableProperty<|>=";
+
+        private static readonly Dictionary<Type, Func<object, EntityProperty>> propTypes = new Dictionary<Type, Func<object, EntityProperty>>
+        {
+            { typeof(string), val => new EntityProperty((string)val) },
+            { typeof(byte[]), val => new EntityProperty((byte[])val) },
+            { typeof(byte), val => new EntityProperty(new [] { (byte)val}) },
+            { typeof(bool), val => new EntityProperty((bool)val) },
+            { typeof(bool?), val => new EntityProperty((bool?)val) },
+            { typeof(DateTime), val => new EntityProperty((DateTime)val) },
+            { typeof(DateTime?), val => new EntityProperty((DateTime?)val) },
+            { typeof(DateTimeOffset), val => new EntityProperty((DateTimeOffset)val) },
+            { typeof(DateTimeOffset?), val => new EntityProperty((DateTimeOffset?)val) },
+            { typeof(double), val => new EntityProperty((double)val) },
+            { typeof(double?), val => new EntityProperty((double?)val) },
+            { typeof(Guid), val => new EntityProperty((Guid)val) },
+            { typeof(Guid?), val => new EntityProperty((Guid?)val) },
+            { typeof(int), val => new EntityProperty((int)val) },
+            { typeof(int?), val => new EntityProperty((int?)val) },
+            { typeof(uint), val => new EntityProperty((uint)val) },
+            { typeof(uint?), val => new EntityProperty((uint?)val) },
+            { typeof(long), val => new EntityProperty((long)val) },
+            { typeof(long?), val => new EntityProperty((long?)val) },
+            { typeof(ulong), val => new EntityProperty((long)Convert.ToUInt64(val, CultureInfo.InvariantCulture)) },
+            { typeof(ulong?), val => new EntityProperty((long)Convert.ToUInt64(val, CultureInfo.InvariantCulture)) },
+            { typeof(TimeSpan), val => new EntityProperty(val.ToString()) },
+            { typeof(TimeSpan?), val => new EntityProperty(val?.ToString()) },
+        };
 
         public static Dictionary<string, EntityProperty> Flatten(object root)
         {
-            var propertyDictionary = new Dictionary<string, EntityProperty>();
+            var dict = new Dictionary<string, EntityProperty>();
 
             if (root == null)
             {
-                return propertyDictionary;
+                return dict;
             }
 
             var antecedents = new HashSet<object>(new ObjectReferenceEqualityComparer());
-            return Flatten(propertyDictionary, root, string.Empty, antecedents) ? propertyDictionary : null;
+            return Flatten(dict, root, string.Empty, antecedents) ? dict : throw new InvalidOperationException($"Can not flatten {root}");
         }
 
-        public static T ConvertBack<T>(IDictionary<string, EntityProperty> flattenedEntityProperties)
+        public static T ConvertBack<T>(IDictionary<string, EntityProperty> properties)
+            where T : new()
         {
-            if (flattenedEntityProperties == null)
+            if (properties == null)
             {
-                return default(T);
+                return new T();
             }
 
             var uninitializedObject = (T)FormatterServices.GetUninitializedObject(typeof(T));
-            return flattenedEntityProperties.Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
+            return properties.Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
         }
 
-        private static bool Flatten(Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, HashSet<object> antecedents)
+        private static bool FlattenWithType(Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, ISet<object> antecedents, Type type)
+        {
+            var properties = (IEnumerable<PropertyInfo>)type.GetProperties();
+
+            if (!properties.Any())
+            {
+                throw new SerializationException($"Unsupported type : {type} encountered during conversion to EntityProperty. Object Path: {objectPath}");
+            }
+
+            var processed = false;
+            if (!type.IsValueType)
+            {
+                if (antecedents.Contains(current))
+                {
+                    throw new SerializationException($"Recursive reference detected. Object Path: {objectPath} Property Type: {type}.");
+                }
+
+                antecedents.Add(current);
+                processed = true;
+            }
+
+            var successful = properties.Where(propertyInfo => !ShouldSkip(propertyInfo)).All(propInfo =>
+            {
+                var next = FlattenProperty(propInfo, current);
+
+                return Flatten(propertyDictionary, next, string.IsNullOrWhiteSpace(objectPath) ? propInfo.Name : objectPath + DefaultPropertyNameDelimiter + propInfo.Name, antecedents);
+            });
+            if (processed)
+            {
+                antecedents.Remove(current);
+            }
+
+            return successful;
+        }
+
+        private static bool Flatten(Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, ISet<object> antecedents)
         {
             if (current == null)
             {
@@ -53,56 +117,15 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             {
                 var type = current.GetType();
                 propertyWithType = CreateEntityPropertyWithType(current, type);
-                if (propertyWithType == null)
+                if (propertyWithType.PropertyAsObject == null)
                 {
                     if (current is IEnumerable)
                     {
-                        current = $"<|>jsonSerializedIEnumerableProperty<|>={JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
+                        current = $"{JsonEnumerationPrefix}{JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
                     }
                     else
                     {
-                        var properties = (IEnumerable<PropertyInfo>)type.GetProperties();
-                        if (!properties.Any())
-                        {
-                            throw new SerializationException($"Unsupported type : {type} encountered during conversion to EntityProperty. Object Path: {objectPath}");
-                        }
-
-                        var processed = false;
-                        if (!type.IsValueType)
-                        {
-                            if (antecedents.Contains(current))
-                            {
-                                throw new SerializationException($"Recursive reference detected. Object Path: {objectPath} Property Type: {type}.");
-                            }
-
-                            antecedents.Add(current);
-                            processed = true;
-                        }
-
-                        var successful = properties.Where(propertyInfo => !ShouldSkip(propertyInfo)).All(propertyInfo =>
-                        {
-                            if (propertyInfo.Name.Contains(DefaultPropertyNameDelimiter))
-                            {
-                                throw new SerializationException($"Property delimiter: {DefaultPropertyNameDelimiter} exists in property name: {propertyInfo.Name}. Object Path: {objectPath}");
-                            }
-
-                            object current1;
-                            try
-                            {
-                                current1 = propertyInfo.GetValue(current, null);
-                            }
-                            catch (Exception)
-                            {
-                                current1 = $"<|>jsonSerializedIEnumerableProperty<|>={JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
-                            }
-                            return Flatten(propertyDictionary, current1, string.IsNullOrWhiteSpace(objectPath) ? propertyInfo.Name : objectPath + DefaultPropertyNameDelimiter + propertyInfo.Name, antecedents);
-                        });
-                        if (processed)
-                        {
-                            antecedents.Remove(current);
-                        }
-
-                        return successful;
+                        return FlattenWithType(propertyDictionary, current, objectPath, antecedents, type);
                     }
                 }
                 else
@@ -114,132 +137,38 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return true;
         }
 
+        private static object FlattenProperty(PropertyInfo propertyInfo, object current)
+        {
+            if (propertyInfo.Name.Contains(DefaultPropertyNameDelimiter))
+            {
+                throw new SerializationException($"Property delimiter: {DefaultPropertyNameDelimiter} exists in property name: {propertyInfo.Name}.");
+            }
+
+            object value;
+            try
+            {
+                value = propertyInfo.GetValue(current, null);
+            }
+            catch (Exception)
+            {
+                value = $"{JsonEnumerationPrefix}{JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
+            }
+
+            return value;
+        }
         private static EntityProperty CreateEntityPropertyWithType(object value, Type type)
         {
-            if (type == typeof(string))
-            {
-                return new EntityProperty((string)value);
-            }
-
-            if (type == typeof(byte[]))
-            {
-                return new EntityProperty((byte[])value);
-            }
-
-            if (type == typeof(byte))
-            {
-                return new EntityProperty(new[]
-                {
-                    (byte) value
-                });
-            }
-
-            if (type == typeof(bool))
-            {
-                return new EntityProperty((bool)value);
-            }
-
-            if (type == typeof(bool?))
-            {
-                return new EntityProperty((bool?)value);
-            }
-
-            if (type == typeof(DateTime))
-            {
-                return new EntityProperty((DateTime)value);
-            }
-
-            if (type == typeof(DateTime?))
-            {
-                return new EntityProperty((DateTime?)value);
-            }
-
-            if (type == typeof(DateTimeOffset))
-            {
-                return new EntityProperty((DateTimeOffset)value);
-            }
-
-            if (type == typeof(DateTimeOffset?))
-            {
-                return new EntityProperty((DateTimeOffset?)value);
-            }
-
-            if (type == typeof(double))
-            {
-                return new EntityProperty((double)value);
-            }
-
-            if (type == typeof(double?))
-            {
-                return new EntityProperty((double?)value);
-            }
-
-            if (type == typeof(Guid?))
-            {
-                return new EntityProperty((Guid?)value);
-            }
-
-            if (type == typeof(Guid))
-            {
-                return new EntityProperty((Guid)value);
-            }
-
-            if (type == typeof(int))
-            {
-                return new EntityProperty((int)value);
-            }
-
-            if (type == typeof(int?))
-            {
-                return new EntityProperty((int?)value);
-            }
-
-            if (type == typeof(uint))
-            {
-                return new EntityProperty((int)Convert.ToUInt32(value, CultureInfo.InvariantCulture));
-            }
-
-            if (type == typeof(uint?))
-            {
-                return new EntityProperty((int)Convert.ToUInt32(value, CultureInfo.InvariantCulture));
-            }
-
-            if (type == typeof(long))
-            {
-                return new EntityProperty((long)value);
-            }
-
-            if (type == typeof(long?))
-            {
-                return new EntityProperty((long?)value);
-            }
-
-            if (type == typeof(ulong))
-            {
-                return new EntityProperty((long)Convert.ToUInt64(value, CultureInfo.InvariantCulture));
-            }
-
-            if (type == typeof(ulong?))
-            {
-                return new EntityProperty((long)Convert.ToUInt64(value, CultureInfo.InvariantCulture));
-            }
-
             if (type.IsEnum)
             {
                 return new EntityProperty(value.ToString());
             }
 
-            if (type == typeof(TimeSpan))
+            if (propTypes.ContainsKey(type))
             {
-                return new EntityProperty(value.ToString());
+                return propTypes[type](value);
             }
 
-            if (type == typeof(TimeSpan?))
-            {
-                return new EntityProperty(value?.ToString());
-            }
-
-            return null;
+            return new EntityProperty((int?)null);
         }
 
         private static object SetProperty(object root, string propertyPath, object propertyValue)
@@ -284,20 +213,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                     }
                 }
                 var property1 = obj.GetType().GetProperty(strArray.Last());
-                if (property1 != null &&
-                    propertyValue is string listProp &&
-                    property1.PropertyType != typeof(string) &&
-                    listProp.StartsWith("<|>jsonSerializedIEnumerableProperty<|>=", StringComparison.InvariantCulture))
-                {
-                    property1.SetValue(obj, Deserialise(listProp.Substring("<|>jsonSerializedIEnumerableProperty<|>=".Length), property1.PropertyType), null);
-                }
-                else
-                {
-                    if (property1 != null)
-                    {
-                        property1.SetValue(obj, ChangeType(propertyValue, property1.PropertyType), null);
-                    }
-                }
+                SetPropertyValue(property1, obj, propertyValue);
 
                 var propertyValue1 = obj;
                 while ((uint)tupleStack.Count > 0U)
@@ -316,7 +232,26 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             }
         }
 
-        private static object ChangeType(object propertyValue, Type propertyType)
+        private static void SetPropertyValue(PropertyInfo propertyInfo, object obj, object value)
+        {
+            if (propertyInfo != null)
+            {
+                if (value is string listProp &&
+                    propertyInfo.PropertyType != typeof(string) &&
+                    listProp.StartsWith(JsonEnumerationPrefix, StringComparison.InvariantCulture))
+                {
+                    propertyInfo.SetValue(obj,
+                        Deserialise(listProp.Substring(JsonEnumerationPrefix.Length), propertyInfo.PropertyType),
+                        null);
+                }
+                else
+                {
+                    propertyInfo.SetValue(obj, ChangeType(value, propertyInfo.PropertyType), null);
+                }
+            }
+        }
+
+        private static object ChangeType(object value, Type propertyType)
         {
             var type1 = Nullable.GetUnderlyingType(propertyType);
             if (type1 is null)
@@ -327,35 +262,35 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             var type2 = type1;
             if (type2.IsEnum)
             {
-                return Enum.Parse(type2, propertyValue.ToString());
+                return Enum.Parse(type2, value.ToString());
             }
 
             if (type2 == typeof(DateTimeOffset))
             {
-                return new DateTimeOffset((DateTime)propertyValue);
+                return new DateTimeOffset((DateTime)value);
             }
 
             if (type2 == typeof(TimeSpan))
             {
-                return TimeSpan.Parse(propertyValue.ToString(), CultureInfo.InvariantCulture);
+                return TimeSpan.Parse(value.ToString(), CultureInfo.InvariantCulture);
             }
 
             if (type2 == typeof(uint))
             {
-                return (uint)(int)propertyValue;
+                return (uint)(int)value;
             }
 
             if (type2 == typeof(ulong))
             {
-                return (ulong)(long)propertyValue;
+                return (ulong)(long)value;
             }
 
             if (type2 == typeof(byte))
             {
-                return ((byte[])propertyValue)[0];
+                return ((byte[])value)[0];
             }
 
-            return Convert.ChangeType(propertyValue, type2, CultureInfo.InvariantCulture);
+            return Convert.ChangeType(value, type2, CultureInfo.InvariantCulture);
         }
 
         private static bool ShouldSkip(PropertyInfo propertyInfo)

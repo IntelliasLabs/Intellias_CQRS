@@ -22,7 +22,7 @@ namespace Intellias.CQRS.Core.Messages
         /// <summary>
         /// Reason of failure
         /// </summary>
-        public string FailureReason { get; }
+        public string FailureReason { get; } = string.Empty;
 
         /// <summary>
         /// Is result successful

@@ -10,12 +10,12 @@ namespace Intellias.CQRS.CommandStore.AzureTable.Documents
         /// <summary>
         /// Keeps serialized command itself
         /// </summary>
-        public string Data { get; set; }
+        public string Data { get; set; } = string.Empty;
 
         /// <summary>
         /// Keeps an event type
         /// </summary>
-        public string CommandType { get; set; }
+        public string CommandType { get; set; } = string.Empty;
 
         /// <summary>
         /// Expected version of command

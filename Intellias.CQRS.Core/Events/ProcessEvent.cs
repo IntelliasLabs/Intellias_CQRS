@@ -8,6 +8,15 @@ namespace Intellias.CQRS.Core.Events
     public abstract class ProcessEvent : Event
     {
         /// <summary>
+        /// Process Event
+        /// </summary>
+        /// <param name="process"></param>
+        protected ProcessEvent(IProcess process)
+        {
+            Process = process;
+        }
+
+        /// <summary>
         /// Process-manager's state
         /// </summary>
         public IProcess Process { get; set; }

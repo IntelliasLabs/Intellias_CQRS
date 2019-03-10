@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
@@ -16,7 +16,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
     public class TableQueryModelStorage<TQueryModel> :
         IQueryModelWriter<TQueryModel>,
         IQueryModelReader<TQueryModel>
-        where TQueryModel : class, IQueryModel
+        where TQueryModel : class, IQueryModel, new()
     {
         private readonly CloudTable queryTable;
 
@@ -94,7 +94,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             var query = new TableQuery<DynamicTableEntity>();
 
             var results = new List<TQueryModel>();
-            TableContinuationToken continuationToken = null;
+            var continuationToken = new TableContinuationToken();
 
             do
             {

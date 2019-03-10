@@ -20,15 +20,15 @@ namespace Intellias.CQRS.Core.Messages
         [Key]
         [DataType(DataType.Text)]
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         /// <inheritdoc />
         [DataType(DataType.Text)]
-        public string AggregateRootId { get; set; }
+        public string AggregateRootId { get; set; } = string.Empty;
 
         /// <inheritdoc />
         [DataType(DataType.Text)]
-        public string CorrelationId { get; set; }
+        public string CorrelationId { get; set; } = string.Empty;
 
         /// <inheritdoc />
         [Required]
@@ -44,7 +44,12 @@ namespace Intellias.CQRS.Core.Messages
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            return Equals(obj as AbstractMessage);
+            if (obj is AbstractMessage a)
+            {
+                return Equals(a);
+            }
+
+            return false;
         }
 
         private static bool IsTransient(AbstractMessage obj)

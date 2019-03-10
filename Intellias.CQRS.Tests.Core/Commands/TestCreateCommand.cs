@@ -8,6 +8,6 @@ namespace Intellias.CQRS.Tests.Core.Commands
         /// <summary>
         /// TestData
         /// </summary>
-        public string TestData { get; set; }
+        public string TestData { get; set; } = string.Empty;
     }
 }

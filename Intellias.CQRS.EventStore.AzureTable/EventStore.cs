@@ -61,12 +61,11 @@ namespace Intellias.CQRS.EventStore.AzureTable
                     QueryComparisons.Equal, aggregateId));
 
             var results = new List<EventStoreEvent>();
-            TableContinuationToken continuationToken = null;
+            var continuationToken = new TableContinuationToken();
 
             do
             {
-                var queryResults =
-                    await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken);
+                var queryResults = await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken);
 
                 continuationToken = queryResults.ContinuationToken;
                 results.AddRange(queryResults.Results);
