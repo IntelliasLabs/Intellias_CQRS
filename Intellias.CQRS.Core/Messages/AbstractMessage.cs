@@ -44,9 +44,9 @@ namespace Intellias.CQRS.Core.Messages
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            if (obj is AbstractMessage)
+            if (obj is AbstractMessage a)
             {
-                return Equals((AbstractMessage)obj);
+                return Equals(a);
             }
 
             return false;
