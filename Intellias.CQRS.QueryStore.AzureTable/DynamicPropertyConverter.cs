@@ -75,12 +75,12 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 return true;
             }
 
-            EntityProperty? propertyWithType;
+            EntityProperty propertyWithType;
             while (true)
             {
                 var type = current.GetType();
                 propertyWithType = CreateEntityPropertyWithType(current, type);
-                if (propertyWithType == null)
+                if (propertyWithType.PropertyAsObject == null)
                 {
                     if (current is IEnumerable)
                     {
@@ -141,7 +141,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return true;
         }
 
-        private static EntityProperty? CreateEntityPropertyWithType(object value, Type type)
+        private static EntityProperty CreateEntityPropertyWithType(object value, Type type)
         {
             if (type.IsEnum)
             {
@@ -153,7 +153,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 return propTypes[type](value);
             }
 
-            return null;
+            return new EntityProperty((int?)null);
         }
 
         private static object SetProperty(object root, string propertyPath, object propertyValue)
@@ -230,7 +230,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             }
         }
 
-        private static object ChangeType(object propertyValue, Type propertyType)
+        private static object ChangeType(object value, Type propertyType)
         {
             var type1 = Nullable.GetUnderlyingType(propertyType);
             if (type1 is null)
@@ -241,35 +241,35 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             var type2 = type1;
             if (type2.IsEnum)
             {
-                return Enum.Parse(type2, propertyValue.ToString());
+                return Enum.Parse(type2, value.ToString());
             }
 
             if (type2 == typeof(DateTimeOffset))
             {
-                return new DateTimeOffset((DateTime)propertyValue);
+                return new DateTimeOffset((DateTime)value);
             }
 
             if (type2 == typeof(TimeSpan))
             {
-                return TimeSpan.Parse(propertyValue.ToString(), CultureInfo.InvariantCulture);
+                return TimeSpan.Parse(value.ToString(), CultureInfo.InvariantCulture);
             }
 
             if (type2 == typeof(uint))
             {
-                return (uint)(int)propertyValue;
+                return (uint)(int)value;
             }
 
             if (type2 == typeof(ulong))
             {
-                return (ulong)(long)propertyValue;
+                return (ulong)(long)value;
             }
 
             if (type2 == typeof(byte))
             {
-                return ((byte[])propertyValue)[0];
+                return ((byte[])value)[0];
             }
 
-            return Convert.ChangeType(propertyValue, type2, CultureInfo.InvariantCulture);
+            return Convert.ChangeType(value, type2, CultureInfo.InvariantCulture);
         }
 
         private static bool ShouldSkip(PropertyInfo propertyInfo)

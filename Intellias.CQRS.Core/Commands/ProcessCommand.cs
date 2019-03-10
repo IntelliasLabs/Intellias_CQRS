@@ -8,8 +8,17 @@ namespace Intellias.CQRS.Core.Commands
     public abstract class ProcessCommand : Command
     {
         /// <summary>
+        /// Process Command
+        /// </summary>
+        /// <param name="process"></param>
+        protected ProcessCommand(IProcess process)
+        {
+            Process = process;
+        }
+
+        /// <summary>
         /// Process-manager's state
         /// </summary>
-        public IProcess? Process { get; set; }
+        public IProcess Process { get; set; }
     }
 }

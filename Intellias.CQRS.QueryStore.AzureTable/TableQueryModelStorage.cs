@@ -94,7 +94,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             var query = new TableQuery<DynamicTableEntity>();
 
             var results = new List<TQueryModel>();
-            TableContinuationToken? continuationToken = null;
+            var continuationToken = new TableContinuationToken();
 
             do
             {
