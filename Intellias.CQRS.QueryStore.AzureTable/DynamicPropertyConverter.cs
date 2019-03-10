@@ -16,6 +16,32 @@ namespace Intellias.CQRS.QueryStore.AzureTable
     internal static class DynamicPropertyConverter
     {
         private const string DefaultPropertyNameDelimiter = "_";
+        private static readonly Dictionary<Type, Func<object, EntityProperty>> propTypes = new Dictionary<Type, Func<object, EntityProperty>>
+        {
+            { typeof(string), val => new EntityProperty((string)val) },
+            { typeof(byte[]), val => new EntityProperty((byte[])val) },
+            { typeof(byte), val => new EntityProperty(new [] { (byte)val}) },
+            { typeof(bool), val => new EntityProperty((bool)val) },
+            { typeof(bool?), val => new EntityProperty((bool?)val) },
+            { typeof(DateTime), val => new EntityProperty((DateTime)val) },
+            { typeof(DateTime?), val => new EntityProperty((DateTime?)val) },
+            { typeof(DateTimeOffset), val => new EntityProperty((DateTimeOffset)val) },
+            { typeof(DateTimeOffset?), val => new EntityProperty((DateTimeOffset?)val) },
+            { typeof(double), val => new EntityProperty((double)val) },
+            { typeof(double?), val => new EntityProperty((double?)val) },
+            { typeof(Guid), val => new EntityProperty((Guid)val) },
+            { typeof(Guid?), val => new EntityProperty((Guid?)val) },
+            { typeof(int), val => new EntityProperty((int)val) },
+            { typeof(int?), val => new EntityProperty((int?)val) },
+            { typeof(uint), val => new EntityProperty((uint)val) },
+            { typeof(uint?), val => new EntityProperty((uint?)val) },
+            { typeof(long), val => new EntityProperty((long)val) },
+            { typeof(long?), val => new EntityProperty((long?)val) },
+            { typeof(ulong), val => new EntityProperty((long)Convert.ToUInt64(val, CultureInfo.InvariantCulture)) },
+            { typeof(ulong?), val => new EntityProperty((long)Convert.ToUInt64(val, CultureInfo.InvariantCulture)) },
+            { typeof(TimeSpan), val => new EntityProperty(val.ToString()) },
+            { typeof(TimeSpan?), val => new EntityProperty(val?.ToString()) },
+        };
 
         public static Dictionary<string, EntityProperty> Flatten(object root)
         {
@@ -117,127 +143,14 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
         private static EntityProperty? CreateEntityPropertyWithType(object value, Type type)
         {
-            if (type == typeof(string))
-            {
-                return new EntityProperty((string)value);
-            }
-
-            if (type == typeof(byte[]))
-            {
-                return new EntityProperty((byte[])value);
-            }
-
-            if (type == typeof(byte))
-            {
-                return new EntityProperty(new[]
-                {
-                    (byte) value
-                });
-            }
-
-            if (type == typeof(bool))
-            {
-                return new EntityProperty((bool)value);
-            }
-
-            if (type == typeof(bool?))
-            {
-                return new EntityProperty((bool?)value);
-            }
-
-            if (type == typeof(DateTime))
-            {
-                return new EntityProperty((DateTime)value);
-            }
-
-            if (type == typeof(DateTime?))
-            {
-                return new EntityProperty((DateTime?)value);
-            }
-
-            if (type == typeof(DateTimeOffset))
-            {
-                return new EntityProperty((DateTimeOffset)value);
-            }
-
-            if (type == typeof(DateTimeOffset?))
-            {
-                return new EntityProperty((DateTimeOffset?)value);
-            }
-
-            if (type == typeof(double))
-            {
-                return new EntityProperty((double)value);
-            }
-
-            if (type == typeof(double?))
-            {
-                return new EntityProperty((double?)value);
-            }
-
-            if (type == typeof(Guid?))
-            {
-                return new EntityProperty((Guid?)value);
-            }
-
-            if (type == typeof(Guid))
-            {
-                return new EntityProperty((Guid)value);
-            }
-
-            if (type == typeof(int))
-            {
-                return new EntityProperty((int)value);
-            }
-
-            if (type == typeof(int?))
-            {
-                return new EntityProperty((int?)value);
-            }
-
-            if (type == typeof(uint))
-            {
-                return new EntityProperty((int)Convert.ToUInt32(value, CultureInfo.InvariantCulture));
-            }
-
-            if (type == typeof(uint?))
-            {
-                return new EntityProperty((int)Convert.ToUInt32(value, CultureInfo.InvariantCulture));
-            }
-
-            if (type == typeof(long))
-            {
-                return new EntityProperty((long)value);
-            }
-
-            if (type == typeof(long?))
-            {
-                return new EntityProperty((long?)value);
-            }
-
-            if (type == typeof(ulong))
-            {
-                return new EntityProperty((long)Convert.ToUInt64(value, CultureInfo.InvariantCulture));
-            }
-
-            if (type == typeof(ulong?))
-            {
-                return new EntityProperty((long)Convert.ToUInt64(value, CultureInfo.InvariantCulture));
-            }
-
             if (type.IsEnum)
             {
                 return new EntityProperty(value.ToString());
             }
 
-            if (type == typeof(TimeSpan))
+            if (propTypes.ContainsKey(type))
             {
-                return new EntityProperty(value.ToString());
-            }
-
-            if (type == typeof(TimeSpan?))
-            {
-                return new EntityProperty(value?.ToString());
+                return propTypes[type](value);
             }
 
             return null;
