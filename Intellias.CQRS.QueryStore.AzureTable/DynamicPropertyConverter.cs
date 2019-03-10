@@ -70,6 +70,39 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return properties.Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
         }
 
+        private static bool FlattenWithType(IEnumerable<PropertyInfo> properties, Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, ISet<object> antecedents, Type type)
+        {
+            if (!properties.Any())
+            {
+                throw new SerializationException($"Unsupported type : {type} encountered during conversion to EntityProperty. Object Path: {objectPath}");
+            }
+
+            var processed = false;
+            if (!type.IsValueType)
+            {
+                if (antecedents.Contains(current))
+                {
+                    throw new SerializationException($"Recursive reference detected. Object Path: {objectPath} Property Type: {type}.");
+                }
+
+                antecedents.Add(current);
+                processed = true;
+            }
+
+            var successful = properties.Where(propertyInfo => !ShouldSkip(propertyInfo)).All(propInfo =>
+            {
+                var next = FlattenProperty(propInfo, current);
+
+                return Flatten(propertyDictionary, next, string.IsNullOrWhiteSpace(objectPath) ? propInfo.Name : objectPath + DefaultPropertyNameDelimiter + propInfo.Name, antecedents);
+            });
+            if (processed)
+            {
+                antecedents.Remove(current);
+            }
+
+            return successful;
+        }
+
         private static bool Flatten(Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, ISet<object> antecedents)
         {
             if (current == null)
@@ -91,35 +124,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                     else
                     {
                         var properties = (IEnumerable<PropertyInfo>)type.GetProperties();
-                        if (!properties.Any())
-                        {
-                            throw new SerializationException($"Unsupported type : {type} encountered during conversion to EntityProperty. Object Path: {objectPath}");
-                        }
-
-                        var processed = false;
-                        if (!type.IsValueType)
-                        {
-                            if (antecedents.Contains(current))
-                            {
-                                throw new SerializationException($"Recursive reference detected. Object Path: {objectPath} Property Type: {type}.");
-                            }
-
-                            antecedents.Add(current);
-                            processed = true;
-                        }
-
-                        var successful = properties.Where(propertyInfo => !ShouldSkip(propertyInfo)).All(propInfo =>
-                        {
-                            var next = FlattenProperty(propInfo, current);
-
-                            return Flatten(propertyDictionary, next, string.IsNullOrWhiteSpace(objectPath) ? propInfo.Name : objectPath + DefaultPropertyNameDelimiter + propInfo.Name, antecedents);
-                        });
-                        if (processed)
-                        {
-                            antecedents.Remove(current);
-                        }
-
-                        return successful;
+                        return FlattenWithType(properties, propertyDictionary, current, objectPath, antecedents, type);
                     }
                 }
                 else
