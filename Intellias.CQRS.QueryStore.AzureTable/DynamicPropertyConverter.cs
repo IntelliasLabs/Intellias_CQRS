@@ -108,20 +108,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
                         var successful = properties.Where(propertyInfo => !ShouldSkip(propertyInfo)).All(propertyInfo =>
                         {
-                            if (propertyInfo.Name.Contains(DefaultPropertyNameDelimiter))
-                            {
-                                throw new SerializationException($"Property delimiter: {DefaultPropertyNameDelimiter} exists in property name: {propertyInfo.Name}. Object Path: {objectPath}");
-                            }
+                            var current1 = FlattenProperty(propertyInfo, current);
 
-                            object current1;
-                            try
-                            {
-                                current1 = propertyInfo.GetValue(current, null);
-                            }
-                            catch (Exception)
-                            {
-                                current1 = $"<|>jsonSerializedIEnumerableProperty<|>={JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
-                            }
                             return Flatten(propertyDictionary, current1, string.IsNullOrWhiteSpace(objectPath) ? propertyInfo.Name : objectPath + DefaultPropertyNameDelimiter + propertyInfo.Name, antecedents);
                         });
                         if (processed)
@@ -141,6 +129,25 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return true;
         }
 
+        private static object FlattenProperty(PropertyInfo propertyInfo, object current)
+        {
+            if (propertyInfo.Name.Contains(DefaultPropertyNameDelimiter))
+            {
+                throw new SerializationException($"Property delimiter: {DefaultPropertyNameDelimiter} exists in property name: {propertyInfo.Name}.");
+            }
+
+            object value;
+            try
+            {
+                value = propertyInfo.GetValue(current, null);
+            }
+            catch (Exception)
+            {
+                value = $"<|>jsonSerializedIEnumerableProperty<|>={JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
+            }
+
+            return value;
+        }
         private static EntityProperty CreateEntityPropertyWithType(object value, Type type)
         {
             if (type.IsEnum)
