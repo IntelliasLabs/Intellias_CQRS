@@ -32,9 +32,13 @@ namespace Intellias.CQRS.Tests
         /// </summary>
         public FullScenarioTests()
         {
-            // Prepare query storage
             var tables = new Dictionary<Type, Dictionary<string, object>>();
+
+            // Prepare query storage
             var queryStore = new InProcessQueryStore<TestQueryModel>(tables);
+
+            // Clear storage to reproduce stable test results
+            queryStore.ClearAsync().Wait();
 
             // Attach event handlers to query store
             var eventHandlers = new DemoEventHandlers(queryStore);

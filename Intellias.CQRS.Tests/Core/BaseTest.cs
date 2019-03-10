@@ -56,15 +56,11 @@ namespace Intellias.CQRS.Tests.Core
                 .AddJsonFile("appsettings.json", false, true)
                 .Build();
 
-            var storeConnectionString = configuration.GetConnectionString("TableStorageConnection");
-
             BusMock = new Mock<IEventBus>();
 
-            Store = new AzureTableEventStore(storeConnectionString, BusMock.Object);
+            Store = new AzureTableEventStore(CloudStorageAccount.DevelopmentStorageAccount, BusMock.Object);
 
-            var tableClient = CloudStorageAccount
-                .Parse(storeConnectionString)
-                .CreateCloudTableClient();
+            var tableClient = CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient();
 
             AggregateTable = tableClient.GetTableReference("AggregateStore");
             EventTable = tableClient.GetTableReference(nameof(EventStore));
