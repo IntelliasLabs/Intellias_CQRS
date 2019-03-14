@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Intellias.CQRS.AzureTable.Core\Intellias.CQRS.AzureTable.Core.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
