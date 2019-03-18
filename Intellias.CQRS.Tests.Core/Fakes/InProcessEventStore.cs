@@ -40,8 +40,11 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <inheritdoc />
         public Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion)
         {
-            _inMemoryDb.TryGetValue(aggregateId, out var events);
-            return Task.FromResult(events?.Where(x => x.Version > fromVersion) ?? new List<IEvent>());
+            var arExist = _inMemoryDb.TryGetValue(aggregateId, out var events);
+
+            return arExist
+                ? Task.FromResult(events?.Where(x => x.Version > fromVersion) ?? new List<IEvent>())
+                : throw new KeyNotFoundException($"Aggregate Root with id = '{aggregateId}' hasn't been found");
         }
     }
 }

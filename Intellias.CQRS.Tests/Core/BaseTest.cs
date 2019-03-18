@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using System.Diagnostics;
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Domain;
-using Intellias.CQRS.Tests.Core.Events;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
@@ -86,15 +84,8 @@ namespace Intellias.CQRS.Tests.Core
             var item = new TestRoot(id);
 
             // Generating virtual load of events..
-            item.LoadFromHistory(new List<IEvent>
-            {
-                new TestCreatedEvent
-                {
-                    AggregateRootId = id,
-                    Version = 1,
-                    TestData = "Data to be updated...."
-                }
-            });
+            var history = Store.GetAsync(id, 0).Result;
+            item.LoadFromHistory(history);
 
             item.Update(new TestUpdateCommand
             {

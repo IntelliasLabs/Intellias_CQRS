@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
@@ -25,7 +28,6 @@ namespace Intellias.CQRS.Tests
         public UpdateEntityTest()
         {
             CreateItem(testId, testData);
-            UpdateItem(testId, testDataUpdated);
         }
 
         /// <summary>
@@ -34,6 +36,8 @@ namespace Intellias.CQRS.Tests
         [Fact]
         public void ShouldCallTwiceServiceBusPublishMethod()
         {
+            UpdateItem(testId, testDataUpdated);
+
             BusMock.Verify(x => x.PublishAsync(It.IsAny<IEvent>()), Times.Exactly(2));
         }
 
@@ -43,6 +47,8 @@ namespace Intellias.CQRS.Tests
         [Fact]
         public void ShouldCreateEventRecordWithVersion2AndTestData()
         {
+            UpdateItem(testId, testDataUpdated);
+
             var query = new TableQuery<EventStoreEvent>()
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, testId));
             var result = EventTable.ExecuteQuerySegmentedAsync(query, null).Result.Results;
@@ -54,6 +60,17 @@ namespace Intellias.CQRS.Tests
 
             Assert.True(@event.Version == 2, "Test version for updated event is not equal 2");
             Assert.True(@event.TestData == testDataUpdated, "Test data for updated event is lost");
+        }
+
+        /// <summary>
+        /// Verifies if Azure table throws exception if such AR can't be found
+        /// </summary>
+        [Fact]
+        public void ShouldThrowAnExceptionWhenARNotFound()
+        {
+            Action updateItemAction = () => { UpdateItem("Some Fake AR Id", testDataUpdated); };
+
+            updateItemAction.Should().Throw<KeyNotFoundException>();
         }
     }
 }

@@ -67,6 +67,11 @@ namespace Intellias.CQRS.EventStore.AzureTable
             {
                 var queryResults = await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken);
 
+                if (!queryResults.Results.Any())
+                {
+                    throw new KeyNotFoundException($"Aggregate Root with id = '{aggregateId}' hasn't been found");
+                }
+
                 continuationToken = queryResults.ContinuationToken;
                 results.AddRange(queryResults.Results);
 
