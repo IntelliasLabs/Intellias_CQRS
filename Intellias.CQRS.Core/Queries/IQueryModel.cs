@@ -1,4 +1,6 @@
-﻿namespace Intellias.CQRS.Core.Queries
+﻿using System;
+
+namespace Intellias.CQRS.Core.Queries
 {
     /// <summary>
     /// Read model interface
@@ -14,5 +16,10 @@
         /// Version of Query Model
         /// </summary>
         int Version { get; set; }
+
+        /// <summary>
+        /// Timestamp of last query item update
+        /// </summary>
+        DateTime Timestamp { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core;
@@ -22,7 +23,8 @@ namespace Intellias.CQRS.Tests
             {
                 Id = Unified.NewCode(),
                 ParentId = Unified.Dummy,
-                TestData = "TestData"
+                TestData = "TestData",
+                Timestamp = DateTime.UtcNow
             };
 
             Store.CreateAsync(model).Wait();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Intellias.CQRS.Core.Events;
 
@@ -20,7 +19,7 @@ namespace Intellias.CQRS.Core.Domain
         public string Id { get; protected set; }
 
         /// <inheritdoc />
-        public ReadOnlyCollection<IEvent> Events => pendingEvents.AsReadOnly();
+        public IReadOnlyCollection<IEvent> Events => pendingEvents.AsReadOnly();
 
         /// <inheritdoc />
         public int Version => State.Version;
