@@ -5,7 +5,7 @@ using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Domain;
 
-namespace Intellias.CQRS.Tests.CommandHandlers
+namespace Intellias.CQRS.Tests.Core.CommandHandlers
 {
     /// <summary>
     /// Demo command handlers
@@ -29,8 +29,6 @@ namespace Intellias.CQRS.Tests.CommandHandlers
         /// <returns></returns>
         public async Task<IExecutionResult> HandleAsync(TestCreateCommand command)
         {
-            command.AggregateRootId = Unified.NewCode();
-
             var ar = new TestRoot(command);
 
             await store.SaveAsync(ar);

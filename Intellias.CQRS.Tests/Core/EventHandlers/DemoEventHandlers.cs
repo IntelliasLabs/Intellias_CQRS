@@ -5,7 +5,7 @@ using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Queries;
 
-namespace Intellias.CQRS.Tests.EventHandlers
+namespace Intellias.CQRS.Tests.Core.EventHandlers
 {
     /// <summary>
     /// Demo command handlers

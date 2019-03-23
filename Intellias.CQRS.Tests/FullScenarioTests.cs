@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intellias.CQRS.Core.Extensions;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Storage;
-using Intellias.CQRS.Tests.CommandHandlers;
+using Intellias.CQRS.Tests.Core.CommandHandlers;
 using Intellias.CQRS.Tests.Core.Commands;
+using Intellias.CQRS.Tests.Core.EventHandlers;
 using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Intellias.CQRS.Tests.Core.Queries;
-using Intellias.CQRS.Tests.EventHandlers;
 using Xunit;
 
 namespace Intellias.CQRS.Tests
@@ -71,7 +73,13 @@ namespace Intellias.CQRS.Tests
         public void DemoTest()
         {
             // Send command to create aggregate
-            var createCommand = new TestCreateCommand { TestData = "Test data" };
+            var createCommand = new TestCreateCommand
+            {
+                TestData = "Test data",
+                AggregateRootId = Unified.NewCode()
+            };
+            createCommand.Wrap();
+            createCommand.Validate();
             var createResult = commandBus.PublishAsync(createCommand).Result;
             Assert.NotNull(createResult);
 
@@ -88,6 +96,8 @@ namespace Intellias.CQRS.Tests
                 AggregateRootId = firstItem.Id,
                 ExpectedVersion = firstItem.Version
             };
+            updateCommand.Wrap();
+            updateCommand.Validate();
             var updateResult = commandBus.PublishAsync(updateCommand).Result;
             Assert.NotNull(updateResult);
 
@@ -102,6 +112,8 @@ namespace Intellias.CQRS.Tests
                 AggregateRootId = updatedFirstItem.Id,
                 ExpectedVersion = updatedFirstItem.Version
             };
+            deactivateCommand.Wrap();
+            deactivateCommand.Validate();
             var deactivateResult = commandBus.PublishAsync(deactivateCommand).Result;
             Assert.NotNull(deactivateResult);
 

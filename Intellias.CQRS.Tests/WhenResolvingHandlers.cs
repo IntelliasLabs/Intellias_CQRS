@@ -2,8 +2,8 @@
 using System.Linq;
 using Intellias.CQRS.Core.Tools;
 using Intellias.CQRS.Tests.Core;
+using Intellias.CQRS.Tests.Core.EventHandlers;
 using Intellias.CQRS.Tests.Core.Events;
-using Intellias.CQRS.Tests.EventHandlers;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
