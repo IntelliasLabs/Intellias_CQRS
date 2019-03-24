@@ -74,14 +74,11 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             return await Task.FromResult(store.Values.Cast<TQueryModel>().ToList().AsReadOnly());
         }
 
-        /// <summary>
-        /// Updates TQueryModelby Id
-        /// </summary>
-        /// <param name="queryModel"></param>
-        /// <returns></returns>
-        public Task UpdateAsync(TQueryModel queryModel)
+        /// <inheritdoc />
+        public Task UpdateAsync(string id, Action<TQueryModel> updateAction)
         {
-            store[queryModel.Id] = queryModel;
+            var queryModel = store[id];
+            updateAction?.Invoke((TQueryModel)queryModel);
             return Task.FromResult(queryModel);
         }
 

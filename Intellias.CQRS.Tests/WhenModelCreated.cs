@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core;
@@ -22,7 +23,8 @@ namespace Intellias.CQRS.Tests
             {
                 Id = Unified.NewCode(),
                 ParentId = Unified.Dummy,
-                TestData = "TestData"
+                TestData = "TestData",
+                Timestamp = DateTime.UtcNow
             };
 
             Store.CreateAsync(model).Wait();
@@ -53,6 +55,26 @@ namespace Intellias.CQRS.Tests
             Assert.True(result != null, "Item is not present in DB");
             Assert.True(result.TestData == model.TestData, "Item data is corrupted");
             Assert.True(result.Id == model.Id, "Item Id is corrupted");
+        }
+
+        /// <summary>
+        /// Update Test
+        /// </summary>
+        [Fact]
+        public void UpdateExistingEntity()
+        {
+            // Arrange
+            var updatedData = Unified.NewCode();
+
+            // Act
+            Store.UpdateAsync(model.Id, m => {
+                m.TestData = updatedData;
+            }).Wait();
+
+            // Assert
+            var result = Store.GetAsync(model.Id).Result;
+
+            Assert.Equal(updatedData, result.TestData);
         }
     }
 }

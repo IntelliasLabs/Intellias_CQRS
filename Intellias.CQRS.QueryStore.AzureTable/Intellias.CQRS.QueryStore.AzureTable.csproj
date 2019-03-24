@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
   </ItemGroup>
 
@@ -28,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Intellias.CQRS.Core.Queries;
+﻿using System;
+using Intellias.CQRS.Core.Queries;
 
 namespace Intellias.CQRS.Tests.Core.Queries
 {
@@ -20,9 +21,10 @@ namespace Intellias.CQRS.Tests.Core.Queries
         /// </summary>
         public string TestData { set; get; } = string.Empty;
 
-        /// <summary>
-        /// Version of query model
-        /// </summary>
+        /// <inheritdoc />
         public int Version { set; get; }
+
+        /// <inheritdoc />
+        public DateTime Timestamp { get; set; }
     }
 }

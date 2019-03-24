@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries;
 
 namespace Intellias.CQRS.Core.Storage
@@ -6,7 +7,7 @@ namespace Intellias.CQRS.Core.Storage
     /// <summary>
     /// IQueryModelWriter - used by event handlers to build query model
     /// </summary>
-    public interface IQueryModelWriter<in TQueryModel> where TQueryModel : IQueryModel, new()
+    public interface IQueryModelWriter<TQueryModel> where TQueryModel : IQueryModel, new()
     {
         /// <summary>
         /// Delete Read Model Item
@@ -31,8 +32,9 @@ namespace Intellias.CQRS.Core.Storage
         /// <summary>
         /// Update one read model
         /// </summary>
-        /// <param name="queryModel"></param>
+        /// <param name="updateAction"></param>
+        /// <param name="id">ID of query model</param>
         /// <returns></returns>
-        Task UpdateAsync(TQueryModel queryModel);
+        Task UpdateAsync(string id, Action<TQueryModel> updateAction);
     }
 }

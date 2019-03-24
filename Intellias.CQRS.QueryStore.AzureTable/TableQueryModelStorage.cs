@@ -25,7 +25,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             var entity = new DynamicTableEntity(model.Id.Substring(0, 1), model.Id)
             {
                 Properties = DynamicPropertyConverter.Flatten(model),
-                Timestamp = DateTime.UtcNow,
+                Timestamp = new DateTimeOffset(model.Timestamp),
                 ETag = "*"
             };
 
@@ -39,6 +39,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             var queryResult = await queryTable.ExecuteAsync(readOperation);
 
             var entity = (DynamicTableEntity)queryResult.Result;
+
             if (entity == null)
             { throw new KeyNotFoundException(id); }
 
@@ -74,7 +75,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         /// <inheritdoc />
         public async Task CreateAsync(TQueryModel queryModel)
         {
-            var operation = TableOperation.Insert(Transform(queryModel));
+            var entity = Transform(queryModel);
+            var operation = TableOperation.Insert(entity);
             await queryTable.ExecuteAsync(operation);
         }
 
@@ -102,7 +104,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
                 continuationToken = querySegment.ContinuationToken;
 
-                var queryResults = querySegment.Results.Select(item => DynamicPropertyConverter.ConvertBack<TQueryModel>(item.Properties));
+                var queryResults = querySegment.Results.Select(item => DynamicPropertyConverter.ConvertBack<TQueryModel>(item));
                 results.AddRange(queryResults);
 
             } while (continuationToken != null);
@@ -116,18 +118,21 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             // Getting entity
             var entity = await RetrieveEntityAsync(id);
 
-            return DynamicPropertyConverter.ConvertBack<TQueryModel>(entity.Properties);
+            return DynamicPropertyConverter.ConvertBack<TQueryModel>(entity);
         }
 
         /// <inheritdoc />
-        public async Task UpdateAsync(TQueryModel queryModel)
+        public async Task UpdateAsync(string id, Action<TQueryModel> updateAction)
         {
             // Getting entity
-            var entity = await RetrieveEntityAsync(queryModel.Id);
+            var entity = await RetrieveEntityAsync(id);
+
+            var queryModel = DynamicPropertyConverter.ConvertBack<TQueryModel>(entity);
+
+            // calling update
+            updateAction?.Invoke(queryModel);
 
             entity.Properties = DynamicPropertyConverter.Flatten(queryModel);
-
-            entity.Timestamp = DateTime.UtcNow;
 
             var updateOperation = TableOperation.Replace(entity);
             await queryTable.ExecuteAsync(updateOperation);

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Intellias.CQRS.Core.Events;
 
 namespace Intellias.CQRS.Core.Domain
@@ -18,7 +17,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <summary>
         /// Holds the list of events
         /// </summary>
-        ReadOnlyCollection<IEvent> Events { get; }
+        IReadOnlyCollection<IEvent> Events { get; }
 
         /// <summary>
         /// Load event history

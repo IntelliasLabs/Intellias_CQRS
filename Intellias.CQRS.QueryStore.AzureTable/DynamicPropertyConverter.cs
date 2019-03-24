@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Intellias.CQRS.Core.Config;
+using Intellias.CQRS.Core.Queries;
 
 namespace Intellias.CQRS.QueryStore.AzureTable
 {
@@ -58,16 +59,21 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return Flatten(dict, root, string.Empty, antecedents) ? dict : throw new InvalidOperationException($"Can not flatten {root}");
         }
 
-        public static T ConvertBack<T>(IDictionary<string, EntityProperty> properties)
-            where T : new()
+        public static T ConvertBack<T>(DynamicTableEntity entity)
+            where T : IQueryModel, new()
         {
-            if (properties == null)
+            if (entity.Properties == null)
             {
                 return new T();
             }
 
             var uninitializedObject = (T)FormatterServices.GetUninitializedObject(typeof(T));
-            return properties.Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
+
+            var result = entity.Properties.Aggregate(uninitializedObject, (current, kvp) => (T)SetProperty(current, kvp.Key, kvp.Value.PropertyAsObject));
+
+            result.Timestamp = entity.Timestamp.UtcDateTime;
+
+            return result;
         }
 
         private static bool FlattenWithType(Dictionary<string, EntityProperty> propertyDictionary, object current, string objectPath, ISet<object> antecedents, Type type)
@@ -171,7 +177,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return new EntityProperty((int?)null);
         }
 
-        private static object SetProperty(object root, string propertyPath, object propertyValue)
+        private static object SetProperty(IQueryModel root, string propertyPath, object propertyValue)
         {
             if (root == null)
             {
@@ -197,11 +203,11 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                     var property = obj.GetType().GetProperty(strArray[index]);
                     if (property != null)
                     {
-                        var uninitializedObject = property.GetValue(obj, null);
+                        var uninitializedObject = (IQueryModel)property.GetValue(obj, null);
                         var propertyType = property.PropertyType;
                         if (uninitializedObject == null)
                         {
-                            uninitializedObject = FormatterServices.GetUninitializedObject(propertyType);
+                            uninitializedObject = (IQueryModel)FormatterServices.GetUninitializedObject(propertyType);
                             property.SetValue(obj, ChangeType(uninitializedObject, property.PropertyType), null);
                         }
                         if (flag || propertyType.IsValueType)
@@ -212,15 +218,15 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                         obj = uninitializedObject;
                     }
                 }
-                var property1 = obj.GetType().GetProperty(strArray.Last());
-                SetPropertyValue(property1, obj, propertyValue);
+                var prop = obj.GetType().GetProperty(strArray.Last());
+                SetPropertyValue(prop, obj, propertyValue);
 
-                var propertyValue1 = obj;
+                var propVal = obj;
                 while ((uint)tupleStack.Count > 0U)
                 {
                     var tuple = tupleStack.Pop();
-                    tuple.Item3.SetValue(tuple.Item2, ChangeType(propertyValue1, tuple.Item3.PropertyType), null);
-                    propertyValue1 = tuple.Item2;
+                    tuple.Item3.SetValue(tuple.Item2, ChangeType(propVal, tuple.Item3.PropertyType), null);
+                    propVal = (IQueryModel)tuple.Item2;
                 }
                 return root;
             }
