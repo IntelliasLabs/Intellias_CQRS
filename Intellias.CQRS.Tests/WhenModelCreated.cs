@@ -67,8 +67,8 @@ namespace Intellias.CQRS.Tests
             var updatedData = Unified.NewCode();
 
             // Act
-            Store.UpdateAsync(model.Id, model => {
-                model.TestData = updatedData;
+            Store.UpdateAsync(model.Id, m => {
+                m.TestData = updatedData;
             }).Wait();
 
             // Assert
