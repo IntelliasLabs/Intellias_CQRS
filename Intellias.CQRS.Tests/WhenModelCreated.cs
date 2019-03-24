@@ -56,5 +56,25 @@ namespace Intellias.CQRS.Tests
             Assert.True(result.TestData == model.TestData, "Item data is corrupted");
             Assert.True(result.Id == model.Id, "Item Id is corrupted");
         }
+
+        /// <summary>
+        /// Update Test
+        /// </summary>
+        [Fact]
+        public void UpdateExistingEntity()
+        {
+            // Arrange
+            var updatedData = Unified.NewCode();
+
+            // Act
+            Store.UpdateAsync(model.Id, model => {
+                model.TestData = updatedData;
+            }).Wait();
+
+            // Assert
+            var result = Store.GetAsync(model.Id).Result;
+
+            Assert.Equal(updatedData, result.TestData);
+        }
     }
 }
