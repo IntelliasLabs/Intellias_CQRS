@@ -122,10 +122,15 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         }
 
         /// <inheritdoc />
-        public async Task UpdateAsync(TQueryModel queryModel)
+        public async Task UpdateAsync(string id, Action<TQueryModel> model)
         {
             // Getting entity
-            var entity = await RetrieveEntityAsync(queryModel.Id);
+            var entity = await RetrieveEntityAsync(id);
+
+            var queryModel = DynamicPropertyConverter.ConvertBack<TQueryModel>(entity);
+
+            // calling update
+            model?.Invoke(queryModel);
 
             entity.Properties = DynamicPropertyConverter.Flatten(queryModel);
 

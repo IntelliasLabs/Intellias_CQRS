@@ -59,12 +59,11 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
         /// <returns>Result</returns>
         public async Task HandleAsync(TestUpdatedEvent @event)
         {
-            await store.UpdateAsync(new TestQueryModel
+            await store.UpdateAsync(@event.AggregateRootId, model =>
             {
-                Id = @event.AggregateRootId,
-                ParentId = Unified.Dummy,
-                TestData = @event.TestData,
-                Version = @event.Version
+                model.ParentId = Unified.Dummy;
+                model.TestData = @event.TestData;
+                model.Version = @event.Version;
             });
         }
     }
