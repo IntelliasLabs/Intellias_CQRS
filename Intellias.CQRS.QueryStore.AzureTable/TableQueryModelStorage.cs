@@ -27,7 +27,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 Properties = DynamicPropertyConverter.Flatten(model),
                 Timestamp = new DateTimeOffset(model.Timestamp),
                 ETag = "*"
-            }; 
+            };
 
             return entity;
         }
