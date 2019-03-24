@@ -75,10 +75,10 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc />
-        public Task UpdateAsync(string id, Action<TQueryModel> model)
+        public Task UpdateAsync(string id, Action<TQueryModel> updateAction)
         {
             var queryModel = store[id];
-            model?.Invoke((TQueryModel)queryModel);
+            updateAction?.Invoke((TQueryModel)queryModel);
             return Task.FromResult(queryModel);
         }
 

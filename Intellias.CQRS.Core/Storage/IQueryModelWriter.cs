@@ -32,9 +32,9 @@ namespace Intellias.CQRS.Core.Storage
         /// <summary>
         /// Update one read model
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="updateAction"></param>
         /// <param name="id">ID of query model</param>
         /// <returns></returns>
-        Task UpdateAsync(string id, Action<TQueryModel> model);
+        Task UpdateAsync(string id, Action<TQueryModel> updateAction);
     }
 }
