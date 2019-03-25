@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core;
+using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Queries;
 using Xunit;
 
@@ -75,6 +76,23 @@ namespace Intellias.CQRS.Tests
             var result = Store.GetAsync(model.Id).Result;
 
             Assert.Equal(updatedData, result.TestData);
+        }
+
+        [Fact]
+        public void PreventEventDublication()
+        {
+            // Arrange
+            var e = new TestUpdatedEvent
+            {
+                AggregateRootId = Unified.NewCode(),
+                Id = Unified.NewCode()
+            };
+
+            // Act
+            Store.ReserveEventAsync(e).Wait();
+
+            // Assert
+            Assert.Throws<AggregateException>(() => Store.ReserveEventAsync(e).Wait());
         }
     }
 }

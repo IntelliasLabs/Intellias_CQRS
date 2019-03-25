@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
 
@@ -15,6 +16,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         where TQueryModel: class, IQueryModel, new()
     {
         private readonly Dictionary<string, object> store;
+        private readonly Dictionary<string, object> storeVersioning;
 
         /// <summary>
         /// InProcessQueryStore
@@ -31,6 +33,8 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                 store = new Dictionary<string, object>();
                 tables.Add(typeof(TQueryModel), store);
             }
+
+            storeVersioning = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -91,6 +95,13 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         {
             store.Add(queryModel.Id, queryModel);
             return Task.FromResult(queryModel);
+        }
+
+        /// <inheritdoc />
+        public Task ReserveEventAsync(IEvent @event)
+        {
+            storeVersioning.Add($"{@event.AggregateRootId}{@event.Id}", @event.Id);
+            return Task.FromResult(@event);
         }
     }
 }

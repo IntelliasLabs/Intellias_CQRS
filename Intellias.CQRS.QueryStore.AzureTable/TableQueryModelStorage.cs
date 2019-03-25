@@ -6,6 +6,7 @@ using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using Intellias.CQRS.Core.Events;
 
 namespace Intellias.CQRS.QueryStore.AzureTable
 {
@@ -19,6 +20,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         where TQueryModel : class, IQueryModel, new()
     {
         private readonly CloudTable queryTable;
+        private readonly CloudTable queryVersioningTable;
 
         private static DynamicTableEntity Transform(TQueryModel model)
         {
@@ -54,9 +56,19 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         {
             var client = account.CreateCloudTableClient();
             queryTable = client.GetTableReference(typeof(TQueryModel).Name);
+            queryVersioningTable = client.GetTableReference($"{typeof(TQueryModel).Name}QueryVersioning");
 
             // Create the CloudTable if it does not exist
             queryTable.CreateIfNotExistsAsync().Wait();
+            queryVersioningTable.CreateIfNotExistsAsync().Wait();
+        }
+
+        /// <inheritdoc />
+        public async Task ReserveEventAsync(IEvent @event)
+        {
+            var entity = new DynamicTableEntity(@event.AggregateRootId, @event.Id);
+            var op = TableOperation.Insert(entity);
+            await queryVersioningTable.ExecuteAsync(op); // Will fail for second event if it was dublicated
         }
 
         /// <inheritdoc />
