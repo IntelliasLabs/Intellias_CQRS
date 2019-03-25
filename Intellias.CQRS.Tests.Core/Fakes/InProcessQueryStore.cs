@@ -100,7 +100,15 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <inheritdoc />
         public Task ReserveEventAsync(IEvent @event)
         {
-            storeVersioning.Add($"{@event.AggregateRootId}{@event.Id}", @event.Id);
+            var key = $"{@event.AggregateRootId}{@event.Id}";
+            if (storeVersioning.ContainsKey(key))
+            {
+                throw new AggregateException($"Event {@event.Id} was dublicated");
+            }
+            else
+            {
+                storeVersioning.Add(key, @event.Id);
+            }
             return Task.FromResult(@event);
         }
     }
