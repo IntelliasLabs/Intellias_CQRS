@@ -5,12 +5,8 @@ namespace Intellias.CQRS.Core.Events
     /// <inheritdoc cref="IEvent" />
     public abstract class Event : AbstractMessage, IEvent
     {
-        private int version;
-
         /// <inheritdoc />
-        protected Event()
-        {
-        }
+        protected Event() {}
 
         /// <inheritdoc />
         protected Event(int version)
@@ -22,14 +18,6 @@ namespace Intellias.CQRS.Core.Events
         public string SourceId { get; set; } = string.Empty;
 
         /// <inheritdoc />
-        public int Version
-        {
-            get => version;
-            set
-            {
-                version = value;
-                Id = Unified.NewCode(Version);
-            }
-        }
+        public int Version { get; set; }
     }
 }

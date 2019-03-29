@@ -46,11 +46,10 @@ namespace Intellias.CQRS.Core.Commands
             return aggregateRoot;
         }
 
-        private async Task<IAggregateRoot> FillAggregateHistoryAsync(IAggregateRoot aggregate)
+        private async Task FillAggregateHistoryAsync(IAggregateRoot aggregate)
         {
             var history = await store.GetAsync(aggregate.Id, 0);
             aggregate.LoadFromHistory(history);
-            return aggregate;
         }
     }
 }

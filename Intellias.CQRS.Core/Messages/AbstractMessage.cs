@@ -20,7 +20,7 @@ namespace Intellias.CQRS.Core.Messages
         [Key]
         [DataType(DataType.Text)]
         [JsonProperty("id")]
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = Unified.NewCode();
 
         /// <inheritdoc />
         [DataType(DataType.Text)]
