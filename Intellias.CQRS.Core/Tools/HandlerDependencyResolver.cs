@@ -44,7 +44,7 @@ namespace Intellias.CQRS.Core.Tools
 
             var handlerType = typeof(IEventHandler<T>);
 
-            return Select<IEventHandler<T>> (handlerType);
+            return Select<IEventHandler<T>>(handlerType);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Intellias.CQRS.Core.Tools
         private IEnumerable<THandlerType> Select<THandlerType>(Type handlerType) =>
             assemblies
             .SelectMany(a => a.GetTypes())
-            .Where(handlerType.IsAssignableFrom)
+            .Where(t => t.GetInterfaces().Contains(handlerType))
             .Select(type =>
             {
                 var service = (THandlerType)serviceProvider.GetService(type);

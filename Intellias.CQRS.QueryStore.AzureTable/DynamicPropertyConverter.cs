@@ -155,10 +155,12 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             {
                 value = propertyInfo.GetValue(current, null);
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
             {
                 value = $"{JsonEnumerationPrefix}{JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
             }
+#pragma warning restore CA1031 // Do not catch general exception types
 
             return value;
         }

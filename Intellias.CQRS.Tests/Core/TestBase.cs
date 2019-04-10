@@ -36,6 +36,7 @@ namespace Intellias.CQRS.Tests.Core
         {
             services.AddHandlerManager(Assembly.GetExecutingAssembly());
             services.AddTransient<DemoEventHandlers>();
+            services.AddTransient<WrappedEventHandler>();
 
             var queryReaderMock = Mock.Of<IQueryModelReader<TestQueryModel>>();
             services.AddTransient(_ => queryReaderMock);

@@ -18,7 +18,7 @@ namespace Intellias.CQRS.Tests
         /// ShouldReceiveCompetencyEventHandler
         /// </summary>
         [Fact]
-        public void ShouldReceiveCompetencyEventHandler()
+        public void ShouldReceiveDemoEventHandler()
         {
             var @event = new TestCreatedEvent();
 
@@ -30,6 +30,21 @@ namespace Intellias.CQRS.Tests
             Assert.True(result.First().GetType() == typeof(DemoEventHandlers));
         }
 
+        /// <summary>
+        /// ShouldReceiveCompetencyEventHandler
+        /// </summary>
+        [Fact]
+        public void ShouldReceiveDerivedEventHanderOnlyWhenRaisedDerivedEvent()
+        {
+            var @event = new WrappedTestCreatedEvent();
+
+            var resolver = ServiceProvider.GetService<HandlerDependencyResolver>();
+
+            var result = resolver.ResolveEvent(@event).ToList();
+
+            var wrappedHandler = result.Single();
+            Assert.True(wrappedHandler.GetType() == typeof(WrappedEventHandler));
+        }
 
         /// <summary>
         /// ShouldReceiveCompetencyEventHandler
