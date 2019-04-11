@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Config;
@@ -19,17 +20,13 @@ namespace Intellias.CQRS.EventStore.AzureTable
     public class AzureTableEventStore : IEventStore
     {
         private readonly CloudTable eventTable;
-        private readonly IEventBus eventBus;
 
         /// <summary>
         /// EventStore
         /// </summary>
         /// <param name="account">Azure Table Storage Account</param>
-        /// <param name="eventBus">Event bus for publishing events</param>
-        public AzureTableEventStore(CloudStorageAccount account, IEventBus eventBus)
+        public AzureTableEventStore(CloudStorageAccount account)
         {
-            this.eventBus = eventBus;
-
             var client = account.CreateCloudTableClient();
 
             eventTable = client.GetTableReference(nameof(EventStore));
@@ -40,17 +37,17 @@ namespace Intellias.CQRS.EventStore.AzureTable
 
 
         /// <inheritdoc />
-        public async Task SaveAsync(IAggregateRoot entity)
+        public async Task<IEnumerable<IEvent>> SaveAsync(IAggregateRoot entity)
         {
-            if (!entity.Events.Any()) { return; }
+            if (!entity.Events.Any()) {
+                throw new InvalidOperationException("No events for serialization.");
+            }
 
-            await Task.WhenAll(entity.Events
-                .Select(async e =>
-                {
-                    var operation = TableOperation.Insert(e.ToStoreEvent());
-                    await eventTable.ExecuteAsync(operation);
-                    await eventBus.PublishAsync(e);
-                }));
+            var batchOperation = new TableBatchOperation();
+            entity.Events.ToList().ForEach(e => batchOperation.Insert(e.ToStoreEvent()));
+            await eventTable.ExecuteBatchAsync(batchOperation);
+
+            return entity.Events;
         }
 
         /// <inheritdoc />

@@ -14,7 +14,7 @@ namespace Intellias.CQRS.Core.Events
         /// </summary>
         /// <param name="entity">IAggregateRoot</param>
         /// <returns>Awaiter</returns>
-        Task SaveAsync(IAggregateRoot entity);
+        Task<IEnumerable<IEvent>> SaveAsync(IAggregateRoot entity);
 
         /// <summary>
         /// Get events for specified version of AR

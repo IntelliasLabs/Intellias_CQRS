@@ -9,20 +9,12 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// <inheritdoc />
     public class InProcessEventStore : IEventStore
     {
-        private readonly IEventBus _publisher;
         private readonly Dictionary<string, List<IEvent>> _inMemoryDb = new Dictionary<string, List<IEvent>>();
 
-        /// <summary>
-        /// Cretes event store
-        /// </summary>
-        /// <param name="bus">event bus</param>
-        public InProcessEventStore(IEventBus bus)
-        {
-            _publisher = bus;
-        }
+
 
         /// <inheritdoc />
-        public async Task SaveAsync(IAggregateRoot entity)
+        public Task<IEnumerable<IEvent>> SaveAsync(IAggregateRoot entity)
         {
             foreach (var @event in entity.Events)
             {
@@ -33,8 +25,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                     _inMemoryDb.Add(@event.AggregateRootId, list);
                 }
                 list.Add(@event);
-                await _publisher.PublishAsync(@event);
             }
+
+            return Task.FromResult((IEnumerable<IEvent>)entity.Events);
         }
 
         /// <inheritdoc />

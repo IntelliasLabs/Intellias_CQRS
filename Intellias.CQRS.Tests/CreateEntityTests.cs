@@ -1,10 +1,8 @@
 using System.Linq;
-using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.Tests.Core;
 using Microsoft.WindowsAzure.Storage.Table;
-using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -24,15 +22,6 @@ namespace Intellias.CQRS.Tests
         public WhenEntityCreated()
         {
             CreateItem(testId, testData);
-        }
-
-        /// <summary>
-        /// Publish method called once
-        /// </summary>
-        [Fact]
-        public void ShouldCallOnceServiceBusPublishMethod()
-        {
-            BusMock.Verify(x=>x.PublishAsync(It.IsAny<IEvent>()), Times.Once);
         }
 
         /// <summary>

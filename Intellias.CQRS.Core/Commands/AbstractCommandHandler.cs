@@ -11,17 +11,24 @@ namespace Intellias.CQRS.Core.Commands
     public abstract class AbstractCommandHandler
     {
         /// <summary>
-        /// Lazy event store instance
+        /// Event store instance
         /// </summary>
         protected IEventStore store { get; }
+
+        /// <summary>
+        /// Event bus instance
+        /// </summary>
+        protected IEventBus bus { get; }
 
         /// <summary>
         /// Initialize base command handler
         /// </summary>
         /// <param name="store"></param>
-        protected AbstractCommandHandler(IEventStore store)
+        /// <param name="bus"></param>
+        protected AbstractCommandHandler(IEventStore store, IEventBus bus)
         {
             this.store = store;
+            this.bus = bus;
         }
 
         /// <summary>

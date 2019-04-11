@@ -52,10 +52,10 @@ namespace Intellias.CQRS.Tests
             eventBus.AddHandler<TestDeletedEvent>(eventHandlers);
 
             // Register event store to populate events into event bus
-            var eventStore = new InProcessEventStore(eventBus);
+            var eventStore = new InProcessEventStore();
 
             // Attach event store to command handlers
-            var commandHandlers = new DemoCommandHandlers(eventStore);
+            var commandHandlers = new DemoCommandHandlers(eventStore, eventBus);
 
             // Create command bus and subscribe command handlers
             commandBus = new InProcessCommandBus();

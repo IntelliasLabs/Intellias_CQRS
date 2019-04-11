@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
@@ -18,8 +19,9 @@ namespace Intellias.CQRS.Tests.Core.CommandHandlers
         /// <summary>
         /// Creates an instance of demo command handler
         /// </summary>
-        /// <param name="store"></param>
-        public DemoCommandHandlers(IEventStore store) : base(store)
+        /// <param name="store">Event store</param>
+        /// <param name="bus">Event bus</param>
+        public DemoCommandHandlers(IEventStore store, IEventBus bus) : base(store, bus)
         { }
 
         /// <summary>
@@ -31,7 +33,8 @@ namespace Intellias.CQRS.Tests.Core.CommandHandlers
         {
             var ar = new TestRoot(command);
 
-            await store.SaveAsync(ar);
+            var processedEvents = await store.SaveAsync(ar);
+            await Task.WhenAll(processedEvents.Select(bus.PublishAsync));
 
             return await Task.FromResult(ExecutionResult.Success);
         }
@@ -46,7 +49,8 @@ namespace Intellias.CQRS.Tests.Core.CommandHandlers
             var ar = await GetAggregateAsync<TestRoot, TestState>(command.AggregateRootId);
             var result = ar.Update(command);
 
-            await store.SaveAsync(ar);
+            var processedEvents = await store.SaveAsync(ar);
+            await Task.WhenAll(processedEvents.Select(bus.PublishAsync));
 
             return await Task.FromResult(result);
         }
@@ -61,7 +65,8 @@ namespace Intellias.CQRS.Tests.Core.CommandHandlers
             var ar = await GetAggregateAsync<TestRoot, TestState>(command.AggregateRootId);
             var result = ar.Deactivate();
 
-            await store.SaveAsync(ar);
+            var processedEvents = await store.SaveAsync(ar);
+            await Task.WhenAll(processedEvents.Select(bus.PublishAsync));
 
             return await Task.FromResult(result);
         }

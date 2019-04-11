@@ -51,7 +51,7 @@ namespace Intellias.CQRS.Tests.Core
 
             BusMock = new Mock<IEventBus>();
 
-            Store = new AzureTableEventStore(CloudStorageAccount.DevelopmentStorageAccount, BusMock.Object);
+            Store = new AzureTableEventStore(CloudStorageAccount.DevelopmentStorageAccount);
 
             var tableClient = CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient();
 
