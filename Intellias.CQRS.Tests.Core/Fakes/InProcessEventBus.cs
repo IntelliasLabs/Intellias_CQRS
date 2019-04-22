@@ -61,9 +61,16 @@ namespace Intellias.CQRS.Tests.Core.Fakes
 
                 var constructedWrapper = typeof(EventHandlerWrapper<>).MakeGenericType(eventType);
                 var abstractHandler = (IEventHandler<IEvent>)Activator.CreateInstance(constructedWrapper, eventHandler);
-                var list = new List<IEventHandler<IEvent>> { abstractHandler };
 
-                funcs.Add(eventType, list);
+                if (funcs.ContainsKey(eventType))
+                {
+                    funcs[eventType].Add(abstractHandler);
+                }
+                else
+                {
+                    var list = new List<IEventHandler<IEvent>> { abstractHandler };
+                    funcs.Add(eventType, list);
+                }
             }
         }
 
