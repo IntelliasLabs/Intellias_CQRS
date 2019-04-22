@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
@@ -41,6 +42,28 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             {
                 var list = new List<IEventHandler<IEvent>> { abstractHandler };
                 funcs.Add(typeof(T), list);
+            }
+        }
+
+        /// <summary>
+        /// Register all implementations of Event handlers
+        /// </summary>
+        /// <param name="eventHandler">event handler</param>
+        public void AddAllHandlers(object eventHandler)
+        {
+            // Here we werify that we take all interfaces IEventHandler<IEvent>
+            var interfaces = eventHandler.GetType().GetInterfaces()
+                .Where(i => i.GetGenericTypeDefinition() == typeof(IEventHandler<>));
+
+            foreach (var t in interfaces)
+            {
+                var eventType = t.GenericTypeArguments.Single();
+
+                var constructedWrapper = typeof(EventHandlerWrapper<>).MakeGenericType(eventType);
+                var abstractHandler = (IEventHandler<IEvent>)Activator.CreateInstance(constructedWrapper, eventHandler);
+                var list = new List<IEventHandler<IEvent>> { abstractHandler };
+
+                funcs.Add(eventType, list);
             }
         }
 

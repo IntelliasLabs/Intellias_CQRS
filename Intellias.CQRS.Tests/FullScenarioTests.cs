@@ -7,7 +7,6 @@ using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Tests.Core.CommandHandlers;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.EventHandlers;
-using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Intellias.CQRS.Tests.Core.Queries;
 using Xunit;
@@ -47,9 +46,7 @@ namespace Intellias.CQRS.Tests
 
             // Create event bus and subscribe handlers to it
             var eventBus = new InProcessEventBus();
-            eventBus.AddHandler<TestCreatedEvent>(eventHandlers);
-            eventBus.AddHandler<TestUpdatedEvent>(eventHandlers);
-            eventBus.AddHandler<TestDeletedEvent>(eventHandlers);
+            eventBus.AddAllHandlers(eventHandlers);
 
             // Register event store to populate events into event bus
             var eventStore = new InProcessEventStore();
@@ -59,9 +56,7 @@ namespace Intellias.CQRS.Tests
 
             // Create command bus and subscribe command handlers
             commandBus = new InProcessCommandBus();
-            commandBus.AddHandler<TestCreateCommand>(commandHandlers);
-            commandBus.AddHandler<TestUpdateCommand>(commandHandlers);
-            commandBus.AddHandler<TestDeleteCommand>(commandHandlers);
+            commandBus.AddAllHandlers(commandHandlers);
 
             queryReader = queryStore;
         }

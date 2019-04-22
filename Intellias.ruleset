@@ -39,5 +39,6 @@
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
     <Rule Id="IDE0005" Action="Error" />
     <Rule Id="IDE1006" Action="None" />
+    <Rule Id="RS1022" Action="None" /> <!-- https://github.com/dotnet/roslyn-analyzers/issues/1861 -->
   </Rules>
 </RuleSet>

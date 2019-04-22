@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Messages;
@@ -40,6 +41,32 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             else
             {
                 funcs.Add(typeof(T), abstractHandler);
+            }
+        }
+
+        /// <summary>
+        /// Register all implementations of Command handlers
+        /// </summary>
+        /// <param name="commandHandler">command handler</param>
+        public void AddAllHandlers(AbstractCommandHandler commandHandler)
+        {
+            if (commandHandler == null)
+            {
+                throw new ArgumentNullException(nameof(commandHandler));
+            }
+
+            // Here we werify that we take all interfaces ICommandHandler<ICommand>
+            var interfaces = commandHandler.GetType().GetInterfaces()
+                .Where(i => i.GetGenericTypeDefinition() == typeof(ICommandHandler<>));
+
+            foreach (var t in interfaces)
+            {
+                var commandType = t.GenericTypeArguments.Single();
+
+                var constructedWrapper = typeof(CommandHandlerWrapper<>).MakeGenericType(commandType);
+                var abstractHandler = (ICommandHandler<ICommand>)Activator.CreateInstance(constructedWrapper, commandHandler);
+
+                funcs.Add(commandType, abstractHandler);
             }
         }
 
