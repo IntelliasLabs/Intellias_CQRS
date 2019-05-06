@@ -1,5 +1,13 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Intellias CQRS 
+Intellias CQRS is a basic CQRS+ES framework.
+Intellias CQRS targets .NET Standard 2.0
+
+## Overview
+- **Event Store** - [Azure Table](https://azure.microsoft.com/en-us/services/storage/tables/)
+- **Command Store** - [Azure Table](https://azure.microsoft.com/en-us/services/storage/tables/)
+- **Query Store** - [Azure Table](https://azure.microsoft.com/en-us/services/storage/tables/)
+- **Event Bus** - [Service Bus](https://azure.microsoft.com/en-us/services/service-bus/)
+- **Command Bus** - [Service Bus](https://azure.microsoft.com/en-us/services/service-bus/)
 
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
@@ -13,8 +21,3 @@ TODO: Describe and show how to build your code and run the tests.
 
 # Contribute
 TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
