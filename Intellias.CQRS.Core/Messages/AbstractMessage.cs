@@ -41,7 +41,7 @@ namespace Intellias.CQRS.Core.Messages
 
         /// <inheritdoc />
         public IDictionary<MetadataKey, string> Metadata { get; } = new Dictionary<MetadataKey, string>();
-        
+
         /// <inheritdoc />
         public override string ToString() => Id;
 
