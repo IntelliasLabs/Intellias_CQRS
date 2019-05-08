@@ -13,7 +13,7 @@ namespace Intellias.CQRS.Core.Messages
         /// </summary>
         protected AbstractMessage()
         {
-            Metadata.Add(MetadataKey.TypeName, GetType().Name);
+            TypeName = GetType().AssemblyQualifiedName;
         }
 
         /// <inheritdoc />
@@ -36,8 +36,12 @@ namespace Intellias.CQRS.Core.Messages
         public DateTime Created { get; } = DateTime.UtcNow;
 
         /// <inheritdoc />
-        public IDictionary<MetadataKey, string> Metadata { get; } = new Dictionary<MetadataKey, string>();
+        [Required]
+        public string TypeName { get; private set; }
 
+        /// <inheritdoc />
+        public IDictionary<MetadataKey, string> Metadata { get; } = new Dictionary<MetadataKey, string>();
+        
         /// <inheritdoc />
         public override string ToString() => Id;
 

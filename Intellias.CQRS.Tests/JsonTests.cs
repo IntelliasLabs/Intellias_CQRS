@@ -1,5 +1,4 @@
-﻿using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Config;
+﻿using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Commands;
 using Newtonsoft.Json;
@@ -22,7 +21,7 @@ namespace Intellias.CQRS.Tests
 
             var json = JsonConvert.SerializeObject(cmd, CqrsSettings.JsonConfig());
 
-            dynamic cmdResult = JsonConvert.DeserializeObject<ICommand>(json, CqrsSettings.JsonConfig());
+            dynamic cmdResult = JsonConvert.DeserializeObject(json, cmd.GetType(), CqrsSettings.JsonConfig());
 
             Assert.Equal(cmd.TestData, cmdResult.TestData);
         }

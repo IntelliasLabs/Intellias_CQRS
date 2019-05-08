@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.Tests.Core;
@@ -42,8 +43,8 @@ namespace Intellias.CQRS.Tests
 
             Assert.True(result.Count == 2, "Result event recordset contains incorrect amount of events. Expeted count is 2");
 
-            var record = result.OrderBy(x=>x.Version).Last().Data;
-            dynamic @event = JsonConvert.DeserializeObject(record);
+            var record = result.OrderBy(x=>x.Version).Last();
+            dynamic @event = JsonConvert.DeserializeObject(record.Data, Type.GetType(record.TypeName), CqrsSettings.JsonConfig());
 
             Assert.True(@event.Version == 2, "Test version for updated event is not equal 2");
             Assert.True(@event.TestData == testDataUpdated, "Test data for updated event is lost");

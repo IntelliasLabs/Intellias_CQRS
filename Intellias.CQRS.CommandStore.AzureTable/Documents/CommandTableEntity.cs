@@ -15,7 +15,7 @@ namespace Intellias.CQRS.CommandStore.AzureTable.Documents
         /// <summary>
         /// Keeps an event type
         /// </summary>
-        public string CommandType { get; set; } = string.Empty;
+        public string TypeName { get; set; } = string.Empty;
 
         /// <summary>
         /// Expected version of command

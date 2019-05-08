@@ -21,7 +21,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
                 RowKey = @event.Id,
                 Version = @event.Version,
                 Data = JsonConvert.SerializeObject(@event, CqrsSettings.JsonConfig()),
-                EventType = @event.GetType().Name,
+                TypeName = @event.TypeName,
                 ETag = "*"
             };
     }

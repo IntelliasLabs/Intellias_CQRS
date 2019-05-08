@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Intellias.CQRS.Core.Messages
+﻿namespace Intellias.CQRS.Core.Messages
 {
     /// <summary>
     /// Extension helpers for Metadata operations
@@ -15,10 +13,7 @@ namespace Intellias.CQRS.Core.Messages
         /// <returns></returns>
         public static void CopyMetadataFrom(this AbstractMessage to, AbstractMessage from)
         {
-            var namesWithoutTypeName = from.Metadata.Keys
-                .Where(e => e != MetadataKey.TypeName);
-
-            foreach (var key in namesWithoutTypeName)
+            foreach (var key in from.Metadata.Keys)
             {
                 to.Metadata[key] = from.Metadata[key];
             }

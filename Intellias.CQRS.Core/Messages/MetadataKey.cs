@@ -6,11 +6,6 @@
     public enum MetadataKey
     {
         /// <summary>
-        /// TypeName, should be set by API gateway
-        /// </summary>
-        TypeName,
-
-        /// <summary>
         /// TypeName of Agreegate Root, should be set by API gateway
         /// </summary>
         AgreegateType,

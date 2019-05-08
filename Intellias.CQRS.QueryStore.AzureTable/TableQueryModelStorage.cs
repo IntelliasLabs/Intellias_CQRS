@@ -16,7 +16,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable
     /// <typeparam name="TQueryModel"></typeparam>
     public class TableQueryModelStorage<TQueryModel> :
         IQueryModelWriter<TQueryModel>,
-        IQueryModelReader<TQueryModel>
+        IQueryModelReader<TQueryModel>,
+        ITableQueryReader<TQueryModel>
         where TQueryModel : class, IQueryModel, new()
     {
         private readonly CloudTable queryTable;
@@ -103,10 +104,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         }
 
         /// <inheritdoc />
-        public async Task<IReadOnlyCollection<TQueryModel>> GetAllAsync()
+        public async Task<IReadOnlyCollection<TQueryModel>> GetAllAsync(TableQuery<DynamicTableEntity> query)
         {
-            var query = new TableQuery<DynamicTableEntity>();
-
             var results = new List<TQueryModel>();
             var continuationToken = new TableContinuationToken();
 
@@ -122,6 +121,13 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             } while (continuationToken != null);
 
             return results;
+        }
+
+        /// <inheritdoc />
+        public async Task<IReadOnlyCollection<TQueryModel>> GetAllAsync()
+        {
+            var query = new TableQuery<DynamicTableEntity>();
+            return await GetAllAsync(query);
         }
 
         /// <inheritdoc />

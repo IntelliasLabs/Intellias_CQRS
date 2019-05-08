@@ -25,7 +25,7 @@ namespace Intellias.CQRS.Tests.Messages
 
             ev.CopyMetadataFrom(cmd);
 
-            ev.Metadata[MetadataKey.TypeName].Should().Be(typeof(TestCreatedEvent).Name);
+            ev.TypeName.Should().Be(typeof(TestCreatedEvent).AssemblyQualifiedName);
             ev.Metadata[MetadataKey.AgreegateType].Should().Be(cmd.Metadata[MetadataKey.AgreegateType]);
             ev.Metadata[MetadataKey.UserId].Should().Be(cmd.Metadata[MetadataKey.UserId]);
             ev.Metadata.TryGetValue(MetadataKey.RequestHeaders, out _).Should().BeFalse();
