@@ -16,7 +16,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Documents
         /// <summary>
         /// Keeps an event type
         /// </summary>
-        public string EventType { get; set; } = string.Empty;
+        public string TypeName { get; set; } = string.Empty;
 
         /// <summary>
         /// Version of event

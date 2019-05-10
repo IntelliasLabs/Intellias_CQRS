@@ -74,7 +74,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
 
             } while (continuationToken != null);
 
-            return results.Select(item => JsonConvert.DeserializeObject<IEvent>(item.Data, CqrsSettings.JsonConfig()));
+            return results.Select(item => JsonConvert.DeserializeObject(item.Data, Type.GetType(item.TypeName), CqrsSettings.JsonConfig())).Cast<IEvent>();
         }
     }
 }

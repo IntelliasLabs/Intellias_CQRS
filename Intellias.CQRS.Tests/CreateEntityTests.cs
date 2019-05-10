@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
@@ -34,8 +35,8 @@ namespace Intellias.CQRS.Tests
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, testId));
             var result = EventTable.ExecuteQuerySegmentedAsync(query, null).Result.Results;
 
-            var record = result.First().Data;
-            dynamic @event = JsonConvert.DeserializeObject(record);
+            var record = result.First();
+            dynamic @event = JsonConvert.DeserializeObject(record.Data, Type.GetType(record.TypeName));
 
             Assert.True(@event.Version == 1, "Test version for created event is not equal 1");
             Assert.True(@event.TestData == testData, "Test data for created event is lost");

@@ -24,6 +24,12 @@ namespace Intellias.CQRS.Core.Messages
         /// </summary>
         string AggregateRootId { get; set; }
 
+
+        /// <summary>
+        /// FullName of message type derived from event/command
+        /// </summary>
+        string TypeName { get; }
+
         /// <summary>
         /// Gets the time stamp for this message creation.
         /// </summary>

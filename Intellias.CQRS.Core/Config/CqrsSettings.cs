@@ -25,7 +25,7 @@ namespace Intellias.CQRS.Core.Config
             () => new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
-                TypeNameHandling = TypeNameHandling.All,
+                TypeNameHandling = TypeNameHandling.None,
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 DateParseHandling = DateParseHandling.DateTimeOffset,
