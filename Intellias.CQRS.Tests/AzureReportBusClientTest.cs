@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text;
+using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventBus.AzureServiceBus;
+using Intellias.CQRS.EventBus.AzureServiceBus.Extensions;
+using Intellias.CQRS.Tests.Core.Events;
 using Microsoft.Azure.ServiceBus;
 using Moq;
 using Xunit;
@@ -22,6 +26,17 @@ namespace Intellias.CQRS.Tests
             });
 
             //Todo mock pushing an event
+        }
+
+        [Fact]
+        public void ServiceBusMessageTest()
+        {
+            var e = new TestCreatedEvent { Id = "123" };
+            var msg = e.ToBusMessage();
+            var json = Encoding.UTF8.GetString(msg.Body);
+            var tms = AbstractMessage.ParseJson(json);
+
+            Assert.Equal(e.Id, tms.Id);
         }
     }
 }
