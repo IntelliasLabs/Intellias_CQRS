@@ -23,7 +23,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// </summary>
         /// <param name="e">event</param>
         /// <returns></returns>
-        public async Task PushTestEvent(IEvent e)
+        public async Task PushTestEventAsync(IEvent e)
         {
             foreach (var handler in handlers)
             {
