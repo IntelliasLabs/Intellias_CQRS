@@ -1,32 +1,15 @@
 ﻿using System;
 using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Config;
+using Newtonsoft.Json;
 
-namespace Intellias.CQRS.Core.Extensions
+namespace Intellias.CQRS.Core.Messages
 {
     /// <summary>
     /// Extension for commands
     /// </summary>
-    public static class CommandExtensions
+    public static class MessageExtensions
     {
-        /// <summary>
-        /// Converts common command data to event
-        /// </summary>
-        /// <typeparam name="TEvent">event without specific properties</typeparam>
-        /// <param name="command">command</param>
-        /// <returns></returns>
-        public static TEvent ToEvent<TEvent>(this Command command)
-            where TEvent : Event, new()
-        {
-
-            var @event = command.ToType<TEvent>();
-            @event.SourceId = command.Id;
-            @event.Version = command.ExpectedVersion;
-
-            return @event;
-        }
-
         /// <summary>
         /// Validates if common command properties are filled and not empty
         /// </summary>
@@ -67,6 +50,16 @@ namespace Intellias.CQRS.Core.Extensions
             {
                 throw new FormatException($"'{nameof(MetadataKey.UserId)}' can't be parsed to guid in the command '{command.Id}");
             }
+        }
+
+        /// <summary>
+        /// IMessage to JSON
+        /// </summary>
+        /// <param name="msg">IMessage</param>
+        /// <returns>JSON</returns>
+        public static string ToJson(this IMessage msg)
+        {
+            return JsonConvert.SerializeObject(msg, CqrsSettings.JsonConfig());
         }
     }
 }

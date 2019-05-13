@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentAssertions;
-using Intellias.CQRS.Core.Extensions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Commands;
 using Xunit;

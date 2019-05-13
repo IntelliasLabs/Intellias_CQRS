@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Intellias.CQRS.Core.Messages
 {
@@ -95,6 +96,51 @@ namespace Intellias.CQRS.Core.Messages
         public override int GetHashCode()
         {
             return Unified.Decode(Id).GetHashCode();
+        }
+
+        /// <summary>
+        /// Parse abstract message
+        /// </summary>
+        /// <param name="json">input json</param>
+        /// <returns>object</returns>
+        public static IMessage ParseJson(string json)
+        {
+            var jObject = JObject.Parse(json);
+            string typeName;
+            typeName = jObject.SelectToken(nameof(typeName)).ToString();
+            return (IMessage)jObject.ToObject(Type.GetType(typeName));
+        }
+
+        /// <summary>
+        /// Copy metadata to another message instance
+        /// </summary>
+        /// <param name="to">target object</param>
+        public void CopyMetadata(AbstractMessage to)
+        {
+            foreach (var key in this.Metadata.Keys)
+            {
+                to.Metadata[key] = this.Metadata[key];
+            }
+        }
+
+        /// <summary>
+        /// Converts abstract message to another type
+        /// </summary>
+        /// <typeparam name="TMessage"></typeparam>
+        /// <returns></returns>
+        public TMessage ToType<TMessage>()
+            where TMessage : AbstractMessage, new()
+        {
+            var result = new TMessage
+            {
+                Id = Unified.NewCode(),
+                AggregateRootId = this.AggregateRootId,
+                CorrelationId = this.CorrelationId
+            };
+
+            this.CopyMetadata(result);
+
+            return result;
         }
     }
 }

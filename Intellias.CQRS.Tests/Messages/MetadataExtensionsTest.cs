@@ -22,8 +22,7 @@ namespace Intellias.CQRS.Tests.Messages
             cmd.Metadata.Add(MetadataKey.UserId, Unified.NewCode());
 
             var ev = new TestCreatedEvent();
-
-            ev.CopyMetadataFrom(cmd);
+            cmd.CopyMetadata(ev);
 
             ev.TypeName.Should().Be(typeof(TestCreatedEvent).AssemblyQualifiedName);
             ev.Metadata[MetadataKey.AgreegateType].Should().Be(cmd.Metadata[MetadataKey.AgreegateType]);
@@ -42,8 +41,7 @@ namespace Intellias.CQRS.Tests.Messages
             cmd.Metadata.Add((MetadataKey)111, "SomeCustomData");
 
             var ev = new TestCreatedEvent();
-
-            ev.CopyMetadataFrom(cmd);
+            cmd.CopyMetadata(ev);
 
             ev.Metadata[(MetadataKey)111].Should().Be("SomeCustomData");
         }
