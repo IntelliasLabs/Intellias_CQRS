@@ -1,13 +1,12 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Microsoft.Azure.ServiceBus;
 
 namespace Intellias.CQRS.EventBus.AzureServiceBus.Extensions
 {
-    /// <summary>
-    /// ServiceBusMessageExtensions
-    /// </summary>
+    [ExcludeFromCodeCoverage]
     internal static class ServiceBusMessageExtensions
     {
         public static Message ToBusMessage(this IEvent @event) =>

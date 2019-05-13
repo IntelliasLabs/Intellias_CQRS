@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
@@ -9,6 +10,7 @@ using Microsoft.Azure.ServiceBus;
 namespace Intellias.CQRS.EventBus.AzureServiceBus
 {
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public class AzureReportBusClient : IReportBusClient
     {
         private readonly ISubscriptionClient sub;

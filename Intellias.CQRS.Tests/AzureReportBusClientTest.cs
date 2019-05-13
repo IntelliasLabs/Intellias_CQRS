@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.EventBus.AzureServiceBus;
+using Intellias.CQRS.Tests.Core.Events;
 using Microsoft.Azure.ServiceBus;
 using Moq;
 using Xunit;
