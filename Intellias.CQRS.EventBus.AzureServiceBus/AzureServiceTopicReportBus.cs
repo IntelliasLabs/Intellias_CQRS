@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventBus.AzureServiceBus.Extensions;
@@ -7,9 +8,7 @@ using Microsoft.Azure.ServiceBus;
 namespace Intellias.CQRS.EventBus.AzureServiceBus
 {
     /// <inheritdoc />
-    /// <summary>
-    /// Publishing events to Azure Service Bus
-    /// </summary>
+    [ExcludeFromCodeCoverage]
     public class AzureServiceTopicReportBus : IReportBus
     {
         private readonly ITopicClient topicClient;
