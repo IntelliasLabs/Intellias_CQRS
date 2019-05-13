@@ -51,7 +51,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <param name="eventHandler">event handler</param>
         public void AddAllHandlers(object eventHandler)
         {
-            // Here we werify that we take all interfaces IEventHandler<IEvent>
+            // Here we verify that we take all interfaces IEventHandler<IEvent>
             var interfaces = eventHandler.GetType().GetInterfaces()
                 .Where(i => i.GetGenericTypeDefinition() == typeof(IEventHandler<>));
 
@@ -77,11 +77,12 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <inheritdoc />
         public async Task<IExecutionResult> PublishAsync(IEvent msg)
         {
-            var funcsList = funcs[msg.GetType()];
-
-            foreach (var func in funcsList)
+            if (funcs.TryGetValue(msg.GetType(), out var funcsList))
             {
-                await func.HandleAsync(msg);
+                foreach (var func in funcsList)
+                {
+                    await func.HandleAsync(msg);
+                }
             }
 
             return await Task.FromResult(ExecutionResult.Success);
