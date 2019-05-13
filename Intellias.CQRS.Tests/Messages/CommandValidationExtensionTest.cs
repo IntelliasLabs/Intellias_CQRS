@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Commands;
+using Intellias.CQRS.Tests.Core.Events;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Messages
@@ -107,6 +108,24 @@ namespace Intellias.CQRS.Tests.Messages
 
             Action act = () => cmd.Validate();
             act.Should().Throw<FormatException>();
+        }
+
+        [Fact]
+        public void CommandToEventTest()
+        {
+            var cmd = new TestCreateCommand
+            {
+                Id = Unified.NewCode(),
+                AggregateRootId = Unified.NewCode(),
+                TestData = "some data",
+                CorrelationId = Unified.NewCode()
+            };
+            var e = cmd.ToEvent<TestCreatedEvent>();
+
+            Assert.Equal(cmd.AggregateRootId, e.AggregateRootId);
+            Assert.Equal(cmd.CorrelationId, e.CorrelationId);
+            Assert.Equal(cmd.Id, e.SourceId);
+            Assert.Equal(cmd.ExpectedVersion, e.Version);
         }
     }
 }
