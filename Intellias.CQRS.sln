@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Core", "Intellias.CQRS.Core\Intellias.CQRS.Core.csproj", "{41AC6C45-8D2E-4ADF-A3BB-60AB94982F37}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.CommandBus.AzureServiceBus", "Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj", "{9A8FBB2E-A8D0-42FD-8F27-D146F14917F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Tests", "Intellias.CQRS.Tests\Intellias.CQRS.Tests.csproj", "{E1DE9EDB-8F92-4A68-B109-3D5AED9B4EEA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Logger.AppInsight", "Intellias.CQRS.Logger.AppInsight\Intellias.CQRS.Logger.AppInsight.csproj", "{1BC39125-AD01-4139-AC62-1FF0C08852B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{E1DE9EDB-8F92-4A68-B109-3D5AED9B4EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1DE9EDB-8F92-4A68-B109-3D5AED9B4EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1DE9EDB-8F92-4A68-B109-3D5AED9B4EEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC39125-AD01-4139-AC62-1FF0C08852B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC39125-AD01-4139-AC62-1FF0C08852B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC39125-AD01-4139-AC62-1FF0C08852B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC39125-AD01-4139-AC62-1FF0C08852B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{3DD22AEC-D602-4980-9D67-B9FF9AD6BB5E} = {428BE606-30C0-4D28-870B-A892A2854C43}
 		{9A8FBB2E-A8D0-42FD-8F27-D146F14917F6} = {428BE606-30C0-4D28-870B-A892A2854C43}
 		{E1DE9EDB-8F92-4A68-B109-3D5AED9B4EEA} = {0D3C6160-9287-4C5F-BC52-27321F544756}
+		{1BC39125-AD01-4139-AC62-1FF0C08852B5} = {428BE606-30C0-4D28-870B-A892A2854C43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6B79CBDF-C02A-4448-96B6-CEB6CE59D144}
