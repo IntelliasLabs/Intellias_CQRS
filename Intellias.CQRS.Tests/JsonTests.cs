@@ -32,7 +32,7 @@ namespace Intellias.CQRS.Tests
         {
             var json = sample.ToJson();
 
-            dynamic cmdResult = AbstractMessage.ParseJson(json);
+            dynamic cmdResult = json.MessageFromJson();
 
             Assert.Equal(sample.TestData, cmdResult.TestData);
         }

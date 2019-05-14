@@ -2,6 +2,7 @@
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Config;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Intellias.CQRS.Core.Messages
 {
@@ -60,6 +61,53 @@ namespace Intellias.CQRS.Core.Messages
         public static string ToJson(this IMessage msg)
         {
             return JsonConvert.SerializeObject(msg, CqrsSettings.JsonConfig());
+        }
+
+        /// <summary>
+        /// Parse abstract message
+        /// </summary>
+        /// <param name="json">input json</param>
+        /// <returns>object</returns>
+        public static IMessage MessageFromJson(this string json)
+        {
+            var jObject = JObject.Parse(json);
+            string typeName;
+            typeName = jObject.SelectToken(nameof(typeName)).ToString();
+            return (IMessage)jObject.ToObject(Type.GetType(typeName));
+        }
+
+        /// <summary>
+        /// Copy metadata to another message instance
+        /// </summary>
+        /// <param name="from">source object</param>
+        /// <param name="to">target object</param>
+        public static void CopyMetadata(this AbstractMessage from, AbstractMessage to)
+        {
+            foreach (var key in from.Metadata.Keys)
+            {
+                to.Metadata[key] = from.Metadata[key];
+            }
+        }
+
+        /// <summary>
+        /// Converts abstract message to another type
+        /// </summary>
+        /// <param name="source">source message</param>
+        /// <typeparam name="TMessage"></typeparam>
+        /// <returns></returns>
+        public static TMessage ToType<TMessage>(this AbstractMessage source)
+            where TMessage : AbstractMessage, new()
+        {
+            var result = new TMessage
+            {
+                Id = Unified.NewCode(),
+                AggregateRootId = source.AggregateRootId,
+                CorrelationId = source.CorrelationId
+            };
+
+            source.CopyMetadata(result);
+
+            return result;
         }
     }
 }
