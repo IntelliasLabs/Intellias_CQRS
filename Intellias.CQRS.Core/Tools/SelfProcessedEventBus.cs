@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
-using Intellias.CQRS.Core.Tools;
 
-namespace Intellias.CQRS.Tests.Core.Fakes
+namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
     /// SelfProcessed EventBus
