@@ -4,7 +4,6 @@ using System.Reflection;
 using Intellias.CQRS.Core.Tools;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
-using Intellias.CQRS.Tests.Core.Fakes;
 using Moq;
 using Xunit;
 

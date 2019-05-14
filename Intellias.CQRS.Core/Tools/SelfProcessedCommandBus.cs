@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Messages;
-using Intellias.CQRS.Core.Tools;
 
-namespace Intellias.CQRS.Tests.Core.Fakes
+namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
     /// Self Processed Command Bus used for process manager needs
