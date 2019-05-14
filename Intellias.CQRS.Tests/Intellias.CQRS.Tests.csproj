@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.9.1" />
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
@@ -22,9 +23,11 @@
     <ProjectReference Include="..\Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Logger.AppInsight\Intellias.CQRS.Logger.AppInsight.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />
+
   </ItemGroup>
 
   <ItemGroup>
