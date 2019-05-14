@@ -10,6 +10,16 @@ namespace Intellias.CQRS.Tests.Messages
     public class CommandValidationExtensionTest
     {
         [Fact]
+        public void ValidateNullCommandTest()
+        {
+            var cmd = new TestCreateCommand
+            {
+                Id = string.Empty
+            };
+            Assert.Throws<ArgumentNullException>(() => cmd.Validate());
+        }
+
+        [Fact]
         public void ValidateBaseCommandSuccessTest()
         {
             var cmd = new TestCreateCommand
