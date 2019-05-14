@@ -8,22 +8,33 @@ namespace Intellias.CQRS.Tests
 {
     public class JsonTests
     {
+        private readonly TestCreateCommand sample = new TestCreateCommand
+        {
+            AggregateRootId = Unified.NewCode(),
+            CorrelationId = Unified.NewCode(),
+            ExpectedVersion = 3,
+            Id = Unified.NewCode(),
+            TestData = "test data"
+        };
+
         [Fact]
         public void CommandSerealizationTest()
         {
-            var cmd = new TestCreateCommand {
-                AggregateRootId = Unified.NewCode(),
-                CorrelationId = Unified.NewCode(),
-                ExpectedVersion = 3,
-                Id = Unified.NewCode(),
-                TestData = "test data"
-            };
+            var json = sample.ToJson();
 
-            var json = JsonConvert.SerializeObject(cmd, CqrsSettings.JsonConfig());
+            dynamic cmdResult = JsonConvert.DeserializeObject(json, sample.GetType(), CqrsSettings.JsonConfig());
 
-            dynamic cmdResult = JsonConvert.DeserializeObject(json, cmd.GetType(), CqrsSettings.JsonConfig());
+            Assert.Equal(sample.TestData, cmdResult.TestData);
+        }
 
-            Assert.Equal(cmd.TestData, cmdResult.TestData);
+        [Fact]
+        public void MessageExtensionTest()
+        {
+            var json = sample.ToJson();
+
+            dynamic cmdResult = json.MessageFromJson();
+
+            Assert.Equal(sample.TestData, cmdResult.TestData);
         }
     }
 }

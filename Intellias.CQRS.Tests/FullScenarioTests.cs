@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Intellias.CQRS.Core.Extensions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Storage;
 using Intellias.CQRS.Tests.Core.CommandHandlers;
