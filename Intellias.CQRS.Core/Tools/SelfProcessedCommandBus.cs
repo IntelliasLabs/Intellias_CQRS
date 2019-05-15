@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Messages;
 
@@ -27,19 +28,28 @@ namespace Intellias.CQRS.Core.Tools
         /// <returns></returns>
         public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
-            var method = typeof(HandlerManager)
-                    .GetMethod("HandleCommandAsync");
-
-            if (method == null)
+            try
             {
-                return ExecutionResult.Fail("Error calling HandleCommandAsync method");
+                var method = typeof(HandlerManager)
+                        .GetMethod("HandleCommandAsync");
+
+                if (method == null)
+                {
+                    return ExecutionResult.Fail("Error calling HandleCommandAsync method");
+                }
+
+                await (Task)method
+                    .MakeGenericMethod(msg.GetType())
+                    .Invoke(_handlerManager, new object[] { msg });
+
+                return ExecutionResult.Success;
             }
-
-            await (Task)method
-                .MakeGenericMethod(msg.GetType())
-                .Invoke(_handlerManager, new object[] { msg });
-
-            return ExecutionResult.Success;
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception e)
+            {
+                return ExecutionResult.Fail($"Error handling command: {e.Message}");
+            }
+#pragma warning restore CA1031 // Do not catch general exception types
         }
     }
 }

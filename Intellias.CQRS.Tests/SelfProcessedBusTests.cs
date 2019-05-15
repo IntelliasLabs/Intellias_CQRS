@@ -30,5 +30,31 @@ namespace Intellias.CQRS.Tests
             var result = bus.PublishAsync(new TestCreatedEvent()).Result;
             Assert.True(result.IsSuccess);
         }
+
+        [Fact]
+        public void SelfCommandBusHandlersNotAddedFailTest()
+        {
+            var sp = new Mock<IServiceProvider>();
+
+            // We add here assembly with command handler but not inject command handler to ServiceProvider
+            var bus = new SelfProcessedCommandBus(new HandlerManager(new HandlerDependencyResolver(sp.Object,
+                new[] { Assembly.GetExecutingAssembly() })));
+
+            var result = bus.PublishAsync(new TestCreateCommand()).Result;
+            Assert.False(result.IsSuccess);
+        }
+
+        [Fact]
+        public void SelfEventBusHandlersNotAddedFailTest()
+        {
+            var sp = new Mock<IServiceProvider>();
+
+            // We add here assembly with command handler but not inject command handler to ServiceProvider
+            var bus = new SelfProcessedEventBus(new HandlerManager(new HandlerDependencyResolver(sp.Object,
+                new[] { Assembly.GetExecutingAssembly() })));
+
+            var result = bus.PublishAsync(new TestCreatedEvent()).Result;
+            Assert.False(result.IsSuccess);
+        }
     }
 }
