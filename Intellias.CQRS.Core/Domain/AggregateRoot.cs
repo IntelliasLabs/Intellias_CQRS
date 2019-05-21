@@ -13,7 +13,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <summary>
         /// Current State of Aggregate
         /// </summary>
-        protected T State { get; } = new T();
+        public T State { get; } = new T();
 
         /// <inheritdoc />
         public string Id { get; protected set; }
