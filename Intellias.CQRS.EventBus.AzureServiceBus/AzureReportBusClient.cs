@@ -37,7 +37,10 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
                 var e = (IEvent)json.MessageFromJson();
 
                 // Invoke handler
-                await handler?.Invoke(e);
+                if (handler != null)
+                {
+                    await handler(e);
+                }
 
                 // Complete the message so that it is not received again.
                 await sub.CompleteAsync(msg.SystemProperties.LockToken);

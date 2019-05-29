@@ -9,9 +9,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.9.1" />
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
-    <PackageReference Include="Microsoft.CodeCoverage" Version="16.0.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="Microsoft.CodeCoverage" Version="16.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
+    <PackageReference Include="Moq" Version="4.11.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.DomainServices\Intellias.CQRS.DomainServices.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Logger.AppInsight\Intellias.CQRS.Logger.AppInsight.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj" />
@@ -37,8 +38,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="3.0.0" />
-    <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Features" Version="3.0.0" />
+    <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="3.1.0" />
+    <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Features" Version="3.1.0" />
     <PackageReference Update="Microsoft.CodeQuality.Analyzers" Version="2.9.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -48,7 +49,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Update="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Update="Text.Analyzers" Version="2.6.3">
+    <PackageReference Update="Text.Analyzers" Version="2.6.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

@@ -6,7 +6,7 @@ using Intellias.CQRS.Logger.AppInsight.AppInsightsLogger;
 using Intellias.CQRS.Tests.Core.Commands;
 using Xunit;
 
-namespace IntelliGrowth.Core.Tests.ApplicationLogger
+namespace Intellias.CQRS.Tests.AppInsightLogger
 {
     public class ApplicationLoggerTests
     {

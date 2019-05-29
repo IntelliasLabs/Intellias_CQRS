@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="3.0.0" />
-    <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Features" Version="3.0.0" />
+    <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="3.1.0" />
+    <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Features" Version="3.1.0" />
     <PackageReference Update="Microsoft.CodeQuality.Analyzers" Version="2.9.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -24,7 +24,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="Text.Analyzers" Version="2.6.3">
+    <PackageReference Update="Text.Analyzers" Version="2.6.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

@@ -18,8 +18,8 @@ namespace Intellias.CQRS.Core.Commands
             where TEvent : Event, new()
         {
             var e = this.ToType<TEvent>();
-            e.SourceId = this.Id;
-            e.Version = this.ExpectedVersion;
+            e.SourceId = Id;
+            e.Version = ExpectedVersion;
 
             return e;
         }
