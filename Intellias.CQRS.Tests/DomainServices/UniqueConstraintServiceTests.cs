@@ -28,7 +28,7 @@ namespace Intellias.CQRS.Tests.DomainServices
         {
             var testId = Unified.NewCode();
 
-            await uniqueConstraintService.ReserveStringAsync("TestIndex", testId);
+            await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
 
             var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", testId));
             Assert.NotNull(testResult.Result);
@@ -39,8 +39,8 @@ namespace Intellias.CQRS.Tests.DomainServices
         {
             var testId = Unified.NewCode();
 
-            await uniqueConstraintService.ReserveStringAsync("TestIndex", testId);
-            await Assert.ThrowsAsync<InvalidOperationException>(() => uniqueConstraintService.ReserveStringAsync("TestIndex", testId));
+            await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId));
         }
 
         [Fact]
@@ -49,8 +49,8 @@ namespace Intellias.CQRS.Tests.DomainServices
             var testId = Unified.NewCode();
             var updatedTestId = Unified.NewCode();
 
-            await uniqueConstraintService.ReserveStringAsync("TestIndex", testId);
-            await uniqueConstraintService.UpdateStringAsync("TestIndex", testId, updatedTestId);
+            await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
+            await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
 
             var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", updatedTestId));
             Assert.NotNull(testResult.Result);
@@ -62,7 +62,7 @@ namespace Intellias.CQRS.Tests.DomainServices
             var testId = Unified.NewCode();
             var updatedTestId = Unified.NewCode();
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() => uniqueConstraintService.UpdateStringAsync("TestIndex", testId, updatedTestId));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId));
         }
 
         [Fact]
@@ -71,9 +71,9 @@ namespace Intellias.CQRS.Tests.DomainServices
             var testId = Unified.NewCode();
             var updatedTestId = Unified.NewCode();
 
-            await uniqueConstraintService.ReserveStringAsync("TestIndex", testId);
-            await uniqueConstraintService.ReserveStringAsync("TestIndex", updatedTestId);
-            await Assert.ThrowsAsync<InvalidOperationException>(() => uniqueConstraintService.UpdateStringAsync("TestIndex", testId, updatedTestId));
+            await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
+            await uniqueConstraintService.ReserveConstraintAsync("TestIndex", updatedTestId);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId));
 
             // Check original record is present
             var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", testId));
@@ -84,9 +84,9 @@ namespace Intellias.CQRS.Tests.DomainServices
         public async Task RemoveTestName()
         {
             var testId = Unified.NewCode();
-            await uniqueConstraintService.ReserveStringAsync("TestIndex", testId);
+            await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
 
-            await uniqueConstraintService.RemoveStringAsync("TestIndex", testId);
+            await uniqueConstraintService.RemoveConstraintAsync("TestIndex", testId);
 
             var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", testId));
             Assert.Null(testResult.Result);

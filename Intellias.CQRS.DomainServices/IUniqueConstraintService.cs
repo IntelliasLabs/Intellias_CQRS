@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Intellias.CQRS.DomainServices
 {
@@ -8,28 +9,31 @@ namespace Intellias.CQRS.DomainServices
     public interface IUniqueConstraintService
     {
         /// <summary>
-        /// RemoveStringAsync
+        /// Remove constraint from store
         /// </summary>
-        /// <param name="indexName"></param>
-        /// <param name="value"></param>
+        /// <param name="indexName">Name of index</param>
+        /// <param name="value">Current constraint value</param>
+        /// <exception cref="InvalidOperationException">Thrown on error removing constraint</exception>
         /// <returns></returns>
-        Task RemoveStringAsync(string indexName, string value);
+        Task RemoveConstraintAsync(string indexName, string value);
 
         /// <summary>
-        /// ReserveStringAsync
+        /// Reserve constraint in store
         /// </summary>
-        /// <param name="indexName"></param>
-        /// <param name="value"></param>
+        /// <param name="indexName">Name of index</param>
+        /// <param name="value">Constraint value</param>
+        /// <exception cref="InvalidOperationException">Thrown when new constraint already exists</exception>
         /// <returns></returns>
-        Task ReserveStringAsync(string indexName, string value);
+        Task ReserveConstraintAsync(string indexName, string value);
 
         /// <summary>
-        /// UpdateStringAsync
+        /// Replaces constraint in store
         /// </summary>
-        /// <param name="indexName"></param>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
+        /// <param name="indexName">Name of index</param>
+        /// <param name="oldValue">Current constraint value</param>
+        /// <param name="newValue">New constraint value</param>
+        /// <exception cref="InvalidOperationException">Thrown when new constraint already exists</exception>
         /// <returns></returns>
-        Task UpdateStringAsync(string indexName, string oldValue, string newValue);
+        Task UpdateConstraintAsync(string indexName, string oldValue, string newValue);
     }
 }

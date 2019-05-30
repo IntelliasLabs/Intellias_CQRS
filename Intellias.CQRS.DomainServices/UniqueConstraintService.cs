@@ -6,7 +6,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 namespace Intellias.CQRS.DomainServices
 {
     /// <summary>
-    /// UniqueConstraintService
+    /// Unique-constraint service
     /// </summary>
     public class UniqueConstraintService : IUniqueConstraintService
     {
@@ -25,12 +25,8 @@ namespace Intellias.CQRS.DomainServices
             table.CreateIfNotExistsAsync().Wait();
         }
 
-        /// <summary>
-        /// Remove string in store
-        /// </summary>
-        /// <param name="indexName"></param>
-        /// <param name="value"></param>
-        public async Task RemoveStringAsync(string indexName, string value)
+        /// <inheritdoc />
+        public async Task RemoveConstraintAsync(string indexName, string value)
         {
             try
             {
@@ -49,12 +45,8 @@ namespace Intellias.CQRS.DomainServices
         }
 
 
-        /// <summary>
-        /// Reserve string in store
-        /// </summary>
-        /// <param name="indexName"></param>
-        /// <param name="value"></param>
-        public async Task ReserveStringAsync(string indexName, string value)
+        /// <inheritdoc />
+        public async Task ReserveConstraintAsync(string indexName, string value)
         {
             try
             {
@@ -72,13 +64,8 @@ namespace Intellias.CQRS.DomainServices
             }
         }
 
-        /// <summary>
-        /// Update string in store
-        /// </summary>
-        /// <param name="indexName"></param>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        public async Task UpdateStringAsync(string indexName, string oldValue, string newValue)
+        /// <inheritdoc />
+        public async Task UpdateConstraintAsync(string indexName, string oldValue, string newValue)
         {
             var updateOperation = new TableBatchOperation();
 
