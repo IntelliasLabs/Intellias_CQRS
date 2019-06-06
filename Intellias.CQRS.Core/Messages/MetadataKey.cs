@@ -23,6 +23,11 @@
         /// <summary>
         /// HTTP request headers of command, should be set by API gateway
         /// </summary>
-        RequestHeaders
+        RequestHeaders,
+
+        /// <summary>
+        /// Message additional payload. Could be set by API gateway for additional parameters passing, etc.
+        /// </summary>
+        Payload
     }
 }
