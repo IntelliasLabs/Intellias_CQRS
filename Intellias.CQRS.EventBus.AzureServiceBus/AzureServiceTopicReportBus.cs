@@ -24,7 +24,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         }
 
         /// <inheritdoc />
-        public async Task<IExecutionResult> PublishAsync(IEvent msg)
+        public async Task<IExecutionResult> PublishAsync(IMessage msg)
         {
             var busMsg = msg.ToBusMessage();
             await topicClient.SendAsync(busMsg);
