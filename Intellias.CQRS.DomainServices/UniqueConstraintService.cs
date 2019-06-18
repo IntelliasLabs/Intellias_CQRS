@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Exceptions;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Shared.Protocol;
 using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.WindowsAzure.Storage.Table.Protocol;
 
 namespace Intellias.CQRS.DomainServices
 {
@@ -40,7 +43,15 @@ namespace Intellias.CQRS.DomainServices
             }
             catch (StorageException e)
             {
-                throw new InvalidOperationException("Delete operation failed.", e);
+                var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
+                if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new BusinessRuleValidationException($"The name '{value}' is not in use. Please enter another one.", e);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Delete operation failed.", e);
+                }
             }
         }
 
@@ -60,7 +71,15 @@ namespace Intellias.CQRS.DomainServices
             }
             catch (StorageException e)
             {
-                throw new InvalidOperationException("Reserve operation failed.", e);
+                var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
+                if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new BusinessRuleValidationException($"The name '{value}' is already in use. Please enter another one.", e);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Reserve operation failed.", e);
+                }
             }
         }
 
@@ -90,7 +109,19 @@ namespace Intellias.CQRS.DomainServices
             }
             catch (StorageException e)
             {
-                throw new InvalidOperationException("Updete operation failed.", e);
+                var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
+                if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new BusinessRuleValidationException($"The name '{newValue}' is already in use. Please enter another one.", e);
+                }
+                else if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new BusinessRuleValidationException($"The name '{oldValue}' is not in use. Please enter another one.", e);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Update operation failed.", e);
+                }
             }
         }
     }

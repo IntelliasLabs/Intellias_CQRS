@@ -81,7 +81,7 @@ namespace Intellias.CQRS.Core.Messages
         /// </summary>
         /// <param name="from">source object</param>
         /// <param name="to">target object</param>
-        public static void CopyMetadata(this AbstractMessage from, AbstractMessage to)
+        public static void CopyMetadata(this IMessage from, IMessage to)
         {
             foreach (var key in from.Metadata.Keys)
             {
@@ -95,7 +95,7 @@ namespace Intellias.CQRS.Core.Messages
         /// <param name="source">source message</param>
         /// <typeparam name="TMessage"></typeparam>
         /// <returns></returns>
-        public static TMessage ToType<TMessage>(this AbstractMessage source)
+        public static TMessage ToType<TMessage>(this IMessage source)
             where TMessage : AbstractMessage, new()
         {
             var result = new TMessage

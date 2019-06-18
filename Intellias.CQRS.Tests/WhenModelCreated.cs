@@ -39,7 +39,7 @@ namespace Intellias.CQRS.Tests
         {
             var result = Store.GetAsync(model.Id).Result;
 
-            Assert.True(result != null, "Item is not present in DB");
+            Assert.NotNull(result);
             Assert.True(result.TestData == model.TestData, "Item data is corrupted");
             Assert.True(result.Id == model.Id, "Item Id is corrupted");
         }
@@ -53,7 +53,7 @@ namespace Intellias.CQRS.Tests
             var resultList = Store.GetAllAsync().Result;
             var result = resultList.FirstOrDefault(x => x.Id == model.Id);
 
-            Assert.True(result != null, "Item is not present in DB");
+            Assert.NotNull(result);
             Assert.True(result.TestData == model.TestData, "Item data is corrupted");
             Assert.True(result.Id == model.Id, "Item Id is corrupted");
         }
