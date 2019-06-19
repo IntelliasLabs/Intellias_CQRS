@@ -10,35 +10,35 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// </summary>
     public class FakeReportBus : IReportBus
     {
-        private readonly IDictionary<string, IEvent> _store;
+        private readonly IDictionary<string, IMessage> _store;
 
         /// <summary>
         /// constructor
         /// </summary>
         /// <param name="store"></param>
-        public FakeReportBus(IDictionary<string, IEvent> store)
+        public FakeReportBus(IDictionary<string, IMessage> store)
         {
-            _store = store ?? new Dictionary<string, IEvent>();
+            _store = store ?? new Dictionary<string, IMessage>();
         }
 
         /// <summary>
         /// Save event to store
         /// </summary>
-        /// <param name="msg">Event</param>
+        /// <param name="message">message</param>
         /// <returns></returns>
-        public Task<IExecutionResult> PublishAsync(IEvent msg)
+        public Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessage
         {
-            _store.Add(msg.AggregateRootId, msg);
+            _store.Add(message.AggregateRootId, message);
 
-            return Task.FromResult<IExecutionResult>(ExecutionResult.Success);
+            return Task.CompletedTask;
         }
 
         /// <summary>
-        /// Get event from store
+        /// Get message from store
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<IEvent> GetEventAsync(string id)
+        public Task<IMessage> GetMessageAsync(string id)
         {
             return _store.TryGetValue(id, out var @event)
                 ? Task.FromResult(@event)

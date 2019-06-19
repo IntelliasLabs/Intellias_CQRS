@@ -12,9 +12,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <summary>
         /// PublishAsync
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="message">message</param>
         /// <returns></returns>
-        public Task<IExecutionResult> PublishAsync(IEvent msg) =>
-            Task.FromResult<IExecutionResult>(ExecutionResult.Success);
+        public Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessage =>
+            Task.CompletedTask;
     }
 }

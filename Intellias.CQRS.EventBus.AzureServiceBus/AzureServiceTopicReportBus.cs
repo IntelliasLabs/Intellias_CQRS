@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
-using Intellias.CQRS.EventBus.AzureServiceBus.Extensions;
 using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
 
 namespace Intellias.CQRS.EventBus.AzureServiceBus
 {
@@ -24,11 +26,21 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         }
 
         /// <inheritdoc />
-        public async Task<IExecutionResult> PublishAsync(IEvent msg)
+        public Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessage
         {
-            var busMsg = msg.ToBusMessage();
-            await topicClient.SendAsync(busMsg);
-            return await Task.FromResult(ExecutionResult.Success);
+            var busMsg = CreateBusMessage(message);
+            return topicClient.SendAsync(busMsg);
+        }
+
+        private static Message CreateBusMessage(IMessage message)
+        {
+            return new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message, CqrsSettings.JsonConfig())))
+            {
+                MessageId = message.Id,
+                ContentType = message.GetType().FullName,
+                PartitionKey = message.AggregateRootId,
+                CorrelationId = message.CorrelationId
+            };
         }
     }
 }
