@@ -6,7 +6,7 @@ using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Xunit;
 
-namespace Intellias.CQRS.Tests
+namespace Intellias.CQRS.Tests.Fakes
 {
     public class FakeReportBusTests
     {

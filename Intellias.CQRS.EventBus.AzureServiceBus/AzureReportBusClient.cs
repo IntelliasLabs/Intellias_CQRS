@@ -23,7 +23,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         }
 
         /// <inheritdoc />
-        public void Subscribe(Func<IEvent, Task> handler)
+        public void Subscribe(Func<IMessage, Task> handler)
         {
             var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandlerAsync)
             {
@@ -34,12 +34,12 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
             // Register the function that processes messages.
             sub.RegisterMessageHandler(async (msg, token) => {
                 var json = Encoding.UTF8.GetString(msg.Body);
-                var e = (IEvent)json.MessageFromJson();
+                var message = json.MessageFromJson();
 
                 // Invoke handler
                 if (handler != null)
                 {
-                    await handler(e);
+                    await handler(message);
                 }
 
                 // Complete the message so that it is not received again.

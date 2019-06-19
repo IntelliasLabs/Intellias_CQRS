@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Core.Events
 {
@@ -12,6 +13,6 @@ namespace Intellias.CQRS.Core.Events
         /// Subscribe to event stream
         /// </summary>
         /// <param name="handler">Handler func</param>
-        void Subscribe(Func<IEvent, Task> handler);
+        void Subscribe(Func<IMessage, Task> handler);
     }
 }

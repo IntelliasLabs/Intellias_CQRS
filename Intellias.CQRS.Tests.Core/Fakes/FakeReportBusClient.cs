@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Messages;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
@@ -10,24 +11,24 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// </summary>
     public class FakeReportBusClient : IReportBusClient
     {
-        private readonly List<Func<IEvent, Task>> handlers = new List<Func<IEvent, Task>>();
+        private readonly List<Func<IMessage, Task>> handlers = new List<Func<IMessage, Task>>();
 
         /// <inheritdoc />
-        public void Subscribe(Func<IEvent, Task> handler)
+        public void Subscribe(Func<IMessage, Task> handler)
         {
             handlers.Add(handler);
         }
 
         /// <summary>
-        /// Pubh test event to bus
+        /// Push test event to bus
         /// </summary>
-        /// <param name="e">event</param>
+        /// <param name="message">message</param>
         /// <returns></returns>
-        public async Task PushTestEventAsync(IEvent e)
+        public async Task PushTestEventAsync(IMessage message)
         {
             foreach (var handler in handlers)
             {
-                await handler(e);
+                await handler(message);
             }
         }
     }

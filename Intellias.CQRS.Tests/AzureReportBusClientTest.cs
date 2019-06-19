@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventBus.AzureServiceBus;
 using Intellias.CQRS.EventBus.AzureServiceBus.Extensions;
@@ -15,17 +18,23 @@ namespace Intellias.CQRS.Tests
         [Fact]
         public void SubscribeTest()
         {
+            var testEvent = new TestCreatedEvent { Id = "id" };
+
             var mock = new Mock<ISubscriptionClient>();
+            mock.Setup(s => s.RegisterMessageHandler(It.IsAny<Func<Message, CancellationToken, Task>>(), It.IsAny<MessageHandlerOptions>()))
+                .Callback<Func<Message, CancellationToken, Task>, MessageHandlerOptions>((handler, _) =>
+                 {
+                     var msg = testEvent.ToBusMessage();
+                     handler?.Invoke(msg, CancellationToken.None);
+                 });
 
             var reportBus = new AzureReportBusClient(mock.Object);
-            reportBus.Subscribe(e => {
+            reportBus.Subscribe(message => {
 
                 // Is event received
-                Assert.NotNull(e);
-                return Task.FromResult(e);
+                message.Should().BeEquivalentTo(testEvent);
+                return Task.CompletedTask;
             });
-
-            //Todo mock pushing an event
         }
 
         [Fact]
