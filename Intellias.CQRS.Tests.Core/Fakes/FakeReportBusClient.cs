@@ -20,7 +20,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// Pubh test event to bus
+        /// Push test event to bus
         /// </summary>
         /// <param name="message">message</param>
         /// <returns></returns>
