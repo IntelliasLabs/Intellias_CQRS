@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Fakes;
@@ -18,9 +17,9 @@ namespace Intellias.CQRS.Tests.Fakes
             };
             var sut = new FakeReportBusClient();
 
-            sut.Subscribe(message => 
+            sut.Subscribe(msg => 
             {
-                message.Should().BeEquivalentTo(message);
+                msg.Should().BeEquivalentTo(message);
                 return Task.CompletedTask;
             });
 
