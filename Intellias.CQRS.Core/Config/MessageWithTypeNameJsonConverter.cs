@@ -9,15 +9,18 @@ namespace Intellias.CQRS.Core.Config
     /// <summary>
     /// Deserialize IMessage to specific type that provided in TypeName property
     /// </summary>
-    internal class MessageWithTypeNameJsonConverter : JsonConverter
+    public class MessageWithTypeNameJsonConverter : JsonConverter
     {
+        /// <inheritdoc />
         public override bool CanConvert(Type objectType)
         {
             return objectType.IsInterface && objectType.IsAssignableFrom(typeof(IMessage));
         }
 
+        /// <inheritdoc />
         public override bool CanWrite => false;
 
+        /// <inheritdoc />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var jObject = JObject.Load(reader);
@@ -26,6 +29,7 @@ namespace Intellias.CQRS.Core.Config
             return jObject.ToObject(Type.GetType(typeName));
         }
 
+        /// <inheritdoc />
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
