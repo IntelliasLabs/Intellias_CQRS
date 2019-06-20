@@ -29,7 +29,8 @@ namespace Intellias.CQRS.Core.Config
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 DateParseHandling = DateParseHandling.DateTimeOffset,
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                Converters = new[] { new MessageWithTypeNameJsonConverter() }
             };
     }
 }
