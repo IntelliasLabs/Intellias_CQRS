@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -30,7 +31,7 @@ namespace Intellias.CQRS.Core.Config
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 DateParseHandling = DateParseHandling.DateTimeOffset,
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                Converters = new[] { new MessageWithTypeNameJsonConverter() }
+                Converters = new List<JsonConverter> { new MessageWithTypeNameJsonConverter() }
             };
     }
 }

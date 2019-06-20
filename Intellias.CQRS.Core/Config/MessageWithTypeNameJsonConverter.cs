@@ -35,9 +35,9 @@ namespace Intellias.CQRS.Core.Config
         /// Convert first letter to lower
         /// </summary>
         /// <returns></returns>
-        private string GetMessageTypeNamePath()
+        private static string GetMessageTypeNamePath()
         {
-            var name = nameof(IMessage.TypeName);
+            const string name = nameof(IMessage.TypeName);
             return char.ToLowerInvariant(name[0]) + name.Substring(1);
         }
     }

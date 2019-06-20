@@ -2,7 +2,6 @@
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Config;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Intellias.CQRS.Core.Messages
 {
@@ -70,10 +69,7 @@ namespace Intellias.CQRS.Core.Messages
         /// <returns>object</returns>
         public static IMessage MessageFromJson(this string json)
         {
-            var jObject = JObject.Parse(json);
-            string typeName;
-            typeName = jObject.SelectToken(nameof(typeName)).ToString();
-            return (IMessage)jObject.ToObject(Type.GetType(typeName));
+            return JsonConvert.DeserializeObject<IMessage>(json, CqrsSettings.JsonConfig());
         }
 
         /// <summary>
