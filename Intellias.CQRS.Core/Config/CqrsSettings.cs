@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -29,7 +30,8 @@ namespace Intellias.CQRS.Core.Config
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 DateParseHandling = DateParseHandling.DateTimeOffset,
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                Converters = new List<JsonConverter> { new MessageWithTypeNameJsonConverter() }
             };
     }
 }

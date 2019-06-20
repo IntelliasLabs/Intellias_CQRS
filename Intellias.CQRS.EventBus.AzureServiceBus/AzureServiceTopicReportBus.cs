@@ -1,11 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Microsoft.Azure.ServiceBus;
-using Newtonsoft.Json;
 
 namespace Intellias.CQRS.EventBus.AzureServiceBus
 {
@@ -34,10 +32,10 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
 
         private static Message CreateBusMessage(IMessage message)
         {
-            return new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message, CqrsSettings.JsonConfig())))
+            return new Message(Encoding.UTF8.GetBytes(message.ToJson()))
             {
                 MessageId = message.Id,
-                ContentType = message.GetType().FullName,
+                ContentType = message.GetType().AssemblyQualifiedName,
                 PartitionKey = message.AggregateRootId,
                 CorrelationId = message.CorrelationId
             };
