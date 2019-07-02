@@ -23,32 +23,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         private readonly CloudTable queryTable;
         private readonly CloudTable queryVersioningTable;
 
-        private static DynamicTableEntity Transform(TQueryModel model)
-        {
-            var entity = new DynamicTableEntity(model.Id.Substring(0, 1), model.Id)
-            {
-                Properties = DynamicPropertyConverter.Flatten(model),
-                Timestamp = DateTimeOffset.UtcNow,
-                ETag = "*"
-            };
-
-            return entity;
-        }
-
-        private async Task<DynamicTableEntity> RetrieveEntityAsync(string id)
-        {
-            var readOperation = TableOperation.Retrieve<DynamicTableEntity>(id.Substring(0, 1), id);
-
-            var queryResult = await queryTable.ExecuteAsync(readOperation);
-
-            var entity = (DynamicTableEntity)queryResult.Result;
-
-            if (entity == null)
-            { throw new KeyNotFoundException(id); }
-
-            return entity;
-        }
-
         /// <summary>
         /// TableQueryModelStorage
         /// </summary>
@@ -154,6 +128,34 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             var updateOperation = TableOperation.Replace(entity);
             await queryTable.ExecuteAsync(updateOperation);
+        }
+
+        private static DynamicTableEntity Transform(TQueryModel model)
+        {
+            var entity = new DynamicTableEntity(model.Id.Substring(0, 1), model.Id)
+            {
+                Properties = DynamicPropertyConverter.Flatten(model),
+                Timestamp = DateTimeOffset.UtcNow,
+                ETag = "*"
+            };
+
+            return entity;
+        }
+
+        private async Task<DynamicTableEntity> RetrieveEntityAsync(string id)
+        {
+            var readOperation = TableOperation.Retrieve<DynamicTableEntity>(id.Substring(0, 1), id);
+
+            var queryResult = await queryTable.ExecuteAsync(readOperation);
+
+            var entity = (DynamicTableEntity)queryResult.Result;
+
+            if (entity == null)
+            { throw new KeyNotFoundException(id); }
+
+            entity.ETag = "*";
+
+            return entity;
         }
     }
 }

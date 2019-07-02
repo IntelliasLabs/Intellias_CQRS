@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core;
 using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Queries;
+using Microsoft.WindowsAzure.Storage;
 using Xunit;
 
 namespace Intellias.CQRS.Tests
@@ -76,6 +79,24 @@ namespace Intellias.CQRS.Tests
             var result = Store.GetAsync(model.Id).Result;
 
             Assert.Equal(updatedData, result.TestData);
+        }
+
+        /// <summary>
+        /// Update existing entity in parallel
+        /// </summary>
+        [Fact]
+        public void UpdateExistingEntityInParallel()
+        {
+            // Act
+            var tasks = Enumerable.Repeat(Unified.NewCode(), 5)
+                .Select(element => Store.UpdateAsync(model.Id, m => {
+                    m.TestData = element;
+                }));
+
+            Func<Task> act = async () => await Task.WhenAll(tasks);
+
+            // Assert
+            act.Should().NotThrow<StorageException>();
         }
 
         [Fact]
