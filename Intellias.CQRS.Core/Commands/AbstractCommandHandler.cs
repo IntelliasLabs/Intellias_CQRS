@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
@@ -38,6 +39,8 @@ namespace Intellias.CQRS.Core.Commands
         /// <typeparam name="TR">type of Aggregate State</typeparam>
         /// <param name="aggregateRootId">Id of Aggreagate root to be loaded</param>
         /// <returns></returns>
+        /// <exception cref="KeyNotFoundException">Aggregate Root Id not found in event store.</exception>
+        /// <exception cref="ArgumentNullException">Aggregate should have constructor with string parameter that is id of AR.</exception>
         protected async Task<T> GetAggregateAsync<T, TR>(string aggregateRootId)
             where T: AggregateRoot<TR>
             where TR: AggregateState, new()
