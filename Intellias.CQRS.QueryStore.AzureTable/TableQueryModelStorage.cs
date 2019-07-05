@@ -7,6 +7,7 @@ using Intellias.CQRS.Core.Storage;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Intellias.CQRS.Core.Events;
+using Polly;
 
 namespace Intellias.CQRS.QueryStore.AzureTable
 {
@@ -113,8 +114,30 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return DynamicPropertyConverter.ConvertBack<TQueryModel>(entity);
         }
 
+#pragma warning disable SCS0005 // Weak random generator
         /// <inheritdoc />
         public async Task UpdateAsync(string id, Action<TQueryModel> updateAction)
+        {
+            const int numberOfRetries = 5;
+            const int coefficientInMiliseconds = 50;
+            const int minSaltInMiliseconds = 50;
+            const int maxSaltInMiliseconds = 200;
+
+            var jitterer = new Random();
+
+            await Policy
+            .Handle<StorageException>()
+            .WaitAndRetryAsync(numberOfRetries,
+                retryAttempt => TimeSpan.FromMilliseconds(coefficientInMiliseconds * Math.Pow(2, retryAttempt))
+                    + TimeSpan.FromMilliseconds(jitterer.Next(minSaltInMiliseconds, maxSaltInMiliseconds))) // plus some jitter:)
+            .ExecuteAsync(async () =>
+            {
+                await UpdateActionAsync(id, updateAction);
+            });
+        }
+#pragma warning restore SCS0005 // Weak random generator
+
+        private async Task UpdateActionAsync(string id, Action<TQueryModel> updateAction)
         {
             // Getting entity
             var entity = await RetrieveEntityAsync(id);
@@ -152,8 +175,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             if (entity == null)
             { throw new KeyNotFoundException(id); }
-
-            entity.ETag = "*";
 
             return entity;
         }

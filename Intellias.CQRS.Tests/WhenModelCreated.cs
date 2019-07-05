@@ -85,18 +85,38 @@ namespace Intellias.CQRS.Tests
         /// Update existing entity in parallel
         /// </summary>
         [Fact]
-        public void UpdateExistingEntityInParallel()
+        public void UpdateExistingEntityInParallelAsync()
         {
-            // Act
-            var tasks = Enumerable.Repeat(Unified.NewCode(), 5)
-                .Select(element => Store.UpdateAsync(model.Id, m => {
-                    m.TestData = element;
-                }));
+            const int numberOfUpdates = 10;
+            var values = new string[numberOfUpdates];
 
+            for (var i = 0 ; i < numberOfUpdates; i++)
+            {
+                var currentValue = Unified.NewCode();
+                values[i] = currentValue;
+            }
+                
+            var tasks = values.Select(async value =>
+                await Store.UpdateAsync(model.Id, m =>
+                {
+                    m.TestList.Add(value);
+                })
+            );
+
+            // Act
             Func<Task> act = async () => await Task.WhenAll(tasks);
 
             // Assert
             act.Should().NotThrow<StorageException>();
+
+            var queryModel = Store.GetAsync(model.Id).Result;
+
+            // Verify that all values are presented in list
+            // It means that all updates are completed successfully
+            foreach(var val in values)
+            {
+                queryModel.TestList.Should().Contain(val);
+            }
         }
 
         [Fact]
