@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
 
 namespace Intellias.CQRS.Core.Tools
 {
@@ -35,19 +35,19 @@ namespace Intellias.CQRS.Core.Tools
 
                 if (method == null)
                 {
-                    return ExecutionResult.Fail("Error calling HandleCommandAsync method");
+                    return ExecutionResult.Failed(new ExecutionError("Error calling HandleCommandAsync method"));
                 }
 
                 await (Task)method
                     .MakeGenericMethod(msg.GetType())
                     .Invoke(_handlerManager, new object[] { msg });
 
-                return ExecutionResult.Success;
+                return ExecutionResult.Successful;
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
             {
-                return ExecutionResult.Fail($"Error handling command: {e.Message}");
+                return ExecutionResult.Failed(new ExecutionError($"Error handling command: {e.Message}", e));
             }
 #pragma warning restore CA1031 // Do not catch general exception types
         }

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.EventBus.AzureServiceBus.Extensions;
 using Microsoft.Azure.ServiceBus;
 
@@ -28,7 +28,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         public async Task<IExecutionResult> PublishAsync(IEvent msg)
         {
             await topicClient.SendAsync(msg.ToBusMessage());
-            return await Task.FromResult(ExecutionResult.Success);
+            return await Task.FromResult(ExecutionResult.Successful);
         }
     }
 }

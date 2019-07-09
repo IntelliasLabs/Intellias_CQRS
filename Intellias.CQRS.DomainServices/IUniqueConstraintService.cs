@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Results;
 
 namespace Intellias.CQRS.DomainServices
 {
@@ -15,7 +16,7 @@ namespace Intellias.CQRS.DomainServices
         /// <param name="value">Current constraint value</param>
         /// <exception cref="InvalidOperationException">Thrown on error removing constraint</exception>
         /// <returns></returns>
-        Task RemoveConstraintAsync(string indexName, string value);
+        Task<IExecutionResult> RemoveConstraintAsync(string indexName, string value);
 
         /// <summary>
         /// Reserve constraint in store
@@ -24,7 +25,7 @@ namespace Intellias.CQRS.DomainServices
         /// <param name="value">Constraint value</param>
         /// <exception cref="InvalidOperationException">Thrown when new constraint already exists</exception>
         /// <returns></returns>
-        Task ReserveConstraintAsync(string indexName, string value);
+        Task<IExecutionResult> ReserveConstraintAsync(string indexName, string value);
 
         /// <summary>
         /// Replaces constraint in store
@@ -34,6 +35,6 @@ namespace Intellias.CQRS.DomainServices
         /// <param name="newValue">New constraint value</param>
         /// <exception cref="InvalidOperationException">Thrown when new constraint already exists</exception>
         /// <returns></returns>
-        Task UpdateConstraintAsync(string indexName, string oldValue, string newValue);
+        Task<IExecutionResult> UpdateConstraintAsync(string indexName, string oldValue, string newValue);
     }
 }

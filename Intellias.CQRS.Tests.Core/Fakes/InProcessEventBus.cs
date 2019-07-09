@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
@@ -85,7 +85,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                 }
             }
 
-            return await Task.FromResult(ExecutionResult.Success);
+            return await Task.FromResult(ExecutionResult.Successful);
         }
     }
 }

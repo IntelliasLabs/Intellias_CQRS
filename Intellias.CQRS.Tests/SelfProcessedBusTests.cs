@@ -18,7 +18,7 @@ namespace Intellias.CQRS.Tests
             var bus = new SelfProcessedCommandBus(new HandlerManager(new HandlerDependencyResolver(sp.Object, new List<Assembly>())));
 
             var result = bus.PublishAsync(new TestCreateCommand()).Result;
-            Assert.True(result.IsSuccess);
+            Assert.True(result.Success);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace Intellias.CQRS.Tests
             var bus = new SelfProcessedEventBus(new HandlerManager(new HandlerDependencyResolver(sp.Object, new List<Assembly>())));
 
             var result = bus.PublishAsync(new TestCreatedEvent()).Result;
-            Assert.True(result.IsSuccess);
+            Assert.True(result.Success);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Intellias.CQRS.Tests
                 new[] { Assembly.GetExecutingAssembly() })));
 
             var result = bus.PublishAsync(new TestCreateCommand()).Result;
-            Assert.False(result.IsSuccess);
+            Assert.False(result.Success);
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Intellias.CQRS.Tests
                 new[] { Assembly.GetExecutingAssembly() })));
 
             var result = bus.PublishAsync(new TestCreatedEvent()).Result;
-            Assert.False(result.IsSuccess);
+            Assert.False(result.Success);
         }
     }
 }

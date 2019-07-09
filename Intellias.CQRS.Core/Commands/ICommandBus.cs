@@ -5,7 +5,7 @@ namespace Intellias.CQRS.Core.Commands
     /// <summary>
     /// Command bus
     /// </summary>
-    public interface ICommandBus : IMessageBus<ICommand, IExecutionResult>
+    public interface ICommandBus : IMessageBus<ICommand>
     {
     }
 }

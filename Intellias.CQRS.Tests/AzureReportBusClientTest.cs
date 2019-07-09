@@ -32,11 +32,10 @@ namespace Intellias.CQRS.Tests
 
             var reportBus = new AzureReportBusClient(mock.Object);
 
-            IMessage? expectedMessage = null;
+            IMessage expectedMessage = null;
 
             reportBus.Subscribe(message =>
             {
-
                 expectedMessage = message;
                 return Task.CompletedTask;
             });

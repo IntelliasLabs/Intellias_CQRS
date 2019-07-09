@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Results;
 
 namespace Intellias.CQRS.Core.Domain
 {
@@ -62,6 +63,37 @@ namespace Intellias.CQRS.Core.Domain
             @event.AggregateRootId = Id;
             State.ApplyEvent(@event);
             pendingEvents.Add(@event);
+        }
+
+        /// <summary>
+        /// Unhandled Error
+        /// </summary>
+        /// <param name="errorMessage">Error Message</param>
+        /// <param name="ex"></param>
+        /// <returns>Execution Result</returns>
+        public IExecutionResult UnhandledError(string errorMessage, Exception ex = null)
+        {
+            
+            return ExecutionResult.Failed(new ExecutionError(ErrorCodes.UnhandledError, string.Empty, errorMessage, ex));
+        }
+
+        /// <summary>
+        /// Validation Failed
+        /// </summary>
+        /// <param name="errorMessage">Error Message</param>
+        /// <returns>Execution Result</returns>
+        public IExecutionResult ValidationFailed(string errorMessage)
+        {
+            return ExecutionResult.Failed(new ExecutionError(ErrorCodes.ValidationFailed, string.Empty, errorMessage));
+        }
+
+        /// <summary>
+        /// Successful result
+        /// </summary>
+        /// <returns>Execution Result</returns>
+        public IExecutionResult Success()
+        {
+            return ExecutionResult.Successful;
         }
     }
 }
