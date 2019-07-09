@@ -1,13 +1,13 @@
-﻿namespace Intellias.CQRS.Core.Messages
+﻿namespace Intellias.CQRS.Core.Results
 {
     /// <summary>
-    /// Result of handler execution
+    /// Execution Result
     /// </summary>
     public interface IExecutionResult
     {
         /// <summary>
         /// Is result successful
         /// </summary>
-        bool IsSuccess { get; }
+        bool Success { get; }
     }
 }

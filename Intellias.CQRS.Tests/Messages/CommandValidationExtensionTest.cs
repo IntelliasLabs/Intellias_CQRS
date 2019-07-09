@@ -1,6 +1,6 @@
-﻿using System;
-using FluentAssertions;
+﻿using System.Linq;
 using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
 using Xunit;
@@ -16,7 +16,9 @@ namespace Intellias.CQRS.Tests.Messages
             {
                 Id = string.Empty
             };
-            Assert.Throws<ArgumentNullException>(() => cmd.Validate());
+
+            var result = cmd.Validate();
+            Assert.False(result.Success);
         }
 
         [Fact]
@@ -41,8 +43,8 @@ namespace Intellias.CQRS.Tests.Messages
                 TestData = "some data"
             };
 
-            Action act = () => cmd.Validate();
-            act.Should().Throw<ArgumentNullException>();
+            var result = (FailedResult)cmd.Validate();
+            Assert.Equal(nameof(cmd.AggregateRootId), result.Errors.First().Source);
         }
 
         [Fact]
@@ -54,8 +56,8 @@ namespace Intellias.CQRS.Tests.Messages
                 TestData = "some data"
             };
 
-            Action act = () => cmd.Validate();
-            act.Should().Throw<ArgumentNullException>();
+            var result = (FailedResult)cmd.Validate();
+            Assert.Equal(nameof(cmd.AggregateRootId), result.Errors.First().Source);
         }
 
         [Fact]
@@ -68,8 +70,8 @@ namespace Intellias.CQRS.Tests.Messages
                 TestData = "some data"
             };
 
-            Action act = () => cmd.Validate();
-            act.Should().Throw<ArgumentNullException>();
+            var result = (FailedResult)cmd.Validate();
+            Assert.Equal(nameof(cmd.CorrelationId), result.Errors.First().Source);
         }
 
         [Fact]
@@ -83,8 +85,8 @@ namespace Intellias.CQRS.Tests.Messages
                 CorrelationId = Unified.NewCode()
             };
 
-            Action act = () => cmd.Validate();
-            act.Should().Throw<ArgumentNullException>();
+            var result = (FailedResult)cmd.Validate();
+            Assert.Equal(nameof(MetadataKey.Roles), result.Errors.First().Source);
         }
 
         [Fact]
@@ -99,8 +101,8 @@ namespace Intellias.CQRS.Tests.Messages
             };
             cmd.Metadata[MetadataKey.Roles] = "Admin";
 
-            Action act = () => cmd.Validate();
-            act.Should().Throw<ArgumentNullException>();
+            var result = (FailedResult)cmd.Validate();
+            Assert.Equal(nameof(MetadataKey.UserId), result.Errors.First().Source);
         }
 
         [Fact]
@@ -116,8 +118,8 @@ namespace Intellias.CQRS.Tests.Messages
             cmd.Metadata[MetadataKey.Roles] = "Admin";
             cmd.Metadata[MetadataKey.UserId] = Unified.NewCode();
 
-            Action act = () => cmd.Validate();
-            act.Should().Throw<FormatException>();
+            var result = (FailedResult)cmd.Validate();
+            Assert.Equal(nameof(MetadataKey.UserId), result.Errors.First().Source);
         }
 
         [Fact]

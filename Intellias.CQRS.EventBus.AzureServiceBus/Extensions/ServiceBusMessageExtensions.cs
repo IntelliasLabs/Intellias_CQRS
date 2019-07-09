@@ -1,6 +1,6 @@
 ﻿using System.Text;
+using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
 using Microsoft.Azure.ServiceBus;
 
 namespace Intellias.CQRS.EventBus.AzureServiceBus.Extensions

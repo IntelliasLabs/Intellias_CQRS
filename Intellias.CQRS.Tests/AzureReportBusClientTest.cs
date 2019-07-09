@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.EventBus.AzureServiceBus;
@@ -36,7 +37,6 @@ namespace Intellias.CQRS.Tests
 
             reportBus.Subscribe(message =>
             {
-
                 expectedMessage = message;
                 return Task.CompletedTask;
             });

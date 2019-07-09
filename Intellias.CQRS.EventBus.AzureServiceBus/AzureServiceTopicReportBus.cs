@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Microsoft.Azure.ServiceBus;

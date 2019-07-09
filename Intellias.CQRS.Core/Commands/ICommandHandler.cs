@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
 
 namespace Intellias.CQRS.Core.Commands
 {

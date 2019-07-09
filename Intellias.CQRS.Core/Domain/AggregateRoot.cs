@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Results;
 
 namespace Intellias.CQRS.Core.Domain
 {
@@ -59,9 +60,48 @@ namespace Intellias.CQRS.Core.Domain
         /// <param name="event">Event</param>
         protected void PublishEvent(IEvent @event)
         {
-            @event.AggregateRootId = Id;
+            if(@event == null)
+            {
+                throw new ArgumentNullException(nameof(@event));
+            }
+
+            if(string.IsNullOrWhiteSpace(@event.AggregateRootId))
+            {
+                @event.AggregateRootId = Id;
+            }
+
             State.ApplyEvent(@event);
             pendingEvents.Add(@event);
+        }
+
+        /// <summary>
+        /// Unhandled Error
+        /// </summary>
+        /// <param name="errorMessage">Error Message</param>
+        /// <param name="ex"></param>
+        /// <returns>Execution Result</returns>
+        public IExecutionResult UnhandledError(string errorMessage, Exception? ex = null)
+        {
+            return new FailedResult(ErrorCodes.UnhandledError, GetType().FullName, errorMessage, ex);
+        }
+
+        /// <summary>
+        /// Validation Failed
+        /// </summary>
+        /// <param name="errorMessage">Error Message</param>
+        /// <returns>Execution Result</returns>
+        public IExecutionResult ValidationFailed(string errorMessage)
+        {
+            return new FailedResult(ErrorCodes.ValidationFailed, GetType().FullName, errorMessage);
+        }
+
+        /// <summary>
+        /// Successful result
+        /// </summary>
+        /// <returns>Execution Result</returns>
+        public IExecutionResult Success()
+        {
+            return new SuccessfulResult();
         }
     }
 }

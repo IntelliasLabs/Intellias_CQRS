@@ -18,15 +18,18 @@ namespace Intellias.CQRS.Core.Messages
 
         /// <inheritdoc />
         [Key]
+        [Required]
         [DataType(DataType.Text)]
         [JsonProperty("id")]
         public string Id { get; set; } = Unified.NewCode();
 
         /// <inheritdoc />
+        [Required]
         [DataType(DataType.Text)]
         public string AggregateRootId { get; set; } = string.Empty;
 
         /// <inheritdoc />
+        [Required]
         [DataType(DataType.Text)]
         public string CorrelationId { get; set; } = string.Empty;
 

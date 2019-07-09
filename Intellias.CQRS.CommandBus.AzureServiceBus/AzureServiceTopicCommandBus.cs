@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Intellias.CQRS.CommandBus.AzureServiceBus.Extensions;
 using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
 using Microsoft.Azure.ServiceBus;
 
 namespace Intellias.CQRS.CommandBus.AzureServiceBus
@@ -10,6 +11,7 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus
     /// <summary>
     /// Publishing events to Azure Service Bus
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class AzureServiceTopicCommandBus : ICommandBus
     {
         private readonly ITopicClient topicClient;
@@ -35,7 +37,7 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus
         {
             await commandStore.SaveAsync(msg);
             await topicClient.SendAsync(msg.ToBusMessage());
-            return await Task.FromResult(ExecutionResult.Success);
+            return await Task.FromResult(new SuccessfulResult());
         }
     }
 }

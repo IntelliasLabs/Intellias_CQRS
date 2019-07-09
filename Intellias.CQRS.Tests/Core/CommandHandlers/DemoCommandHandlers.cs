@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Domain;
 
@@ -36,7 +36,7 @@ namespace Intellias.CQRS.Tests.Core.CommandHandlers
             var processedEvents = await store.SaveAsync(ar);
             await Task.WhenAll(processedEvents.Select(bus.PublishAsync));
 
-            return await Task.FromResult(ExecutionResult.Success);
+            return await Task.FromResult(new SuccessfulResult());
         }
 
         /// <summary>

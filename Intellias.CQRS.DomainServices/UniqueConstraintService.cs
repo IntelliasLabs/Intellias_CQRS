@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core.Exceptions;
+using Intellias.CQRS.Core.Results;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Shared.Protocol;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -29,7 +29,7 @@ namespace Intellias.CQRS.DomainServices
         }
 
         /// <inheritdoc />
-        public async Task RemoveConstraintAsync(string indexName, string value)
+        public async Task<IExecutionResult> RemoveConstraintAsync(string indexName, string value)
         {
             try
             {
@@ -46,18 +46,18 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    throw new BusinessRuleValidationException($"The name '{value}' is not in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{value}' is not in use. Please enter another one.", e);
                 }
-                else
-                {
-                    throw new InvalidOperationException("Delete operation failed.", e);
-                }
+
+                return new FailedResult("Delete operation failed.", e);
             }
+
+            return new SuccessfulResult();
         }
 
 
         /// <inheritdoc />
-        public async Task ReserveConstraintAsync(string indexName, string value)
+        public async Task<IExecutionResult> ReserveConstraintAsync(string indexName, string value)
         {
             try
             {
@@ -74,17 +74,17 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    throw new BusinessRuleValidationException($"The name '{value}' is already in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{value}' is already in use. Please enter another one.", e);
                 }
-                else
-                {
-                    throw new InvalidOperationException("Reserve operation failed.", e);
-                }
+
+                return new FailedResult("Reserve operation failed.", e);
             }
+
+            return new SuccessfulResult();
         }
 
         /// <inheritdoc />
-        public async Task UpdateConstraintAsync(string indexName, string oldValue, string newValue)
+        public async Task<IExecutionResult> UpdateConstraintAsync(string indexName, string oldValue, string newValue)
         {
             var updateOperation = new TableBatchOperation();
 
@@ -112,17 +112,18 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    throw new BusinessRuleValidationException($"The name '{newValue}' is already in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.", e);
                 }
-                else if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
+
+                if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    throw new BusinessRuleValidationException($"The name '{oldValue}' is not in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.", e);
                 }
-                else
-                {
-                    throw new InvalidOperationException("Update operation failed.", e);
-                }
+
+                return new FailedResult("Update operation failed.", e);
             }
+
+            return new SuccessfulResult();
         }
     }
 }

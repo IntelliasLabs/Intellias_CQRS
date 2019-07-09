@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Intellias.CQRS.Core.Exceptions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.DomainServices;
 using Microsoft.WindowsAzure.Storage;
@@ -38,8 +37,11 @@ namespace Intellias.CQRS.Tests.DomainServices
         {
             var testId = Unified.NewCode();
 
-            await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
-            await Assert.ThrowsAsync<BusinessRuleValidationException>(() => uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId));
+            var result = await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
+            Assert.True(result.Success);
+
+            result = await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
+            Assert.False(result.Success);
         }
 
         [Fact]
@@ -61,7 +63,8 @@ namespace Intellias.CQRS.Tests.DomainServices
             var testId = Unified.NewCode();
             var updatedTestId = Unified.NewCode();
 
-            await Assert.ThrowsAsync<BusinessRuleValidationException>(() => uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId));
+            var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
+            Assert.False(result.Success);
         }
 
         [Fact]
@@ -72,7 +75,8 @@ namespace Intellias.CQRS.Tests.DomainServices
 
             await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
             await uniqueConstraintService.ReserveConstraintAsync("TestIndex", updatedTestId);
-            await Assert.ThrowsAsync<BusinessRuleValidationException>(() => uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId));
+            var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
+            Assert.False(result.Success);
 
             // Check original record is present
             var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", testId));
@@ -85,14 +89,16 @@ namespace Intellias.CQRS.Tests.DomainServices
             var testId = Unified.NewCode();
             var updatedTestId = Unified.NewCode();
 
-            await Assert.ThrowsAsync<BusinessRuleValidationException>(() => uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId));
+            var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
+            Assert.False(result.Success);
         }
 
         [Fact]
         public async Task RemoveTestNameNoSource()
         {
             var testId = Unified.NewCode();
-            await Assert.ThrowsAsync<BusinessRuleValidationException>(() => uniqueConstraintService.RemoveConstraintAsync("TestIndex", testId));
+            var result = await uniqueConstraintService.RemoveConstraintAsync("TestIndex", testId);
+            Assert.False(result.Success);
         }
 
         [Fact]
