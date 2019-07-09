@@ -68,7 +68,7 @@ namespace Intellias.CQRS.Core.Commands
                 {
                     var field = validationResult.MemberNames.FirstOrDefault() ?? string.Empty;
                     var error = new ExecutionError(field, validationResult.ErrorMessage);
-                    result.Error.AddError(error);
+                    result.Error?.AddError(error);
                 }
                 return result;
             }

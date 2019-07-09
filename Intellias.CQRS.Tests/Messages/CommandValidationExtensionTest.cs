@@ -44,7 +44,7 @@ namespace Intellias.CQRS.Tests.Messages
             };
 
             var result = (ExecutionResult)cmd.Validate();
-            Assert.Equal(nameof(cmd.AggregateRootId), result.Error.Errors.First().Source);
+            Assert.Equal(nameof(cmd.AggregateRootId), result.Error?.Errors.First().Source);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace Intellias.CQRS.Tests.Messages
             };
 
             var result = (ExecutionResult)cmd.Validate();
-            Assert.Equal(nameof(cmd.AggregateRootId), result.Error.Errors.First().Source);
+            Assert.Equal(nameof(cmd.AggregateRootId), result.Error?.Errors.First().Source);
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Intellias.CQRS.Tests.Messages
             };
 
             var result = (ExecutionResult)cmd.Validate();
-            Assert.Equal(nameof(cmd.CorrelationId), result.Error.Errors.First().Source);
+            Assert.Equal(nameof(cmd.CorrelationId), result.Error?.Errors.First().Source);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace Intellias.CQRS.Tests.Messages
             };
 
             var result = (ExecutionResult)cmd.Validate();
-            Assert.Equal(nameof(MetadataKey.Roles), result.Error.Errors.First().Source);
+            Assert.Equal(nameof(MetadataKey.Roles), result.Error?.Errors.First().Source);
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace Intellias.CQRS.Tests.Messages
             cmd.Metadata[MetadataKey.Roles] = "Admin";
 
             var result = (ExecutionResult)cmd.Validate();
-            Assert.Equal(nameof(MetadataKey.UserId), result.Error.Errors.First().Source);
+            Assert.Equal(nameof(MetadataKey.UserId), result.Error?.Errors.First().Source);
         }
 
         [Fact]
@@ -119,7 +119,7 @@ namespace Intellias.CQRS.Tests.Messages
             cmd.Metadata[MetadataKey.UserId] = Unified.NewCode();
 
             var result = (ExecutionResult)cmd.Validate();
-            Assert.Equal(nameof(MetadataKey.UserId), result.Error.Errors.First().Source);
+            Assert.Equal(nameof(MetadataKey.UserId), result.Error?.Errors.First().Source);
         }
 
         [Fact]

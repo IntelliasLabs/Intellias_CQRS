@@ -80,7 +80,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <param name="errorMessage">Error Message</param>
         /// <param name="ex"></param>
         /// <returns>Execution Result</returns>
-        public IExecutionResult UnhandledError(string errorMessage, Exception ex = null)
+        public IExecutionResult UnhandledError(string errorMessage, Exception? ex = null)
         {
             return ExecutionResult.Failed(new ExecutionError(ErrorCodes.UnhandledError, GetType().FullName, errorMessage, ex));
         }

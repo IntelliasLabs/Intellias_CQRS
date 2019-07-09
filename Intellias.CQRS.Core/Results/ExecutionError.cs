@@ -22,7 +22,7 @@ namespace Intellias.CQRS.Core.Results
         /// </summary>
         /// <param name="errorMessage">Reason of failure</param>
         /// <param name="ex"></param>
-        public ExecutionError(string errorMessage, Exception ex = null)
+        public ExecutionError(string errorMessage, Exception? ex = null)
         {
             ErrorMessage = errorMessage;
             Exception = ex;
@@ -48,7 +48,7 @@ namespace Intellias.CQRS.Core.Results
         /// <param name="source"></param>
         /// <param name="errorMessage">Error Message</param>
         /// <param name="ex"></param>
-        public ExecutionError(string errorCode, string source, string errorMessage, Exception ex = null)
+        public ExecutionError(string errorCode, string source, string errorMessage, Exception? ex = null)
         {
             ErrorCode = errorCode;
             Source = source;
@@ -60,7 +60,7 @@ namespace Intellias.CQRS.Core.Results
         /// Exception, optional
         /// </summary>
         [JsonProperty]
-        public Exception Exception { get; private set; }
+        public Exception? Exception { get; private set; }
 
         /// <summary>
         /// Error code

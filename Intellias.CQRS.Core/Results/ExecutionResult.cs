@@ -27,7 +27,7 @@ namespace Intellias.CQRS.Core.Results
         /// Error of execution
         /// </summary>
         [JsonProperty]
-        public ExecutionError Error { get; private set; }
+        public ExecutionError? Error { get; private set; }
 
         /// <inheritdoc />
         [JsonProperty]
@@ -51,6 +51,6 @@ namespace Intellias.CQRS.Core.Results
         /// <param name="error"></param>
         /// <param name="ex"></param>
         /// <returns></returns>
-        public static ExecutionResult Failed(string error, Exception ex = null) => Failed(new ExecutionError(error, ex));
+        public static ExecutionResult Failed(string error, Exception? ex = null) => Failed(new ExecutionError(error, ex));
     }
 }
