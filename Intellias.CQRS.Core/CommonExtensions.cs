@@ -1,7 +1,8 @@
 ﻿using Intellias.CQRS.Core.Config;
+using Intellias.CQRS.Core.Messages;
 using Newtonsoft.Json;
 
-namespace Intellias.CQRS.Core.Messages
+namespace Intellias.CQRS.Core
 {
     /// <summary>
     /// Extension for commands

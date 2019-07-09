@@ -63,7 +63,7 @@ namespace Intellias.CQRS.Core.Commands
             }
             else
             {
-                var result = ExecutionResult.Failed(new ExecutionError(ErrorCodes.ValidationFailed, this.GetType().AssemblyQualifiedName, "Annotations validation failed"));
+                var result = ExecutionResult.Failed(new ExecutionError(ErrorCodes.ValidationFailed, GetType().AssemblyQualifiedName, "Annotations validation failed"));
                 foreach(var validationResult in validationResults)
                 {
                     var field = validationResult.MemberNames.FirstOrDefault() ?? string.Empty;

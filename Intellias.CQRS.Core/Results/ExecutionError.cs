@@ -99,7 +99,10 @@ namespace Intellias.CQRS.Core.Results
         [JsonProperty]
         private List<ExecutionError> errors = new List<ExecutionError>();
 
-        /// <inheritdoc />
+        /// <summary>
+        /// ErrorMessage
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return ErrorMessage;
