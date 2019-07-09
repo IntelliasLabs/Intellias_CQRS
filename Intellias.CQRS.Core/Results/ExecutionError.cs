@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Core.Results
 {
@@ -20,11 +19,9 @@ namespace Intellias.CQRS.Core.Results
         /// Execution Error
         /// </summary>
         /// <param name="errorMessage">Reason of failure</param>
-        /// <param name="ex"></param>
-        public ExecutionError(string errorMessage, Exception? ex = null)
+        public ExecutionError(string errorMessage)
         {
             ErrorMessage = errorMessage;
-            Exception = ex;
             ErrorCode = ErrorCodes.UnhandledError;
         }
 
@@ -46,20 +43,12 @@ namespace Intellias.CQRS.Core.Results
         /// <param name="errorCode"></param>
         /// <param name="source"></param>
         /// <param name="errorMessage">Error Message</param>
-        /// <param name="ex"></param>
-        public ExecutionError(string errorCode, string source, string errorMessage, Exception? ex = null)
+        public ExecutionError(string errorCode, string source, string errorMessage)
         {
             ErrorCode = errorCode;
             Source = source;
             ErrorMessage = errorMessage;
-            Exception = ex;
         }
-
-        /// <summary>
-        /// Exception, optional
-        /// </summary>
-        [JsonProperty]
-        public Exception? Exception { get; protected set; }
 
         /// <summary>
         /// Error code

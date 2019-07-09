@@ -46,6 +46,12 @@ namespace Intellias.CQRS.Core.Results
         public bool Success => false;
 
         /// <summary>
+        /// Exception, optional
+        /// </summary>
+        [JsonProperty]
+        public Exception? Exception { get; private set; }
+
+        /// <summary>
         /// Execution Errors
         /// </summary>
         [JsonIgnore]

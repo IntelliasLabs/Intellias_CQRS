@@ -24,5 +24,10 @@
         /// Connection Failed
         /// </summary>
         public static string ConnectionFailed => nameof(ConnectionFailed);
+
+        /// <summary>
+        /// Version Conflict
+        /// </summary>
+        public static string VersionConflict => nameof(VersionConflict);
     }
 }

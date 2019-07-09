@@ -14,6 +14,8 @@ namespace Intellias.CQRS.Tests.Messages
         {
             var result = new FailedResult("Test error", new Exception("Test exception"));
             result.AddError(new ExecutionError("Name", "Test field error"));
+            result.AddError(new ExecutionError("Test field error"));
+            result.AddError(new ExecutionError(ErrorCodes.ValidationFailed, "Name", "Test field error"));
 
             var json = JsonConvert.SerializeObject(result, CqrsSettings.JsonConfig());
 
