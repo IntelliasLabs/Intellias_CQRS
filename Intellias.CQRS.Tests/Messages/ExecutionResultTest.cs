@@ -12,17 +12,17 @@ namespace Intellias.CQRS.Tests.Messages
         [Fact]
         public void SerializeTest()
         {
-            var result = ExecutionResult.Failed("Test error", new Exception("Test exception"));
-            result.Error?.AddError(new ExecutionError("Name", "Test field error"));
+            var result = new FailedResult("Test error", new Exception("Test exception"));
+            result.AddError(new ExecutionError("Name", "Test field error"));
 
             var json = JsonConvert.SerializeObject(result, CqrsSettings.JsonConfig());
 
-            var deserialized = JsonConvert.DeserializeObject<ExecutionResult>(json, CqrsSettings.JsonConfig());
+            var deserialized = JsonConvert.DeserializeObject<FailedResult>(json, CqrsSettings.JsonConfig());
 
-            Assert.Equal(result.Error?.ErrorMessage, deserialized.Error?.ErrorMessage);
-            Assert.Equal(result.Error?.Exception?.Message, deserialized.Error?.Exception?.Message);
+            Assert.Equal(result.ErrorMessage, deserialized.ErrorMessage);
+            Assert.Equal(result.Exception?.Message, deserialized.Exception?.Message);
             Assert.Equal(result.Success, deserialized.Success);
-            Assert.Equal(result.Error?.Errors.First().ErrorMessage, deserialized.Error?.Errors.First().ErrorMessage);
+            Assert.Equal(result.Errors.First().ErrorMessage, deserialized.Errors.First().ErrorMessage);
         }
     }
 }

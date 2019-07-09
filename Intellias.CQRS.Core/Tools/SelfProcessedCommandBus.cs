@@ -35,19 +35,19 @@ namespace Intellias.CQRS.Core.Tools
 
                 if (method == null)
                 {
-                    return ExecutionResult.Failed(new ExecutionError("Error calling HandleCommandAsync method"));
+                    return new FailedResult("Error calling HandleCommandAsync method");
                 }
 
                 await (Task)method
                     .MakeGenericMethod(msg.GetType())
                     .Invoke(_handlerManager, new object[] { msg });
 
-                return ExecutionResult.Successful;
+                return new SuccessfulResult();
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
             {
-                return ExecutionResult.Failed(new ExecutionError($"Error handling command: {e.Message}", e));
+                return new FailedResult($"Error handling command: {e.Message}", e);
             }
 #pragma warning restore CA1031 // Do not catch general exception types
         }

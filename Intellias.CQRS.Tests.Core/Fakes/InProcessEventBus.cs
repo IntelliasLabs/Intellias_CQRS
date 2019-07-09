@@ -85,7 +85,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                 }
             }
 
-            return await Task.FromResult(ExecutionResult.Successful);
+            return await Task.FromResult(new SuccessfulResult());
         }
     }
 }

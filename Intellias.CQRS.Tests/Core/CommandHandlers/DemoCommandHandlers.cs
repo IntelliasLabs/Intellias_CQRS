@@ -36,7 +36,7 @@ namespace Intellias.CQRS.Tests.Core.CommandHandlers
             var processedEvents = await store.SaveAsync(ar);
             await Task.WhenAll(processedEvents.Select(bus.PublishAsync));
 
-            return await Task.FromResult(ExecutionResult.Successful);
+            return await Task.FromResult(new SuccessfulResult());
         }
 
         /// <summary>

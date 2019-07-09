@@ -59,16 +59,16 @@ namespace Intellias.CQRS.Core.Commands
             var isValid = Validator.TryValidateObject(this, validationContext, validationResults, true);
             if(isValid)
             {
-                return ExecutionResult.Successful;
+                return new SuccessfulResult();
             }
             else
             {
-                var result = ExecutionResult.Failed(new ExecutionError(ErrorCodes.ValidationFailed, GetType().AssemblyQualifiedName, "Annotations validation failed"));
+                var result = new FailedResult(ErrorCodes.ValidationFailed, GetType().AssemblyQualifiedName, "Annotations validation failed");
                 foreach(var validationResult in validationResults)
                 {
                     var field = validationResult.MemberNames.FirstOrDefault() ?? string.Empty;
                     var error = new ExecutionError(field, validationResult.ErrorMessage);
-                    result.Error?.AddError(error);
+                    result.AddError(error);
                 }
                 return result;
             }

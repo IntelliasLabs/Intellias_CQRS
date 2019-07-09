@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Core.Results
@@ -7,13 +6,13 @@ namespace Intellias.CQRS.Core.Results
     /// <summary>
     /// ExecutionError
     /// </summary>
-    public sealed class ExecutionError
+    public class ExecutionError
     {
         /// <summary>
         /// Successful Execution Result
         /// </summary>
         [JsonConstructor]
-        private ExecutionError()
+        protected ExecutionError()
         {
         }
 
@@ -60,43 +59,25 @@ namespace Intellias.CQRS.Core.Results
         /// Exception, optional
         /// </summary>
         [JsonProperty]
-        public Exception? Exception { get; private set; }
+        public Exception? Exception { get; protected set; }
 
         /// <summary>
         /// Error code
         /// </summary>
         [JsonProperty]
-        public string ErrorCode { get; private set; } = string.Empty;
+        public string ErrorCode { get; protected set; } = string.Empty;
 
         /// <summary>
         /// Error Source, optional
         /// </summary>
         [JsonProperty]
-        public string Source { private set; get; } = string.Empty;
+        public string Source { get; protected set; } = string.Empty;
 
         /// <summary>
         /// Reason of failure
         /// </summary>
         [JsonProperty]
-        public string ErrorMessage { get; private set; } = string.Empty;
-
-        /// <summary>
-        /// Execution Errors
-        /// </summary>
-        [JsonIgnore]
-        public IReadOnlyCollection<ExecutionError> Errors => errors;
-
-        /// <summary>
-        /// Add Error
-        /// </summary>
-        /// <param name="error">Error</param>
-        public void AddError(ExecutionError error)
-        {
-            errors.Add(error);
-        }
-
-        [JsonProperty]
-        private readonly List<ExecutionError> errors = new List<ExecutionError>();
+        public string ErrorMessage { get; protected set; } = string.Empty;
 
         /// <summary>
         /// ErrorMessage

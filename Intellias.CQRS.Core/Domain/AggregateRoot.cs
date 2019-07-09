@@ -82,7 +82,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <returns>Execution Result</returns>
         public IExecutionResult UnhandledError(string errorMessage, Exception? ex = null)
         {
-            return ExecutionResult.Failed(new ExecutionError(ErrorCodes.UnhandledError, GetType().FullName, errorMessage, ex));
+            return new FailedResult(ErrorCodes.UnhandledError, GetType().FullName, errorMessage, ex);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <returns>Execution Result</returns>
         public IExecutionResult ValidationFailed(string errorMessage)
         {
-            return ExecutionResult.Failed(new ExecutionError(ErrorCodes.ValidationFailed, GetType().FullName, errorMessage));
+            return new FailedResult(ErrorCodes.ValidationFailed, GetType().FullName, errorMessage);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <returns>Execution Result</returns>
         public IExecutionResult Success()
         {
-            return ExecutionResult.Successful;
+            return new SuccessfulResult();
         }
     }
 }

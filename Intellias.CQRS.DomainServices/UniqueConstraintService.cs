@@ -46,13 +46,13 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return ExecutionResult.Failed($"The name '{value}' is not in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{value}' is not in use. Please enter another one.", e);
                 }
 
-                return ExecutionResult.Failed("Delete operation failed.", e);
+                return new FailedResult("Delete operation failed.", e);
             }
 
-            return ExecutionResult.Successful;
+            return new SuccessfulResult();
         }
 
 
@@ -74,13 +74,13 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return ExecutionResult.Failed($"The name '{value}' is already in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{value}' is already in use. Please enter another one.", e);
                 }
 
-                return ExecutionResult.Failed("Reserve operation failed.", e);
+                return new FailedResult("Reserve operation failed.", e);
             }
 
-            return ExecutionResult.Successful;
+            return new SuccessfulResult();
         }
 
         /// <inheritdoc />
@@ -112,18 +112,18 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return ExecutionResult.Failed($"The name '{newValue}' is already in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.", e);
                 }
 
                 if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return ExecutionResult.Failed($"The name '{oldValue}' is not in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.", e);
                 }
 
-                return ExecutionResult.Failed("Update operation failed.", e);
+                return new FailedResult("Update operation failed.", e);
             }
 
-            return ExecutionResult.Successful;
+            return new SuccessfulResult();
         }
     }
 }
