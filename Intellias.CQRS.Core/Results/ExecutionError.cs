@@ -96,7 +96,7 @@ namespace Intellias.CQRS.Core.Results
         }
 
         [JsonProperty]
-        private List<ExecutionError> errors = new List<ExecutionError>();
+        private readonly List<ExecutionError> errors = new List<ExecutionError>();
 
         /// <summary>
         /// ErrorMessage
