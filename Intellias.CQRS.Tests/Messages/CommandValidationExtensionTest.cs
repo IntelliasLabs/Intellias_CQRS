@@ -43,8 +43,8 @@ namespace Intellias.CQRS.Tests.Messages
                 TestData = "some data"
             };
 
-            var result = cmd.Validate() as ExecutionResult;
-            Assert.Equal(nameof(cmd.AggregateRootId), result.Error?.Errors.First().Source);
+            var result = (ExecutionResult)cmd.Validate();
+            Assert.Equal(nameof(cmd.AggregateRootId), result.Error.Errors.First().Source);
         }
 
         [Fact]
@@ -56,8 +56,8 @@ namespace Intellias.CQRS.Tests.Messages
                 TestData = "some data"
             };
 
-            var result = cmd.Validate() as ExecutionResult;
-            Assert.Equal(nameof(cmd.AggregateRootId), result.Error?.Errors.First().Source);
+            var result = (ExecutionResult)cmd.Validate();
+            Assert.Equal(nameof(cmd.AggregateRootId), result.Error.Errors.First().Source);
         }
 
         [Fact]
@@ -70,8 +70,8 @@ namespace Intellias.CQRS.Tests.Messages
                 TestData = "some data"
             };
 
-            var result = cmd.Validate() as ExecutionResult;
-            Assert.Equal(nameof(cmd.CorrelationId), result.Error?.Errors.First().Source);
+            var result = (ExecutionResult)cmd.Validate();
+            Assert.Equal(nameof(cmd.CorrelationId), result.Error.Errors.First().Source);
         }
 
         [Fact]
@@ -85,8 +85,8 @@ namespace Intellias.CQRS.Tests.Messages
                 CorrelationId = Unified.NewCode()
             };
 
-            var result = cmd.Validate() as ExecutionResult;
-            Assert.Equal(nameof(MetadataKey.Roles), result.Error?.Errors.First().Source);
+            var result = (ExecutionResult)cmd.Validate();
+            Assert.Equal(nameof(MetadataKey.Roles), result.Error.Errors.First().Source);
         }
 
         [Fact]
@@ -101,8 +101,8 @@ namespace Intellias.CQRS.Tests.Messages
             };
             cmd.Metadata[MetadataKey.Roles] = "Admin";
 
-            var result = cmd.Validate() as ExecutionResult;
-            Assert.Equal(nameof(MetadataKey.UserId), result.Error?.Errors.First().Source);
+            var result = (ExecutionResult)cmd.Validate();
+            Assert.Equal(nameof(MetadataKey.UserId), result.Error.Errors.First().Source);
         }
 
         [Fact]
@@ -118,8 +118,8 @@ namespace Intellias.CQRS.Tests.Messages
             cmd.Metadata[MetadataKey.Roles] = "Admin";
             cmd.Metadata[MetadataKey.UserId] = Unified.NewCode();
 
-            var result = cmd.Validate() as ExecutionResult;
-            Assert.Equal(nameof(MetadataKey.UserId), result.Error?.Errors.First().Source);
+            var result = (ExecutionResult)cmd.Validate();
+            Assert.Equal(nameof(MetadataKey.UserId), result.Error.Errors.First().Source);
         }
 
         [Fact]

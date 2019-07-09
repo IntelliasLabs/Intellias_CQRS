@@ -90,7 +90,6 @@ namespace Intellias.CQRS.Core.Results
         /// Add Error
         /// </summary>
         /// <param name="error">Error</param>
-        /// <inheritdoc />
         public void AddError(ExecutionError error)
         {
             errors.Add(error);
