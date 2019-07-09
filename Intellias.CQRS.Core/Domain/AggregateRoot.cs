@@ -60,7 +60,16 @@ namespace Intellias.CQRS.Core.Domain
         /// <param name="event">Event</param>
         protected void PublishEvent(IEvent @event)
         {
-            @event.AggregateRootId = Id;
+            if(@event == null)
+            {
+                throw new ArgumentNullException(nameof(@event));
+            }
+
+            if(string.IsNullOrWhiteSpace(@event.AggregateRootId))
+            {
+                @event.AggregateRootId = Id;
+            }
+
             State.ApplyEvent(@event);
             pendingEvents.Add(@event);
         }

@@ -23,22 +23,4 @@
     <ProjectReference Include="..\Intellias.CQRS.EventStore.AzureTable\Intellias.CQRS.EventStore.AzureTable.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="3.1.0" />
-    <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Features" Version="3.1.0" />
-    <PackageReference Update="Microsoft.CodeQuality.Analyzers" Version="2.9.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Update="Microsoft.NetCore.Analyzers" Version="2.9.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Update="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Update="Text.Analyzers" Version="2.6.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
 </Project>

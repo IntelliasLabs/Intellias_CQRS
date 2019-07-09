@@ -15,14 +15,14 @@
      <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />  
   </ItemGroup>
   <ItemGroup Label="Common packages">
-    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.6.2" />
-    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.6.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-    <PackageReference Include="Text.Analyzers" Version="2.6.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="2.9" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9" />
     <PackageReference Include="codecracker.CSharp" Version="1.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="3.1.0" />
+    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.3" />
+    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.9.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="SecurityCodeScan" Version="3.2.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <PackageReference Include="Text.Analyzers" Version="2.6.4" />
   </ItemGroup>
 </Project>
