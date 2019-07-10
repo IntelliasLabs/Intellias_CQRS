@@ -36,7 +36,8 @@ namespace Intellias.CQRS.Core.Messages
         /// <inheritdoc />
         [Required]
         [DataType(DataType.DateTime)]
-        public DateTime Created { get; } = DateTime.UtcNow;
+        [JsonProperty]
+        public DateTime Created { get; protected set; } = DateTime.UtcNow;
 
         /// <inheritdoc />
         [Required]
