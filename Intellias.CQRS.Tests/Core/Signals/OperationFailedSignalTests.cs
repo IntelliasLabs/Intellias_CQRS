@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Tests.Core.Events;
@@ -19,6 +20,7 @@ namespace Intellias.CQRS.Tests.Core.Signals
             };
 
             var failedEvent = new OperationFailedSignal(message, new FailedResult(error));
+            failedEvent = (OperationFailedSignal)failedEvent.ToJson().MessageFromJson();
 
             failedEvent.Should()
                 .Match<OperationFailedSignal>(x => x.CorrelationId == message.CorrelationId).And
