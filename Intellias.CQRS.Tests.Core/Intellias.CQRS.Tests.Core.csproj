@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Intellias.CQRS.DomainServices\Intellias.CQRS.DomainServices.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.EventStore.AzureTable\Intellias.CQRS.EventStore.AzureTable.csproj" />
   </ItemGroup>
 

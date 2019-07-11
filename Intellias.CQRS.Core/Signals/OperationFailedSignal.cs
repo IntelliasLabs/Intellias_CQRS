@@ -1,5 +1,6 @@
 ﻿using System;
 using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
 
 namespace Intellias.CQRS.Core.Signals
 {
@@ -13,10 +14,10 @@ namespace Intellias.CQRS.Core.Signals
         /// </summary>
         /// <param name="source"></param>
         /// <param name="error"></param>
-        public OperationFailedSignal(IMessage source, string error)
+        public OperationFailedSignal(IMessage source, FailedResult error)
         {
             Source = source ?? throw new ArgumentNullException($"Source in the OperationFailedSignal should be set");
-            Error = error;
+            Error = error ?? throw new ArgumentNullException($"FailedResult in the OperationFailedSignal should be set");
 
             Id = Unified.NewCode();
             AggregateRootId = source.AggregateRootId;
@@ -33,7 +34,7 @@ namespace Intellias.CQRS.Core.Signals
         /// <summary>
         /// Failed reason
         /// </summary>
-        public string Error { get; private set; }
+        public FailedResult Error { get; private set; }
 
     }
 }
