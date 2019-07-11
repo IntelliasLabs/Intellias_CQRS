@@ -1,4 +1,5 @@
-﻿using Intellias.CQRS.Core.Config;
+﻿using System;
+using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Messages;
 using Newtonsoft.Json;
 
@@ -12,21 +13,32 @@ namespace Intellias.CQRS.Core
         /// <summary>
         /// IMessage to JSON
         /// </summary>
-        /// <param name="msg">IMessage</param>
+        /// <param name="entity">entity</param>
         /// <returns>JSON</returns>
-        public static string ToJson(this IMessage msg)
+        public static string ToJson(this object entity)
         {
-            return JsonConvert.SerializeObject(msg, CqrsSettings.JsonConfig());
+            return JsonConvert.SerializeObject(entity, CqrsSettings.JsonConfig());
+        }
+
+        /// <summary>
+        /// Parse JSON
+        /// </summary>
+        /// <param name="json">input json</param>
+        /// <returns>object</returns>
+        public static T FromJson<T>(this string json)
+        {
+            return JsonConvert.DeserializeObject<T>(json, CqrsSettings.JsonConfig());
         }
 
         /// <summary>
         /// Parse abstract message
         /// </summary>
         /// <param name="json">input json</param>
+        /// <param name="type"></param>
         /// <returns>object</returns>
-        public static IMessage MessageFromJson(this string json)
+        public static object FromJson(this string json, Type type)
         {
-            return JsonConvert.DeserializeObject<IMessage>(json, CqrsSettings.JsonConfig());
+            return JsonConvert.DeserializeObject(json, type, CqrsSettings.JsonConfig());
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
-﻿using Intellias.CQRS.Core.Config;
+﻿using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
-using Newtonsoft.Json;
 
 namespace Intellias.CQRS.EventStore.AzureTable.Extensions
 {
@@ -20,7 +19,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Extensions
                 PartitionKey = @event.AggregateRootId,
                 RowKey = @event.Id,
                 Version = @event.Version,
-                Data = JsonConvert.SerializeObject(@event, CqrsSettings.JsonConfig()),
+                Data = @event.ToJson(),
                 TypeName = @event.TypeName,
                 ETag = "*"
             };

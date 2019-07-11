@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Intellias.CQRS.Core.Config;
+using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Results;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Messages
@@ -17,9 +16,8 @@ namespace Intellias.CQRS.Tests.Messages
             result.AddError(new ExecutionError("Test field error"));
             result.AddError(new ExecutionError(ErrorCodes.ValidationFailed, "Name", "Test field error"));
 
-            var json = JsonConvert.SerializeObject(result, CqrsSettings.JsonConfig());
-
-            var deserialized = JsonConvert.DeserializeObject<FailedResult>(json, CqrsSettings.JsonConfig());
+            var json = result.ToJson();
+            var deserialized = json.FromJson<FailedResult>();
 
             Assert.Equal(result.ErrorMessage, deserialized.ErrorMessage);
             Assert.Equal(result.Exception?.Message, deserialized.Exception?.Message);

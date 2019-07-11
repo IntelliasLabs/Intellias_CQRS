@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core.Config;
+using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.EventStore.AzureTable.Extensions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
 
 namespace Intellias.CQRS.EventStore.AzureTable
 {
-    /// <inheritdoc />
     /// <summary>
     /// Azure Table Storage event store
     /// </summary>
@@ -74,7 +72,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
 
             } while (continuationToken != null);
 
-            return results.Select(item => JsonConvert.DeserializeObject(item.Data, Type.GetType(item.TypeName), CqrsSettings.JsonConfig())).Cast<IEvent>();
+            return results.Select(item => item.Data.FromJson(Type.GetType(item.TypeName))).Cast<IEvent>();
         }
     }
 }
