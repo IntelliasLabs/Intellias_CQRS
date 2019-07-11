@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core;
-using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.EventStore.AzureTable.Extensions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
 
 namespace Intellias.CQRS.EventStore.AzureTable
 {
-    /// <inheritdoc />
     /// <summary>
     /// Azure Table Storage event store
     /// </summary>

@@ -2,8 +2,6 @@
 using Intellias.CQRS.CommandStore.AzureTable.Documents;
 using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Config;
-using Newtonsoft.Json;
 
 namespace Intellias.CQRS.CommandStore.AzureTable.Extensions
 {

@@ -1,9 +1,7 @@
 ﻿using System.Text;
 using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Commands;
-using Intellias.CQRS.Core.Config;
 using Microsoft.Azure.ServiceBus;
-using Newtonsoft.Json;
 
 namespace Intellias.CQRS.CommandBus.AzureServiceBus.Extensions
 {

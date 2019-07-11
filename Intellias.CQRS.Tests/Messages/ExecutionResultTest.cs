@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Intellias.CQRS.Core;
-using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Results;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Messages
