@@ -11,8 +11,6 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     {
         private readonly Dictionary<string, List<IEvent>> _inMemoryDb = new Dictionary<string, List<IEvent>>();
 
-
-
         /// <inheritdoc />
         public Task<IEnumerable<IEvent>> SaveAsync(IAggregateRoot entity)
         {

@@ -1,4 +1,5 @@
-﻿using Intellias.CQRS.Core.Config;
+﻿using Intellias.CQRS.Core;
+using Intellias.CQRS.Core.Config;
 using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Logger.AppInsight
@@ -29,7 +30,7 @@ namespace Intellias.CQRS.Logger.AppInsight
             set
             {
                 data = value;
-                DataJson = JsonConvert.SerializeObject(data, CqrsSettings.JsonConfig());
+                DataJson = data.ToJson();
             }
         }
     }

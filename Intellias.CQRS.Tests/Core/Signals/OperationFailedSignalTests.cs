@@ -20,7 +20,7 @@ namespace Intellias.CQRS.Tests.Core.Signals
             };
 
             var failedEvent = new OperationFailedSignal(message, new FailedResult(error));
-            failedEvent = (OperationFailedSignal)failedEvent.ToJson().MessageFromJson();
+            failedEvent = failedEvent.ToJson().FromJson<OperationFailedSignal>();
 
             failedEvent.Should()
                 .Match<OperationFailedSignal>(x => x.CorrelationId == message.CorrelationId).And

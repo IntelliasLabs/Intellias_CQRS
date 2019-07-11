@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Queries;
+using Intellias.CQRS.Core;
 
 namespace Intellias.CQRS.QueryStore.AzureTable
 {
@@ -127,7 +128,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 {
                     if (current is IEnumerable)
                     {
-                        current = $"{JsonEnumerationPrefix}{JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
+                        current = $"{JsonEnumerationPrefix}{current.ToJson()}";
                     }
                     else
                     {
@@ -158,7 +159,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
             {
-                value = $"{JsonEnumerationPrefix}{JsonConvert.SerializeObject(current, CqrsSettings.JsonConfig())}";
+                value = $"{JsonEnumerationPrefix}{current.ToJson()}";
             }
 #pragma warning restore CA1031 // Do not catch general exception types
 

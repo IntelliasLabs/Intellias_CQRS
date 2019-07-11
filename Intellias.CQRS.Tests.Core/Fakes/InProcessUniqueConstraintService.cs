@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.DomainServices;
@@ -8,6 +9,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// <summary>
     /// InProcessUniqueConstraintService
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class InProcessUniqueConstraintService : IUniqueConstraintService
     {
         private readonly Dictionary<string, HashSet<string>> cache = new Dictionary<string, HashSet<string>>();

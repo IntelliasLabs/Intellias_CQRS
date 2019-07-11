@@ -4,7 +4,7 @@ using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.Tests.Core;
 using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
+using Intellias.CQRS.Core;
 using Xunit;
 
 namespace Intellias.CQRS.Tests
@@ -36,7 +36,7 @@ namespace Intellias.CQRS.Tests
             var result = EventTable.ExecuteQuerySegmentedAsync(query, null).Result.Results;
 
             var record = result.First();
-            dynamic @event = JsonConvert.DeserializeObject(record.Data, Type.GetType(record.TypeName));
+            dynamic @event = record.Data.FromJson(Type.GetType(record.TypeName));
 
             Assert.True(@event.Version == 1, "Test version for created event is not equal 1");
             Assert.True(@event.TestData == testData, "Test data for created event is lost");

@@ -1,8 +1,6 @@
 ﻿using Intellias.CQRS.Core;
-using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Commands;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Intellias.CQRS.Tests
@@ -23,7 +21,7 @@ namespace Intellias.CQRS.Tests
         {
             var json = sample.ToJson();
 
-            dynamic cmdResult = JsonConvert.DeserializeObject(json, sample.GetType(), CqrsSettings.JsonConfig());
+            dynamic cmdResult = json.FromJson(sample.GetType());
 
             Assert.Equal(sample.TestData, cmdResult.TestData);
         }
@@ -33,7 +31,7 @@ namespace Intellias.CQRS.Tests
         {
             var json = sample.ToJson();
 
-            dynamic cmdResult = json.MessageFromJson();
+            dynamic cmdResult = json.FromJson<IMessage>();
 
             Assert.Equal(sample.TestData, cmdResult.TestData);
         }

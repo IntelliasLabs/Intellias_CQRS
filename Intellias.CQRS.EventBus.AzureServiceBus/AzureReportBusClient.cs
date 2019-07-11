@@ -37,7 +37,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
             // Register the function that processes messages.
             sub.RegisterMessageHandler(async (msg, token) => {
                 var json = Encoding.UTF8.GetString(msg.Body);
-                var message = json.MessageFromJson();
+                var message = json.FromJson<IMessage>();
 
                 // Invoke handler
                 if (handler != null)
