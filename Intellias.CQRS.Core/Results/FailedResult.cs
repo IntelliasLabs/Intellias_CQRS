@@ -17,10 +17,8 @@ namespace Intellias.CQRS.Core.Results
         /// Failed Result
         /// </summary>
         /// <param name="errorMessage"></param>
-        public FailedResult(string errorMessage)
+        public FailedResult(string errorMessage) : this(ErrorCodes.UnhandledError, errorMessage)
         {
-            ErrorCode = ErrorCodes.UnhandledError;
-            ErrorMessage = errorMessage;
         }
 
         /// <summary>
@@ -28,10 +26,8 @@ namespace Intellias.CQRS.Core.Results
         /// </summary>
         /// <param name="errorCode"></param>
         /// <param name="errorMessage">Error Message</param>
-        public FailedResult(string errorCode, string errorMessage)
+        public FailedResult(string errorCode, string errorMessage) : this(errorCode, string.Empty, errorMessage)
         {
-            ErrorCode = errorCode;
-            ErrorMessage = errorMessage;
         }
 
         /// <summary>
