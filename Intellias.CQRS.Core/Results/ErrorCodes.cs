@@ -29,5 +29,10 @@
         /// Version Conflict
         /// </summary>
         public static string VersionConflict => nameof(VersionConflict);
+
+        /// <summary>
+        /// Access Denied
+        /// </summary>
+        public static string AccessDenied => nameof(AccessDenied);
     }
 }

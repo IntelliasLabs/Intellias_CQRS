@@ -46,10 +46,10 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return new FailedResult($"The name '{value}' is not in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{value}' is not in use. Please enter another one.");
                 }
 
-                return new FailedResult("Delete operation failed.", e);
+                return new FailedResult("Delete operation failed.");
             }
 
             return new SuccessfulResult();
@@ -74,10 +74,10 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return new FailedResult($"The name '{value}' is already in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{value}' is already in use. Please enter another one.");
                 }
 
-                return new FailedResult("Reserve operation failed.", e);
+                return new FailedResult("Reserve operation failed.");
             }
 
             return new SuccessfulResult();
@@ -112,15 +112,15 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.");
                 }
 
                 if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.", e);
+                    return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.");
                 }
 
-                return new FailedResult("Update operation failed.", e);
+                return new FailedResult("Update operation failed.");
             }
 
             return new SuccessfulResult();

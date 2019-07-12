@@ -78,11 +78,20 @@ namespace Intellias.CQRS.Core.Domain
         /// Unhandled Error
         /// </summary>
         /// <param name="errorMessage">Error Message</param>
-        /// <param name="ex"></param>
         /// <returns>Execution Result</returns>
-        public IExecutionResult UnhandledError(string errorMessage, Exception? ex = null)
+        public IExecutionResult UnhandledError(string errorMessage)
         {
-            return new FailedResult(ErrorCodes.UnhandledError, GetType().FullName, errorMessage, ex);
+            return new FailedResult(ErrorCodes.UnhandledError, GetType().FullName, errorMessage);
+        }
+
+        /// <summary>
+        /// Access Denied
+        /// </summary>
+        /// <param name="errorMessage">Error Message</param>
+        /// <returns>Execution Result</returns>
+        public IExecutionResult AccessDenied(string errorMessage)
+        {
+            return new FailedResult(ErrorCodes.AccessDenied, GetType().FullName, errorMessage);
         }
 
         /// <summary>
@@ -93,6 +102,17 @@ namespace Intellias.CQRS.Core.Domain
         public IExecutionResult ValidationFailed(string errorMessage)
         {
             return new FailedResult(ErrorCodes.ValidationFailed, GetType().FullName, errorMessage);
+        }
+
+        /// <summary>
+        /// Failed custom domain logic
+        /// </summary>
+        /// <param name="errorCode">Specific error code</param>
+        /// <param name="errorMessage">Error Message</param>
+        /// <returns>Execution Result</returns>
+        public IExecutionResult Failed(string errorCode, string errorMessage)
+        {
+            return new FailedResult(errorCode, GetType().FullName, errorMessage);
         }
 
         /// <summary>

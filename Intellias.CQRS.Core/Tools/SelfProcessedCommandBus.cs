@@ -47,7 +47,7 @@ namespace Intellias.CQRS.Core.Tools
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
             {
-                return new FailedResult($"Error handling command: {e.Message}", e);
+                return new FailedResult($"Error handling command: {e.Message}");
             }
 #pragma warning restore CA1031 // Do not catch general exception types
         }
