@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Results;
 
 namespace Intellias.CQRS.Core.Tools
 {
@@ -37,7 +38,7 @@ namespace Intellias.CQRS.Core.Tools
         /// <typeparam name="T"></typeparam>
         /// <param name="command"></param>
         /// <returns></returns>
-        public Task HandleCommandAsync<T>(T command) where T : ICommand =>
-            Task.WhenAll(resolver.ResolveCommand(command).Select(handler => handler.HandleAsync(command)));
+        public Task<IExecutionResult> HandleCommandAsync<T>(T command) where T : ICommand =>
+            resolver.ResolveCommand(command).HandleAsync(command);
     }
 }

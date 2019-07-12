@@ -52,7 +52,7 @@ namespace Intellias.CQRS.Core.Tools
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public IEnumerable<ICommandHandler<T>> ResolveCommand<T>(T command)
+        public ICommandHandler<T> ResolveCommand<T>(T command)
             where T : ICommand
         {
             if (command == null)
@@ -62,7 +62,7 @@ namespace Intellias.CQRS.Core.Tools
 
             var handlerType = typeof(ICommandHandler<T>);
 
-            return Select<ICommandHandler<T>>(handlerType);
+            return Select<ICommandHandler<T>>(handlerType).First();
         }
 
         private IEnumerable<THandlerType> Select<THandlerType>(Type handlerType) =>

@@ -81,7 +81,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <returns>Execution Result</returns>
         public IExecutionResult UnhandledError(string errorMessage)
         {
-            return new FailedResult(ErrorCodes.UnhandledError, GetType().FullName, errorMessage);
+            return new FailedResult(ErrorCodes.UnhandledError, GetType().Name, errorMessage);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <returns>Execution Result</returns>
         public IExecutionResult AccessDenied(string errorMessage)
         {
-            return new FailedResult(ErrorCodes.AccessDenied, GetType().FullName, errorMessage);
+            return new FailedResult(ErrorCodes.AccessDenied, GetType().Name, errorMessage);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <returns>Execution Result</returns>
         public IExecutionResult ValidationFailed(string errorMessage)
         {
-            return new FailedResult(ErrorCodes.ValidationFailed, GetType().FullName, errorMessage);
+            return new FailedResult(ErrorCodes.ValidationFailed, GetType().Name, errorMessage);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <returns>Execution Result</returns>
         public IExecutionResult Failed(string errorCode, string errorMessage)
         {
-            return new FailedResult(errorCode, GetType().FullName, errorMessage);
+            return new FailedResult(errorCode, GetType().Name, errorMessage);
         }
 
         /// <summary>
