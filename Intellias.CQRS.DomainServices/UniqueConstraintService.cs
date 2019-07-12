@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Results;
 using Microsoft.WindowsAzure.Storage;
@@ -11,6 +12,7 @@ namespace Intellias.CQRS.DomainServices
     /// <summary>
     /// Unique-constraint service
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class UniqueConstraintService : IUniqueConstraintService
     {
         private readonly CloudTable table;
