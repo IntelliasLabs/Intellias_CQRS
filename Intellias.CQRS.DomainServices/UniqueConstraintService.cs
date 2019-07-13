@@ -26,8 +26,10 @@ namespace Intellias.CQRS.DomainServices
             var client = account.CreateCloudTableClient();
             table = client.GetTableReference(typeof(UniqueConstraintService).Name);
 
-            // Create the CloudTable if it does not exist
-            table.CreateIfNotExistsAsync().Wait();
+            if (!table.ExistsAsync().GetAwaiter().GetResult())
+            {
+                table.CreateIfNotExistsAsync().Wait();
+            }
         }
 
         /// <inheritdoc />

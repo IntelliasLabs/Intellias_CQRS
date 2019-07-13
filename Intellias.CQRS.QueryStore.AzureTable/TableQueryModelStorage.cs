@@ -31,12 +31,18 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         public TableQueryModelStorage(CloudStorageAccount account)
         {
             var client = account.CreateCloudTableClient();
-            queryTable = client.GetTableReference(typeof(TQueryModel).Name);
-            queryVersioningTable = client.GetTableReference($"{typeof(TQueryModel).Name}QueryVersioning");
 
-            // Create the CloudTable if it does not exist
-            queryTable.CreateIfNotExistsAsync().Wait();
-            queryVersioningTable.CreateIfNotExistsAsync().Wait();
+            queryTable = client.GetTableReference(typeof(TQueryModel).Name);
+            if (!queryTable.ExistsAsync().GetAwaiter().GetResult())
+            {
+                queryTable.CreateIfNotExistsAsync().Wait();
+            }
+
+            queryVersioningTable = client.GetTableReference($"{typeof(TQueryModel).Name}QueryVersioning");
+            if (!queryVersioningTable.ExistsAsync().GetAwaiter().GetResult())
+            {
+                queryVersioningTable.CreateIfNotExistsAsync().Wait();
+            }
         }
 
         /// <inheritdoc />
