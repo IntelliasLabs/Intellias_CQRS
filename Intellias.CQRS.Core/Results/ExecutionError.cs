@@ -18,43 +18,43 @@ namespace Intellias.CQRS.Core.Results
         /// <summary>
         /// Execution Error
         /// </summary>
-        /// <param name="errorMessage">Reason of failure</param>
-        public ExecutionError(string errorMessage)
+        /// <param name="message">Reason of failure</param>
+        public ExecutionError(string message)
         {
-            ErrorMessage = errorMessage;
-            ErrorCode = ErrorCodes.UnhandledError;
+            Message = message;
+            Code = ErrorCodes.UnhandledError;
         }
 
         /// <summary>
         /// Execution Error
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="errorMessage">Error Message</param>
-        public ExecutionError(string source, string errorMessage)
+        /// <param name="message">Error Message</param>
+        public ExecutionError(string source, string message)
         {
             Source = source;
-            ErrorMessage = errorMessage;
-            ErrorCode = ErrorCodes.ValidationFailed;
+            Message = message;
+            Code = ErrorCodes.ValidationFailed;
         }
 
         /// <summary>
         /// Execution Error
         /// </summary>
-        /// <param name="errorCode"></param>
+        /// <param name="code"></param>
         /// <param name="source"></param>
-        /// <param name="errorMessage">Error Message</param>
-        public ExecutionError(string errorCode, string source, string errorMessage)
+        /// <param name="message">Error Message</param>
+        public ExecutionError(string code, string source, string message)
         {
-            ErrorCode = errorCode;
+            Code = code;
             Source = source;
-            ErrorMessage = errorMessage;
+            Message = message;
         }
 
         /// <summary>
         /// Error code
         /// </summary>
         [JsonProperty]
-        public string ErrorCode { get; protected set; } = string.Empty;
+        public string Code { get; protected set; } = string.Empty;
 
         /// <summary>
         /// Error Source, optional
@@ -66,7 +66,7 @@ namespace Intellias.CQRS.Core.Results
         /// Reason of failure
         /// </summary>
         [JsonProperty]
-        public string ErrorMessage { get; protected set; } = string.Empty;
+        public string Message { get; protected set; } = string.Empty;
 
         /// <summary>
         /// ErrorMessage
@@ -74,7 +74,7 @@ namespace Intellias.CQRS.Core.Results
         /// <returns></returns>
         public override string ToString()
         {
-            return ErrorMessage;
+            return $"{Code}: '{Message}'";
         }
     }
 }

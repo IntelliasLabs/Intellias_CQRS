@@ -16,31 +16,31 @@ namespace Intellias.CQRS.Core.Results
         /// <summary>
         /// Failed Result
         /// </summary>
-        /// <param name="errorMessage"></param>
-        public FailedResult(string errorMessage) : this(ErrorCodes.UnhandledError, errorMessage)
+        /// <param name="message"></param>
+        public FailedResult(string message) : this(ErrorCodes.UnhandledError, message)
         {
         }
 
         /// <summary>
         /// Execution Error
         /// </summary>
-        /// <param name="errorCode"></param>
-        /// <param name="errorMessage">Error Message</param>
-        public FailedResult(string errorCode, string errorMessage) : this(errorCode, string.Empty, errorMessage)
+        /// <param name="code"></param>
+        /// <param name="message">Error Message</param>
+        public FailedResult(string code, string message) : this(code, string.Empty, message)
         {
         }
 
         /// <summary>
         /// Execution Error
         /// </summary>
-        /// <param name="errorCode"></param>
+        /// <param name="code"></param>
         /// <param name="source"></param>
-        /// <param name="errorMessage">Error Message</param>
-        public FailedResult(string errorCode, string source, string errorMessage)
+        /// <param name="message">Error Message</param>
+        public FailedResult(string code, string source, string message)
         {
-            ErrorCode = errorCode;
+            Code = code;
             Source = source;
-            ErrorMessage = errorMessage;
+            Message = message;
         }
 
         /// <inheritdoc />
@@ -51,18 +51,18 @@ namespace Intellias.CQRS.Core.Results
         /// Execution Errors
         /// </summary>
         [JsonIgnore]
-        public IReadOnlyCollection<ExecutionError> Errors => errors;
+        public IReadOnlyCollection<ExecutionError> Details => details;
 
         /// <summary>
         /// Add Error
         /// </summary>
-        /// <param name="error">Error</param>
-        public void AddError(ExecutionError error)
+        /// <param name="errorDetail">Error</param>
+        public void AddError(ExecutionError errorDetail)
         {
-            errors.Add(error);
+            details.Add(errorDetail);
         }
 
         [JsonProperty]
-        private readonly List<ExecutionError> errors = new List<ExecutionError>();
+        private readonly List<ExecutionError> details = new List<ExecutionError>();
     }
 }
