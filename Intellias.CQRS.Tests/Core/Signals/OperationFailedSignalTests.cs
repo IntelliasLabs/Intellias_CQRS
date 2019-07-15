@@ -25,7 +25,7 @@ namespace Intellias.CQRS.Tests.Core.Signals
             failedEvent.Should()
                 .Match<OperationFailedSignal>(x => x.CorrelationId == message.CorrelationId).And
                 .Match<OperationFailedSignal>(x => x.AggregateRootId == message.AggregateRootId).And
-                .Match<OperationFailedSignal>(x => x.Error.ErrorMessage == error).And
+                .Match<OperationFailedSignal>(x => x.Error.Message == error).And
                 .Match<OperationFailedSignal>(x => x.Source.Equals(message));
         }
     }
