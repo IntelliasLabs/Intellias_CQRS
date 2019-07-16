@@ -23,10 +23,11 @@ namespace Intellias.CQRS.Core.Messages
         /// <summary>
         /// Generate x64 FNV hash based on random GUID
         /// </summary>
+        /// <param name="id">Source data</param>
         /// <returns>Guid based FNV hash</returns>
-        public static ulong NewHash()
+        public static ulong NewHash(Guid id)
         {
-            return NewHash(Guid.NewGuid().ToByteArray());
+            return NewHash(id.ToByteArray());
         }
 
         /// <summary>
@@ -48,12 +49,19 @@ namespace Intellias.CQRS.Core.Messages
         }
 
         /// <summary>
+        /// Generate x64 FNV code based on GUID
+        /// </summary>
+        /// <param name="id">Source data</param>
+        /// <returns>Guid based FNV hash</returns>
+        public static string NewCode(Guid id) => NewCode(NewHash(id));
+
+        /// <summary>
         /// Generate random x32 hex
         /// </summary>
         /// <returns>x32 hex based on guid</returns>
         public static string NewCode()
         {
-            return NewCode(NewHash());
+            return NewCode(Guid.NewGuid());
         }
 
         /// <summary>
