@@ -42,7 +42,7 @@ namespace Intellias.CQRS.Tests
 
             Assert.True(result.Count == 2, "Result event recordset contains incorrect amount of events. Expeted count is 2");
 
-            var record = result.OrderBy(x=>x.Version).Last();
+            var record = result.OrderBy(x => x.RowKey).Last();
             dynamic @event = record.Data.FromJson(Type.GetType(record.TypeName));
 
             Assert.True(@event.Version == 2, "Test version for updated event is not equal 2");

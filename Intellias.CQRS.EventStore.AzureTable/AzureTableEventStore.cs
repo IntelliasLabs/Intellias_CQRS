@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
-using Intellias.CQRS.EventStore.AzureTable.Extensions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
@@ -29,8 +27,10 @@ namespace Intellias.CQRS.EventStore.AzureTable
 
             eventTable = client.GetTableReference(nameof(EventStore));
 
-            // Create the CloudTable if it does not exist
-            eventTable.CreateIfNotExistsAsync().Wait();
+            if (!eventTable.ExistsAsync().GetAwaiter().GetResult())
+            {
+                eventTable.CreateIfNotExistsAsync().Wait();
+            }
         }
 
 
@@ -42,7 +42,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
             }
 
             var batchOperation = new TableBatchOperation();
-            entity.Events.ToList().ForEach(e => batchOperation.Insert(e.ToStoreEvent()));
+            entity.Events.ToList().ForEach(e => batchOperation.Insert(new EventStoreEvent(e)));
             await eventTable.ExecuteBatchAsync(batchOperation);
 
             return entity.Events;
@@ -72,7 +72,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
 
             } while (continuationToken != null);
 
-            return results.Select(item => item.Data.FromJson(Type.GetType(item.TypeName))).Cast<IEvent>();
+            return results.Select(tableEntity => tableEntity.ToEvent());
         }
     }
 }

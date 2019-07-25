@@ -22,8 +22,11 @@ namespace Intellias.CQRS.CommandStore.AzureTable
                 .CreateCloudTableClient();
 
             commandTable = client.GetTableReference(nameof(CommandStore));
-            // Create the CloudTable if it does not exist
-            commandTable.CreateIfNotExistsAsync().Wait();
+
+            if (!commandTable.ExistsAsync().GetAwaiter().GetResult())
+            {
+                commandTable.CreateIfNotExistsAsync().Wait();
+            }
         }
 
         /// <summary>

@@ -95,7 +95,7 @@ namespace Intellias.CQRS.Tests
                 var currentValue = Unified.NewCode();
                 values[i] = currentValue;
             }
-                
+
             var tasks = values.Select(async value =>
                 await Store.UpdateAsync(model.Id, m =>
                 {
@@ -125,8 +125,7 @@ namespace Intellias.CQRS.Tests
             // Arrange
             var e = new TestUpdatedEvent
             {
-                AggregateRootId = Unified.NewCode(),
-                Id = Unified.NewCode()
+                AggregateRootId = Unified.NewCode()
             };
 
             // Act

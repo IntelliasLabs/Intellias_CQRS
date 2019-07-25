@@ -20,7 +20,7 @@ namespace Intellias.CQRS.Tests
         [Fact]
         public void SubscribeTest()
         {
-            var testEvent = new TestCreatedEvent { Id = "id" };
+            var testEvent = new TestCreatedEvent();
             var signal = new OperationCompletedSignal(testEvent);
 
             var mock = new Mock<ISubscriptionClient>();
@@ -47,7 +47,7 @@ namespace Intellias.CQRS.Tests
         [Fact]
         public void ServiceBusMessageTest()
         {
-            var e = new TestCreatedEvent { Id = "123" };
+            var e = new TestCreatedEvent();
             var msg = e.ToBusMessage();
             var json = Encoding.UTF8.GetString(msg.Body);
             var tms = json.FromJson<IMessage>();
