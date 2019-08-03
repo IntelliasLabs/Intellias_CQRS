@@ -43,10 +43,5 @@ namespace Intellias.CQRS.Configuration
         /// MsGraphClientSecret
         /// </summary>
         public string MsGraphClientSecret { get; set; } = string.Empty;
-
-        /// <summary>
-        /// MsGraphApplicationId
-        /// </summary>
-        public Guid MsGraphApplicationId { get; set; }
     }
 }
