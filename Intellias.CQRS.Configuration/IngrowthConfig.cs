@@ -45,11 +45,6 @@ namespace Intellias.CQRS.Configuration
         public IngrowthBusConfig JobProfile { get; set; } = new IngrowthBusConfig();
 
         /// <summary>
-        /// Spa section
-        /// </summary>
-        public IngrowthSpaConfig Spa { get; set; } = new IngrowthSpaConfig();
-
-        /// <summary>
         /// Shared section
         /// </summary>
         public IngrowthSharedConfig Shared { get; set; } = new IngrowthSharedConfig();
