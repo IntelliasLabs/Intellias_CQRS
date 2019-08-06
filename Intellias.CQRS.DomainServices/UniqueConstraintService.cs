@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Shared.Protocol;
@@ -37,13 +39,7 @@ namespace Intellias.CQRS.DomainServices
         {
             try
             {
-                await table.ExecuteAsync(TableOperation.Delete(new TableEntity
-                {
-                    PartitionKey = indexName,
-                    RowKey = value,
-                    Timestamp = DateTimeOffset.UtcNow,
-                    ETag = "*"
-                }));
+                await table.ExecuteAsync(TableOperation.Delete(new UniqueTableEntity(indexName, value)));
             }
             catch (StorageException e)
             {
@@ -65,13 +61,7 @@ namespace Intellias.CQRS.DomainServices
         {
             try
             {
-                await table.ExecuteAsync(TableOperation.Insert(new TableEntity
-                {
-                    PartitionKey = indexName,
-                    RowKey = value,
-                    Timestamp = DateTimeOffset.UtcNow,
-                    ETag = "*"
-                }));
+                await table.ExecuteAsync(TableOperation.Insert(new UniqueTableEntity(indexName, value)));
             }
             catch (StorageException e)
             {
@@ -92,20 +82,8 @@ namespace Intellias.CQRS.DomainServices
         {
             var updateOperation = new TableBatchOperation();
 
-            updateOperation.Delete(new TableEntity
-            {
-                PartitionKey = indexName,
-                RowKey = oldValue,
-                Timestamp = DateTimeOffset.UtcNow,
-                ETag = "*"
-            });
-            updateOperation.Insert(new TableEntity
-            {
-                PartitionKey = indexName,
-                RowKey = newValue,
-                Timestamp = DateTimeOffset.UtcNow,
-                ETag = "*"
-            });
+            updateOperation.Delete(new UniqueTableEntity(indexName, oldValue));
+            updateOperation.Insert(new UniqueTableEntity(indexName, newValue));
 
             try
             {
@@ -128,6 +106,25 @@ namespace Intellias.CQRS.DomainServices
             }
 
             return new SuccessfulResult();
+        }
+
+        private class UniqueTableEntity : TableEntity
+        {
+            public string Source { get; set; }
+
+            public UniqueTableEntity(string partition, string key)
+            {
+                PartitionKey = partition;
+                RowKey = Encode(key);
+                Timestamp = DateTimeOffset.UtcNow;
+                ETag = "*";
+                Source = key;
+            }
+
+            private static string Encode(string key)
+            {
+                return Unified.NewCode(Unified.NewHash(Encoding.UTF8.GetBytes(key)));
+            }
         }
     }
 }
