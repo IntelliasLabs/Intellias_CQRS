@@ -80,12 +80,11 @@ namespace Intellias.CQRS.Tests.DomainServices
             await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
             await uniqueConstraintService.ReserveConstraintAsync("TestIndex", updatedTestId);
 
-            var oldHash = Unified.NewCode(Unified.NewHash(Encoding.UTF8.GetBytes(testId)));
-            var newHash = Unified.NewCode(Unified.NewHash(Encoding.UTF8.GetBytes(updatedTestId)));
-            var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", oldHash, newHash);
+            var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
             Assert.False(result.Success);
 
             // Check original record is present
+            var oldHash = Unified.NewCode(Unified.NewHash(Encoding.UTF8.GetBytes(testId)));
             var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", oldHash));
             Assert.NotNull(testResult.Result);
         }

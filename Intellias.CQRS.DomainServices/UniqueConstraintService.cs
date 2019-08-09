@@ -91,18 +91,17 @@ namespace Intellias.CQRS.DomainServices
             }
             catch (StorageException e)
             {
-                var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
-                if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
+                switch (e.RequestInformation.ExtendedErrorInformation.ErrorCode)
                 {
-                    return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.");
+                    case string code when code == TableErrorCodeStrings.EntityAlreadyExists:
+                        return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.");
+                    case string code when code == StorageErrorCodeStrings.ResourceNotFound:
+                        return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.");
+                    case "InvalidDuplicateRow": // occures when new value duplicates old value then no error is needed
+                        return new SuccessfulResult();
+                    default:
+                        return new FailedResult("Update operation failed.");
                 }
-
-                if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.");
-                }
-
-                return new FailedResult("Update operation failed.");
             }
 
             return new SuccessfulResult();
