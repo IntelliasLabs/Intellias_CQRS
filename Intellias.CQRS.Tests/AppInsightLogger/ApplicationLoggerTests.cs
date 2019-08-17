@@ -11,7 +11,7 @@ namespace Intellias.CQRS.Tests.AppInsightLogger
     public class ApplicationLoggerTests
     {
         private readonly ICommand command;
-        AppInsightsLog logger;
+        private AppInsightsLog logger;
 
         public ApplicationLoggerTests()
         {
@@ -27,9 +27,8 @@ namespace Intellias.CQRS.Tests.AppInsightLogger
             logger.ApplyOperationConfig(command.ToLogConfig());
         }
 
-
         /// <summary>
-        /// LogInfoMessage
+        /// LogInfoMessage.
         /// </summary>
         [Fact]
         public void LogInfoMessage()
@@ -46,9 +45,8 @@ namespace Intellias.CQRS.Tests.AppInsightLogger
             logger.Flush();
         }
 
-
         /// <summary>
-        /// Log Dependency
+        /// Log Dependency.
         /// </summary>
         [Fact]
         public void LogDependency()

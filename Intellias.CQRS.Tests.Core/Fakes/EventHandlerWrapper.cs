@@ -4,14 +4,15 @@ using Intellias.CQRS.Core.Events;
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <inheritdoc />
-    public class EventHandlerWrapper<T> : IEventHandler<IEvent> where T : IEvent
+    public class EventHandlerWrapper<T> : IEventHandler<IEvent>
+        where T : IEvent
     {
         private readonly IEventHandler<T> handler;
 
         /// <summary>
-        /// Constructs handler wrapper from func
+        /// Initializes a new instance of the <see cref="EventHandlerWrapper{T}"/> class.
         /// </summary>
-        /// <param name="handler"></param>
+        /// <param name="handler">Event Handler.</param>
         public EventHandlerWrapper(IEventHandler<T> handler)
         {
             this.handler = handler;

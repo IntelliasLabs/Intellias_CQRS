@@ -4,7 +4,7 @@ using Intellias.CQRS.Tests.Core.Events;
 namespace Intellias.CQRS.Tests.Core.Domain
 {
     /// <summary>
-    /// Demo State
+    /// Demo State.
     /// </summary>
     public class TestState : AggregateState,
         IEventApplier<TestCreatedEvent>,
@@ -12,12 +12,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
         IEventApplier<TestDeletedEvent>
     {
         /// <summary>
-        /// TestData
-        /// </summary>
-        public string TestData { get; private set; } = string.Empty;
-
-        /// <summary>
-        /// Demo State
+        /// Initializes a new instance of the <see cref="TestState"/> class.
         /// </summary>
         public TestState()
         {
@@ -25,6 +20,11 @@ namespace Intellias.CQRS.Tests.Core.Domain
             Handles<TestUpdatedEvent>(Apply);
             Handles<TestDeletedEvent>(Apply);
         }
+
+        /// <summary>
+        /// TestData.
+        /// </summary>
+        public string TestData { get; private set; } = string.Empty;
 
         /// <inheritdoc />
         public void Apply(TestCreatedEvent @event)

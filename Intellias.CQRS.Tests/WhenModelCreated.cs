@@ -11,16 +11,10 @@ using Xunit;
 
 namespace Intellias.CQRS.Tests
 {
-    /// <summary>
-    /// CRUDTest
-    /// </summary>
     public class WhenModelCreated : BaseQueryTest<TestQueryModel>
     {
         private readonly TestQueryModel model;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
         public WhenModelCreated()
         {
             model = new TestQueryModel
@@ -34,9 +28,6 @@ namespace Intellias.CQRS.Tests
             Store.CreateAsync(model).Wait();
         }
 
-        /// <summary>
-        /// ShouldBeAvailableInGetById
-        /// </summary>
         [Fact]
         public void ShouldBeAvailableInGetById()
         {
@@ -47,9 +38,6 @@ namespace Intellias.CQRS.Tests
             Assert.True(result.Id == model.Id, "Item Id is corrupted");
         }
 
-        /// <summary>
-        /// ShouldBeAvailableInGetById
-        /// </summary>
         [Fact]
         public void ShouldBeAvailableInGetAll()
         {
@@ -61,9 +49,6 @@ namespace Intellias.CQRS.Tests
             Assert.True(result.Id == model.Id, "Item Id is corrupted");
         }
 
-        /// <summary>
-        /// Update Test
-        /// </summary>
         [Fact]
         public void UpdateExistingEntity()
         {
@@ -71,7 +56,8 @@ namespace Intellias.CQRS.Tests
             var updatedData = Unified.NewCode();
 
             // Act
-            Store.UpdateAsync(model.Id, m => {
+            Store.UpdateAsync(model.Id, m =>
+            {
                 m.TestData = updatedData;
             }).Wait();
 
@@ -82,7 +68,7 @@ namespace Intellias.CQRS.Tests
         }
 
         /// <summary>
-        /// Update existing entity in parallel
+        /// Update existing entity in parallel.
         /// </summary>
         [Fact]
         public void UpdateExistingEntityInParallelAsync()
@@ -90,7 +76,7 @@ namespace Intellias.CQRS.Tests
             const int numberOfUpdates = 10;
             var values = new string[numberOfUpdates];
 
-            for (var i = 0 ; i < numberOfUpdates; i++)
+            for (var i = 0; i < numberOfUpdates; i++)
             {
                 var currentValue = Unified.NewCode();
                 values[i] = currentValue;
@@ -100,8 +86,7 @@ namespace Intellias.CQRS.Tests
                 await Store.UpdateAsync(model.Id, m =>
                 {
                     m.TestList.Add(value);
-                })
-            );
+                }));
 
             // Act
             Func<Task> act = async () => await Task.WhenAll(tasks);
@@ -113,7 +98,7 @@ namespace Intellias.CQRS.Tests
 
             // Verify that all values are presented in list
             // It means that all updates are completed successfully
-            foreach(var val in values)
+            foreach (var val in values)
             {
                 queryModel.TestList.Should().Contain(val);
             }

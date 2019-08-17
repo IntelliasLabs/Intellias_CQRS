@@ -17,9 +17,9 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         private readonly ISubscriptionClient sub;
 
         /// <summary>
-        /// ctor
+        /// Initializes a new instance of the <see cref="AzureReportBusClient"/> class.
         /// </summary>
-        /// <param name="sub"></param>
+        /// <param name="sub">Subscription Type.</param>
         public AzureReportBusClient(ISubscriptionClient sub)
         {
             this.sub = sub;
@@ -35,22 +35,24 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
             };
 
             // Register the function that processes messages.
-            sub.RegisterMessageHandler(async (msg, token) => {
-                var json = Encoding.UTF8.GetString(msg.Body);
-                var message = json.FromJson<IMessage>();
-
-                // Invoke handler
-                if (handler != null)
+            sub.RegisterMessageHandler(
+                async (msg, token) =>
                 {
-                    await handler(message);
-                }
+                    var json = Encoding.UTF8.GetString(msg.Body);
+                    var message = json.FromJson<IMessage>();
 
-                // Complete the message so that it is not received again.
-                await sub.CompleteAsync(msg.SystemProperties.LockToken);
-            }, messageHandlerOptions);
+                    // Invoke handler
+                    if (handler != null)
+                    {
+                        await handler(message);
+                    }
+
+                    // Complete the message so that it is not received again.
+                    await sub.CompleteAsync(msg.SystemProperties.LockToken);
+                }, messageHandlerOptions);
         }
 
-        static Task ExceptionReceivedHandlerAsync(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
+        private static Task ExceptionReceivedHandlerAsync(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
             Trace.TraceError($"Message handler encountered an exception {exceptionReceivedEventArgs.Exception}.");
             return Task.CompletedTask;

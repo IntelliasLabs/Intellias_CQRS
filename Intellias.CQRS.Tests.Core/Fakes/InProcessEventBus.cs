@@ -13,7 +13,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         private readonly Dictionary<Type, List<IEventHandler<IEvent>>> funcs;
 
         /// <summary>
-        /// Creates message bus
+        /// Initializes a new instance of the <see cref="InProcessEventBus"/> class.
         /// </summary>
         public InProcessEventBus()
         {
@@ -21,11 +21,12 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// Add event handler
+        /// Add event handler.
         /// </summary>
-        /// <param name="handler">event handler</param>
-        /// <typeparam name="T"></typeparam>
-        public void AddHandler<T>(IEventHandler<T> handler) where T : IEvent
+        /// <param name="handler">event handler.</param>
+        /// <typeparam name="T">Some Evevnt.</typeparam>
+        public void AddHandler<T>(IEventHandler<T> handler)
+            where T : IEvent
         {
             if (handler == null)
             {
@@ -46,9 +47,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// Register all implementations of Event handlers
+        /// Register all implementations of Event handlers.
         /// </summary>
-        /// <param name="eventHandler">event handler</param>
+        /// <param name="eventHandler">event handler.</param>
         public void AddAllHandlers(object eventHandler)
         {
             // Here we verify that we take all interfaces IEventHandler<IEvent>

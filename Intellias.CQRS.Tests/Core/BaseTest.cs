@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Intellias.CQRS.Tests.Core
 {
     /// <summary>
-    /// Keeps all init data
+    /// Keeps all init data.
     /// </summary>
     public class BaseTest
     {
@@ -23,27 +23,7 @@ namespace Intellias.CQRS.Tests.Core
         }
 
         /// <summary>
-        /// EventStore
-        /// </summary>
-        protected IEventStore Store { get; }
-
-        /// <summary>
-        /// EventBus
-        /// </summary>
-        protected Mock<IEventBus> BusMock { get; }
-
-        /// <summary>
-        /// aggregateTable
-        /// </summary>
-        protected CloudTable AggregateTable { get; }
-
-        /// <summary>
-        /// eventTable
-        /// </summary>
-        protected CloudTable EventTable { get; }
-
-        /// <summary>
-        /// Base constructor
+        /// Initializes a new instance of the <see cref="BaseTest"/> class.
         /// </summary>
         public BaseTest()
         {
@@ -60,10 +40,30 @@ namespace Intellias.CQRS.Tests.Core
         }
 
         /// <summary>
-        /// CreateItem
+        /// EventStore.
         /// </summary>
-        /// <param name="id"></param>
-        /// /// <param name="testData"></param>
+        protected IEventStore Store { get; }
+
+        /// <summary>
+        /// EventBus.
+        /// </summary>
+        protected Mock<IEventBus> BusMock { get; }
+
+        /// <summary>
+        /// aggregateTable.
+        /// </summary>
+        protected CloudTable AggregateTable { get; }
+
+        /// <summary>
+        /// eventTable.
+        /// </summary>
+        protected CloudTable EventTable { get; }
+
+        /// <summary>
+        /// CreateItem.
+        /// </summary>
+        /// <param name="id">Id.</param>
+        /// /// <param name="testData">Test Data.</param>
         protected void CreateItem(string id, string testData)
         {
             var item = new TestRoot(new TestCreateCommand
@@ -75,10 +75,10 @@ namespace Intellias.CQRS.Tests.Core
         }
 
         /// <summary>
-        /// UpdateItem
+        /// UpdateItem.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="testData"></param>
+        /// <param name="id">Id of the item.</param>
+        /// <param name="testData">Test Data.</param>
         protected void UpdateItem(string id, string testData)
         {
             var item = new TestRoot(id);

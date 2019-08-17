@@ -6,15 +6,15 @@ using Intellias.CQRS.Core.Commands;
 namespace Intellias.CQRS.CommandStore.AzureTable.Extensions
 {
     /// <summary>
-    /// CommandStoreItemExtensions
+    /// CommandStoreItemExtensions.
     /// </summary>
     public static class CommandStoreItemExtensions
     {
         /// <summary>
-        /// ToStoreCommandS
+        /// ToStoreCommand.
         /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
+        /// <param name="command">Command.</param>
+        /// <returns>CommandTableEntity.</returns>
         public static CommandTableEntity ToStoreCommand(this ICommand command) =>
         new CommandTableEntity
         {

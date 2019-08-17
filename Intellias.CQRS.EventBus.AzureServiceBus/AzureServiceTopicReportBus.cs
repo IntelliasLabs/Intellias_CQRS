@@ -15,17 +15,18 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         private readonly ITopicClient topicClient;
 
         /// <summary>
-        /// Creates an instance of ReportBus
+        /// Initializes a new instance of the <see cref="AzureServiceTopicReportBus"/> class.
         /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="topic"></param>
+        /// <param name="connectionString">Connection String.</param>
+        /// <param name="topic">Entity Path.</param>
         public AzureServiceTopicReportBus(string connectionString, string topic)
         {
             topicClient = new TopicClient(connectionString, topic);
         }
 
         /// <inheritdoc />
-        public Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessage
+        public Task PublishAsync<TMessage>(TMessage message)
+            where TMessage : IMessage
         {
             var busMsg = CreateBusMessage(message);
             return topicClient.SendAsync(busMsg);

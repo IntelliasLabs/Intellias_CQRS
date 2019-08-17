@@ -6,7 +6,7 @@ namespace Intellias.CQRS.Tests.Core.Commands
     public class TestCreateCommand : Command
     {
         /// <summary>
-        /// TestData
+        /// TestData.
         /// </summary>
         public string TestData { get; set; } = string.Empty;
     }

@@ -1,37 +1,37 @@
 ﻿namespace Intellias.CQRS.Core.Results
 {
     /// <summary>
-    /// Common error codes
+    /// Common error codes.
     /// </summary>
     public static class ErrorCodes
     {
         /// <summary>
-        /// ValidationFailed
+        /// ValidationFailed.
         /// </summary>
         public static string ValidationFailed => nameof(ValidationFailed);
 
         /// <summary>
-        /// UnhandledError
+        /// UnhandledError.
         /// </summary>
         public static string UnhandledError => nameof(UnhandledError);
 
         /// <summary>
-        /// Resource Unavailable
+        /// Resource Unavailable.
         /// </summary>
         public static string ResourceUnavailable => nameof(ResourceUnavailable);
 
         /// <summary>
-        /// Connection Failed
+        /// Connection Failed.
         /// </summary>
         public static string ConnectionFailed => nameof(ConnectionFailed);
 
         /// <summary>
-        /// Version Conflict
+        /// Version Conflict.
         /// </summary>
         public static string VersionConflict => nameof(VersionConflict);
 
         /// <summary>
-        /// Access Denied
+        /// Access Denied.
         /// </summary>
         public static string AccessDenied => nameof(AccessDenied);
     }

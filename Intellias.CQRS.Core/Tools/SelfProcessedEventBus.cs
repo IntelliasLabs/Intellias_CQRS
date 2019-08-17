@@ -6,26 +6,26 @@ using Intellias.CQRS.Core.Results;
 namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
-    /// SelfProcessed EventBus
+    /// SelfProcessed EventBus.
     /// </summary>
     public class SelfProcessedEventBus : IEventBus
     {
-        private readonly HandlerManager _handlerManager;
+        private readonly HandlerManager handlerManager;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="SelfProcessedEventBus"/> class.
         /// </summary>
-        /// <param name="handlerManager"></param>
+        /// <param name="handlerManager">Handle Manager.</param>
         public SelfProcessedEventBus(HandlerManager handlerManager)
         {
-            _handlerManager = handlerManager;
+            this.handlerManager = handlerManager;
         }
 
         /// <summary>
-        /// PublishAsync
+        /// PublishAsync.
         /// </summary>
-        /// <param name="msg"></param>
-        /// <returns></returns>
+        /// <param name="msg">Message.</param>
+        /// <returns>Execution Result.</returns>
         public async Task<IExecutionResult> PublishAsync(IEvent msg)
         {
             try
@@ -40,7 +40,7 @@ namespace Intellias.CQRS.Core.Tools
 
                 await (Task)method
                     .MakeGenericMethod(msg.GetType())
-                    .Invoke(_handlerManager, new object[] { msg });
+                    .Invoke(handlerManager, new object[] { msg });
 
                 return new SuccessfulResult();
             }

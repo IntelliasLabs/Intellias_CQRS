@@ -7,24 +7,14 @@ using Microsoft.WindowsAzure.Storage.Table;
 namespace Intellias.CQRS.EventStore.AzureTable.Documents
 {
     /// <summary>
-    /// StoreEventItem
+    /// StoreEventItem.
     /// </summary>
     public class EventStoreEvent : TableEntity
     {
         /// <summary>
-        /// Keeps serialized event itself
+        /// Initializes a new instance of the <see cref="EventStoreEvent"/> class.
         /// </summary>
-        public string Data { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Keeps an event type
-        /// </summary>
-        public string TypeName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// ctor buildes azure table store entity from IEvent
-        /// </summary>
-        /// <param name="event"></param>
+        /// <param name="event">Event.</param>
         public EventStoreEvent(IEvent @event)
         {
             PartitionKey = @event.AggregateRootId;
@@ -34,13 +24,26 @@ namespace Intellias.CQRS.EventStore.AzureTable.Documents
         }
 
         /// <summary>
-        /// parameterless ctor
+        /// Initializes a new instance of the <see cref="EventStoreEvent"/> class.
         /// </summary>
-        public EventStoreEvent() { }
+        public EventStoreEvent()
+        {
+        }
 
         /// <summary>
-        /// Converts an EventStoreEvent to IEvent
+        /// Keeps serialized event itself.
         /// </summary>
+        public string Data { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Keeps an event type.
+        /// </summary>
+        public string TypeName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Converts an EventStoreEvent to IEvent.
+        /// </summary>
+        /// <returns>Event.</returns>
         public IEvent ToEvent()
         {
             var @event = (IEvent)Data.FromJson(Type.GetType(TypeName));

@@ -11,16 +11,16 @@ using Microsoft.WindowsAzure.Storage.Table;
 namespace Intellias.CQRS.EventStore.AzureTable
 {
     /// <summary>
-    /// Azure Table Storage event store
+    /// Azure Table Storage event store.
     /// </summary>
     public class AzureTableEventStore : IEventStore
     {
         private readonly CloudTable eventTable;
 
         /// <summary>
-        /// EventStore
+        /// Initializes a new instance of the <see cref="AzureTableEventStore"/> class.
         /// </summary>
-        /// <param name="account">Azure Table Storage Account</param>
+        /// <param name="account">Azure Table Storage Account.</param>
         public AzureTableEventStore(CloudStorageAccount account)
         {
             var client = account.CreateCloudTableClient();
@@ -33,11 +33,11 @@ namespace Intellias.CQRS.EventStore.AzureTable
             }
         }
 
-
         /// <inheritdoc />
         public async Task<IEnumerable<IEvent>> SaveAsync(IAggregateRoot entity)
         {
-            if (!entity.Events.Any()) {
+            if (!entity.Events.Any())
+            {
                 throw new InvalidOperationException("No events for serialization.");
             }
 
@@ -52,8 +52,10 @@ namespace Intellias.CQRS.EventStore.AzureTable
         public async Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion)
         {
             var query = new TableQuery<EventStoreEvent>()
-                .Where(TableQuery.GenerateFilterCondition("PartitionKey",
-                    QueryComparisons.Equal, aggregateId));
+                .Where(TableQuery.GenerateFilterCondition(
+                    "PartitionKey",
+                    QueryComparisons.Equal,
+                    aggregateId));
 
             var results = new List<EventStoreEvent>();
             var continuationToken = new TableContinuationToken();
@@ -69,8 +71,8 @@ namespace Intellias.CQRS.EventStore.AzureTable
 
                 continuationToken = queryResults.ContinuationToken;
                 results.AddRange(queryResults.Results);
-
-            } while (continuationToken != null);
+            }
+            while (continuationToken != null);
 
             return results.Select(tableEntity => tableEntity.ToEvent());
         }

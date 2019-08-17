@@ -12,7 +12,7 @@ using Microsoft.WindowsAzure.Storage.Table.Protocol;
 namespace Intellias.CQRS.DomainServices
 {
     /// <summary>
-    /// Unique-constraint service
+    /// Unique-constraint service.
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class UniqueConstraintService : IUniqueConstraintService
@@ -20,9 +20,9 @@ namespace Intellias.CQRS.DomainServices
         private readonly CloudTable table;
 
         /// <summary>
-        /// ctor
+        /// Initializes a new instance of the <see cref="UniqueConstraintService"/> class.
         /// </summary>
-        /// <param name="account"></param>
+        /// <param name="account">Storage account.</param>
         public UniqueConstraintService(CloudStorageAccount account)
         {
             var client = account.CreateCloudTableClient();
@@ -54,7 +54,6 @@ namespace Intellias.CQRS.DomainServices
 
             return new SuccessfulResult();
         }
-
 
         /// <inheritdoc />
         public async Task<IExecutionResult> ReserveConstraintAsync(string indexName, string value)
@@ -109,8 +108,6 @@ namespace Intellias.CQRS.DomainServices
 
         private class UniqueTableEntity : TableEntity
         {
-            public string Source { get; set; }
-
             public UniqueTableEntity(string partition, string key)
             {
                 PartitionKey = partition;
@@ -119,6 +116,8 @@ namespace Intellias.CQRS.DomainServices
                 ETag = "*";
                 Source = key;
             }
+
+            public string Source { get; set; }
 
             private static string Encode(string key)
             {

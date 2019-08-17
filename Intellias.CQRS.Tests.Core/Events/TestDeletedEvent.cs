@@ -4,5 +4,6 @@ namespace Intellias.CQRS.Tests.Core.Events
 {
     /// <inheritdoc />
     public class TestDeletedEvent : Event
-    {}
+    {
+    }
 }

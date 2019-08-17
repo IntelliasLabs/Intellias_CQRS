@@ -12,9 +12,9 @@ namespace Intellias.CQRS.CommandStore.AzureTable
         private readonly CloudTable commandTable;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="AzureTableCommandStore"/> class.
         /// </summary>
-        /// <param name="storeConnectionString"></param>
+        /// <param name="storeConnectionString">Storage Connection string.</param>
         public AzureTableCommandStore(string storeConnectionString)
         {
             var client = CloudStorageAccount
@@ -30,10 +30,10 @@ namespace Intellias.CQRS.CommandStore.AzureTable
         }
 
         /// <summary>
-        /// InsertCommand
+        /// InsertCommand.
         /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
+        /// <param name="command">Command to Save.</param>
+        /// <returns>Simple Task.</returns>
         public Task SaveAsync(ICommand command)
         {
             var operation = TableOperation.Insert(command.ToStoreCommand());

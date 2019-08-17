@@ -9,16 +9,20 @@ namespace Intellias.CQRS.Tests.Core.Domain
     public class TestRoot : AggregateRoot<TestState>
     {
         /// <summary>
-        /// TestRoot
+        /// Initializes a new instance of the <see cref="TestRoot"/> class.
         /// </summary>
-        public TestRoot(string id) : base(id)
+        /// <param name="id">Id of Aggeregate Root.</param>
+        public TestRoot(string id)
+            : base(id)
         {
         }
 
         /// <summary>
-        /// TestRoot
+        /// Initializes a new instance of the <see cref="TestRoot"/> class.
         /// </summary>
-        public TestRoot(TestCreateCommand command) : base(command.AggregateRootId)
+        /// <param name="command">Create command.</param>
+        public TestRoot(TestCreateCommand command)
+            : base(command.AggregateRootId)
         {
             PublishEvent(new TestCreatedEvent
             {
@@ -27,9 +31,10 @@ namespace Intellias.CQRS.Tests.Core.Domain
         }
 
         /// <summary>
-        /// Update
+        /// Update.
         /// </summary>
-        /// <param name="command">TestUpdateCommand</param>
+        /// <param name="command">TestUpdateCommand.</param>
+        /// <returns>Execution Result.</returns>
         public IExecutionResult Update(TestUpdateCommand command)
         {
             if (command.TestData.Length < 10)
@@ -46,8 +51,9 @@ namespace Intellias.CQRS.Tests.Core.Domain
         }
 
         /// <summary>
-        /// Deactivate
+        /// Deactivate.
         /// </summary>
+        /// <returns>Execution Result.</returns>
         public IExecutionResult Deactivate()
         {
             PublishEvent(new TestDeletedEvent());

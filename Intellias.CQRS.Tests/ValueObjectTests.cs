@@ -9,7 +9,8 @@ namespace Intellias.CQRS.Tests
         [Fact]
         public void ValueObjectEqualityTest()
         {
-            var address1 = new Address {
+            var address1 = new Address
+            {
                 AddressLine = "test1"
             };
 

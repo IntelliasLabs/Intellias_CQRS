@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Queries;
-using Intellias.CQRS.Core;
+using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 
 namespace Intellias.CQRS.QueryStore.AzureTable
 {
@@ -20,11 +20,11 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         private const string DefaultPropertyNameDelimiter = "_";
         private const string JsonEnumerationPrefix = "<|>jsonSerializedIEnumerableProperty<|>=";
 
-        private static readonly Dictionary<Type, Func<object, EntityProperty>> propTypes = new Dictionary<Type, Func<object, EntityProperty>>
+        private static readonly Dictionary<Type, Func<object, EntityProperty>> PropTypes = new Dictionary<Type, Func<object, EntityProperty>>
         {
             { typeof(string), val => new EntityProperty((string)val) },
             { typeof(byte[]), val => new EntityProperty((byte[])val) },
-            { typeof(byte), val => new EntityProperty(new [] { (byte)val}) },
+            { typeof(byte), val => new EntityProperty(new[] { (byte)val }) },
             { typeof(bool), val => new EntityProperty((bool)val) },
             { typeof(bool?), val => new EntityProperty((bool?)val) },
             { typeof(DateTime), val => new EntityProperty((DateTime)val) },
@@ -140,6 +140,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                     break;
                 }
             }
+
             propertyDictionary.Add(objectPath, propertyWithType);
             return true;
         }
@@ -165,6 +166,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 
             return value;
         }
+
         private static EntityProperty CreateEntityPropertyWithType(object value, Type type)
         {
             if (type.IsEnum)
@@ -172,9 +174,9 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 return new EntityProperty(value.ToString());
             }
 
-            if (propTypes.ContainsKey(type))
+            if (PropTypes.ContainsKey(type))
             {
-                return propTypes[type](value);
+                return PropTypes[type](value);
             }
 
             return new EntityProperty((int?)null);
@@ -195,10 +197,11 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             try
             {
                 var tupleStack = new Stack<Tuple<object, object, PropertyInfo>>();
-                var strArray = propertyPath.Split(new[]
-                {
-                    DefaultPropertyNameDelimiter
-                }, StringSplitOptions.RemoveEmptyEntries);
+                var strArray = propertyPath.Split(
+                    new[]
+                    {
+                        DefaultPropertyNameDelimiter
+                    }, StringSplitOptions.RemoveEmptyEntries);
                 var obj = root;
                 var flag = false;
                 for (var index = 0; index < strArray.Length - 1; ++index)
@@ -213,14 +216,17 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                             uninitializedObject = (IQueryModel)FormatterServices.GetUninitializedObject(propertyType);
                             property.SetValue(obj, ChangeType(uninitializedObject, property.PropertyType), null);
                         }
+
                         if (flag || propertyType.IsValueType)
                         {
                             flag = true;
                             tupleStack.Push(new Tuple<object, object, PropertyInfo>(uninitializedObject, obj, property));
                         }
+
                         obj = uninitializedObject;
                     }
                 }
+
                 var prop = obj.GetType().GetProperty(strArray.Last());
                 SetPropertyValue(prop, obj, propertyValue);
 
@@ -231,12 +237,14 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                     tuple.Item3.SetValue(tuple.Item2, ChangeType(propVal, tuple.Item3.PropertyType), null);
                     propVal = (IQueryModel)tuple.Item2;
                 }
+
                 return root;
             }
             catch (Exception ex)
             {
                 var data = ex.Data;
-                data["ObjectRecompositionError"] = data["ObjectRecompositionError"]+ $"Exception thrown while trying to set property value. Property Path: {propertyPath} Property Value: {propertyValue}. Exception Message: {ex.Message}";
+                data["ObjectRecompositionError"] = data["ObjectRecompositionError"]
+                    + $"Exception thrown while trying to set property value. Property Path: {propertyPath} Property Value: {propertyValue}. Exception Message: {ex.Message}";
                 throw;
             }
         }
@@ -249,7 +257,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                     propertyInfo.PropertyType != typeof(string) &&
                     listProp.StartsWith(JsonEnumerationPrefix, StringComparison.InvariantCulture))
                 {
-                    propertyInfo.SetValue(obj,
+                    propertyInfo.SetValue(
+                        obj,
                         Deserialise(listProp.Substring(JsonEnumerationPrefix.Length), propertyInfo.PropertyType),
                         null);
                 }
@@ -331,5 +340,4 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             }
         }
     }
-
 }

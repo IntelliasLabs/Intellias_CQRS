@@ -9,7 +9,7 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus
 {
     /// <inheritdoc />
     /// <summary>
-    /// Publishing events to Azure Service Bus
+    /// Publishing events to Azure Service Bus.
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class AzureServiceTopicCommandBus : ICommandBus
@@ -18,11 +18,11 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus
         private readonly ICommandStore commandStore;
 
         /// <summary>
-        /// Creates an instance of EventBus
+        /// Initializes a new instance of the <see cref="AzureServiceTopicCommandBus"/> class.
         /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="topic"></param>
-        /// <param name="commandStore"></param>
+        /// <param name="connectionString">Connection String.</param>
+        /// <param name="topic">Azure Topic.</param>
+        /// <param name="commandStore">Command Store.</param>
         public AzureServiceTopicCommandBus(
             string connectionString,
             string topic,

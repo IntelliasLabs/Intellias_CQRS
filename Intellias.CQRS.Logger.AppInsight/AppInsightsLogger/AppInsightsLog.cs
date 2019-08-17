@@ -10,32 +10,32 @@ namespace Intellias.CQRS.Logger.AppInsight.AppInsightsLogger
     /// First - we have to register config for operation, so
     /// 1. AppInsightsLog.ApplyOperationConfig(config)
     /// Now we are able to log messages, which belong to particular operation
-    /// 2. AppInsightsLog -> LogInfo/LogError/Any other log
+    /// 2. AppInsightsLog -> LogInfo/LogError/Any other log.
     /// </summary>
     public class AppInsightsLog : IAppInsightsLog
     {
         /// <summary>
-        /// TelemetryClient
+        /// Initializes a new instance of the <see cref="AppInsightsLog"/> class.
         /// </summary>
-        public TelemetryClient TelemetryClient { get; }
-
-        /// <summary>
-        /// AppInsightsLog
-        /// </summary>
-        /// <param name="telemetryKey"></param>
+        /// <param name="telemetryKey">App Insights Telemetry key.</param>
         public AppInsightsLog(string telemetryKey)
         {
             TelemetryClient = new TelemetryClient
             {
-                InstrumentationKey = telemetryKey
+                InstrumentationKey = telemetryKey,
             };
         }
 
         /// <summary>
-        /// ApplyOperationConfig
+        /// TelemetryClient.
         /// </summary>
-        /// <param name="config"></param>
-        /// <returns></returns>
+        public TelemetryClient TelemetryClient { get; }
+
+        /// <summary>
+        /// ApplyOperationConfig.
+        /// </summary>
+        /// <param name="config">OperationConfig.</param>
+        /// <returns>Log of App Insights.</returns>
         public AppInsightsLog ApplyOperationConfig(OperationConfig config)
         {
             TelemetryClient.Context.Operation.Id = config.OperationId;
@@ -46,10 +46,10 @@ namespace Intellias.CQRS.Logger.AppInsight.AppInsightsLogger
         }
 
         /// <summary>
-        /// Tracks trace message
+        /// Tracks trace message.
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        /// <param name="message">Message to log.</param>
+        /// <returns>Log of App Insights.</returns>
         public AppInsightsLog LogInfo(AppInsightsLogMessage message)
         {
             TelemetryClient.TrackTrace(
@@ -61,12 +61,12 @@ namespace Intellias.CQRS.Logger.AppInsight.AppInsightsLogger
         }
 
         /// <summary>
-        /// StartRecordDependency
+        /// StartRecordDependency.
         /// </summary>
         /// <param name="name">Name of the command initiated with this dependency call. Examples are stored procedure name and URL path template.</param>
-        /// <param name="dependencyType">Logical grouping of dependencies. Examples are SQL, Azure table, and HTTP. </param>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        /// <param name="dependencyType">Logical grouping of dependencies. Examples are SQL, Azure table, and HTTP.</param>
+        /// <param name="message">Message to log.</param>
+        /// <returns>DependencyTelemetry.</returns>
         public DependencyTelemetry StartRecordDependency(string name, string dependencyType, AppInsightsLogMessage message)
         {
             return new DependencyTelemetry
@@ -75,15 +75,15 @@ namespace Intellias.CQRS.Logger.AppInsight.AppInsightsLogger
                 Type = dependencyType,
                 Data = message.DataJson,
                 Timestamp = DateTimeOffset.Now,
-                Success = false
+                Success = false,
             };
         }
 
         /// <summary>
-        /// StopRecordDependency
+        /// StopRecordDependency.
         /// </summary>
-        /// <param name="dependency"></param>
-        /// <returns></returns>
+        /// <param name="dependency">DependencyTelemetry.</param>
+        /// <returns>Log of App Insight.</returns>
         public AppInsightsLog StopRecordDependency(DependencyTelemetry dependency)
         {
             dependency.Success = true;
@@ -95,7 +95,7 @@ namespace Intellias.CQRS.Logger.AppInsight.AppInsightsLogger
 
         /// <summary>
         /// App insights telemetry client uses batches for sending requests.
-        /// We should force sending this cached data
+        /// We should force sending this cached data.
         /// </summary>
         public void Flush()
         {

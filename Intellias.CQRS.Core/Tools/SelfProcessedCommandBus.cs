@@ -6,26 +6,26 @@ using Intellias.CQRS.Core.Results;
 namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
-    /// Self Processed Command Bus used for process manager needs
+    /// Self Processed Command Bus used for process manager needs.
     /// </summary>
     public class SelfProcessedCommandBus : ICommandBus
     {
-        private readonly HandlerManager _handlerManager;
+        private readonly HandlerManager handlerManager;
 
         /// <summary>
-        /// ctor
+        /// Initializes a new instance of the <see cref="SelfProcessedCommandBus"/> class.
         /// </summary>
-        /// <param name="handlerManager"></param>
+        /// <param name="handlerManager">Handler Manager.</param>
         public SelfProcessedCommandBus(HandlerManager handlerManager)
         {
-            _handlerManager = handlerManager;
+            this.handlerManager = handlerManager;
         }
 
         /// <summary>
-        /// PublishAsync ICommand
+        /// PublishAsync ICommand.
         /// </summary>
-        /// <param name="msg"></param>
-        /// <returns></returns>
+        /// <param name="msg">Message.</param>
+        /// <returns>Execution Result.</returns>
         public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
             try
@@ -40,7 +40,7 @@ namespace Intellias.CQRS.Core.Tools
 
                 await (Task)method
                     .MakeGenericMethod(msg.GetType())
-                    .Invoke(_handlerManager, new object[] { msg });
+                    .Invoke(handlerManager, new object[] { msg });
 
                 return new SuccessfulResult();
             }

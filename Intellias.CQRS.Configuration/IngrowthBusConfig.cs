@@ -3,23 +3,23 @@
 namespace Intellias.CQRS.Configuration
 {
     /// <summary>
-    /// IngrowthBusConfig
+    /// IngrowthBusConfig.
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class IngrowthBusConfig
     {
         /// <summary>
-        /// StorageAccountConnectionString
+        /// StorageAccountConnectionString.
         /// </summary>
         public string StorageAccountConnectionString { get; set; } = string.Empty;
 
         /// <summary>
-        /// CommandBusTopic
+        /// CommandBusTopic.
         /// </summary>
         public string CommandBusTopic { get; set; } = string.Empty;
 
         /// <summary>
-        /// EventBusTopic
+        /// EventBusTopic.
         /// </summary>
         public string EventBusTopic { get; set; } = string.Empty;
     }

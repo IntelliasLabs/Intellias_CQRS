@@ -1,33 +1,24 @@
 using System;
 using System.Linq;
+using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.Tests.Core;
 using Microsoft.WindowsAzure.Storage.Table;
-using Intellias.CQRS.Core;
 using Xunit;
 
 namespace Intellias.CQRS.Tests
 {
-    /// <summary>
-    /// CreateEntityTests
-    /// </summary>
     public class WhenEntityCreated : BaseTest
     {
         private readonly string testId = Unified.NewCode();
         private readonly string testData = "Test Data";
 
-        /// <summary>
-        /// WhenEntityCreated
-        /// </summary>
         public WhenEntityCreated()
         {
             CreateItem(testId, testData);
         }
 
-        /// <summary>
-        /// Check if event serialized
-        /// </summary>
         [Fact]
         public void ShouldCreateEventRecordWithVersion1AndTestData()
         {

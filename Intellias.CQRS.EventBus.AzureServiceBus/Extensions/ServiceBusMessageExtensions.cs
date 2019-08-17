@@ -6,15 +6,15 @@ using Microsoft.Azure.ServiceBus;
 namespace Intellias.CQRS.EventBus.AzureServiceBus.Extensions
 {
     /// <summary>
-    /// Service bus extensions
+    /// Service bus extensions.
     /// </summary>
     public static class ServiceBusMessageExtensions
     {
         /// <summary>
-        /// Event to service-bus message
+        /// Event to service-bus message.
         /// </summary>
-        /// <param name="event">event</param>
-        /// <returns>Message</returns>
+        /// <param name="event">event.</param>
+        /// <returns>Message.</returns>
         public static Message ToBusMessage(this IEvent @event) =>
             new Message(Encoding.UTF8.GetBytes(@event.ToJson()))
             {

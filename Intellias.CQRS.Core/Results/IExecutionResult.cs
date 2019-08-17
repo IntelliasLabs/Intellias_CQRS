@@ -1,12 +1,12 @@
 ﻿namespace Intellias.CQRS.Core.Results
 {
     /// <summary>
-    /// Execution Result
+    /// Execution Result.
     /// </summary>
     public interface IExecutionResult
     {
         /// <summary>
-        /// Is result successful
+        /// Is result successful.
         /// </summary>
         bool Success { get; }
     }

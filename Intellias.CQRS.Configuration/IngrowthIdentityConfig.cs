@@ -4,18 +4,18 @@ using System.Diagnostics.CodeAnalysis;
 namespace Intellias.CQRS.Configuration
 {
     /// <summary>
-    /// IngrowthIdentityConfig
+    /// IngrowthIdentityConfig.
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class IngrowthIdentityConfig
     {
         /// <summary>
-        /// CoE Groups Root-Node Id
+        /// CoE Groups Root-Node Id.
         /// </summary>
         public Guid CoEGroupsRootNodeId { get; set; }
 
         /// <summary>
-        /// StorageAccountConnectionString
+        /// StorageAccountConnectionString.
         /// </summary>
         public string StorageAccountConnectionString { get; set; } = string.Empty;
     }

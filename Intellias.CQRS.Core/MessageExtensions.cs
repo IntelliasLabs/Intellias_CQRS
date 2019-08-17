@@ -6,46 +6,44 @@ using Newtonsoft.Json;
 namespace Intellias.CQRS.Core
 {
     /// <summary>
-    /// Extension for commands
+    /// Extension for commands.
     /// </summary>
     public static class MessageExtensions
     {
         /// <summary>
-        /// IMessage to JSON
+        /// IMessage to JSON.
         /// </summary>
-        /// <param name="entity">entity</param>
-        /// <returns>JSON</returns>
+        /// <param name="entity">entity.</param>
+        /// <returns>JSON.</returns>
         public static string ToJson(this object entity)
         {
             return JsonConvert.SerializeObject(entity, CqrsSettings.JsonConfig());
         }
 
         /// <summary>
-        /// Parse JSON
+        /// Parse JSON.
         /// </summary>
-        /// <param name="json">input json</param>
-        /// <returns>object</returns>
-        public static T FromJson<T>(this string json)
-        {
-            return JsonConvert.DeserializeObject<T>(json, CqrsSettings.JsonConfig());
-        }
+        /// <param name="json">input json.</param>
+        /// <typeparam name="T">Object Type.</typeparam>
+        /// <returns>object.</returns>
+        public static T FromJson<T>(this string json) => JsonConvert.DeserializeObject<T>(json, CqrsSettings.JsonConfig());
 
         /// <summary>
-        /// Parse abstract message
+        /// Parse abstract message.
         /// </summary>
-        /// <param name="json">input json</param>
-        /// <param name="type"></param>
-        /// <returns>object</returns>
+        /// <param name="json">input json.</param>
+        /// <param name="type">Type.</param>
+        /// <returns>object.</returns>
         public static object FromJson(this string json, Type type)
         {
             return JsonConvert.DeserializeObject(json, type, CqrsSettings.JsonConfig());
         }
 
         /// <summary>
-        /// Copy metadata to another message instance
+        /// Copy metadata to another message instance.
         /// </summary>
-        /// <param name="from">source object</param>
-        /// <param name="to">target object</param>
+        /// <param name="from">source object.</param>
+        /// <param name="to">target object.</param>
         public static void CopyMetadata(this IMessage from, IMessage to)
         {
             foreach (var key in from.Metadata.Keys)
@@ -55,11 +53,11 @@ namespace Intellias.CQRS.Core
         }
 
         /// <summary>
-        /// Converts abstract message to another type
+        /// Converts abstract message to another type.
         /// </summary>
-        /// <param name="source">source message</param>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <returns></returns>
+        /// <param name="source">source message.</param>
+        /// <typeparam name="TMessage">Mesaage Type.</typeparam>
+        /// <returns>Message.</returns>
         public static TMessage ToType<TMessage>(this IMessage source)
             where TMessage : AbstractMessage, new()
         {

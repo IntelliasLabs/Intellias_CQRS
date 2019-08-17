@@ -4,48 +4,48 @@ using System.Diagnostics.CodeAnalysis;
 namespace Intellias.CQRS.Configuration
 {
     /// <summary>
-    /// Config
+    /// Config.
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class IngrowthConfig
     {
         /// <summary>
-        /// AppInsightsInstrumentationKey
+        /// AppInsightsInstrumentationKey.
         /// </summary>
         public string AppInsightsInstrumentationKey { get; set; } = string.Empty;
 
         /// <summary>
-        /// ArmsContainerSas
+        /// ArmsContainerSas.
         /// </summary>
         public string ArmsContainerSas { get; set; } = string.Empty;
 
         /// <summary>
-        /// ArmsContainerUri
+        /// ArmsContainerUri.
         /// </summary>
         public Uri? ArmsContainerUri { get; set; }
 
         /// <summary>
-        /// Auth section
+        /// Auth section.
         /// </summary>
         public IngrowthAuthConfig Auth { get; set; } = new IngrowthAuthConfig();
 
         /// <summary>
-        /// Competency section
+        /// Competency section.
         /// </summary>
         public IngrowthBusConfig Competency { get; set; } = new IngrowthBusConfig();
 
         /// <summary>
-        /// Identity section
+        /// Identity section.
         /// </summary>
         public IngrowthIdentityConfig Identity { get; set; } = new IngrowthIdentityConfig();
 
         /// <summary>
-        /// JobProfile section
+        /// JobProfile section.
         /// </summary>
         public IngrowthBusConfig JobProfile { get; set; } = new IngrowthBusConfig();
 
         /// <summary>
-        /// Shared section
+        /// Shared section.
         /// </summary>
         public IngrowthSharedConfig Shared { get; set; } = new IngrowthSharedConfig();
     }

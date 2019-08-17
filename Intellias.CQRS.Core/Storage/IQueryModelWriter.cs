@@ -6,43 +6,45 @@ using Intellias.CQRS.Core.Queries;
 namespace Intellias.CQRS.Core.Storage
 {
     /// <summary>
-    /// IQueryModelWriter - used by event handlers to build query model
+    /// IQueryModelWriter - used by event handlers to build query model.
     /// </summary>
-    public interface IQueryModelWriter<TQueryModel> where TQueryModel : IQueryModel, new()
+    /// <typeparam name="TQueryModel">Query Model Type.</typeparam>
+    public interface IQueryModelWriter<TQueryModel>
+        where TQueryModel : IQueryModel, new()
     {
         /// <summary>
-        /// Delete Read Model Item
+        /// Delete Read Model Item.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Id of Query model.</param>
+        /// <returns>Simple Task.</returns>
         Task DeleteAsync(string id);
 
         /// <summary>
-        /// Delete All Read Model Items
+        /// Delete All Read Model Items.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Simple Task.</returns>
         Task ClearAsync();
 
         /// <summary>
-        /// Creates one read model
+        /// Creates one read model.
         /// </summary>
-        /// <param name="queryModel"></param>
-        /// <returns></returns>
+        /// <param name="queryModel">Query model to create.</param>
+        /// <returns>Simple Task.</returns>
         Task CreateAsync(TQueryModel queryModel);
 
         /// <summary>
-        /// Update one read model
+        /// Update one read model.
         /// </summary>
-        /// <param name="updateAction"></param>
-        /// <param name="id">ID of query model</param>
-        /// <returns></returns>
+        /// <param name="id">Id of Query model.</param>
+        /// <param name="updateAction">Update action.</param>
+        /// <returns>Simple Task.</returns>
         Task UpdateAsync(string id, Action<TQueryModel> updateAction);
 
         /// <summary>
-        /// Reserve Event Dublication
+        /// Reserve Event Dublication.
         /// </summary>
-        /// <param name="event">event for processing</param>
-        /// <returns></returns>
+        /// <param name="event">event for processing.</param>
+        /// <returns>Simple Task.</returns>
         Task ReserveEventAsync(IEvent @event);
     }
 }

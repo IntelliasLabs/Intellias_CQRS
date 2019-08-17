@@ -5,21 +5,23 @@ using Intellias.CQRS.Core.Queries;
 namespace Intellias.CQRS.Core.Storage
 {
     /// <summary>
-    /// IQueryModelReader - used to read query model
+    /// IQueryModelReader - used to read query model.
     /// </summary>
-    public interface IQueryModelReader<TQueryModel> where TQueryModel : IQueryModel, new()
+    /// <typeparam name="TQueryModel">Query Model Type.</typeparam>
+    public interface IQueryModelReader<TQueryModel>
+        where TQueryModel : IQueryModel, new()
     {
         /// <summary>
-        /// Returns the query model item by Id
+        /// Returns the query model item by Id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Id of Query model to find.</param>
+        /// <returns>Query Model.</returns>
         Task<TQueryModel> GetAsync(string id);
 
         /// <summary>
-        /// Returns all query model items
+        /// Returns all query model items.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Collection of Query Models.</returns>
         Task<IReadOnlyCollection<TQueryModel>> GetAllAsync();
     }
 }

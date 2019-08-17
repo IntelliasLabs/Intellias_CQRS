@@ -17,7 +17,7 @@ namespace Intellias.CQRS.Tests.Fakes
             };
             var sut = new FakeReportBusClient();
 
-            sut.Subscribe(msg => 
+            sut.Subscribe(msg =>
             {
                 msg.Should().BeEquivalentTo(message);
                 return Task.CompletedTask;

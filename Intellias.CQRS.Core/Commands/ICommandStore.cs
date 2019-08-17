@@ -3,15 +3,15 @@
 namespace Intellias.CQRS.Core.Commands
 {
     /// <summary>
-    /// Command storage abstraction
+    /// Command storage abstraction.
     /// </summary>
     public interface ICommandStore
     {
         /// <summary>
-        /// Store command
+        /// Store command.
         /// </summary>
-        /// <param name="command"></param>
-        /// <returns>Awaiter</returns>
+        /// <param name="command">Command.</param>
+        /// <returns>Awaiter.</returns>
         Task SaveAsync(ICommand command);
     }
 }

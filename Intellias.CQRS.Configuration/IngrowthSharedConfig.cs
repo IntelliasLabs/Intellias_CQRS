@@ -3,18 +3,18 @@
 namespace Intellias.CQRS.Configuration
 {
     /// <summary>
-    /// IngrowthSharedConfig
+    /// IngrowthSharedConfig.
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class IngrowthSharedConfig
     {
         /// <summary>
-        /// ServiceBusConnectionString
+        /// ServiceBusConnectionString.
         /// </summary>
         public string ServiceBusConnectionString { get; set; } = string.Empty;
 
         /// <summary>
-        /// StorageAccountConnectionString
+        /// StorageAccountConnectionString.
         /// </summary>
         public string StorageAccountConnectionString { get; set; } = string.Empty;
     }

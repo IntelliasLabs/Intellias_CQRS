@@ -7,12 +7,27 @@ using Intellias.CQRS.Core.Results;
 namespace Intellias.CQRS.Core.Domain
 {
     /// <inheritdoc />
-    public class AggregateRoot<T> : IAggregateRoot where T : AggregateState, new()
+    public class AggregateRoot<T> : IAggregateRoot
+        where T : AggregateState, new()
     {
         private readonly List<IEvent> pendingEvents = new List<IEvent>();
 
         /// <summary>
-        /// Current State of Aggregate
+        /// Initializes a new instance of the <see cref="AggregateRoot{T}"/> class.
+        /// </summary>
+        /// <param name="id">Id of Aggregate Root.</param>
+        protected AggregateRoot(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            Id = id;
+        }
+
+        /// <summary>
+        /// Current State of Aggregate.
         /// </summary>
         public T State { get; } = new T();
 
@@ -24,20 +39,6 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <inheritdoc />
         public int Version => State.Version;
-
-        /// <summary>
-        /// Creates an existing aggregate-root
-        /// </summary>
-        /// <param name="id"></param>
-        protected AggregateRoot(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            Id = id;
-        }
 
         /// <inheritdoc />
         public void LoadFromHistory(IEnumerable<IEvent> history)
@@ -55,73 +56,73 @@ namespace Intellias.CQRS.Core.Domain
         }
 
         /// <summary>
-        /// Apply an event
+        /// Unhandled Error.
         /// </summary>
-        /// <param name="event">Event</param>
-        protected void PublishEvent(IEvent @event)
-        {
-            if(@event == null)
-            {
-                throw new ArgumentNullException(nameof(@event));
-            }
-
-            if(string.IsNullOrWhiteSpace(@event.AggregateRootId))
-            {
-                @event.AggregateRootId = Id;
-            }
-
-            State.ApplyEvent(@event);
-            pendingEvents.Add(@event);
-        }
-
-        /// <summary>
-        /// Unhandled Error
-        /// </summary>
-        /// <param name="errorMessage">Error Message</param>
-        /// <returns>Execution Result</returns>
+        /// <param name="errorMessage">Error Message.</param>
+        /// <returns>Execution Result.</returns>
         public IExecutionResult UnhandledError(string errorMessage)
         {
             return new FailedResult(ErrorCodes.UnhandledError, GetType().Name, errorMessage);
         }
 
         /// <summary>
-        /// Access Denied
+        /// Access Denied.
         /// </summary>
-        /// <param name="errorMessage">Error Message</param>
-        /// <returns>Execution Result</returns>
+        /// <param name="errorMessage">Error Message.</param>
+        /// <returns>Execution Result.</returns>
         public IExecutionResult AccessDenied(string errorMessage)
         {
             return new FailedResult(ErrorCodes.AccessDenied, GetType().Name, errorMessage);
         }
 
         /// <summary>
-        /// Validation Failed
+        /// Validation Failed.
         /// </summary>
-        /// <param name="errorMessage">Error Message</param>
-        /// <returns>Execution Result</returns>
+        /// <param name="errorMessage">Error Message.</param>
+        /// <returns>Execution Result.</returns>
         public IExecutionResult ValidationFailed(string errorMessage)
         {
             return new FailedResult(ErrorCodes.ValidationFailed, GetType().Name, errorMessage);
         }
 
         /// <summary>
-        /// Failed custom domain logic
+        /// Failed custom domain logic.
         /// </summary>
-        /// <param name="errorCode">Specific error code</param>
-        /// <param name="errorMessage">Error Message</param>
-        /// <returns>Execution Result</returns>
+        /// <param name="errorCode">Specific error code.</param>
+        /// <param name="errorMessage">Error Message.</param>
+        /// <returns>Execution Result.</returns>
         public IExecutionResult Failed(string errorCode, string errorMessage)
         {
             return new FailedResult(errorCode, GetType().Name, errorMessage);
         }
 
         /// <summary>
-        /// Successful result
+        /// Successful result.
         /// </summary>
-        /// <returns>Execution Result</returns>
+        /// <returns>Execution Result.</returns>
         public IExecutionResult Success()
         {
             return new SuccessfulResult();
+        }
+
+        /// <summary>
+        /// Apply an event.
+        /// </summary>
+        /// <param name="event">Event.</param>
+        protected void PublishEvent(IEvent @event)
+        {
+            if (@event == null)
+            {
+                throw new ArgumentNullException(nameof(@event));
+            }
+
+            if (string.IsNullOrWhiteSpace(@event.AggregateRootId))
+            {
+                @event.AggregateRootId = Id;
+            }
+
+            State.ApplyEvent(@event);
+            pendingEvents.Add(@event);
         }
     }
 }
