@@ -22,6 +22,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
         public Task<TQueryModel> GetLatestAsync(string id) => throw new System.NotImplementedException();
 
         /// <inheritdoc />
-        public Task CreateAsync(TQueryModel model) => throw new System.NotImplementedException();
+        public Task<TQueryModel> CreateAsync(TQueryModel model) => throw new System.NotImplementedException();
     }
 }

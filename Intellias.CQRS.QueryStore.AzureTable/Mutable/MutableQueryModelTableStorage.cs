@@ -84,21 +84,25 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
         }
 
         /// <inheritdoc />
-        public Task CreateAsync(TQueryModel model)
+        public async Task<TQueryModel> CreateAsync(TQueryModel model)
         {
             var entity = new MutableTableEntity(model);
             var operation = TableOperation.Insert(entity);
 
-            return tableClient.Value.ExecuteAsync(operation);
+            var result = await tableClient.Value.ExecuteAsync(operation);
+
+            return ((MutableTableEntity)result.Result).DeserializeQueryModel();
         }
 
         /// <inheritdoc />
-        public Task ReplaceAsync(TQueryModel model)
+        public async Task<TQueryModel> ReplaceAsync(TQueryModel model)
         {
             var entity = new MutableTableEntity(model);
             var operation = TableOperation.Replace(entity);
 
-            return tableClient.Value.ExecuteAsync(operation);
+            var result = await tableClient.Value.ExecuteAsync(operation);
+
+            return ((MutableTableEntity)result.Result).DeserializeQueryModel();
         }
 
         private async Task<IReadOnlyCollection<TQueryModel>> QueryAllSegmentedAsync(TableQuery<MutableTableEntity> query)
