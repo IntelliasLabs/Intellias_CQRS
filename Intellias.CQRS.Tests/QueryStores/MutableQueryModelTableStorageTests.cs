@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Queries.Mutable;
-using Intellias.CQRS.QueryStore.AzureTable;
 using Intellias.CQRS.QueryStore.AzureTable.Mutable;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Intellias.CQRS.Tests.Fakes;
@@ -51,8 +50,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         {
             var queryModel = new MutableQueryModel { Id = Unified.NewCode() };
 
-            await storage.CreateAsync(queryModel);
-            var stored = await storage.FindAsync(queryModel.Id);
+            var stored = await storage.CreateAsync(queryModel);
 
             stored.Should().BeEquivalentTo(queryModel, options => options.ForQueryModel());
         }
@@ -71,39 +69,31 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Replace_WhenETagIsInvalid_Throws()
         {
-            var qm1 = new MutableQueryModel { Id = Unified.NewCode() };
-            await storage.CreateAsync(qm1);
-
-            var stored = await storage.GetAsync(qm1.Id);
-            stored.SomeProperty = Unified.NewCode();
+            var qm1 = await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() });
 
             // Update query model.
-            await storage.ReplaceAsync(stored);
+            qm1.SomeProperty = Unified.NewCode();
+            await storage.ReplaceAsync(qm1);
 
             // Trying to update again should fail as ETag is changed after first update.
-            (await storage.Awaiting(s => s.ReplaceAsync(stored)).Should().ThrowAsync<StorageException>())
+            (await storage.Awaiting(s => s.ReplaceAsync(qm1)).Should().ThrowAsync<StorageException>())
                 .Which.RequestInformation.HttpStatusCode.Should().Be((int)HttpStatusCode.PreconditionFailed);
         }
 
         [Fact]
         public async Task Replace_WhenETagIsValid_Replaces()
         {
-            var qm1 = new MutableQueryModel { Id = Unified.NewCode() };
-            await storage.CreateAsync(qm1);
+            var qm1 = await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() });
 
             // Update for the first time.
-            var updated1 = await storage.GetAsync(qm1.Id);
-            updated1.SomeProperty = Unified.NewCode();
-            await storage.ReplaceAsync(updated1);
+            qm1.SomeProperty = Unified.NewCode();
+            var updated1 = await storage.ReplaceAsync(qm1);
 
             // Update again with the valid changed ETag.
-            var updated2 = await storage.GetAsync(qm1.Id);
-            updated2.SomeProperty = Unified.NewCode();
-            await storage.ReplaceAsync(updated2);
+            updated1.SomeProperty = Unified.NewCode();
+            var updated2 = await storage.ReplaceAsync(updated1);
 
-            var result = await storage.GetAsync(updated2.Id);
-
-            result.Should().BeEquivalentTo(updated2, options => options.ForQueryModel());
+            updated2.Should().BeEquivalentTo(updated1, options => options.ForQueryModel());
         }
 
         [Fact]
@@ -115,11 +105,8 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task GetAll_HasQueryModels_ReturnsAll()
         {
-            var qm1 = new MutableQueryModel { Id = Unified.NewCode() };
-            var qm2 = new MutableQueryModel { Id = Unified.NewCode() };
-
-            await storage.CreateAsync(qm1);
-            await storage.CreateAsync(qm2);
+            var qm1 = await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() });
+            var qm2 = await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() });
 
             (await storage.GetAllAsync()).Should().BeEquivalentTo(new[] { qm1, qm2 }, options => options.ForQueryModel());
         }
@@ -133,9 +120,7 @@ namespace Intellias.CQRS.Tests.QueryStores
             var queryModels = new List<MutableQueryModel>();
             for (var i = 0; i < numberOfQueryModels; i++)
             {
-                var qm = new MutableQueryModel { Id = Unified.NewCode() };
-                await storage.CreateAsync(qm);
-                queryModels.Add(await storage.GetAsync(qm.Id));
+                queryModels.Add(await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() }));
             }
 
             // Add one more which is not part of the filter.
