@@ -30,6 +30,7 @@
     <Rule Id="SA1642" Action="Warning" />
     <Rule Id="SA1649" Action="Warning" />
     <Rule Id="SX1101" Action="None" />
+    <Rule Id="SCS0005" Action="None" />
   </Rules>
   <Rules AnalyzerId="CodeCracker.CSharp" RuleNamespace="CodeCracker.CSharp">
     <Rule Id="CC0031" Action="None" />
