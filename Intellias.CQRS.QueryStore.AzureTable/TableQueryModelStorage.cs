@@ -120,7 +120,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return DynamicPropertyConverter.ConvertBack<TQueryModel>(entity);
         }
 
-#pragma warning disable SCS0005 // Weak random generator
         /// <inheritdoc />
         public async Task UpdateAsync(string id, Action<TQueryModel> updateAction)
         {
@@ -142,7 +141,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable
                 await UpdateActionAsync(id, updateAction);
             });
         }
-#pragma warning restore SCS0005 // Weak random generator
 
         private static DynamicTableEntity Transform(TQueryModel model)
         {

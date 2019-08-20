@@ -9,6 +9,9 @@ namespace Intellias.CQRS.Core.Queries.Mutable
         public string Id { get; set; } = string.Empty;
 
         /// <inheritdoc />
+        public string ETag { get; set; } = string.Empty;
+
+        /// <inheritdoc />
         public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
 
         /// <inheritdoc />

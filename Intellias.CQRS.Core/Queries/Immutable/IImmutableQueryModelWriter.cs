@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Intellias.CQRS.Core.Queries.Mutable;
 
 namespace Intellias.CQRS.Core.Queries.Immutable
 {
@@ -8,7 +7,7 @@ namespace Intellias.CQRS.Core.Queries.Immutable
     /// </summary>
     /// <typeparam name="TQueryModel">Type of the query model.</typeparam>
     public interface IImmutableQueryModelWriter<in TQueryModel>
-        where TQueryModel : IMutableQueryModel, new()
+        where TQueryModel : IImmutableQueryModel, new()
     {
         /// <summary>
         /// Creates query model.
