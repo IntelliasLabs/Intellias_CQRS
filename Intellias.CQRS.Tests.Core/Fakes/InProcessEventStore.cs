@@ -9,19 +9,20 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// <inheritdoc />
     public class InProcessEventStore : IEventStore
     {
-        private readonly Dictionary<string, List<IEvent>> _inMemoryDb = new Dictionary<string, List<IEvent>>();
+        private readonly Dictionary<string, List<IEvent>> inMemoryDb = new Dictionary<string, List<IEvent>>();
 
         /// <inheritdoc />
         public Task<IEnumerable<IEvent>> SaveAsync(IAggregateRoot entity)
         {
             foreach (var @event in entity.Events)
             {
-                _inMemoryDb.TryGetValue(@event.AggregateRootId, out var list);
+                inMemoryDb.TryGetValue(@event.AggregateRootId, out var list);
                 if (list == null)
                 {
                     list = new List<IEvent>();
-                    _inMemoryDb.Add(@event.AggregateRootId, list);
+                    inMemoryDb.Add(@event.AggregateRootId, list);
                 }
+
                 list.Add(@event);
             }
 
@@ -31,7 +32,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         /// <inheritdoc />
         public Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion)
         {
-            var arExist = _inMemoryDb.TryGetValue(aggregateId, out var events);
+            var arExist = inMemoryDb.TryGetValue(aggregateId, out var events);
 
             return arExist
                 ? Task.FromResult(events?.Where(x => x.Version > fromVersion) ?? new List<IEvent>())

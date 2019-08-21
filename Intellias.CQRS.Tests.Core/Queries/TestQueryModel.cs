@@ -5,32 +5,32 @@ using Intellias.CQRS.Core.Queries;
 namespace Intellias.CQRS.Tests.Core.Queries
 {
     /// <summary>
-    /// DemoQueryModel
+    /// DemoQueryModel.
     /// </summary>
     public class TestQueryModel : IQueryModel
     {
         /// <inheritdoc />
-        public string Id { set; get; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
 
         /// <summary>
-        /// ParentId
+        /// ParentId.
         /// </summary>
         public string ParentId { get; set; } = string.Empty;
 
         /// <summary>
-        /// TestData
+        /// TestData.
         /// </summary>
         public string TestData { get; set; } = string.Empty;
 
         /// <summary>
-        /// Array of strings
+        /// Array of strings.
         /// </summary>
 #pragma warning disable CA2227 // We can't deserialize model without setter
         public List<string> TestList { get; set; } = new List<string>();
 #pragma warning restore CA2227 // We can't deserialize model without setter
 
         /// <inheritdoc />
-        public int Version { set; get; }
+        public int Version { get; set; }
 
         /// <inheritdoc />
         public DateTime Timestamp { get; set; }

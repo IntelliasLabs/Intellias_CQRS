@@ -5,14 +5,14 @@ using Intellias.CQRS.Core.Messages;
 namespace Intellias.CQRS.Core.Events
 {
     /// <summary>
-    /// Subscription client to report bus
+    /// Subscription client to report bus.
     /// </summary>
     public interface IReportBusClient
     {
         /// <summary>
-        /// Subscribe to event stream
+        /// Subscribe to event stream.
         /// </summary>
-        /// <param name="handler">Handler func</param>
+        /// <param name="handler">Handler func.</param>
         void Subscribe(Func<IMessage, Task> handler);
     }
 }

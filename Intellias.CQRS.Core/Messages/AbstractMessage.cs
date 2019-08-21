@@ -9,7 +9,7 @@ namespace Intellias.CQRS.Core.Messages
     public abstract class AbstractMessage : IMessage
     {
         /// <summary>
-        /// Constructs abstract message
+        /// Initializes a new instance of the <see cref="AbstractMessage"/> class.
         /// </summary>
         protected AbstractMessage()
         {
@@ -60,16 +60,17 @@ namespace Intellias.CQRS.Core.Messages
             return false;
         }
 
-        private static bool IsTransient(AbstractMessage obj)
+        /// <inheritdoc />
+        public override int GetHashCode()
         {
-            return obj != null && string.IsNullOrWhiteSpace(obj.Id);
+            return Unified.Decode(Id).GetHashCode();
         }
 
         /// <summary>
-        /// Base equality operator
+        /// Base equality operator.
         /// </summary>
-        /// <param name="other">Other</param>
-        /// <returns>Is equal</returns>
+        /// <param name="other">Other.</param>
+        /// <returns>Is equal.</returns>
         protected virtual bool Equals(AbstractMessage other)
         {
             if (other == null)
@@ -95,10 +96,9 @@ namespace Intellias.CQRS.Core.Messages
             return false;
         }
 
-        /// <inheritdoc />
-        public override int GetHashCode()
+        private static bool IsTransient(AbstractMessage obj)
         {
-            return Unified.Decode(Id).GetHashCode();
+            return obj != null && string.IsNullOrWhiteSpace(obj.Id);
         }
     }
 }

@@ -8,7 +8,7 @@ using Intellias.CQRS.Core.Events;
 namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
-    /// Used to return all handler instanses from handler's assembly
+    /// Used to return all handler instanses from handler's assembly.
     /// </summary>
     public class HandlerDependencyResolver
     {
@@ -16,10 +16,10 @@ namespace Intellias.CQRS.Core.Tools
         private readonly IEnumerable<Assembly> assemblies;
 
         /// <summary>
-        /// Ctor
+        /// Initializes a new instance of the <see cref="HandlerDependencyResolver"/> class.
         /// </summary>
-        /// <param name="serviceProvider"></param>
-        /// <param name="assemblies"></param>
+        /// <param name="serviceProvider">Service Provider.</param>
+        /// <param name="assemblies">Collection of assemblies.</param>
         public HandlerDependencyResolver(
             IServiceProvider serviceProvider,
             IEnumerable<Assembly> assemblies)
@@ -28,12 +28,12 @@ namespace Intellias.CQRS.Core.Tools
             this.assemblies = assemblies;
         }
 
-
         /// <summary>
-        /// Resolves all event handlers
+        /// Resolves all event handlers.
         /// </summary>
-        /// <param name="event"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">Event Type.</typeparam>
+        /// <param name="event">Event.</param>
+        /// <returns>Event Hanlder.</returns>
         public IEnumerable<IEventHandler<T>> ResolveEvent<T>(T @event)
             where T : IEvent
         {
@@ -48,10 +48,11 @@ namespace Intellias.CQRS.Core.Tools
         }
 
         /// <summary>
-        /// Resolves all event handlers
+        /// Resolves all event handlers.
         /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
+        /// <param name="command">Command.</param>
+        /// <typeparam name="T">Command Type.</typeparam>
+        /// <returns>Command Handler.</returns>
         public ICommandHandler<T> ResolveCommand<T>(T command)
             where T : ICommand
         {

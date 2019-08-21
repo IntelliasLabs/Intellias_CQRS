@@ -4,29 +4,28 @@ using System.Collections.Generic;
 namespace Intellias.CQRS.Core.Messages
 {
     /// <summary>
-    /// Represents system cross-domain message
+    /// Represents system cross-domain message.
     /// </summary>
     public interface IMessage
     {
         /// <summary>
-        /// Unique system message identifier
+        /// Unique system message identifier.
         /// </summary>
         string Id { get; }
 
         /// <summary>
         /// Id of operation (Operation can consist of several commands / events).
-        /// Used for operations tracking or operation rejecting for example
+        /// Used for operations tracking or operation rejecting for example.
         /// </summary>
         string CorrelationId { get; set; }
 
         /// <summary>
-        /// Aggregate Root Identifier
+        /// Aggregate Root Identifier.
         /// </summary>
         string AggregateRootId { get; set; }
 
-
         /// <summary>
-        /// FullName of message type derived from event/command
+        /// FullName of message type derived from event/command.
         /// </summary>
         string TypeName { get; }
 
@@ -40,7 +39,7 @@ namespace Intellias.CQRS.Core.Messages
         }
 
         /// <summary>
-        /// Message Metadata
+        /// Message Metadata.
         /// </summary>
         IDictionary<MetadataKey, string> Metadata { get; }
     }

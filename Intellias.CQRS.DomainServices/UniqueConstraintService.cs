@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Shared.Protocol;
@@ -10,7 +12,7 @@ using Microsoft.WindowsAzure.Storage.Table.Protocol;
 namespace Intellias.CQRS.DomainServices
 {
     /// <summary>
-    /// Unique-constraint service
+    /// Unique-constraint service.
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class UniqueConstraintService : IUniqueConstraintService
@@ -18,9 +20,9 @@ namespace Intellias.CQRS.DomainServices
         private readonly CloudTable table;
 
         /// <summary>
-        /// ctor
+        /// Initializes a new instance of the <see cref="UniqueConstraintService"/> class.
         /// </summary>
-        /// <param name="account"></param>
+        /// <param name="account">Storage account.</param>
         public UniqueConstraintService(CloudStorageAccount account)
         {
             var client = account.CreateCloudTableClient();
@@ -37,13 +39,7 @@ namespace Intellias.CQRS.DomainServices
         {
             try
             {
-                await table.ExecuteAsync(TableOperation.Delete(new TableEntity
-                {
-                    PartitionKey = indexName,
-                    RowKey = value,
-                    Timestamp = DateTimeOffset.UtcNow,
-                    ETag = "*"
-                }));
+                await table.ExecuteAsync(TableOperation.Delete(new UniqueTableEntity(indexName, value)));
             }
             catch (StorageException e)
             {
@@ -59,19 +55,12 @@ namespace Intellias.CQRS.DomainServices
             return new SuccessfulResult();
         }
 
-
         /// <inheritdoc />
         public async Task<IExecutionResult> ReserveConstraintAsync(string indexName, string value)
         {
             try
             {
-                await table.ExecuteAsync(TableOperation.Insert(new TableEntity
-                {
-                    PartitionKey = indexName,
-                    RowKey = value,
-                    Timestamp = DateTimeOffset.UtcNow,
-                    ETag = "*"
-                }));
+                await table.ExecuteAsync(TableOperation.Insert(new UniqueTableEntity(indexName, value)));
             }
             catch (StorageException e)
             {
@@ -92,20 +81,8 @@ namespace Intellias.CQRS.DomainServices
         {
             var updateOperation = new TableBatchOperation();
 
-            updateOperation.Delete(new TableEntity
-            {
-                PartitionKey = indexName,
-                RowKey = oldValue,
-                Timestamp = DateTimeOffset.UtcNow,
-                ETag = "*"
-            });
-            updateOperation.Insert(new TableEntity
-            {
-                PartitionKey = indexName,
-                RowKey = newValue,
-                Timestamp = DateTimeOffset.UtcNow,
-                ETag = "*"
-            });
+            updateOperation.Delete(new UniqueTableEntity(indexName, oldValue));
+            updateOperation.Insert(new UniqueTableEntity(indexName, newValue));
 
             try
             {
@@ -113,21 +90,39 @@ namespace Intellias.CQRS.DomainServices
             }
             catch (StorageException e)
             {
-                var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
-                if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
+                switch (e.RequestInformation.ExtendedErrorInformation.ErrorCode)
                 {
-                    return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.");
+                    case string code when code == TableErrorCodeStrings.EntityAlreadyExists:
+                        return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.");
+                    case string code when code == StorageErrorCodeStrings.ResourceNotFound:
+                        return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.");
+                    case "InvalidDuplicateRow": // occures when new value duplicates old value then no error is needed
+                        return new SuccessfulResult();
+                    default:
+                        return new FailedResult("Update operation failed.");
                 }
-
-                if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.");
-                }
-
-                return new FailedResult("Update operation failed.");
             }
 
             return new SuccessfulResult();
+        }
+
+        private class UniqueTableEntity : TableEntity
+        {
+            public UniqueTableEntity(string partition, string key)
+            {
+                PartitionKey = partition;
+                RowKey = Encode(key);
+                Timestamp = DateTimeOffset.UtcNow;
+                ETag = "*";
+                Source = key;
+            }
+
+            public string Source { get; set; }
+
+            private static string Encode(string key)
+            {
+                return Unified.NewCode(Unified.NewHash(Encoding.UTF8.GetBytes(key)));
+            }
         }
     }
 }

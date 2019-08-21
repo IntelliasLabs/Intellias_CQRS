@@ -9,21 +9,13 @@ using Moq;
 namespace Intellias.CQRS.Tests.Core
 {
     /// <summary>
-    /// TestBase
+    /// TestBase.
     /// </summary>
     public class TestBase
     {
-        /// <summary>
-        /// ServiceProvider
-        /// </summary>
-        protected ServiceProvider ServiceProvider { get; }
-
-        /// <summary>
-        /// ctor
-        /// </summary>
         protected TestBase()
         {
-            //setup our DI
+            // setup our DI
             var serviceCollection = new ServiceCollection();
 
             IocRegistrations(serviceCollection);
@@ -31,6 +23,8 @@ namespace Intellias.CQRS.Tests.Core
             ServiceProvider = serviceCollection
                 .BuildServiceProvider();
         }
+
+        protected ServiceProvider ServiceProvider { get; }
 
         private static void IocRegistrations(ServiceCollection services)
         {

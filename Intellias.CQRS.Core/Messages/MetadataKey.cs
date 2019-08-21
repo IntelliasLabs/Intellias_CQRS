@@ -1,7 +1,7 @@
 ﻿namespace Intellias.CQRS.Core.Messages
 {
     /// <summary>
-    /// Metadata key
+    /// Metadata key.
     /// </summary>
     public enum MetadataKey
     {

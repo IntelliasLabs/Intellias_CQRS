@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.DomainServices;
 using Microsoft.WindowsAzure.Storage;
@@ -28,7 +30,8 @@ namespace Intellias.CQRS.Tests.DomainServices
 
             await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
 
-            var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", testId));
+            var hash = Unified.NewCode(Unified.NewHash(Encoding.UTF8.GetBytes(testId)));
+            var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", hash));
             Assert.NotNull(testResult.Result);
         }
 
@@ -53,7 +56,8 @@ namespace Intellias.CQRS.Tests.DomainServices
             await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
             await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
 
-            var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", updatedTestId));
+            var hash = Unified.NewCode(Unified.NewHash(Encoding.UTF8.GetBytes(updatedTestId)));
+            var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", hash));
             Assert.NotNull(testResult.Result);
         }
 
@@ -75,11 +79,13 @@ namespace Intellias.CQRS.Tests.DomainServices
 
             await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
             await uniqueConstraintService.ReserveConstraintAsync("TestIndex", updatedTestId);
+
             var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
             Assert.False(result.Success);
 
             // Check original record is present
-            var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", testId));
+            var oldHash = Unified.NewCode(Unified.NewHash(Encoding.UTF8.GetBytes(testId)));
+            var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", oldHash));
             Assert.NotNull(testResult.Result);
         }
 
@@ -111,6 +117,16 @@ namespace Intellias.CQRS.Tests.DomainServices
 
             var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", testId));
             Assert.Null(testResult.Result);
+        }
+
+        [Fact]
+        public async Task ReserveDisallowedCharsName()
+        {
+            var dissalowedCharsName = $"{Unified.NewCode()}_#\t\n?";
+
+            var result = await uniqueConstraintService.ReserveConstraintAsync("TestIndex", dissalowedCharsName);
+
+            result.Success.Should().BeTrue();
         }
     }
 }

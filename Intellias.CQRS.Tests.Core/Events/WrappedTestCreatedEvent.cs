@@ -1,7 +1,7 @@
 ﻿namespace Intellias.CQRS.Tests.Core.Events
 {
     /// <inheritdoc />
-    public class WrappedTestCreatedEvent: TestCreatedEvent
+    public class WrappedTestCreatedEvent : TestCreatedEvent
     {
     }
 }

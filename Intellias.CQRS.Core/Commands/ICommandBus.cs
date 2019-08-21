@@ -3,7 +3,7 @@
 namespace Intellias.CQRS.Core.Commands
 {
     /// <summary>
-    /// Command bus
+    /// Command bus.
     /// </summary>
     public interface ICommandBus : IMessageBus<ICommand>
     {

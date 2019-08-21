@@ -3,7 +3,7 @@
 namespace Intellias.CQRS.Core.Results
 {
     /// <summary>
-    /// Successful Execution Result
+    /// Successful Execution Result.
     /// </summary>
     public sealed class SuccessfulResult : IExecutionResult
     {

@@ -6,14 +6,17 @@ using Microsoft.WindowsAzure.Storage.Table;
 namespace Intellias.CQRS.QueryStore.AzureTable
 {
     /// <summary>
-    /// ITableQueryReader - used to read query model with azure specific features
+    /// ITableQueryReader - used to read query model with azure specific features.
     /// </summary>
-    public interface ITableQueryReader<TQueryModel> where TQueryModel : IQueryModel, new()
+    /// <typeparam name="TQueryModel">Query Model Type.</typeparam>
+    public interface ITableQueryReader<TQueryModel>
+        where TQueryModel : IQueryModel, new()
     {
         /// <summary>
-        /// Returns all query model items by azure table query
+        /// Returns all query model items by azure table query.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="query">Table Query.</param>
+        /// <returns>Collection of Query Models.</returns>
         Task<IReadOnlyCollection<TQueryModel>> GetAllAsync(TableQuery<DynamicTableEntity> query);
     }
 }

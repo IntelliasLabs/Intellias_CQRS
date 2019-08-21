@@ -4,19 +4,19 @@ using Intellias.CQRS.Core.Domain;
 namespace Intellias.CQRS.Tests.Core.ValueObjects
 {
     /// <summary>
-    /// Address value object
+    /// Address value object.
     /// </summary>
     public class Address : ValueObject<Address>
     {
         /// <summary>
-        /// Address Line
+        /// Address Line.
         /// </summary>
-        public string AddressLine { set; get; } = string.Empty;
+        public string AddressLine { get; set; } = string.Empty;
 
         /// <summary>
-        /// Post Code
+        /// Post Code.
         /// </summary>
-        public string PostCode { set; get; } = string.Empty;
+        public string PostCode { get; set; } = string.Empty;
 
         /// <inheritdoc />
         protected override bool EqualsCore(Address other) => string.Equals(AddressLine, other.AddressLine, StringComparison.InvariantCulture);

@@ -13,7 +13,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         private readonly Dictionary<Type, ICommandHandler<ICommand>> funcs;
 
         /// <summary>
-        /// Creates command bus
+        /// Initializes a new instance of the <see cref="InProcessCommandBus"/> class.
         /// </summary>
         public InProcessCommandBus()
         {
@@ -21,11 +21,12 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        ///
+        /// Adds handler.
         /// </summary>
-        /// <param name="handler">command handler</param>
-        /// <typeparam name="T"></typeparam>
-        public void AddHandler<T>(ICommandHandler<T> handler) where T : ICommand
+        /// <param name="handler">command handler.</param>
+        /// <typeparam name="T">Command type.</typeparam>
+        public void AddHandler<T>(ICommandHandler<T> handler)
+            where T : ICommand
         {
             if (handler == null)
             {
@@ -45,9 +46,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// Register all implementations of Command handlers
+        /// Register all implementations of Command handlers.
         /// </summary>
-        /// <param name="commandHandler">command handler</param>
+        /// <param name="commandHandler">command handler.</param>
         public void AddAllHandlers(AbstractCommandHandler commandHandler)
         {
             if (commandHandler == null)

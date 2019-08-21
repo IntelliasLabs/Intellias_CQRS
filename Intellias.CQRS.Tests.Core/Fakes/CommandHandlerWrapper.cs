@@ -5,14 +5,15 @@ using Intellias.CQRS.Core.Results;
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <inheritdoc />
-    public class CommandHandlerWrapper<T> : ICommandHandler<ICommand> where T : ICommand
+    public class CommandHandlerWrapper<T> : ICommandHandler<ICommand>
+        where T : ICommand
     {
         private readonly ICommandHandler<T> handler;
 
         /// <summary>
-        /// Constructs handler wrapper from func
+        /// Initializes a new instance of the <see cref="CommandHandlerWrapper{T}"/> class.
         /// </summary>
-        /// <param name="handler"></param>
+        /// <param name="handler">Command Handler.</param>
         public CommandHandlerWrapper(ICommandHandler<T> handler)
         {
             this.handler = handler;

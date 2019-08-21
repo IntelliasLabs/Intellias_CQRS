@@ -5,19 +5,19 @@ namespace Intellias.CQRS.Core.Commands
 {
     /// <inheritdoc />
     /// <summary>
-    /// Domain command interface
+    /// Domain command interface.
     /// </summary>
     public interface ICommand : IMessage
     {
         /// <summary>
-        /// Expected version of aggregate root
+        /// Expected version of aggregate root.
         /// </summary>
         int ExpectedVersion { get; set; }
 
         /// <summary>
-        /// Validate Command
+        /// Validate Command.
         /// </summary>
-        /// <returns>Execution Result</returns>
+        /// <returns>Execution Result.</returns>
         IExecutionResult Validate();
     }
 }

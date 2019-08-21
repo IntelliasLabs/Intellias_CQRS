@@ -3,7 +3,7 @@
 namespace Intellias.CQRS.Core.Events
 {
     /// <summary>
-    /// Domain event interface
+    /// Domain event interface.
     /// </summary>
     public interface IEvent : IMessage
     {
@@ -13,7 +13,7 @@ namespace Intellias.CQRS.Core.Events
         string SourceId { get; }
 
         /// <summary>
-        /// Version of AR that generated an event
+        /// Version of AR that generated an event.
         /// </summary>
         int Version { get; set; }
     }

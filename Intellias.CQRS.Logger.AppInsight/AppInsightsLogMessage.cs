@@ -3,32 +3,32 @@
 namespace Intellias.CQRS.Logger.AppInsight
 {
     /// <summary>
-    /// Standardized log message
+    /// Standardized log message.
     /// </summary>
     public class AppInsightsLogMessage
     {
+        private object internalData = string.Empty;
+
         /// <summary>
-        /// Message
+        /// Message.
         /// </summary>
         public string Message { get; set; } = string.Empty;
 
         /// <summary>
-        /// Serialized data
+        /// Serialized data.
         /// </summary>
         public string DataJson { get; private set; } = string.Empty;
 
-        private object data = string.Empty;
-
         /// <summary>
-        /// Data
+        /// Data.
         /// </summary>
         public object Data
         {
-            get => data;
+            get => internalData;
             set
             {
-                data = value;
-                DataJson = data.ToJson();
+                internalData = value;
+                DataJson = internalData.ToJson();
             }
         }
     }

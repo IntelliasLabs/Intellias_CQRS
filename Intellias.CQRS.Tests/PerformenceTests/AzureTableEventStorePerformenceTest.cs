@@ -23,7 +23,6 @@ namespace Intellias.CQRS.Tests.PerformenceTests
         public AzureTableEventStorePerformenceTest()
         {
             // Let's use real event Store to test related performence issues with it
-
             var storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
             eventStore = new AzureTableEventStore(storageAccount);
 
@@ -69,8 +68,7 @@ namespace Intellias.CQRS.Tests.PerformenceTests
                     {
                         AggregateRootId = createCmd.AggregateRootId,
                         TestData = value
-                    })
-            );
+                    }));
 
             // Act
             Func<Task> act = async () => await Task.WhenAll(tasks);

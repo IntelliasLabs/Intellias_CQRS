@@ -15,10 +15,10 @@ namespace Intellias.CQRS.Core.Commands
         public int ExpectedVersion { get; set; }
 
         /// <summary>
-        /// Converts common command data to event
+        /// Converts common command data to event.
         /// </summary>
-        /// <typeparam name="TEvent">event without specific properties</typeparam>
-        /// <returns></returns>
+        /// <typeparam name="TEvent">event without specific properties.</typeparam>
+        /// <returns>Event.</returns>
         public TEvent ToEvent<TEvent>()
             where TEvent : Event, new()
         {
@@ -29,7 +29,11 @@ namespace Intellias.CQRS.Core.Commands
             return e;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Validate command.
+        /// </summary>
+        /// <param name="validationContext">Validation COntext.</param>
+        /// <returns>Collection of Validation Results.</returns>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
@@ -57,19 +61,22 @@ namespace Intellias.CQRS.Core.Commands
             var validationContext = new ValidationContext(this);
             var validationResults = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(this, validationContext, validationResults, true);
-            if(isValid)
+
+            if (isValid)
             {
                 return new SuccessfulResult();
             }
             else
             {
                 var result = new FailedResult(ErrorCodes.ValidationFailed, GetType().Name, "Command Validation Failed, please, look at inner errors");
-                foreach(var validationResult in validationResults)
+
+                foreach (var validationResult in validationResults)
                 {
                     var field = validationResult.MemberNames.FirstOrDefault() ?? string.Empty;
                     var error = new ExecutionError(field, validationResult.ErrorMessage);
                     result.AddError(error);
                 }
+
                 return result;
             }
         }

@@ -8,7 +8,7 @@ using Microsoft.Azure.ServiceBus;
 namespace Intellias.CQRS.EventBus.AzureServiceBus
 {
     /// <summary>
-    /// Publishing events to Azure Service Bus
+    /// Publishing events to Azure Service Bus.
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class AzureServiceTopicEventBus : IEventBus
@@ -16,10 +16,10 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         private readonly ITopicClient topicClient;
 
         /// <summary>
-        /// Creates an instance of EventBus
+        /// Initializes a new instance of the <see cref="AzureServiceTopicEventBus"/> class.
         /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="topic"></param>
+        /// <param name="connectionString">Connection String.</param>
+        /// <param name="topic">Azure Topic.</param>
         public AzureServiceTopicEventBus(string connectionString, string topic)
         {
             topicClient = new TopicClient(connectionString, topic);

@@ -1,12 +1,12 @@
 ﻿namespace Intellias.CQRS.Core.Domain
 {
     /// <summary>
-    /// Entity
+    /// Entity.
     /// </summary>
     public interface IEntity
     {
         /// <summary>
-        /// Id of entity
+        /// Id of entity.
         /// </summary>
         string Id { get; }
     }

@@ -5,15 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
-    /// HandlerResolverExtensions
+    /// HandlerResolverExtensions.
     /// </summary>
     public static class HandlerResolverExtensions
     {
         /// <summary>
-        /// Adds Handler Dependency Resolver with HandlerManager for resolving all event and command handlers functions invoking
+        /// Adds Handler Dependency Resolver with HandlerManager for resolving all event and command handlers functions invoking.
         /// </summary>
-        /// <param name="services"></param>
-        /// <param name="assemblies"></param>
+        /// <param name="services">Services.</param>
+        /// <param name="assemblies">Assemblies.</param>
         public static void AddHandlerManager(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
             services.AddSingleton(assemblies);
@@ -22,10 +22,10 @@ namespace Intellias.CQRS.Core.Tools
         }
 
         /// <summary>
-        /// Adds Handler Dependency Resolver with HandlerManager for resolving all event and command handlers functions invoking
+        /// Adds Handler Dependency Resolver with HandlerManager for resolving all event and command handlers functions invoking.
         /// </summary>
-        /// <param name="services"></param>
-        /// <param name="assembly"></param>
+        /// <param name="services">Services.</param>
+        /// <param name="assembly">Assembly.</param>
         public static void AddHandlerManager(this IServiceCollection services, Assembly assembly)
             => AddHandlerManager(services, new[] { assembly });
     }

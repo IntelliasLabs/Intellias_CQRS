@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Intellias.CQRS.Core.Messages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -7,18 +6,18 @@ using Newtonsoft.Json.Linq;
 namespace Intellias.CQRS.Core.Config
 {
     /// <summary>
-    /// Deserialize IMessage to specific type that provided in TypeName property
+    /// Deserialize IMessage to specific type that provided in TypeName property.
     /// </summary>
     public class MessageWithTypeNameJsonConverter : JsonConverter
     {
+        /// <inheritdoc />
+        public override bool CanWrite => false;
+
         /// <inheritdoc />
         public override bool CanConvert(Type objectType)
         {
             return objectType.IsInterface && objectType.IsAssignableFrom(typeof(IMessage));
         }
-
-        /// <inheritdoc />
-        public override bool CanWrite => false;
 
         /// <inheritdoc />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -36,9 +35,9 @@ namespace Intellias.CQRS.Core.Config
         }
 
         /// <summary>
-        /// Convert first letter to lower
+        /// Convert first letter to lower.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>String.</returns>
         private static string GetMessageTypeNamePath()
         {
             const string name = nameof(IMessage.TypeName);

@@ -5,10 +5,17 @@ namespace Intellias.CQRS.Core.Events
     /// <inheritdoc cref="IEvent" />
     public abstract class Event : AbstractMessage, IEvent
     {
-        /// <inheritdoc />
-        protected Event() {}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Event"/> class.
+        /// </summary>
+        protected Event()
+        {
+        }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Event"/> class.
+        /// </summary>
+        /// <param name="version">Version.</param>
         protected Event(int version)
         {
             Version = version;

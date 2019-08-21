@@ -7,14 +7,8 @@ using Xunit;
 
 namespace Intellias.CQRS.Tests.Messages
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class MetadataExtensionsTest
     {
-        /// <summary>
-        /// 
-        /// </summary>
         [Fact]
         public void CopyMetadataFromSuccessTest()
         {
@@ -32,9 +26,6 @@ namespace Intellias.CQRS.Tests.Messages
             ev.Metadata.TryGetValue(MetadataKey.Roles, out _).Should().BeFalse();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [Fact]
         public void CopyMetadataFromWhereMetadataContainsDataNotFromMetadataKeyEnum()
         {

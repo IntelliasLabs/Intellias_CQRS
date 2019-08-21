@@ -5,15 +5,15 @@ using Intellias.CQRS.Core.Results;
 namespace Intellias.CQRS.Core.Signals
 {
     /// <summary>
-    /// Operation failed event
+    /// Operation failed event.
     /// </summary>
     public class OperationFailedSignal : AbstractMessage
     {
         /// <summary>
-        /// ctor
+        /// Initializes a new instance of the <see cref="OperationFailedSignal"/> class.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="error"></param>
+        /// <param name="source">Source.</param>
+        /// <param name="error">Error.</param>
         public OperationFailedSignal(IMessage source, FailedResult error)
         {
             Source = source ?? throw new ArgumentNullException($"Source in the OperationFailedSignal should be set");
@@ -27,14 +27,13 @@ namespace Intellias.CQRS.Core.Signals
         }
 
         /// <summary>
-        /// Source
+        /// Source.
         /// </summary>
         public IMessage Source { get; private set; }
 
         /// <summary>
-        /// Failed reason
+        /// Failed reason.
         /// </summary>
         public FailedResult Error { get; private set; }
-
     }
 }
