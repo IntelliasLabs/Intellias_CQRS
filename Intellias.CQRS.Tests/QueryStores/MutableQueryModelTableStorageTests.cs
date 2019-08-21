@@ -48,17 +48,17 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Create_NoQueryModel_Creates()
         {
-            var queryModel = new MutableQueryModel { Id = Unified.NewCode() };
+            var queryModel = new MutableQueryModel();
 
             var stored = await storage.CreateAsync(queryModel);
 
-            stored.Should().BeEquivalentTo(queryModel, options => options.ForQueryModel());
+            stored.Should().BeEquivalentTo(queryModel, options => options.ForMutableQueryModel());
         }
 
         [Fact]
         public async Task Create_QueryModelAlreadyExist_Throws()
         {
-            var queryModel = new MutableQueryModel { Id = Unified.NewCode() };
+            var queryModel = new MutableQueryModel();
 
             await storage.CreateAsync(queryModel);
 
@@ -69,7 +69,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Replace_WhenETagIsInvalid_Throws()
         {
-            var qm1 = await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() });
+            var qm1 = await storage.CreateAsync(new MutableQueryModel());
 
             // Update query model.
             qm1.SomeProperty = Unified.NewCode();
@@ -83,7 +83,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Replace_WhenETagIsValid_Replaces()
         {
-            var qm1 = await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() });
+            var qm1 = await storage.CreateAsync(new MutableQueryModel());
 
             // Update for the first time.
             qm1.SomeProperty = Unified.NewCode();
@@ -93,7 +93,7 @@ namespace Intellias.CQRS.Tests.QueryStores
             updated1.SomeProperty = Unified.NewCode();
             var updated2 = await storage.ReplaceAsync(updated1);
 
-            updated2.Should().BeEquivalentTo(updated1, options => options.ForQueryModel());
+            updated2.Should().BeEquivalentTo(updated1, options => options.ForMutableQueryModel());
         }
 
         [Fact]
@@ -105,10 +105,10 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task GetAll_HasQueryModels_ReturnsAll()
         {
-            var qm1 = await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() });
-            var qm2 = await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() });
+            var qm1 = await storage.CreateAsync(new MutableQueryModel());
+            var qm2 = await storage.CreateAsync(new MutableQueryModel());
 
-            (await storage.GetAllAsync()).Should().BeEquivalentTo(new[] { qm1, qm2 }, options => options.ForQueryModel());
+            (await storage.GetAllAsync()).Should().BeEquivalentTo(new[] { qm1, qm2 }, options => options.ForMutableQueryModel());
         }
 
         [Fact]
@@ -120,21 +120,27 @@ namespace Intellias.CQRS.Tests.QueryStores
             var queryModels = new List<MutableQueryModel>();
             for (var i = 0; i < numberOfQueryModels; i++)
             {
-                queryModels.Add(await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() }));
+                queryModels.Add(await storage.CreateAsync(new MutableQueryModel()));
             }
 
             // Add one more which is not part of the filter.
-            await storage.CreateAsync(new MutableQueryModel { Id = Unified.NewCode() });
+            await storage.CreateAsync(new MutableQueryModel());
 
             var results = await storage.GetAllAsync(queryModels.Select(qm => qm.Id).ToArray());
 
             // Ensure only queried models are returned.
-            results.Should().BeEquivalentTo(queryModels, options => options.ForQueryModel());
+            results.Should().BeEquivalentTo(queryModels, options => options.ForMutableQueryModel());
         }
 
         private class MutableQueryModel : BaseMutableQueryModel
         {
-            public string SomeProperty { get; set; } = Unified.NewCode();
+            public MutableQueryModel()
+            {
+                Id = Unified.NewCode();
+                SomeProperty = Unified.NewCode();
+            }
+
+            public string SomeProperty { get; set; }
         }
     }
 }

@@ -10,21 +10,21 @@ namespace Intellias.CQRS.Core.Queries.Immutable
         /// <summary>
         /// Query model id.
         /// </summary>
-        string Id { get; }
+        string Id { get; set; }
 
         /// <summary>
         /// Query model version.
         /// </summary>
-        int Version { get; }
+        int Version { get; set; }
 
         /// <summary>
         /// Last time query model is updated.
         /// </summary>
-        DateTimeOffset Timestamp { get; }
+        DateTimeOffset Timestamp { get; set; }
 
         /// <summary>
         /// Last applied event to query model. Empty if query model is just created.
         /// </summary>
-        AppliedEvent AppliedEvent { get; }
+        AppliedEvent AppliedEvent { get; set; }
     }
 }
