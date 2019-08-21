@@ -4,9 +4,9 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
-using Intellias.CQRS.Core.Queries.Mutable;
 using Intellias.CQRS.QueryStore.AzureTable.Mutable;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
+using Intellias.CQRS.Tests.Core.Queries;
 using Intellias.CQRS.Tests.Fakes;
 using Intellias.CQRS.Tests.Utils;
 using Intellias.CQRS.Tests.Utils.Fixtures;
@@ -130,17 +130,6 @@ namespace Intellias.CQRS.Tests.QueryStores
 
             // Ensure only queried models are returned.
             results.Should().BeEquivalentTo(queryModels, options => options.ForMutableQueryModel());
-        }
-
-        private class MutableQueryModel : BaseMutableQueryModel
-        {
-            public MutableQueryModel()
-            {
-                Id = Unified.NewCode();
-                SomeProperty = Unified.NewCode();
-            }
-
-            public string SomeProperty { get; set; }
         }
     }
 }

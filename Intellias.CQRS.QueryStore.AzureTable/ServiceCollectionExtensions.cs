@@ -12,9 +12,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddTableQueryModelStorage<TOptionsSource>(
-            this IServiceCollection services,
-            Action<TOptionsSource, TableStorageOptions> configure)
+        public static IServiceCollection AddTableQueryModelStorage(this IServiceCollection services, Action<TableStorageOptions> configure)
         {
             // Add required services.
             services.AddOptions();
@@ -26,13 +24,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             services.AddSingleton(typeof(IImmutableQueryModelWriter<>), typeof(ImmutableQueryModelTableStorage<>));
 
             // Register Table Storage options.
-            services.AddSingleton(sp =>
-            {
-                var optionsSourceMonitor = sp.GetRequiredService<IOptionsMonitor<TOptionsSource>>();
-                return new TableStorageOptionsConfigure<TOptionsSource>(optionsSourceMonitor, configure);
-            });
-            services.AddSingleton<IConfigureOptions<TableStorageOptions>>(sp => sp.GetRequiredService<TableStorageOptionsConfigure<TOptionsSource>>());
-            services.AddSingleton<IOptionsChangeTokenSource<TableStorageOptions>>(sp => sp.GetRequiredService<TableStorageOptionsConfigure<TOptionsSource>>());
+            services.Configure(configure);
             services.AddSingleton<IValidateOptions<TableStorageOptions>>(new DataAnnotationValidateOptions<TableStorageOptions>(MicrosoftOptions.DefaultName));
 
             return services;
