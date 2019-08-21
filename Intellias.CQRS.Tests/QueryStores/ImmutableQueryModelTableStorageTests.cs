@@ -3,9 +3,9 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
-using Intellias.CQRS.Core.Queries.Immutable;
 using Intellias.CQRS.QueryStore.AzureTable.Immutable;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
+using Intellias.CQRS.Tests.Core.Queries;
 using Intellias.CQRS.Tests.Fakes;
 using Intellias.CQRS.Tests.Utils;
 using Intellias.CQRS.Tests.Utils.Fixtures;
@@ -79,18 +79,6 @@ namespace Intellias.CQRS.Tests.QueryStores
             var latest = await storage.GetLatestAsync(id);
 
             latest.Should().BeEquivalentTo(qm2);
-        }
-
-        private class ImmutableQueryModel : BaseImmutableQueryModel
-        {
-            public ImmutableQueryModel()
-            {
-                Id = Unified.NewCode();
-                Version = 1;
-                SomeProperty = Unified.NewCode();
-            }
-
-            public string SomeProperty { get; set; }
         }
     }
 }
