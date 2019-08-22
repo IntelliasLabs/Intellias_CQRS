@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries.Mutable;
+using Intellias.CQRS.QueryStore.AzureTable.Common;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
@@ -21,19 +22,26 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
         where TQueryModel : class, IMutableQueryModel, new()
     {
         private readonly IOptionsMonitor<TableStorageOptions> options;
-        private readonly Lazy<CloudTable> tableClient;
+        private readonly CloudTableProxy tableProxy;
 
         public MutableQueryModelTableStorage(IOptionsMonitor<TableStorageOptions> options)
         {
             this.options = options;
-            tableClient = new Lazy<CloudTable>(CreateTable);
+            var client = CloudStorageAccount
+                .Parse(options.CurrentValue.ConnectionString)
+                .CreateCloudTableClient();
+
+            var tableName = options.CurrentValue.TableNamePrefix + typeof(TQueryModel).Name;
+            var tableReference = client.GetTableReference(tableName);
+
+            tableProxy = new CloudTableProxy(tableReference);
         }
 
         /// <inheritdoc />
         public async Task<TQueryModel?> FindAsync(string id)
         {
             var operation = TableOperation.Retrieve<MutableTableEntity>(typeof(TQueryModel).Name, id);
-            var result = await tableClient.Value.ExecuteAsync(operation);
+            var result = await tableProxy.ExecuteAsync(operation);
             var entity = (MutableTableEntity)result.Result;
 
             return entity?.DeserializeQueryModel();
@@ -89,7 +97,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
             var entity = new MutableTableEntity(model);
             var operation = TableOperation.Insert(entity);
 
-            var result = await tableClient.Value.ExecuteAsync(operation);
+            var result = await tableProxy.ExecuteAsync(operation);
 
             return ((MutableTableEntity)result.Result).DeserializeQueryModel();
         }
@@ -100,7 +108,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
             var entity = new MutableTableEntity(model);
             var operation = TableOperation.Replace(entity);
 
-            var result = await tableClient.Value.ExecuteAsync(operation);
+            var result = await tableProxy.ExecuteAsync(operation);
 
             return ((MutableTableEntity)result.Result).DeserializeQueryModel();
         }
@@ -112,7 +120,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
 
             do
             {
-                var querySegment = await tableClient.Value.ExecuteQuerySegmentedAsync(query, continuationToken);
+                var querySegment = await tableProxy.ExecuteQuerySegmentedAsync(query, continuationToken);
                 var queryResults = querySegment.Results.Select(entity => entity.DeserializeQueryModel());
 
                 results.AddRange(queryResults);
@@ -122,22 +130,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
             while (continuationToken != null);
 
             return results;
-        }
-
-        private CloudTable CreateTable()
-        {
-            var client = CloudStorageAccount
-                .Parse(options.CurrentValue.ConnectionString)
-                .CreateCloudTableClient();
-
-            var tableName = this.options.CurrentValue.TableNamePrefix + typeof(TQueryModel).Name;
-            var tableReference = client.GetTableReference(tableName);
-            if (!tableReference.ExistsAsync().GetAwaiter().GetResult())
-            {
-                tableReference.CreateIfNotExistsAsync().GetAwaiter().GetResult();
-            }
-
-            return tableReference;
         }
 
         private class MutableTableEntity : TableEntity
