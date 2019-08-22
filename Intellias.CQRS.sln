@@ -42,6 +42,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{36062571-C384-4818-9F2E-A5C621153409}"
 ProjectSection(SolutionItems) = preProject
 	deploy\azuredeploy.test.json = deploy\azuredeploy.test.json
+	deploy\azuredeploy.test.ps1 = deploy\azuredeploy.test.ps1
 EndProjectSection
 EndProject
 Global
