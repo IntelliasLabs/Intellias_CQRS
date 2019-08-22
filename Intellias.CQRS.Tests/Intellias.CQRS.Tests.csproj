@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <DebugType>Full</DebugType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <UserSecretsId>cqrs-tests-cbbf4ede-fb1b-4676-b6e0-78f8a7b2a0c7</UserSecretsId>
     <IsPackable>false</IsPackable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
