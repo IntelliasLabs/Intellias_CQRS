@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries.Immutable;
+using Intellias.CQRS.QueryStore.AzureTable.Common;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
@@ -21,20 +22,25 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
         IImmutableQueryModelWriter<TQueryModel>
         where TQueryModel : class, IImmutableQueryModel, new()
     {
-        private readonly IOptionsMonitor<TableStorageOptions> options;
-        private readonly Lazy<CloudTable> tableClient;
+        private readonly CloudTableProxy tableProxy;
 
         public ImmutableQueryModelTableStorage(IOptionsMonitor<TableStorageOptions> options)
         {
-            this.options = options;
-            tableClient = new Lazy<CloudTable>(CreateTable);
+            var client = CloudStorageAccount
+                .Parse(options.CurrentValue.ConnectionString)
+                .CreateCloudTableClient();
+
+            var tableName = options.CurrentValue.TableNamePrefix + typeof(TQueryModel).Name;
+            var tableReference = client.GetTableReference(tableName);
+
+            tableProxy = new CloudTableProxy(tableReference);
         }
 
         /// <inheritdoc />
         public async Task<TQueryModel?> FindAsync(string id, int version)
         {
             var operation = TableOperation.Retrieve<ImmutableTableEntity>(id, GetRowKey(version));
-            var result = await tableClient.Value.ExecuteAsync(operation);
+            var result = await tableProxy.ExecuteAsync(operation);
             var entity = (ImmutableTableEntity)result.Result;
 
             return entity?.DeserializeQueryModel();
@@ -60,7 +66,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
                 .Where(filter)
                 .Take(1);
 
-            var querySegment = await tableClient.Value.ExecuteQuerySegmentedAsync(query, null);
+            var querySegment = await tableProxy.ExecuteQuerySegmentedAsync(query, null);
             var queryModel = querySegment.Results.Select(entity => entity.DeserializeQueryModel()).FirstOrDefault();
 
             return queryModel;
@@ -72,7 +78,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
             var entity = new ImmutableTableEntity(model);
             var operation = TableOperation.Insert(entity);
 
-            var result = await tableClient.Value.ExecuteAsync(operation);
+            var result = await tableProxy.ExecuteAsync(operation);
 
             return ((ImmutableTableEntity)result.Result).DeserializeQueryModel();
         }
@@ -81,22 +87,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
         {
             // Build from Created row key that stores data in reverse order.
             return string.Format(CultureInfo.InvariantCulture, "{0:D20}", int.MaxValue - version);
-        }
-
-        private CloudTable CreateTable()
-        {
-            var client = CloudStorageAccount
-                .Parse(options.CurrentValue.ConnectionString)
-                .CreateCloudTableClient();
-
-            var tableName = this.options.CurrentValue.TableNamePrefix + typeof(TQueryModel).Name;
-            var tableReference = client.GetTableReference(tableName);
-            if (!tableReference.ExistsAsync().GetAwaiter().GetResult())
-            {
-                tableReference.CreateIfNotExistsAsync().GetAwaiter().GetResult();
-            }
-
-            return tableReference;
         }
 
         private class ImmutableTableEntity : TableEntity
