@@ -16,7 +16,7 @@ namespace Intellias.CQRS.Tests.QueryStores
 {
     public class ImmutableQueryModelTableStorageTests : StorageAccountTestBase
     {
-        private readonly ImmutableQueryModelTableStorage<ImmutableQueryModel> storage;
+        private readonly ImmutableQueryModelTableStorage<FakeImmutableQueryModel> storage;
 
         public ImmutableQueryModelTableStorageTests(StorageAccountFixture fixture)
             : base(fixture)
@@ -27,7 +27,7 @@ namespace Intellias.CQRS.Tests.QueryStores
                 ConnectionString = fixture.Configuration.StorageAccount.ConnectionString
             };
 
-            storage = new ImmutableQueryModelTableStorage<ImmutableQueryModel>(new OptionsMonitorFake<TableStorageOptions>(options));
+            storage = new ImmutableQueryModelTableStorage<FakeImmutableQueryModel>(new OptionsMonitorFake<TableStorageOptions>(options));
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Create_NoQueryModel_Creates()
         {
-            var queryModel = new ImmutableQueryModel();
+            var queryModel = new FakeImmutableQueryModel();
 
             var stored = await storage.CreateAsync(queryModel);
 
@@ -55,7 +55,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Create_QueryModelAlreadyExist_Throws()
         {
-            var queryModel = new ImmutableQueryModel();
+            var queryModel = new FakeImmutableQueryModel();
 
             await storage.CreateAsync(queryModel);
 
@@ -73,8 +73,8 @@ namespace Intellias.CQRS.Tests.QueryStores
         public async Task GetLatestAsync_HasQueryModels_ReturnsLatest()
         {
             var id = Unified.NewCode();
-            await storage.CreateAsync(new ImmutableQueryModel { Id = id, Version = 1 });
-            var qm2 = await storage.CreateAsync(new ImmutableQueryModel { Id = id, Version = 2 });
+            await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 1 });
+            var qm2 = await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 2 });
 
             var latest = await storage.GetLatestAsync(id);
 

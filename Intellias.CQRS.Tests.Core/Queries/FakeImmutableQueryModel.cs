@@ -3,9 +3,9 @@ using Intellias.CQRS.Core.Queries.Immutable;
 
 namespace Intellias.CQRS.Tests.Core.Queries
 {
-    public class ImmutableQueryModel : BaseImmutableQueryModel
+    public class FakeImmutableQueryModel : BaseImmutableQueryModel
     {
-        public ImmutableQueryModel()
+        public FakeImmutableQueryModel()
         {
             Id = Unified.NewCode();
             Version = 1;

@@ -3,7 +3,7 @@ using System;
 namespace Intellias.CQRS.Core.Queries.Mutable
 {
     /// <inheritdoc />
-    public class BaseMutableQueryModel : IMutableQueryModel
+    public abstract class BaseMutableQueryModel : IMutableQueryModel
     {
         /// <inheritdoc />
         public string Id { get; set; } = string.Empty;

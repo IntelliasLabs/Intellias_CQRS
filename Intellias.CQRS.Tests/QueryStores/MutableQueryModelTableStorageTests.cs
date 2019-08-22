@@ -18,7 +18,7 @@ namespace Intellias.CQRS.Tests.QueryStores
     public class MutableQueryModelTableStorageTests : StorageAccountTestBase
     {
         private const int SizeOfTheFilterChunk = 10;
-        private readonly MutableQueryModelTableStorage<MutableQueryModel> storage;
+        private readonly MutableQueryModelTableStorage<FakeMutableQueryModel> storage;
 
         public MutableQueryModelTableStorageTests(StorageAccountFixture fixture)
             : base(fixture)
@@ -30,7 +30,7 @@ namespace Intellias.CQRS.Tests.QueryStores
                 ConnectionString = fixture.Configuration.StorageAccount.ConnectionString
             };
 
-            storage = new MutableQueryModelTableStorage<MutableQueryModel>(new OptionsMonitorFake<TableStorageOptions>(options));
+            storage = new MutableQueryModelTableStorage<FakeMutableQueryModel>(new OptionsMonitorFake<TableStorageOptions>(options));
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Create_NoQueryModel_Creates()
         {
-            var queryModel = new MutableQueryModel();
+            var queryModel = new FakeMutableQueryModel();
 
             var stored = await storage.CreateAsync(queryModel);
 
@@ -58,7 +58,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Create_QueryModelAlreadyExist_Throws()
         {
-            var queryModel = new MutableQueryModel();
+            var queryModel = new FakeMutableQueryModel();
 
             await storage.CreateAsync(queryModel);
 
@@ -69,7 +69,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Replace_WhenETagIsInvalid_Throws()
         {
-            var qm1 = await storage.CreateAsync(new MutableQueryModel());
+            var qm1 = await storage.CreateAsync(new FakeMutableQueryModel());
 
             // Update query model.
             qm1.SomeProperty = Unified.NewCode();
@@ -83,7 +83,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task Replace_WhenETagIsValid_Replaces()
         {
-            var qm1 = await storage.CreateAsync(new MutableQueryModel());
+            var qm1 = await storage.CreateAsync(new FakeMutableQueryModel());
 
             // Update for the first time.
             qm1.SomeProperty = Unified.NewCode();
@@ -105,8 +105,8 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public async Task GetAll_HasQueryModels_ReturnsAll()
         {
-            var qm1 = await storage.CreateAsync(new MutableQueryModel());
-            var qm2 = await storage.CreateAsync(new MutableQueryModel());
+            var qm1 = await storage.CreateAsync(new FakeMutableQueryModel());
+            var qm2 = await storage.CreateAsync(new FakeMutableQueryModel());
 
             (await storage.GetAllAsync()).Should().BeEquivalentTo(new[] { qm1, qm2 }, options => options.ForMutableQueryModel());
         }
@@ -117,14 +117,14 @@ namespace Intellias.CQRS.Tests.QueryStores
             var numberOfQueryModels = SizeOfTheFilterChunk + 1; // To ensure that chunked query is working.
 
             // Create query models to query by ids.
-            var queryModels = new List<MutableQueryModel>();
+            var queryModels = new List<FakeMutableQueryModel>();
             for (var i = 0; i < numberOfQueryModels; i++)
             {
-                queryModels.Add(await storage.CreateAsync(new MutableQueryModel()));
+                queryModels.Add(await storage.CreateAsync(new FakeMutableQueryModel()));
             }
 
             // Add one more which is not part of the filter.
-            await storage.CreateAsync(new MutableQueryModel());
+            await storage.CreateAsync(new FakeMutableQueryModel());
 
             var results = await storage.GetAllAsync(queryModels.Select(qm => qm.Id).ToArray());
 

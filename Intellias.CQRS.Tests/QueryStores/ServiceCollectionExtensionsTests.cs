@@ -43,15 +43,15 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public void ServiceProvider_Always_HasRegisteredMutableQueryModelsStorage()
         {
-            serviceProvider.Invoking(sp => sp.GetRequiredService<IMutableQueryModelWriter<MutableQueryModel>>()).Should().NotThrow();
-            serviceProvider.Invoking(sp => sp.GetRequiredService<IMutableQueryModelReader<MutableQueryModel>>()).Should().NotThrow();
+            serviceProvider.Invoking(sp => sp.GetRequiredService<IMutableQueryModelWriter<FakeMutableQueryModel>>()).Should().NotThrow();
+            serviceProvider.Invoking(sp => sp.GetRequiredService<IMutableQueryModelReader<FakeMutableQueryModel>>()).Should().NotThrow();
         }
 
         [Fact]
         public void ServiceProvider_Always_HasRegisteredImmutableQueryModelsStorage()
         {
-            serviceProvider.Invoking(sp => sp.GetRequiredService<IImmutableQueryModelWriter<ImmutableQueryModel>>()).Should().NotThrow();
-            serviceProvider.Invoking(sp => sp.GetRequiredService<IImmutableQueryModelReader<ImmutableQueryModel>>()).Should().NotThrow();
+            serviceProvider.Invoking(sp => sp.GetRequiredService<IImmutableQueryModelWriter<FakeImmutableQueryModel>>()).Should().NotThrow();
+            serviceProvider.Invoking(sp => sp.GetRequiredService<IImmutableQueryModelReader<FakeImmutableQueryModel>>()).Should().NotThrow();
         }
     }
 }
