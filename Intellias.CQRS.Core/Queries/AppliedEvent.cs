@@ -1,10 +1,9 @@
 using System;
-using Intellias.CQRS.Core.Events.IntegrationEvents;
 
 namespace Intellias.CQRS.Core.Queries
 {
     /// <summary>
-    /// Last <see cref="IIntegrationEvent"/> that updated query model.
+    /// Last IIntegrationEvent that updated query model.
     /// </summary>
     public class AppliedEvent
     {
