@@ -10,7 +10,7 @@ namespace Intellias.CQRS.Core.Queries
         /// <summary>
         /// No event constant.
         /// </summary>
-        public static readonly AppliedEvent Empty = new AppliedEvent(default, default);
+        public static readonly AppliedEvent Empty = new AppliedEvent(string.Empty, DateTimeOffset.MinValue);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppliedEvent"/> class.

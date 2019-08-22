@@ -8,7 +8,7 @@ namespace Intellias.CQRS.Core.Queries.Immutable
     /// </summary>
     /// <typeparam name="TQueryModel">Type of the query model.</typeparam>
     public interface IImmutableQueryModelReader<TQueryModel>
-        where TQueryModel : IImmutableQueryModel, new()
+        where TQueryModel : class, IImmutableQueryModel, new()
     {
         /// <summary>
         /// Gets single query model.
@@ -17,7 +17,7 @@ namespace Intellias.CQRS.Core.Queries.Immutable
         /// <param name="id">Query model id.</param>
         /// <param name="version">Query model version.</param>
         /// <returns>Found query model or NULL.</returns>
-        Task<TQueryModel> FindAsync(string id, int version);
+        Task<TQueryModel?> FindAsync(string id, int version);
 
         /// <summary>
         /// Gets single query model.
