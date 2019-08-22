@@ -4,6 +4,6 @@ namespace Intellias.CQRS.Tests.Utils.Options
     {
         public const string SectionName = "StorageAccount";
 
-        public string ConnectionString { get; set; }
+        public string ConnectionString { get; set; } = string.Empty;
     }
 }

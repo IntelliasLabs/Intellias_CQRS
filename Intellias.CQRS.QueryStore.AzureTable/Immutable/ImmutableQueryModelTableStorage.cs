@@ -19,7 +19,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
     public class ImmutableQueryModelTableStorage<TQueryModel> :
         IImmutableQueryModelReader<TQueryModel>,
         IImmutableQueryModelWriter<TQueryModel>
-        where TQueryModel : IImmutableQueryModel, new()
+        where TQueryModel : class, IImmutableQueryModel, new()
     {
         private readonly IOptionsMonitor<TableStorageOptions> options;
         private readonly Lazy<CloudTable> tableClient;
@@ -31,13 +31,13 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
         }
 
         /// <inheritdoc />
-        public async Task<TQueryModel> FindAsync(string id, int version)
+        public async Task<TQueryModel?> FindAsync(string id, int version)
         {
             var operation = TableOperation.Retrieve<ImmutableTableEntity>(id, GetRowKey(version));
             var result = await tableClient.Value.ExecuteAsync(operation);
             var entity = (ImmutableTableEntity)result.Result;
 
-            return entity == null ? default : entity.DeserializeQueryModel();
+            return entity?.DeserializeQueryModel();
         }
 
         /// <inheritdoc />
@@ -103,6 +103,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
         {
             public ImmutableTableEntity()
             {
+                JsonQueryModel = string.Empty;
             }
 
             public ImmutableTableEntity(TQueryModel queryModel)
@@ -118,7 +119,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
             {
                 if (string.IsNullOrWhiteSpace(JsonQueryModel))
                 {
-                    return default;
+                    throw new InvalidOperationException($"Unable to deserialize entity '{RowKey}' from empty json.");
                 }
 
                 var queryModel = JsonConvert.DeserializeObject<TQueryModel>(JsonQueryModel);
