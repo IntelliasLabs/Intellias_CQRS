@@ -12,7 +12,7 @@ using Xunit;
 namespace Intellias.CQRS.Tests
 {
     /// <summary>
-    /// UpdateEntityTest
+    /// UpdateEntityTest.
     /// </summary>
     public class UpdateEntityTest : BaseTest
     {
@@ -21,7 +21,8 @@ namespace Intellias.CQRS.Tests
         private readonly string testDataUpdated = "Test Data Updated";
 
         /// <summary>
-        /// UpdateEntityTest
+        /// Initializes a new instance of the <see cref="UpdateEntityTest"/> class.
+        /// UpdateEntityTest.
         /// </summary>
         public UpdateEntityTest()
         {
@@ -29,7 +30,7 @@ namespace Intellias.CQRS.Tests
         }
 
         /// <summary>
-        /// Check if event serialized
+        /// Check if event serialized.
         /// </summary>
         [Fact]
         public void ShouldCreateEventRecordWithVersion2AndTestData()
@@ -50,7 +51,7 @@ namespace Intellias.CQRS.Tests
         }
 
         /// <summary>
-        /// Verifies if Azure table throws exception if such AR can't be found
+        /// Verifies if Azure table throws exception if such AR can't be found.
         /// </summary>
         [Fact]
         public void ShouldThrowAnExceptionWhenARNotFound()

@@ -22,7 +22,7 @@ namespace Intellias.CQRS.Configuration
         /// <summary>
         /// ArmsContainerUri.
         /// </summary>
-        public Uri ArmsContainerUri { get; set; }
+        public Uri? ArmsContainerUri { get; set; }
 
         /// <summary>
         /// Auth section.

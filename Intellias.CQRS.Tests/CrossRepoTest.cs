@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using Intellias.CQRS.Tests.Utils;
 using LibGit2Sharp;
 using Xunit;
 
@@ -16,7 +17,7 @@ namespace Intellias.CQRS.Tests
     public class CrossRepoTest
     {
         private const string BasePath = "https://IntelliasTS@dev.azure.com/IntelliasTS/IntelliGrowth/_git/";
-
+        private readonly TestsConfiguration testsConfiguration;
         private readonly List<string> sourceFiles;
 
         /// <summary>
@@ -25,8 +26,9 @@ namespace Intellias.CQRS.Tests
         public CrossRepoTest()
         {
             var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var basePath = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\..\"));
+            var basePath = Path.GetFullPath(Path.Combine(currentPath!, @"..\..\..\..\"));
             sourceFiles = GetProjectFiles(basePath);
+            testsConfiguration = new TestsConfiguration();
         }
 
         /// <summary>
@@ -129,9 +131,9 @@ namespace Intellias.CQRS.Tests
             Directory.Delete(directory, false);
         }
 
-        private static void CloneRepo(string name, string repoPath)
+        private void CloneRepo(string name, string repoPath)
         {
-            var accessToken = Environment.GetEnvironmentVariable("SYSTEM_ACCESSTOKEN") ?? "hanfpowgg33ge5sxq4txa3bhwhb5dxc4z2qcf22jndhx3nz2kpkq";
+            var accessToken = Environment.GetEnvironmentVariable("SYSTEM_ACCESSTOKEN") ?? testsConfiguration.AzureDevOpsAccessToken;
 
             var co = new CloneOptions
             {
@@ -144,7 +146,7 @@ namespace Intellias.CQRS.Tests
 
             var ro = new RepositoryOptions
             {
-                Identity = new Identity(accessToken, "sseletskyi@intellias.com"),
+                Identity = new Identity(accessToken, "test@test.com"),
                 WorkingDirectoryPath = repoPath
             };
 
