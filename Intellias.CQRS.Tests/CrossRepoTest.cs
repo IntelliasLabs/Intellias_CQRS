@@ -49,30 +49,35 @@ namespace Intellias.CQRS.Tests
                 DeleteDirectory(repoPath);
             }
 
-            CloneRepo(repoName, repoPath);
-            var projectFiles = GetProjectFiles(repoPath);
-
-            var solutionFile = Directory.GetFiles(repoPath, "*.sln").Single();
-
-            var projectsToAdd = sourceFiles.Aggregate((i, j) => i + " " + j);
-            DotNet($"sln {solutionFile} add {projectsToAdd}");
-
-            foreach (var projectFile in projectFiles)
+            try
             {
-                var packages = GetPackages(projectFile, "Intellias.CQRS.");
-                if (packages.Any())
+                CloneRepo(repoName, repoPath);
+                var projectFiles = GetProjectFiles(repoPath);
+
+                var solutionFile = Directory.GetFiles(repoPath, "*.sln").Single();
+
+                var projectsToAdd = sourceFiles.Aggregate((i, j) => i + " " + j);
+                DotNet($"sln {solutionFile} add {projectsToAdd}");
+
+                foreach (var projectFile in projectFiles)
                 {
-                    var packagesToRemove = packages.Aggregate((i, j) => i + " " + j);
-                    DotNet($"remove {projectFile} reference {packagesToRemove}");
+                    var packages = GetPackages(projectFile, "Intellias.CQRS.");
+                    if (packages.Any())
+                    {
+                        var packagesToRemove = packages.Aggregate((i, j) => i + " " + j);
+                        DotNet($"remove {projectFile} reference {packagesToRemove}");
 
-                    var projectsRefsToAdd = packages.Select(p => sourceFiles.Single(f => f.Contains($"{p}.csproj", StringComparison.InvariantCultureIgnoreCase))).Aggregate((i, j) => i + " " + j);
-                    DotNet($"add {projectFile} reference {projectsRefsToAdd}");
+                        var projectsRefsToAdd = packages.Select(p => sourceFiles.Single(f => f.Contains($"{p}.csproj", StringComparison.InvariantCultureIgnoreCase))).Aggregate((i, j) => i + " " + j);
+                        DotNet($"add {projectFile} reference {projectsRefsToAdd}");
+                    }
                 }
+
+                DotNet($"build {solutionFile}");
             }
-
-            DotNet($"build {solutionFile}");
-
-            DeleteDirectory(repoPath);
+            finally
+            {
+                DeleteDirectory(repoPath);
+            }
         }
 
         private void DotNet(string args)
@@ -168,6 +173,6 @@ namespace Intellias.CQRS.Tests
                 var master = repo.Branches["master"];
                 Commands.Checkout(repo, master);
             }
-        }
+        } 
     }
 }
