@@ -8,6 +8,7 @@ using System.Xml;
 using Intellias.CQRS.Tests.Utils;
 using LibGit2Sharp;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Intellias.CQRS.Tests
 {
@@ -19,16 +20,18 @@ namespace Intellias.CQRS.Tests
         private const string BasePath = "https://IntelliasTS@dev.azure.com/IntelliasTS/IntelliGrowth/_git/";
         private readonly TestsConfiguration testsConfiguration;
         private readonly List<string> sourceFiles;
+        private readonly ITestOutputHelper output;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CrossRepoTest"/> class.
         /// </summary>
-        public CrossRepoTest()
+        public CrossRepoTest(ITestOutputHelper output)
         {
             var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var basePath = Path.GetFullPath(Path.Combine(currentPath!, @"..\..\..\..\"));
             sourceFiles = GetProjectFiles(basePath);
             testsConfiguration = new TestsConfiguration();
+            this.output = output;
         }
 
         /// <summary>
@@ -41,6 +44,10 @@ namespace Intellias.CQRS.Tests
         public void RepoConsistencyTest(string repoName)
         {
             var repoPath = $"repos\\{repoName}";
+            if (Directory.Exists(repoPath))
+            {
+                DeleteDirectory(repoPath);
+            }
 
             CloneRepo(repoName, repoPath);
             var projectFiles = GetProjectFiles(repoPath);
@@ -68,7 +75,7 @@ namespace Intellias.CQRS.Tests
             DeleteDirectory(repoPath);
         }
 
-        private static void DotNet(string args)
+        private void DotNet(string args)
         {
             using (var process = new Process())
             {
@@ -78,7 +85,10 @@ namespace Intellias.CQRS.Tests
                 process.StartInfo.RedirectStandardOutput = true;
                 process.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
                 {
-                    Trace.WriteLine(e.Data);
+                    if (e.Data != null)
+                    {
+                        output.WriteLine(e.Data);
+                    }
                 });
                 process.Start();
                 process.BeginOutputReadLine();
