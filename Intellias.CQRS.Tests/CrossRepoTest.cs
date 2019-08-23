@@ -93,6 +93,8 @@ namespace Intellias.CQRS.Tests
                     if (e.Data != null)
                     {
                         output.WriteLine(e.Data);
+                        Trace.WriteLine(e.Data);
+                        Console.WriteLine(e.Data);
                     }
                 });
                 process.Start();
