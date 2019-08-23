@@ -39,7 +39,7 @@ namespace Intellias.CQRS.Tests.Utils.Fixtures
 
         private async Task DeleteAllTablesAsync(string prefix)
         {
-            TableContinuationToken continuationToken = null;
+            TableContinuationToken? continuationToken = null;
 
             do
             {

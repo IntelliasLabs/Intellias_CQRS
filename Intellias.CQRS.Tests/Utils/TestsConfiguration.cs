@@ -23,8 +23,12 @@ namespace Intellias.CQRS.Tests.Utils
             this.StorageAccount = Configuration
                 .GetSection(StorageAccountOptions.SectionName)
                 .Get<StorageAccountOptions>();
+
+            this.AzureDevOpsAccessToken = Configuration.GetValue<string>(nameof(AzureDevOpsAccessToken));
         }
 
         public StorageAccountOptions StorageAccount { get; }
+
+        public string AzureDevOpsAccessToken { get; }
     }
 }

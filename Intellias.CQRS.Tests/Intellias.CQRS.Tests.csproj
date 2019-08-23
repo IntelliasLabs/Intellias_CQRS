@@ -8,6 +8,7 @@
     <NoWarn>$(NoWarn);CA1707;SCS0005;SA1600</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="LibGit2Sharp" Version="0.26.1" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
     <PackageReference Include="FluentAssertions" Version="5.7.0" />
     <PackageReference Include="AutoFixture" Version="4.11.0" />

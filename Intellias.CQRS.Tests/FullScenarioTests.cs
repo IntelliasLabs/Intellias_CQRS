@@ -13,22 +13,23 @@ using Xunit;
 namespace Intellias.CQRS.Tests
 {
     /// <summary>
-    /// Full CQRS scenario test
+    /// Full CQRS scenario test.
     /// </summary>
     public class FullScenarioTests
     {
         /// <summary>
-        /// Write Side Command Bus
+        /// Write Side Command Bus.
         /// </summary>
         private readonly InProcessCommandBus commandBus;
 
         /// <summary>
-        /// Read Side Query Executor
+        /// Read Side Query Executor.
         /// </summary>
         private readonly IQueryModelReader<TestQueryModel> queryReader;
 
         /// <summary>
-        /// Setup test infrastructure
+        /// Initializes a new instance of the <see cref="FullScenarioTests"/> class.
+        /// Setup test infrastructure.
         /// </summary>
         public FullScenarioTests()
         {
@@ -61,7 +62,7 @@ namespace Intellias.CQRS.Tests
         }
 
         /// <summary>
-        /// Full demo test
+        /// Full demo test.
         /// </summary>
         [Fact]
         public void DemoTest()
