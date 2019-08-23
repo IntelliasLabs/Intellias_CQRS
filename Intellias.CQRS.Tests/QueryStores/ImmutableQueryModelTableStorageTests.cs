@@ -19,7 +19,6 @@ namespace Intellias.CQRS.Tests.QueryStores
         private readonly ImmutableQueryModelTableStorage<FakeImmutableQueryModel> storage;
 
         public ImmutableQueryModelTableStorageTests(StorageAccountFixture fixture)
-            : base(fixture)
         {
             var options = new TableStorageOptions
             {

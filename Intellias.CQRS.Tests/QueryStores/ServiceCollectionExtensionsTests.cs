@@ -17,7 +17,6 @@ namespace Intellias.CQRS.Tests.QueryStores
         private readonly ServiceProvider serviceProvider;
 
         public ServiceCollectionExtensionsTests(StorageAccountFixture fixture)
-            : base(fixture)
         {
             serviceProvider = new ServiceCollection()
                 .AddTableQueryModelStorage(o =>
