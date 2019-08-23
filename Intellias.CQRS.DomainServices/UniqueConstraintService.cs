@@ -92,9 +92,9 @@ namespace Intellias.CQRS.DomainServices
             {
                 switch (e.RequestInformation.ExtendedErrorInformation.ErrorCode)
                 {
-                    case string code when code == TableErrorCodeStrings.EntityAlreadyExists:
+                    case nameof(TableErrorCodeStrings.EntityAlreadyExists):
                         return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.");
-                    case string code when code == StorageErrorCodeStrings.ResourceNotFound:
+                    case nameof(StorageErrorCodeStrings.ResourceNotFound):
                         return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.");
                     case "InvalidDuplicateRow": // occures when new value duplicates old value then no error is needed
                         return new SuccessfulResult();

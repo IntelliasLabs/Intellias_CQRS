@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Intellias.CQRS.Core.Config;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable;
@@ -16,12 +15,6 @@ namespace Intellias.CQRS.Tests.Core
     /// </summary>
     public class BaseTest
     {
-        static BaseTest()
-        {
-            // Used to start azure storage emulator process on testing agent
-            Process.Start(@"C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator\AzureStorageEmulator.exe", "start")?.WaitForExit();
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseTest"/> class.
         /// </summary>
