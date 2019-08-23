@@ -39,7 +39,6 @@ namespace Intellias.CQRS.Tests
         /// </summary>
         /// <param name="repoName">name of IntelliGrowth repo.</param>
         [Theory]
-        [InlineData("IntelliGrowth_JobProfiles")]
         [InlineData("IntelliGrowth_Identity")]
         public void RepoConsistencyTest(string repoName)
         {
