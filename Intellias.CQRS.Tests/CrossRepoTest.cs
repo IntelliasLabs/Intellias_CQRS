@@ -87,15 +87,14 @@ namespace Intellias.CQRS.Tests
                 process.StartInfo.Arguments = args;
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
-                process.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
+                process.OutputDataReceived += (sender, e) =>
                 {
                     if (e.Data != null)
                     {
                         output.WriteLine(e.Data);
                         Trace.WriteLine(e.Data);
-                        Console.WriteLine(e.Data);
                     }
-                });
+                };
                 process.Start();
                 process.BeginOutputReadLine();
                 if (!process.WaitForExit(60 * 1000))
