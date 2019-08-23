@@ -98,7 +98,11 @@ namespace Intellias.CQRS.Tests
                 });
                 process.Start();
                 process.BeginOutputReadLine();
-                process.WaitForExit();
+                if (!process.WaitForExit(60 * 1000))
+                {
+                    process.Kill();
+                }
+
                 Assert.Equal(0, process.ExitCode);
             }
         }
