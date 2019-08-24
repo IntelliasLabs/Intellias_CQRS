@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +7,6 @@ using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
 
 namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
 {
@@ -24,6 +22,10 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
         private readonly IOptionsMonitor<TableStorageOptions> options;
         private readonly CloudTableProxy tableProxy;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MutableQueryModelTableStorage{TQueryModel}"/> class.
+        /// </summary>
+        /// <param name="options">Table storage options.</param>
         public MutableQueryModelTableStorage(IOptionsMonitor<TableStorageOptions> options)
         {
             this.options = options;
@@ -34,7 +36,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
             var tableName = options.CurrentValue.TableNamePrefix + typeof(TQueryModel).Name;
             var tableReference = client.GetTableReference(tableName);
 
-            tableProxy = new CloudTableProxy(tableReference);
+            tableProxy = new CloudTableProxy(tableReference, ensureTableExists: true);
         }
 
         /// <inheritdoc />
@@ -44,7 +46,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
             var result = await tableProxy.ExecuteAsync(operation);
             var entity = (MutableTableEntity)result.Result;
 
-            return entity?.DeserializeQueryModel();
+            return entity?.DeserializeData();
         }
 
         /// <inheritdoc />
@@ -99,7 +101,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
 
             var result = await tableProxy.ExecuteAsync(operation);
 
-            return ((MutableTableEntity)result.Result).DeserializeQueryModel();
+            return ((MutableTableEntity)result.Result).DeserializeData();
         }
 
         /// <inheritdoc />
@@ -110,7 +112,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
 
             var result = await tableProxy.ExecuteAsync(operation);
 
-            return ((MutableTableEntity)result.Result).DeserializeQueryModel();
+            return ((MutableTableEntity)result.Result).DeserializeData();
         }
 
         private async Task<IReadOnlyCollection<TQueryModel>> QueryAllSegmentedAsync(TableQuery<MutableTableEntity> query)
@@ -121,7 +123,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
             do
             {
                 var querySegment = await tableProxy.ExecuteQuerySegmentedAsync(query, continuationToken);
-                var queryResults = querySegment.Results.Select(entity => entity.DeserializeQueryModel());
+                var queryResults = querySegment.Results.Select(entity => entity.DeserializeData());
 
                 results.AddRange(queryResults);
 
@@ -132,36 +134,24 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
             return results;
         }
 
-        private class MutableTableEntity : TableEntity
+        private class MutableTableEntity : BaseJsonTableEntity<TQueryModel>
         {
             public MutableTableEntity()
             {
-                JsonQueryModel = string.Empty;
             }
 
             public MutableTableEntity(TQueryModel queryModel)
+                : base(queryModel)
             {
                 PartitionKey = typeof(TQueryModel).Name;
                 RowKey = queryModel.Id;
                 ETag = string.IsNullOrWhiteSpace(queryModel.ETag) ? "*" : queryModel.ETag;
-                JsonQueryModel = JsonConvert.SerializeObject(queryModel);
             }
 
-            public string JsonQueryModel { get; set; }
-
-            public TQueryModel DeserializeQueryModel()
+            protected override void SetupDeserializedData(TQueryModel data)
             {
-                if (string.IsNullOrWhiteSpace(JsonQueryModel))
-                {
-                    throw new InvalidOperationException($"Unable to deserialize entity '{RowKey}' from empty json.");
-                }
-
-                var queryModel = JsonConvert.DeserializeObject<TQueryModel>(JsonQueryModel);
-
-                queryModel.Timestamp = Timestamp;
-                queryModel.ETag = ETag;
-
-                return queryModel;
+                data.Timestamp = Timestamp;
+                data.ETag = ETag;
             }
         }
     }

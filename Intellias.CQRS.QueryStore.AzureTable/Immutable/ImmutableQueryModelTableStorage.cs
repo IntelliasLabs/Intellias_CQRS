@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,7 +8,6 @@ using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
 
 namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
 {
@@ -24,6 +22,10 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
     {
         private readonly CloudTableProxy tableProxy;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImmutableQueryModelTableStorage{TQueryModel}"/> class.
+        /// </summary>
+        /// <param name="options">Table storage options.</param>
         public ImmutableQueryModelTableStorage(IOptionsMonitor<TableStorageOptions> options)
         {
             var client = CloudStorageAccount
@@ -33,7 +35,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
             var tableName = options.CurrentValue.TableNamePrefix + typeof(TQueryModel).Name;
             var tableReference = client.GetTableReference(tableName);
 
-            tableProxy = new CloudTableProxy(tableReference);
+            tableProxy = new CloudTableProxy(tableReference, ensureTableExists: true);
         }
 
         /// <inheritdoc />
@@ -43,7 +45,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
             var result = await tableProxy.ExecuteAsync(operation);
             var entity = (ImmutableTableEntity)result.Result;
 
-            return entity?.DeserializeQueryModel();
+            return entity?.DeserializeData();
         }
 
         /// <inheritdoc />
@@ -67,7 +69,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
                 .Take(1);
 
             var querySegment = await tableProxy.ExecuteQuerySegmentedAsync(query, null);
-            var queryModel = querySegment.Results.Select(entity => entity.DeserializeQueryModel()).FirstOrDefault();
+            var queryModel = querySegment.Results.Select(entity => entity.DeserializeData()).FirstOrDefault();
 
             return queryModel;
         }
@@ -80,7 +82,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
 
             var result = await tableProxy.ExecuteAsync(operation);
 
-            return ((ImmutableTableEntity)result.Result).DeserializeQueryModel();
+            return ((ImmutableTableEntity)result.Result).DeserializeData();
         }
 
         private static string GetRowKey(int version)
@@ -89,34 +91,22 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
             return string.Format(CultureInfo.InvariantCulture, "{0:D20}", int.MaxValue - version);
         }
 
-        private class ImmutableTableEntity : TableEntity
+        private class ImmutableTableEntity : BaseJsonTableEntity<TQueryModel>
         {
             public ImmutableTableEntity()
             {
-                JsonQueryModel = string.Empty;
             }
 
             public ImmutableTableEntity(TQueryModel queryModel)
+                : base(queryModel)
             {
                 PartitionKey = queryModel.Id;
                 RowKey = GetRowKey(queryModel.Version);
-                JsonQueryModel = JsonConvert.SerializeObject(queryModel);
             }
 
-            public string JsonQueryModel { get; set; }
-
-            public TQueryModel DeserializeQueryModel()
+            protected override void SetupDeserializedData(TQueryModel data)
             {
-                if (string.IsNullOrWhiteSpace(JsonQueryModel))
-                {
-                    throw new InvalidOperationException($"Unable to deserialize entity '{RowKey}' from empty json.");
-                }
-
-                var queryModel = JsonConvert.DeserializeObject<TQueryModel>(JsonQueryModel);
-
-                queryModel.Timestamp = Timestamp;
-
-                return queryModel;
+                data.Timestamp = Timestamp;
             }
         }
     }

@@ -10,8 +10,17 @@ using MicrosoftOptions = Microsoft.Extensions.Options.Options;
 
 namespace Intellias.CQRS.QueryStore.AzureTable
 {
+    /// <summary>
+    /// Query Models Storage extensions.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds Query Models Table Storage services.
+        /// </summary>
+        /// <param name="services">Services collection.</param>
+        /// <param name="configure">Configures <see cref="TableStorageOptions"/>.</param>
+        /// <returns>Services collection Query Model Table Storage services.</returns>
         public static IServiceCollection AddTableQueryModelStorage(this IServiceCollection services, Action<TableStorageOptions> configure)
         {
             // Add required services.

@@ -10,6 +10,9 @@ using Polly.Retry;
 
 namespace Intellias.CQRS.QueryStore.AzureTable.Common
 {
+    /// <summary>
+    /// Proxy for <see cref="CloudTable"/> that handles errors and ensures that table exists.
+    /// </summary>
     public class CloudTableProxy
     {
         private const string TableKey = nameof(TableKey);
@@ -32,11 +35,26 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
 
         private readonly CloudTable table;
 
-        public CloudTableProxy(CloudTable table)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CloudTableProxy"/> class.
+        /// </summary>
+        /// <param name="table">Reference to Storage Table.</param>
+        /// <param name="ensureTableExists">Immediately ensures that table exists.</param>
+        public CloudTableProxy(CloudTable table, bool ensureTableExists)
         {
             this.table = table;
+
+            if (ensureTableExists)
+            {
+                CreateTableAsync(this.table).GetAwaiter().GetResult();
+            }
         }
 
+        /// <summary>
+        /// Executes <paramref name="operation"/>.
+        /// </summary>
+        /// <param name="operation">Operation to be executed.</param>
+        /// <returns>Operation result.</returns>
         public async Task<TableResult> ExecuteAsync(TableOperation operation)
         {
             return await ExecuteCreateTablePolicy.ExecuteAsync(
@@ -54,6 +72,13 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
                 });
         }
 
+        /// <summary>
+        /// Executes <paramref name="query"/>.
+        /// </summary>
+        /// <param name="query">Query to be executed.</param>
+        /// <param name="continuationToken">Query continuation token.</param>
+        /// <typeparam name="T">Table entity type.</typeparam>
+        /// <returns>Query result.</returns>
         public async Task<TableQuerySegment<T>> ExecuteQuerySegmentedAsync<T>(TableQuery<T> query, TableContinuationToken? continuationToken)
             where T : ITableEntity, new()
         {
@@ -74,14 +99,19 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
                 });
         }
 
-        private static async Task CreateTableAsync(Context context)
+        private static Task CreateTableAsync(Context context)
         {
-            if (await ((CloudTable)context[TableKey]).ExistsAsync())
+            return CreateTableAsync((CloudTable)context[TableKey]);
+        }
+
+        private static async Task CreateTableAsync(CloudTable table)
+        {
+            if (await table.ExistsAsync())
             {
                 return;
             }
 
-            await ((CloudTable)context[TableKey]).CreateIfNotExistsAsync();
+            await table.CreateIfNotExistsAsync();
         }
 
         private static TimeSpan Jitter(int retryAttempt)

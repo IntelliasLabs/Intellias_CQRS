@@ -10,6 +10,7 @@
   </PropertyGroup>
   <PropertyGroup Label="Common properties">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CodeAnalysisRuleSet>..\Intellias.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup Label="StyleCop config">    
