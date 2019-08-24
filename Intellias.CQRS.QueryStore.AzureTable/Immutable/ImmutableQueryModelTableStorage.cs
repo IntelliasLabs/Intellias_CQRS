@@ -98,7 +98,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
             }
 
             public ImmutableTableEntity(TQueryModel queryModel)
-                : base(queryModel)
+                : base(queryModel, true)
             {
                 PartitionKey = queryModel.Id;
                 RowKey = GetRowKey(queryModel.Version);

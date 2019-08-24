@@ -10,11 +10,21 @@ namespace Intellias.CQRS.Tests.QueryStores
     public class BaseJsonTableEntityTests
     {
         [Fact]
-        public void Serialization_DefaultValue_DeserializedCorrectly()
+        public void Serialization_WithCompression_DeserializesCorrectly()
         {
             var data = new DummyData();
 
             var entity = new DummyJsonTableEntity(data);
+
+            entity.DeserializeData().Should().BeEquivalentTo(data);
+        }
+
+        [Fact]
+        public void Serialization_WithoutCompression_DeserializesCorrectly()
+        {
+            var data = new DummyData();
+
+            var entity = new DummyJsonTableEntity(data, false);
 
             entity.DeserializeData().Should().BeEquivalentTo(data);
         }
@@ -49,7 +59,11 @@ namespace Intellias.CQRS.Tests.QueryStores
             var entityWithoutProperty = new DummyWithoutSnapshotIdJsonTableEntity(dataWithoutProperty);
 
             // Set JSON to entity with property.
-            var entity = new DummyJsonTableEntity { Data = entityWithoutProperty.Data };
+            var entity = new DummyJsonTableEntity
+            {
+                IsCompressed = entityWithoutProperty.IsCompressed,
+                Data = entityWithoutProperty.Data
+            };
 
             entity.DeserializeData().Should().BeEquivalentTo(expected);
         }
@@ -60,8 +74,8 @@ namespace Intellias.CQRS.Tests.QueryStores
             {
             }
 
-            public DummyJsonTableEntity(DummyData data)
-                : base(data)
+            public DummyJsonTableEntity(DummyData data, bool enableCompression = true)
+                : base(data, enableCompression)
             {
             }
 
@@ -72,8 +86,8 @@ namespace Intellias.CQRS.Tests.QueryStores
 
         private class DummyWithoutSnapshotIdJsonTableEntity : BaseJsonTableEntity<DummyDataWithoutSnapshotId>
         {
-            public DummyWithoutSnapshotIdJsonTableEntity(DummyDataWithoutSnapshotId data)
-                : base(data)
+            public DummyWithoutSnapshotIdJsonTableEntity(DummyDataWithoutSnapshotId data, bool enableCompression = true)
+                : base(data, enableCompression)
             {
             }
 

@@ -141,7 +141,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
             }
 
             public MutableTableEntity(TQueryModel queryModel)
-                : base(queryModel)
+                : base(queryModel, true)
             {
                 PartitionKey = typeof(TQueryModel).Name;
                 RowKey = queryModel.Id;
