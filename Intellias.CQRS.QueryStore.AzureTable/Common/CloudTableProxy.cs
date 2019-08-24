@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.WindowsAzure.Storage.Table.Protocol;
 using Polly;
 using Polly.Retry;
 
@@ -21,12 +22,12 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
         // Policy for recreating table for operations.
         private static readonly AsyncRetryPolicy<TableResult> ExecuteCreateTablePolicy = Policy
             .HandleResult<TableResult>(r => r.HttpStatusCode == (int)HttpStatusCode.NotFound)
-            .Or<StorageException>(e => e.RequestInformation.HttpStatusCode == (int)HttpStatusCode.NotFound)
+            .Or<StorageException>(e => e.RequestInformation.ExtendedErrorInformation.ErrorCode == TableErrorCodeStrings.TableNotFound)
             .WaitAndRetryAsync(3, Jitter, (result, i, context) => CreateTableAsync(context));
 
         // Policy for recreating table for segmented queries.
         private static readonly AsyncRetryPolicy ExecuteQuerySegmentedCreateTablePolicy = Policy
-            .Handle<StorageException>(e => e.RequestInformation.HttpStatusCode == (int)HttpStatusCode.NotFound)
+            .Handle<StorageException>(e => e.RequestInformation.ExtendedErrorInformation.ErrorCode == TableErrorCodeStrings.TableNotFound)
             .WaitAndRetryAsync(3, Jitter, (result, i, context) => CreateTableAsync(context));
 
         private readonly CloudTable table;
