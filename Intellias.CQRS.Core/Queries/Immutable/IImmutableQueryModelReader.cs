@@ -34,6 +34,6 @@ namespace Intellias.CQRS.Core.Queries.Immutable
         /// </summary>
         /// <param name="id">Query model id.</param>
         /// <returns>Found query model.</returns>
-        Task<TQueryModel> GetLatestAsync(string id);
+        Task<TQueryModel?> GetLatestAsync(string id);
     }
 }

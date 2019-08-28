@@ -28,7 +28,7 @@ namespace Intellias.CQRS.Tests
         public CrossRepoTest(ITestOutputHelper output)
         {
             var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var basePath = Path.GetFullPath(Path.Combine(currentPath!, @"..\..\..\..\"));
+            var basePath = Path.GetFullPath(Path.Combine(currentPath!, "..", "..", "..", ".."));
             sourceFiles = GetProjectFiles(basePath);
             testsConfiguration = new TestsConfiguration();
             this.output = output;
@@ -42,7 +42,7 @@ namespace Intellias.CQRS.Tests
         [InlineData("IntelliGrowth_Identity")]
         public void RepoConsistencyTest(string repoName)
         {
-            var repoPath = $"repos\\{repoName}";
+            var repoPath = Path.Combine("repos", repoName);
             if (Directory.Exists(repoPath))
             {
                 DeleteDirectory(repoPath);

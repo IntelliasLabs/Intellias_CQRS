@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
@@ -10,6 +9,7 @@ using Intellias.CQRS.Tests.Fakes;
 using Intellias.CQRS.Tests.Utils;
 using Intellias.CQRS.Tests.Utils.Fixtures;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table.Protocol;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.QueryStores
@@ -59,7 +59,7 @@ namespace Intellias.CQRS.Tests.QueryStores
             await storage.CreateAsync(queryModel);
 
             storage.Awaiting(s => s.CreateAsync(queryModel)).Should().Throw<StorageException>()
-                .Which.RequestInformation.HttpStatusCode.Should().Be((int)HttpStatusCode.Conflict);
+                .Which.RequestInformation.ExtendedErrorInformation.ErrorCode.Should().Be(TableErrorCodeStrings.EntityAlreadyExists);
         }
 
         [Fact]
