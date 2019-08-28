@@ -134,13 +134,13 @@ namespace Intellias.CQRS.Tests
         {
             var files = new List<string>();
 
-            var dirs = Directory.GetDirectories(path).Select(x => Path.GetFullPath(x));
+            var dirs = Directory.GetDirectories(path).Select(x => Path.GetFullPath(x)).ToList();
             foreach (var dir in dirs)
             {
                 files.AddRange(GetProjectFiles(dir));
             }
 
-            files.AddRange(dirs.SelectMany(dir => Directory.GetFiles(dir, "*.csproj")));
+            files.AddRange(dirs.SelectMany(dir => Directory.GetFiles(dir, "*.csproj")).ToList());
 
             return files;
         }
