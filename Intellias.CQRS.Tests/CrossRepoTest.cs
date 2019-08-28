@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Xml;
 using Intellias.CQRS.Tests.Utils;
 using LibGit2Sharp;
@@ -25,6 +26,7 @@ namespace Intellias.CQRS.Tests
         /// <summary>
         /// Initializes a new instance of the <see cref="CrossRepoTest"/> class.
         /// </summary>
+        /// <param name="output">ITestOutputHelper.</param>
         public CrossRepoTest(ITestOutputHelper output)
         {
             var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -40,6 +42,7 @@ namespace Intellias.CQRS.Tests
         /// <param name="repoName">name of IntelliGrowth repo.</param>
         [Theory]
         [InlineData("IntelliGrowth_Identity")]
+        [InlineData("IntelliGrowth_JobProfiles")]
         public void RepoConsistencyTest(string repoName)
         {
             var repoPath = Path.Combine("repos", repoName);
@@ -55,9 +58,7 @@ namespace Intellias.CQRS.Tests
 
                 var solutionFile = Directory.GetFiles(repoPath, "*.sln").Single();
 
-                var projectsToAdd = sourceFiles.Aggregate((i, j) => i + " " + j);
-                DotNet($"sln {solutionFile} add {projectsToAdd}");
-
+                var projectsToAdd = new StringBuilder();
                 foreach (var projectFile in projectFiles)
                 {
                     var packages = GetPackages(projectFile, "Intellias.CQRS.");
@@ -68,8 +69,12 @@ namespace Intellias.CQRS.Tests
 
                         var projectsRefsToAdd = packages.Select(p => sourceFiles.Single(f => f.Contains($"{p}.csproj", StringComparison.InvariantCultureIgnoreCase))).Aggregate((i, j) => i + " " + j);
                         DotNet($"add {projectFile} reference {projectsRefsToAdd}");
+
+                        projectsToAdd.Append($"{projectsRefsToAdd} ");
                     }
                 }
+
+                DotNet($"sln {solutionFile} add {projectsToAdd}");
 
                 DotNet($"build {solutionFile}");
             }
@@ -127,8 +132,17 @@ namespace Intellias.CQRS.Tests
 
         private static List<string> GetProjectFiles(string path)
         {
+            var files = new List<string>();
+
             var dirs = Directory.GetDirectories(path).Select(x => Path.GetFullPath(x));
-            return dirs.SelectMany(dir => Directory.GetFiles(dir, "*.csproj")).ToList();
+            foreach (var dir in dirs)
+            {
+                files.AddRange(GetProjectFiles(dir));
+            }
+
+            files.AddRange(dirs.SelectMany(dir => Directory.GetFiles(dir, "*.csproj")));
+
+            return files;
         }
 
         private static void DeleteDirectory(string directory)
@@ -177,6 +191,6 @@ namespace Intellias.CQRS.Tests
                 var master = repo.Branches["master"];
                 Commands.Checkout(repo, master);
             }
-        } 
+        }
     }
 }
