@@ -43,6 +43,7 @@ namespace Intellias.CQRS.Tests
         [Theory]
         [InlineData("IntelliGrowth_Identity")]
         [InlineData("IntelliGrowth_JobProfiles")]
+        [InlineData("IntelliGrowth_API")]
         public void RepoConsistencyTest(string repoName)
         {
             var repoPath = Path.Combine("repos", repoName);
@@ -77,6 +78,7 @@ namespace Intellias.CQRS.Tests
                 DotNet($"sln {solutionFile} add {projectsToAdd}");
 
                 DotNet($"build {solutionFile}");
+                DotNet($"test {solutionFile}");
             }
             finally
             {
