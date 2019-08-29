@@ -27,14 +27,13 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.DomainServices\Intellias.CQRS.DomainServices.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.Logger.AppInsight\Intellias.CQRS.Logger.AppInsight.csproj" />
+    <ProjectReference Include="..\..\src\Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj" />
+    <ProjectReference Include="..\..\src\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
+    <ProjectReference Include="..\..\src\Intellias.CQRS.DomainServices\Intellias.CQRS.DomainServices.csproj" />
+    <ProjectReference Include="..\..\src\Intellias.CQRS.Logger.AppInsight\Intellias.CQRS.Logger.AppInsight.csproj" />
+    <ProjectReference Include="..\..\src\Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj" />
+    <ProjectReference Include="..\..\src\Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj" />
     <ProjectReference Include="..\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj" />
-    <ProjectReference Include="..\Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">

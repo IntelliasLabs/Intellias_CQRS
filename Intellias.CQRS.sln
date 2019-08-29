@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Core", "Intellias.CQRS.Core\Intellias.CQRS.Core.csproj", "{41AC6C45-8D2E-4ADF-A3BB-60AB94982F37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Core", "src\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj", "{41AC6C45-8D2E-4ADF-A3BB-60AB94982F37}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{66AA23B1-E838-419A-AD8C-253D796AFB39}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,32 +12,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Intellias.CQRS.sln.DotSettings = Intellias.CQRS.sln.DotSettings
 		Intellias.ruleset = Intellias.ruleset
 		stylecop.json = stylecop.json
-		test.runsettings = test.runsettings
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventStore.AzureTable", "Intellias.CQRS.EventStore.AzureTable\Intellias.CQRS.EventStore.AzureTable.csproj", "{0EE03140-2422-4D8B-9E8C-1032F6871885}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventStore.AzureTable", "src\Intellias.CQRS.EventStore.AzureTable\Intellias.CQRS.EventStore.AzureTable.csproj", "{0EE03140-2422-4D8B-9E8C-1032F6871885}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventBus.AzureServiceBus", "Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj", "{E7BE0F03-977E-47EC-B26B-742EBA3FC053}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.EventBus.AzureServiceBus", "src\Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj", "{E7BE0F03-977E-47EC-B26B-742EBA3FC053}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Tests.Core", "Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj", "{5E758EFE-C893-4652-8F4E-D68D407603A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Tests.Core", "test\Intellias.CQRS.Tests.Core\Intellias.CQRS.Tests.Core.csproj", "{5E758EFE-C893-4652-8F4E-D68D407603A4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.QueryStore.AzureTable", "Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj", "{BE47C4EF-40EF-4D89-B2B0-ABB0A4FCD318}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.QueryStore.AzureTable", "src\Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj", "{BE47C4EF-40EF-4D89-B2B0-ABB0A4FCD318}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.CommandStore.AzureTable", "Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj", "{3DD22AEC-D602-4980-9D67-B9FF9AD6BB5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.CommandStore.AzureTable", "src\Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj", "{3DD22AEC-D602-4980-9D67-B9FF9AD6BB5E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{428BE606-30C0-4D28-870B-A892A2854C43}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0D3C6160-9287-4C5F-BC52-27321F544756}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.CommandBus.AzureServiceBus", "Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj", "{9A8FBB2E-A8D0-42FD-8F27-D146F14917F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.CommandBus.AzureServiceBus", "src\Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj", "{9A8FBB2E-A8D0-42FD-8F27-D146F14917F6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Tests", "Intellias.CQRS.Tests\Intellias.CQRS.Tests.csproj", "{E1DE9EDB-8F92-4A68-B109-3D5AED9B4EEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Tests", "test\Intellias.CQRS.Tests\Intellias.CQRS.Tests.csproj", "{E1DE9EDB-8F92-4A68-B109-3D5AED9B4EEA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Logger.AppInsight", "Intellias.CQRS.Logger.AppInsight\Intellias.CQRS.Logger.AppInsight.csproj", "{1BC39125-AD01-4139-AC62-1FF0C08852B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Logger.AppInsight", "src\Intellias.CQRS.Logger.AppInsight\Intellias.CQRS.Logger.AppInsight.csproj", "{1BC39125-AD01-4139-AC62-1FF0C08852B5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.DomainServices", "Intellias.CQRS.DomainServices\Intellias.CQRS.DomainServices.csproj", "{757C2CFC-B256-441F-A1DB-A5C38BC1A023}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.DomainServices", "src\Intellias.CQRS.DomainServices\Intellias.CQRS.DomainServices.csproj", "{757C2CFC-B256-441F-A1DB-A5C38BC1A023}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Configuration", "Intellias.CQRS.Configuration\Intellias.CQRS.Configuration.csproj", "{6E3D6605-21E1-4F0C-966A-F0E21F1FAA7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Configuration", "src\Intellias.CQRS.Configuration\Intellias.CQRS.Configuration.csproj", "{6E3D6605-21E1-4F0C-966A-F0E21F1FAA7B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{36062571-C384-4818-9F2E-A5C621153409}"
 ProjectSection(SolutionItems) = preProject

@@ -11,10 +11,10 @@
   <PropertyGroup Label="Common properties">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <CodeAnalysisRuleSet>..\Intellias.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Intellias.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup Label="StyleCop config">    
-     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />  
+  <ItemGroup Label="StyleCop config">
+     <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
   <ItemGroup Label="Analyzer packages">
     <PackageReference Include="codecracker.CSharp" Version="1.1.0">
