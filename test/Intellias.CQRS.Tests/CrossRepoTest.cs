@@ -30,7 +30,7 @@ namespace Intellias.CQRS.Tests
         public CrossRepoTest(ITestOutputHelper output)
         {
             var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var basePath = Path.GetFullPath(Path.Combine(currentPath!, "..", "..", "..", ".."));
+            var basePath = Path.GetFullPath(Path.Combine(currentPath!, "..", "..", "..", "..", ".."));
             sourceFiles = GetProjectFiles(basePath);
             testsConfiguration = new TestsConfiguration();
             this.output = output;
