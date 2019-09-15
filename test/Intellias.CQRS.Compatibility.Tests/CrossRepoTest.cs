@@ -11,7 +11,7 @@ using LibGit2Sharp;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Intellias.CQRS.Tests
+namespace Intellias.CQRS.Compatibility.Tests
 {
     /// <summary>
     /// CrossRepoTest.
@@ -42,6 +42,7 @@ namespace Intellias.CQRS.Tests
         /// <param name="repoName">name of IntelliGrowth repo.</param>
         [Theory]
         [InlineData("IntelliGrowth_Identity")]
+        [InlineData("IntelliGrowth_Competencies")]
         [InlineData("IntelliGrowth_JobProfiles")]
         [InlineData("IntelliGrowth_API")]
         public void RepoConsistencyTest(string repoName)
