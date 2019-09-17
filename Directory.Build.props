@@ -16,6 +16,9 @@
   <ItemGroup Label="StyleCop config">
      <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
+  <PropertyGroup Label="Packages version">
+    <MicrosoftExtensionsPackageVersion>2.2.0</MicrosoftExtensionsPackageVersion>
+  </PropertyGroup>
   <ItemGroup Label="Analyzer packages">
     <PackageReference Include="codecracker.CSharp" Version="1.1.0">
       <PrivateAssets>all</PrivateAssets>
