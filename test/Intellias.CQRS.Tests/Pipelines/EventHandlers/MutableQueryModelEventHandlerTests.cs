@@ -41,7 +41,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
             await handler.Handle(notification, CancellationToken.None);
 
             // Query model is created.
-            var queryModel = await storage.FindAsync(@event.SnapshotId.EntryId);
+            var queryModel = await storage.GetAsync(@event.SnapshotId.EntryId);
 
             queryModel.Should().NotBeNull();
             queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent(@event.Id, @event.Created));

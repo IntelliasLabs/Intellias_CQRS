@@ -1,17 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Intellias.CQRS.QueryStore.AzureTable.Common;
 using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     public class InProcessTableStorage<T> : IList<T>, IReadOnlyCollection<T>
     {
-        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            ObjectCreationHandling = ObjectCreationHandling.Replace
-        };
-
         private readonly List<string> storage = new List<string>();
 
         public int Count => storage.Count;
@@ -55,9 +51,9 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             storage.RemoveAt(index);
 
         private static string Serialize(object? entity) =>
-            JsonConvert.SerializeObject(entity, Settings);
+            JsonConvert.SerializeObject(entity, TableStorageJsonSerializerSettings.GetDefault());
 
         private static IEnumerable<T> Deserialize(IEnumerable<string> storage) =>
-            storage.Select(e => JsonConvert.DeserializeObject<T>(e, Settings));
+            storage.Select(e => JsonConvert.DeserializeObject<T>(e, TableStorageJsonSerializerSettings.GetDefault()));
     }
 }

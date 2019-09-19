@@ -7,6 +7,6 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines.Fakes
     {
         public SnapshotId SnapshotId { get; set; } = SnapshotId.Empty;
 
-        public string Data { get; set; }
+        public string Data { get; set; } = string.Empty;
     }
 }
