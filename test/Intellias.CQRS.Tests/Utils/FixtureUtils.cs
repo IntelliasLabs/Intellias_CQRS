@@ -6,7 +6,7 @@ using Intellias.CQRS.Tests.Core.Infrastructure.Builders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Intellias.CQRS.Tests.Core.Infrastructure
+namespace Intellias.CQRS.Tests.Utils
 {
     public static class FixtureUtils
     {
