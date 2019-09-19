@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <ProjectGuid>{9a5e14a1-8ae5-4b1f-97b3-79416cc3ea62}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>

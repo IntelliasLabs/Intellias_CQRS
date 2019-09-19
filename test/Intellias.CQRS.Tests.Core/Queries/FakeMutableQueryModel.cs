@@ -8,9 +8,9 @@ namespace Intellias.CQRS.Tests.Core.Queries
         public FakeMutableQueryModel()
         {
             Id = Unified.NewCode();
-            SomeProperty = Unified.NewCode();
+            Data = Unified.NewCode();
         }
 
-        public string SomeProperty { get; set; }
+        public string Data { get; set; }
     }
 }
