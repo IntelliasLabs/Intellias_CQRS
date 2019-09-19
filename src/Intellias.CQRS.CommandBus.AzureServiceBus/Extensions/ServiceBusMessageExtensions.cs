@@ -13,7 +13,8 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus.Extensions
                 MessageId = command.Id,
                 ContentType = command.GetType().FullName,
                 PartitionKey = command.AggregateRootId,
-                CorrelationId = command.CorrelationId
+                CorrelationId = command.CorrelationId,
+                SessionId = command.AggregateRootId
             };
     }
 }
