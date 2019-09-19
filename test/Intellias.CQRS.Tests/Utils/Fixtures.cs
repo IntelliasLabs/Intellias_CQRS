@@ -3,9 +3,8 @@ using AutoFixture;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Tests.Core.Infrastructure;
 using Intellias.CQRS.Tests.Core.Pipelines.Builders;
-using IntelliGrowth.JobProfiles.Tests.Utils.Pipelines;
+using Intellias.CQRS.Tests.Utils.Pipelines;
 
 namespace Intellias.CQRS.Tests.Utils
 {
