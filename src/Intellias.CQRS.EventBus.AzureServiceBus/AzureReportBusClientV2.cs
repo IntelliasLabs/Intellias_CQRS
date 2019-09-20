@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,22 +6,26 @@ using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Logging;
 
 namespace Intellias.CQRS.EventBus.AzureServiceBus
 {
     /// <inheritdoc />
     [ExcludeFromCodeCoverage]
-    public class AzureReportBusClient : IReportBusClient
+    public class AzureReportBusClientV2 : IReportBusClient
     {
         private readonly ISubscriptionClient sub;
+        private readonly ILogger<AzureReportBusClientV2> log;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AzureReportBusClient"/> class.
+        /// Initializes a new instance of the <see cref="AzureReportBusClientV2"/> class.
         /// </summary>
+        /// <param name="log">ILogger.</param>
         /// <param name="sub">Subscription Type.</param>
-        public AzureReportBusClient(ISubscriptionClient sub)
+        public AzureReportBusClientV2(ILogger<AzureReportBusClientV2> log, ISubscriptionClient sub)
         {
             this.sub = sub;
+            this.log = log;
         }
 
         /// <inheritdoc />
@@ -52,7 +55,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
 
         private Task ExceptionReceivedHandlerAsync(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
-            Trace.TraceError(exceptionReceivedEventArgs.Exception.Message);
+            log.LogError(exceptionReceivedEventArgs.Exception, exceptionReceivedEventArgs.Exception.Message);
             return Task.CompletedTask;
         }
     }

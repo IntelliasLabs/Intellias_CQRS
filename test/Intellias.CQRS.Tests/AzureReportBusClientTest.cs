@@ -10,6 +10,7 @@ using Intellias.CQRS.EventBus.AzureServiceBus;
 using Intellias.CQRS.EventBus.AzureServiceBus.Extensions;
 using Intellias.CQRS.Tests.Core.Events;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -24,14 +25,16 @@ namespace Intellias.CQRS.Tests
             var signal = new OperationCompletedSignal(testEvent);
 
             var mock = new Mock<ISubscriptionClient>();
-            mock.Setup(s => s.RegisterMessageHandler(It.IsAny<Func<Message, CancellationToken, Task>>(), It.IsAny<MessageHandlerOptions>()))
-                .Callback<Func<Message, CancellationToken, Task>, MessageHandlerOptions>((handler, _) =>
+            mock.Setup(s => s.RegisterSessionHandler(It.IsAny<Func<IMessageSession, Message, CancellationToken, Task>>(), It.IsAny<SessionHandlerOptions>()))
+                .Callback<Func<IMessageSession, Message, CancellationToken, Task>, SessionHandlerOptions>((handler, _) =>
                  {
                      var msg = CreateBusMessage(signal);
-                     handler?.Invoke(msg, CancellationToken.None);
+                     var sessionMock = new Mock<IMessageSession>();
+                     handler?.Invoke(sessionMock.Object, msg, CancellationToken.None);
                  });
 
-            var reportBus = new AzureReportBusClient(mock.Object);
+            var logMock = new Mock<ILogger<AzureReportBusClientV2>>();
+            var reportBus = new AzureReportBusClientV2(logMock.Object, mock.Object);
 
             IMessage? expectedMessage = null;
 
