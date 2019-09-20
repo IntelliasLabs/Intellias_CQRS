@@ -25,8 +25,8 @@ namespace Intellias.CQRS.Tests
             var signal = new OperationCompletedSignal(testEvent);
 
             var mock = new Mock<ISubscriptionClient>();
-            mock.Setup(s => s.RegisterMessageHandler(It.IsAny<Func<Message, CancellationToken, Task>>(), It.IsAny<MessageHandlerOptions>()))
-                .Callback<Func<Message, CancellationToken, Task>, MessageHandlerOptions>((handler, _) =>
+            mock.Setup(s => s.RegisterSessionHandler(It.IsAny<Func<IMessageSession, Message, CancellationToken, Task>>(), It.IsAny<SessionHandlerOptions>()))
+                .Callback<Func<Message, CancellationToken, Task>, SessionHandlerOptions>((handler, _) =>
                  {
                      var msg = CreateBusMessage(signal);
                      handler?.Invoke(msg, CancellationToken.None);
