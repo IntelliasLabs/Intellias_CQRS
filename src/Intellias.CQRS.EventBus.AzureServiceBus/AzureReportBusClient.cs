@@ -48,7 +48,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
                     }
 
                     // Complete the message so that it is not received again.
-                    await sub.CompleteAsync(msg.SystemProperties.LockToken);
+                    await session.CompleteAsync(msg.SystemProperties.LockToken);
                 }, messageHandlerOptions);
         }
 
