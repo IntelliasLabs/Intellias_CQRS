@@ -30,7 +30,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         {
             var messageHandlerOptions = new SessionHandlerOptions(ExceptionReceivedHandlerAsync)
             {
-                AutoComplete = true,
+                AutoComplete = false,
                 MaxConcurrentSessions = 1
             };
 
