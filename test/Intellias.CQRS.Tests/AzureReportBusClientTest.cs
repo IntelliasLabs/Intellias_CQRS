@@ -26,10 +26,11 @@ namespace Intellias.CQRS.Tests
 
             var mock = new Mock<ISubscriptionClient>();
             mock.Setup(s => s.RegisterSessionHandler(It.IsAny<Func<IMessageSession, Message, CancellationToken, Task>>(), It.IsAny<SessionHandlerOptions>()))
-                .Callback<Func<Message, CancellationToken, Task>, SessionHandlerOptions>((handler, _) =>
+                .Callback<Func<IMessageSession, Message, CancellationToken, Task>, SessionHandlerOptions>((handler, _) =>
                  {
                      var msg = CreateBusMessage(signal);
-                     handler?.Invoke(msg, CancellationToken.None);
+                     var sessionMock = new Mock<IMessageSession>();
+                     handler?.Invoke(sessionMock.Object, msg, CancellationToken.None);
                  });
 
             var logMock = new Mock<ILogger<AzureReportBusClientV2>>();
