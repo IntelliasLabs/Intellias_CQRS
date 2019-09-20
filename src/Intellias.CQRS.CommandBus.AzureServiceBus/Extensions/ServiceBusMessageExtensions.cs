@@ -14,7 +14,8 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus.Extensions
                 ContentType = command.GetType().FullName,
                 PartitionKey = command.AggregateRootId,
                 CorrelationId = command.CorrelationId,
-                SessionId = command.AggregateRootId
+                SessionId = command.AggregateRootId,
+                Label = command.GetType().Name
             };
     }
 }

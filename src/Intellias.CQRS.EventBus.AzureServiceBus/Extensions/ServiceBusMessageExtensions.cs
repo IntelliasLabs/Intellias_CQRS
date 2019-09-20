@@ -22,7 +22,8 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus.Extensions
                 ContentType = @event.GetType().AssemblyQualifiedName,
                 PartitionKey = @event.AggregateRootId,
                 CorrelationId = @event.CorrelationId,
-                SessionId = @event.AggregateRootId
+                SessionId = @event.AggregateRootId,
+                Label = @event.GetType().Name
             };
     }
 }
