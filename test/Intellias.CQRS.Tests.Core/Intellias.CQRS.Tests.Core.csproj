@@ -15,7 +15,4 @@
     <ProjectReference Include="..\..\src\Intellias.CQRS.Pipelines\Intellias.CQRS.Pipelines.csproj" />
     <ProjectReference Include="..\..\src\Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pipelines\Fakes" />
-  </ItemGroup>
 </Project>
