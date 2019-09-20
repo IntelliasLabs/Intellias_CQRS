@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Intellias.CQRS.Tests.Utils
+namespace Intellias.CQRS.Tests.Utils.StorageAccount
 {
     [Collection(nameof(StorageAccountTestCollection))]
     public class StorageAccountTestBase

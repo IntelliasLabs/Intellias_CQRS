@@ -8,7 +8,7 @@ using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Intellias.CQRS.Tests.Core.Queries;
 using Intellias.CQRS.Tests.Fakes;
 using Intellias.CQRS.Tests.Utils;
-using Intellias.CQRS.Tests.Utils.Fixtures;
+using Intellias.CQRS.Tests.Utils.StorageAccount;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Shared.Protocol;
 using Microsoft.WindowsAzure.Storage.Table.Protocol;
@@ -72,7 +72,7 @@ namespace Intellias.CQRS.Tests.QueryStores
             var qm1 = await storage.CreateAsync(new FakeMutableQueryModel());
 
             // Update query model.
-            qm1.SomeProperty = Unified.NewCode();
+            qm1.Data = Unified.NewCode();
             await storage.ReplaceAsync(qm1);
 
             // Trying to update again should fail as ETag is changed after first update.
@@ -93,11 +93,11 @@ namespace Intellias.CQRS.Tests.QueryStores
             var qm1 = await storage.CreateAsync(new FakeMutableQueryModel());
 
             // Update for the first time.
-            qm1.SomeProperty = Unified.NewCode();
+            qm1.Data = Unified.NewCode();
             var updated1 = await storage.ReplaceAsync(qm1);
 
             // Update again with the valid changed ETag.
-            updated1.SomeProperty = Unified.NewCode();
+            updated1.Data = Unified.NewCode();
             var updated2 = await storage.ReplaceAsync(updated1);
 
             updated2.Should().BeEquivalentTo(updated1, options => options.ForMutableQueryModel());

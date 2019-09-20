@@ -14,11 +14,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
     public abstract class BaseJsonTableEntity<TData> : TableEntity
         where TData : class
     {
-        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            ObjectCreationHandling = ObjectCreationHandling.Replace
-        };
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseJsonTableEntity{TData}"/> class.
         /// </summary>
@@ -59,7 +54,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
             }
 
             var json = IsCompressed ? Unzip(Data) : Data;
-            var data = JsonConvert.DeserializeObject<TData>(json, Settings);
+            var data = JsonConvert.DeserializeObject<TData>(json, TableStorageJsonSerializerSettings.GetDefault());
 
             SetupDeserializedData(data);
 
@@ -104,7 +99,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
 
         private string SerializeData(TData data)
         {
-            var json = JsonConvert.SerializeObject(data, Settings);
+            var json = JsonConvert.SerializeObject(data, TableStorageJsonSerializerSettings.GetDefault());
             return IsCompressed ? Zip(json) : json;
         }
     }

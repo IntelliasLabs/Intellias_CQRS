@@ -4,7 +4,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace Intellias.CQRS.Tests.Utils.Fixtures
+namespace Intellias.CQRS.Tests.Utils.StorageAccount
 {
     public class StorageAccountFixture : IDisposable
     {
@@ -56,7 +56,7 @@ namespace Intellias.CQRS.Tests.Utils.Fixtures
 
         private async Task DeleteAllContainersAsync(string prefix)
         {
-            BlobContinuationToken continuationToken = null;
+            BlobContinuationToken? continuationToken = null;
 
             do
             {
