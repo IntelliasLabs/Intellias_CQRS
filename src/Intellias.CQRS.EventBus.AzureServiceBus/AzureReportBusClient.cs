@@ -28,10 +28,9 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
         /// <inheritdoc />
         public void Subscribe(Func<IMessage, Task> handler)
         {
-            var messageHandlerOptions = new SessionHandlerOptions(ExceptionReceivedHandlerAsync)
+            var options = new SessionHandlerOptions(ExceptionReceivedHandlerAsync)
             {
-                AutoComplete = false,
-                MaxConcurrentSessions = 1
+                AutoComplete = false
             };
 
             // Register the function that processes messages.
@@ -47,9 +46,8 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
                         await handler(message);
                     }
 
-                    // Complete the message so that it is not received again.
                     await session.CompleteAsync(msg.SystemProperties.LockToken);
-                }, messageHandlerOptions);
+                }, options);
         }
 
         private static Task ExceptionReceivedHandlerAsync(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
