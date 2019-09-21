@@ -2,7 +2,7 @@
   <PropertyGroup Label="Projects metadata">
     <Authors>IntelliGrowth@intellias.com</Authors>
     <Company>Intellias</Company>
-    <Copyright>Copyright © Intellias 2018</Copyright>
+    <Copyright>Copyright © Intellias 2019</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <DebugType>Full</DebugType>
     <LangVersion>8.0</LangVersion>

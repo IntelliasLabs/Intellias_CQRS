@@ -23,7 +23,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public Task<TQueryModel?> FindAsync(string id)
         {
             var queryModel = storage.FirstOrDefault(q => q.Id == id);
-            return Task.FromResult(queryModel);
+            return Task.FromResult<TQueryModel?>(queryModel);
         }
 
         public async Task<TQueryModel> GetAsync(string id)

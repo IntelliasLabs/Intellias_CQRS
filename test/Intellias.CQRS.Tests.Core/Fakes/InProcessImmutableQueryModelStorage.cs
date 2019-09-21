@@ -22,7 +22,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public Task<TQueryModel?> FindAsync(string id, int version)
         {
             var queryModel = storage.FirstOrDefault(q => q.Id == id && q.Version == version);
-            return Task.FromResult(queryModel);
+            return Task.FromResult<TQueryModel?>(queryModel);
         }
 
         public async Task<TQueryModel> GetAsync(string id, int version)
@@ -34,7 +34,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public Task<TQueryModel?> GetLatestAsync(string id)
         {
             var queryModel = storage.Where(qm => qm.Id == id).OrderByDescending(qm => qm.Version).FirstOrDefault();
-            return Task.FromResult(queryModel);
+            return Task.FromResult<TQueryModel?>(queryModel);
         }
 
         public async Task<TQueryModel> CreateAsync(TQueryModel model)
