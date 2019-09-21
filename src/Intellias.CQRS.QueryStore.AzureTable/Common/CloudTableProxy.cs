@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -22,14 +21,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
 
         private static readonly Random Random = new Random(Environment.TickCount);
 
-        // Policy for recreating table for operations.
-        private static readonly AsyncRetryPolicy<TableResult> ExecuteCreateTablePolicy = Policy
-            .HandleResult<TableResult>(r => r.HttpStatusCode == (int)HttpStatusCode.NotFound)
-            .Or<StorageException>(e => e.RequestInformation.ExtendedErrorInformation.ErrorCode == TableErrorCodeStrings.TableNotFound)
-            .WaitAndRetryAsync(3, Jitter, (result, i, context) => CreateTableAsync(context));
-
-        // Policy for recreating table for segmented queries.
-        private static readonly AsyncRetryPolicy ExecuteQuerySegmentedCreateTablePolicy = Policy
+        // Policy for recreating table for queries.
+        private static readonly AsyncRetryPolicy ExecuteCreateTablePolicy = Policy
             .Handle<StorageException>(e => e.RequestInformation.ExtendedErrorInformation.ErrorCode == TableErrorCodeStrings.TableNotFound)
             .WaitAndRetryAsync(3, Jitter, (result, i, context) => CreateTableAsync(context));
 
@@ -82,7 +75,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
         public async Task<TableQuerySegment<T>> ExecuteQuerySegmentedAsync<T>(TableQuery<T> query, TableContinuationToken? continuationToken)
             where T : ITableEntity, new()
         {
-            return await ExecuteQuerySegmentedCreateTablePolicy.ExecuteAsync(
+            return await ExecuteCreateTablePolicy.ExecuteAsync(
                 context =>
                 {
                     var policyTable = (CloudTable)context[TableKey];
