@@ -29,11 +29,11 @@ namespace Intellias.CQRS.Pipelines.CommandHandlers.Behaviors
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            logger.LogInformation($"Start Handling '{request.GetType()}'.");
+            logger.LogInformation($"Start Handling '{request?.GetType()}'.");
 
             var result = next();
 
-            logger.LogInformation($"Stop Handling '{request.GetType()}'.");
+            logger.LogInformation($"Stop Handling '{request?.GetType()}'.");
 
             return result;
         }

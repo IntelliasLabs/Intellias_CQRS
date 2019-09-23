@@ -9,6 +9,7 @@ namespace Intellias.CQRS.Core.Domain.Validation
     /// </summary>
     /// <typeparam name="T">Type of the entry.</typeparam>
     public class CreationResult<T>
+        where T : class
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CreationResult{T}"/> class.
@@ -41,7 +42,7 @@ namespace Intellias.CQRS.Core.Domain.Validation
         /// <summary>
         /// Created entry.
         /// </summary>
-        public T Entry { get; }
+        public T? Entry { get; }
 
         /// <summary>
         /// Creation errors.
@@ -49,16 +50,11 @@ namespace Intellias.CQRS.Core.Domain.Validation
         public IReadOnlyCollection<ExecutionError> Errors { get; }
 
         /// <summary>
-        /// Returns true if entry is created, otherwise false.
-        /// </summary>
-        public bool Succeeded => Entry != null;
-
-        /// <summary>
         /// Deconstructs result into entry and errors.
         /// </summary>
         /// <param name="errors">Value of <see cref="Errors"/>.</param>
         /// <param name="entry">Value of <see cref="Entry"/>.</param>
-        public void Deconstruct(out IReadOnlyCollection<ExecutionError> errors, out T entry)
+        public void Deconstruct(out IReadOnlyCollection<ExecutionError> errors, out T? entry)
         {
             errors = Errors;
             entry = Entry;

@@ -33,7 +33,7 @@ namespace Intellias.CQRS.Pipelines.Transactions
         }
 
         /// <inheritdoc />
-        public async Task<TAggregateRoot> FindAggregateAsync<TAggregateRoot, TAggregateState>(string aggregateId, AggregateExecutionContext context)
+        public async Task<TAggregateRoot?> FindAggregateAsync<TAggregateRoot, TAggregateState>(string aggregateId, AggregateExecutionContext context)
             where TAggregateRoot : AggregateRoot<TAggregateState>
             where TAggregateState : AggregateState, new()
         {

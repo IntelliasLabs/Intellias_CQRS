@@ -11,7 +11,7 @@ namespace Intellias.CQRS.Pipelines.Transactions
     public class NullTransactionScope : ITransactionScope
     {
         /// <inheritdoc />
-        public Task<TAggregateRoot> FindAggregateAsync<TAggregateRoot, TAggregateState>(string aggregateId, AggregateExecutionContext context)
+        public Task<TAggregateRoot?> FindAggregateAsync<TAggregateRoot, TAggregateState>(string aggregateId, AggregateExecutionContext context)
             where TAggregateRoot : AggregateRoot<TAggregateState>
             where TAggregateState : AggregateState, new()
         {

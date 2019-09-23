@@ -15,13 +15,14 @@ namespace Intellias.CQRS.Core.Domain.Validation
         /// <typeparam name="T">Type of the entry.</typeparam>
         /// <returns>Result of collection.</returns>
         public static CreationResult<IReadOnlyCollection<T>> AsCreationResult<T>(this IEnumerable<CreationResult<T>> source)
+            where T : class
         {
             var errors = new List<ExecutionError>();
             var entries = new List<T>();
 
             foreach (var element in source)
             {
-                if (element.Succeeded)
+                if (element.Entry != null)
                 {
                     entries.Add(element.Entry);
                 }
