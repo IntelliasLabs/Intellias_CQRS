@@ -10,6 +10,6 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.Builders
 
         public Guid? UserId { get; set; }
 
-        public string AggregateRootId { get; set; } = string.Empty;
+        public string? AggregateRootId { get; set; }
     }
 }

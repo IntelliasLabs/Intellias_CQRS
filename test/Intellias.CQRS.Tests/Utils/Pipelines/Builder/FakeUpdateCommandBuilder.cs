@@ -1,18 +1,17 @@
 using AutoFixture;
-using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Pipelines.Builders;
 using Intellias.CQRS.Tests.Utils.Pipelines.Fakes;
 
 namespace Intellias.CQRS.Tests.Utils.Pipelines.Builder
 {
-    public class FakeCreateCommandBuilder : CommandBuilder<FakeCreateCommand>
+    public class FakeUpdateCommandBuilder : CommandBuilder<FakeUpdateCommand>
     {
-        public FakeCreateCommandBuilder(IFixture fixture, CommandSeed<FakeCreateCommand> seed)
+        public FakeUpdateCommandBuilder(IFixture fixture, CommandSeed<FakeUpdateCommand> seed)
             : base(fixture, seed)
         {
         }
 
-        protected override void Setup(FakeCreateCommand command)
+        protected override void Setup(FakeUpdateCommand command)
         {
             command.Data = Fixture.Create<string>();
         }

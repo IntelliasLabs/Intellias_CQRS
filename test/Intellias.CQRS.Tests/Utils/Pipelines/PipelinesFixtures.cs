@@ -17,13 +17,14 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines
             return Fixtures.CommandFromBuilder(f => new FakeCreateCommandBuilder(f, seed));
         }
 
-        public FakeCreatedIntegrationEvent FakeCreatedIntegrationEvent(FakeCreateCommand command)
+        public FakeUpdateCommand FakeUpdateCommand()
         {
-            return Fixtures.IntegrationEvent<FakeCreatedIntegrationEvent>(command, e =>
-            {
-                e.SnapshotId = new SnapshotId(command.AggregateRootId, 0);
-                e.Data = command.Data;
-            });
+            return FakeUpdateCommand(new CommandSeed<FakeUpdateCommand>());
+        }
+
+        public FakeUpdateCommand FakeUpdateCommand(CommandSeed<FakeUpdateCommand> seed)
+        {
+            return Fixtures.CommandFromBuilder(f => new FakeUpdateCommandBuilder(f, seed));
         }
 
         public FakeDispatcherCommand FakeDispatcherCommand()
@@ -34,6 +35,15 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines
         public FakeDispatcherEvent FakeDispatcherEvent()
         {
             return Fixtures.IntegrationEvent<FakeDispatcherEvent>(FakeDispatcherCommand(), e => { });
+        }
+
+        public FakeCreatedIntegrationEvent FakeCreatedIntegrationEvent(FakeCreateCommand command)
+        {
+            return Fixtures.IntegrationEvent<FakeCreatedIntegrationEvent>(command, e =>
+            {
+                e.SnapshotId = new SnapshotId(command.AggregateRootId, 0);
+                e.Data = command.Data;
+            });
         }
     }
 }
