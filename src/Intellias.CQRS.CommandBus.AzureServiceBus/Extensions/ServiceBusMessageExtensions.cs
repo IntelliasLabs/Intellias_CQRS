@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Commands;
+using Intellias.CQRS.Core.Messages;
 using Microsoft.Azure.ServiceBus;
 
 namespace Intellias.CQRS.CommandBus.AzureServiceBus.Extensions
@@ -14,7 +15,7 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus.Extensions
                 ContentType = command.GetType().FullName,
                 PartitionKey = command.AggregateRootId,
                 CorrelationId = command.CorrelationId,
-                SessionId = command.CorrelationId,
+                SessionId = AbstractMessage.GlobalSessionId,
                 Label = command.GetType().Name
             };
     }

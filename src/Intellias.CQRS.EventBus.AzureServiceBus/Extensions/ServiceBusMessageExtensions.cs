@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Messages;
 using Microsoft.Azure.ServiceBus;
 
 namespace Intellias.CQRS.EventBus.AzureServiceBus.Extensions
@@ -22,7 +23,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus.Extensions
                 ContentType = @event.GetType().AssemblyQualifiedName,
                 PartitionKey = @event.AggregateRootId,
                 CorrelationId = @event.CorrelationId,
-                SessionId = @event.CorrelationId,
+                SessionId = AbstractMessage.GlobalSessionId,
                 Label = @event.GetType().Name
             };
     }

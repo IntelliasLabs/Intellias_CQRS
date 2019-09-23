@@ -9,6 +9,11 @@ namespace Intellias.CQRS.Core.Messages
     public abstract class AbstractMessage : IMessage
     {
         /// <summary>
+        /// Global session id.
+        /// </summary>
+        public const string GlobalSessionId = nameof(GlobalSessionId);
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AbstractMessage"/> class.
         /// </summary>
         protected AbstractMessage()
