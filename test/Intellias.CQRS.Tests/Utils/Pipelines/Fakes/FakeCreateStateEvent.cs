@@ -4,6 +4,6 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines.Fakes
 {
     public class FakeCreateStateEvent : Event
     {
-        public string Data { get; set; }
+        public string Data { get; set; } = string.Empty;
     }
 }
