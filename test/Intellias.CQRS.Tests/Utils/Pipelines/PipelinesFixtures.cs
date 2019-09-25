@@ -37,6 +37,11 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines
             return Fixtures.IntegrationEvent<FakeDispatcherEvent>(FakeDispatcherCommand(), e => { });
         }
 
+        public FakeCreatedIntegrationEvent FakeCreatedIntegrationEvent()
+        {
+            return FakeCreatedIntegrationEvent(FakeCreateCommand());
+        }
+
         public FakeCreatedIntegrationEvent FakeCreatedIntegrationEvent(FakeCreateCommand command)
         {
             return Fixtures.IntegrationEvent<FakeCreatedIntegrationEvent>(command, e =>
