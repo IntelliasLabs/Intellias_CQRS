@@ -42,7 +42,7 @@ namespace Intellias.CQRS.Core.Domain.Validation
         /// <summary>
         /// Created entry.
         /// </summary>
-        public T? Entry { get; }
+        public T Entry { get; }
 
         /// <summary>
         /// Creation errors.
@@ -54,7 +54,7 @@ namespace Intellias.CQRS.Core.Domain.Validation
         /// </summary>
         /// <param name="errors">Value of <see cref="Errors"/>.</param>
         /// <param name="entry">Value of <see cref="Entry"/>.</param>
-        public void Deconstruct(out IReadOnlyCollection<ExecutionError> errors, out T? entry)
+        public void Deconstruct(out IReadOnlyCollection<ExecutionError> errors, out T entry)
         {
             errors = Errors;
             entry = Entry;

@@ -49,13 +49,13 @@ namespace Intellias.CQRS.Tests.Core.Fakes
 
         private class Handler
         {
-            private Handler(Func<object, object?> handle, Type requestType)
+            private Handler(Func<object, object> handle, Type requestType)
             {
                 Handle = handle;
                 RequestType = requestType;
             }
 
-            public Func<object, object?> Handle { get; }
+            public Func<object, object> Handle { get; }
 
             public Type RequestType { get; }
 

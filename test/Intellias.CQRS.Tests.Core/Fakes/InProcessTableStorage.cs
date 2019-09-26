@@ -50,7 +50,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public void RemoveAt(int index) =>
             storage.RemoveAt(index);
 
-        private static string Serialize(object? entity) =>
+        private static string Serialize(object entity) =>
             JsonConvert.SerializeObject(entity, TableStorageJsonSerializerSettings.GetDefault());
 
         private static IEnumerable<T> Deserialize(IEnumerable<string> storage) =>

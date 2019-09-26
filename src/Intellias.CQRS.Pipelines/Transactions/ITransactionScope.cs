@@ -17,7 +17,7 @@ namespace Intellias.CQRS.Pipelines.Transactions
         /// <typeparam name="TAggregateRoot">Type of the aggregate.</typeparam>
         /// <typeparam name="TAggregateState">Type of the aggregate state.</typeparam>
         /// <returns>Found aggregate or null.</returns>
-        Task<TAggregateRoot?> FindAggregateAsync<TAggregateRoot, TAggregateState>(string aggregateId, AggregateExecutionContext context)
+        Task<TAggregateRoot> FindAggregateAsync<TAggregateRoot, TAggregateState>(string aggregateId, AggregateExecutionContext context)
             where TAggregateRoot : AggregateRoot<TAggregateState>
             where TAggregateState : AggregateState, new();
 

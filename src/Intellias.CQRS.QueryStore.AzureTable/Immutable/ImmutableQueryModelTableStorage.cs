@@ -29,7 +29,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
         }
 
         /// <inheritdoc />
-        public async Task<TQueryModel?> FindAsync(string id, int version)
+        public async Task<TQueryModel> FindAsync(string id, int version)
         {
             var result = await FindAsync(id, GetRowKey(version));
             return result?.DeserializeData();
@@ -48,7 +48,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
         }
 
         /// <inheritdoc />
-        public async Task<TQueryModel?> GetLatestAsync(string id)
+        public async Task<TQueryModel> GetLatestAsync(string id)
         {
             var entity = (await QueryFirstAsync(id, 1)).FirstOrDefault();
             return entity?.DeserializeData();

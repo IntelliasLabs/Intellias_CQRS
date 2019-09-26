@@ -72,7 +72,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
         /// <param name="continuationToken">Query continuation token.</param>
         /// <typeparam name="T">Table entity type.</typeparam>
         /// <returns>Query result.</returns>
-        public async Task<TableQuerySegment<T>> ExecuteQuerySegmentedAsync<T>(TableQuery<T> query, TableContinuationToken? continuationToken)
+        public async Task<TableQuerySegment<T>> ExecuteQuerySegmentedAsync<T>(TableQuery<T> query, TableContinuationToken continuationToken)
             where T : ITableEntity, new()
         {
             return await ExecuteCreateTablePolicy.ExecuteAsync(
@@ -80,11 +80,11 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
                 {
                     var policyTable = (CloudTable)context[TableKey];
                     var policyQuery = (TableQuery<T>)context[QueryKey];
-                    var policyContinuationToken = (TableContinuationToken?)context[ContinuationTokenKey];
+                    var policyContinuationToken = (TableContinuationToken)context[ContinuationTokenKey];
 
                     return policyTable.ExecuteQuerySegmentedAsync(policyQuery, policyContinuationToken);
                 },
-                new Dictionary<string, object?>
+                new Dictionary<string, object>
                 {
                     [TableKey] = table,
                     [QueryKey] = query,

@@ -29,7 +29,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
         }
 
         /// <inheritdoc />
-        public async Task<TQueryModel?> FindAsync(string id)
+        public async Task<TQueryModel> FindAsync(string id)
         {
             var result = await FindAsync(typeof(TQueryModel).Name, id);
             return result?.DeserializeData();
