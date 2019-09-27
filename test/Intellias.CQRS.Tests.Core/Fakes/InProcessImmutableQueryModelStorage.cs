@@ -19,10 +19,10 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             this.storage = storage;
         }
 
-        public Task<TQueryModel?> FindAsync(string id, int version)
+        public Task<TQueryModel> FindAsync(string id, int version)
         {
             var queryModel = storage.FirstOrDefault(q => q.Id == id && q.Version == version);
-            return Task.FromResult<TQueryModel?>(queryModel);
+            return Task.FromResult(queryModel);
         }
 
         public async Task<TQueryModel> GetAsync(string id, int version)
@@ -31,10 +31,10 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             return result ?? throw new KeyNotFoundException();
         }
 
-        public Task<TQueryModel?> GetLatestAsync(string id)
+        public Task<TQueryModel> GetLatestAsync(string id)
         {
             var queryModel = storage.Where(qm => qm.Id == id).OrderByDescending(qm => qm.Version).FirstOrDefault();
-            return Task.FromResult<TQueryModel?>(queryModel);
+            return Task.FromResult(queryModel);
         }
 
         public async Task<TQueryModel> CreateAsync(TQueryModel model)

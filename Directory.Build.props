@@ -6,7 +6,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <DebugType>Full</DebugType>
     <LangVersion>8.0</LangVersion>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
   <PropertyGroup Label="Common properties">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

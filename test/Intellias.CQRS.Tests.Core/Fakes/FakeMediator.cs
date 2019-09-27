@@ -9,13 +9,18 @@ namespace Intellias.CQRS.Tests.Core.Fakes
 {
     public class FakeMediator : IMediator
     {
-        private readonly List<INotification> notifications = new List<INotification>();
+        private readonly List<object> sentRequests = new List<object>();
+        private readonly List<INotification> publishedNotifications = new List<INotification>();
         private readonly List<Handler> handlers = new List<Handler>();
 
-        public IReadOnlyList<INotification> PublishedNotifications => notifications.AsReadOnly();
+        public IReadOnlyList<object> SentRequests => sentRequests.AsReadOnly();
+
+        public IReadOnlyList<INotification> PublishedNotifications => publishedNotifications.AsReadOnly();
 
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
+            sentRequests.Add(request);
+
             var handler = handlers.FirstOrDefault(h => h.RequestType == request.GetType())
                 ?? throw new KeyNotFoundException($"No handler for request type of '{request.GetType()}' is found.");
 
@@ -26,7 +31,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
 
         public Task Publish(object notification, CancellationToken cancellationToken = default)
         {
-            notifications.Add((INotification)notification);
+            publishedNotifications.Add((INotification)notification);
             return Task.CompletedTask;
         }
 
@@ -44,13 +49,13 @@ namespace Intellias.CQRS.Tests.Core.Fakes
 
         private class Handler
         {
-            private Handler(Func<object, object?> handle, Type requestType)
+            private Handler(Func<object, object> handle, Type requestType)
             {
                 Handle = handle;
                 RequestType = requestType;
             }
 
-            public Func<object, object?> Handle { get; }
+            public Func<object, object> Handle { get; }
 
             public Type RequestType { get; }
 

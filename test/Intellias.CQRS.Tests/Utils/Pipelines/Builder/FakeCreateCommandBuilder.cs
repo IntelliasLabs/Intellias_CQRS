@@ -14,7 +14,6 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines.Builder
 
         protected override void Setup(FakeCreateCommand command)
         {
-            command.AggregateRootId = Unified.NewCode();
             command.Data = Fixture.Create<string>();
         }
     }

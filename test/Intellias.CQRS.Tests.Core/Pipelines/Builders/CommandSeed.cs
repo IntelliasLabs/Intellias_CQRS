@@ -6,10 +6,10 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.Builders
     public class CommandSeed<TCommand>
         where TCommand : Command
     {
-        public Action<TCommand>? Setup { get; set; }
+        public Action<TCommand> Setup { get; set; }
 
         public Guid? UserId { get; set; }
 
-        public string AggregateRootId { get; set; } = string.Empty;
+        public string AggregateRootId { get; set; }
     }
 }

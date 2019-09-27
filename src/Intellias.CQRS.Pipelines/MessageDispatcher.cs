@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Pipelines.CommandHandlers;
 using Intellias.CQRS.Pipelines.EventHandlers.Notifications;
 using MediatR;
 using Newtonsoft.Json;
@@ -24,6 +26,36 @@ namespace Intellias.CQRS.Pipelines
         public MessageDispatcher(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+        /// <inheritdoc />
+        public async Task DispatchCommandAsync(string message)
+        {
+            var messageObject = DeserializeMessage(message);
+            var messageType = messageObject.GetType();
+
+            var sendMethodInfo = mediator.GetType().GetMethod(nameof(IMediator.Send));
+            if (sendMethodInfo == null)
+            {
+                throw new InvalidOperationException($"Unable to resolve '{nameof(IMediator.Send)}' from '{mediator.GetType()}'.");
+            }
+
+            try
+            {
+                var requestType = typeof(CommandRequest<>).MakeGenericType(messageType);
+                var request = Activator.CreateInstance(requestType, messageObject);
+
+                var sendGenericMethodInfo = sendMethodInfo.MakeGenericMethod(typeof(IExecutionResult));
+                var result = (Task<IExecutionResult>)sendGenericMethodInfo.Invoke(mediator, new[] { request, CancellationToken.None });
+
+                await result;
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidOperationException(
+                    $"Unhandled error occured during dispatching message with id '{messageObject.Id}' of type '{messageObject.GetType()}'.",
+                    exception);
+            }
         }
 
         /// <inheritdoc />

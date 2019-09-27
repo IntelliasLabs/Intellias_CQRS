@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProjectGuid>{d0245f14-6dc2-452d-9d03-9be399c5f7f1}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Pipelines\Intellias.CQRS.Pipelines.csproj" />
+  </ItemGroup>
+</Project>

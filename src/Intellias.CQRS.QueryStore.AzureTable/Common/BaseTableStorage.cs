@@ -49,7 +49,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
         /// <param name="partitionKey">Partition key.</param>
         /// <param name="rowKey">Row key.</param>
         /// <returns>Found entity or NULL.</returns>
-        protected async Task<TTableEntity?> FindAsync(string partitionKey, string rowKey)
+        protected async Task<TTableEntity> FindAsync(string partitionKey, string rowKey)
         {
             var operation = TableOperation.Retrieve<TTableEntity>(partitionKey, rowKey);
             var result = await TableProxy.ExecuteAsync(operation);

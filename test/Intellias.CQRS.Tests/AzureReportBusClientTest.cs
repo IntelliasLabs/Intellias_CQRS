@@ -36,7 +36,7 @@ namespace Intellias.CQRS.Tests
             var logMock = new Mock<ILogger<AzureReportBusClientV2>>();
             var reportBus = new AzureReportBusClientV2(logMock.Object, mock.Object);
 
-            IMessage? expectedMessage = null;
+            IMessage expectedMessage = null;
 
             reportBus.Subscribe(message =>
             {
