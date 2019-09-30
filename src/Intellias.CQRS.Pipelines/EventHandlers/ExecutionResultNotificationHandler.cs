@@ -15,44 +15,47 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
         INotificationHandler<EventAlreadyAppliedNotification>
     {
         private readonly IReportBus reportBus;
-        private readonly ILogger<ExecutionResultNotificationHandler> log;
+        private readonly ILogger<ExecutionResultNotificationHandler> logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecutionResultNotificationHandler"/> class.
         /// </summary>
         /// <param name="reportBus">Report bus.</param>
-        /// <param name="log">Logger.</param>
+        /// <param name="logger">Logger.</param>
         public ExecutionResultNotificationHandler(
             IReportBus reportBus,
-            ILogger<ExecutionResultNotificationHandler> log)
+            ILogger<ExecutionResultNotificationHandler> logger)
         {
             this.reportBus = reportBus;
-            this.log = log;
+            this.logger = logger;
         }
 
         /// <summary>
-        /// Handle QueryModelUpdatedNotification.
+        /// Handle <see cref="QueryModelUpdatedNotification"/>.
         /// </summary>
         /// <param name="notification">Notification.</param>
         /// <param name="cancellationToken">CancellationToken.</param>
         /// <returns>Task.</returns>
         public async Task Handle(QueryModelUpdatedNotification notification, CancellationToken cancellationToken)
         {
-            if (!notification.IsReplay)
+            if (notification.IsReplay || notification.IsPrivate)
             {
-                await reportBus.PublishAsync(notification.Signal);
+                logger.LogInformation($"Notification of signal '{notification.Signal.GetType()}' is replay or private and wouldn't be published.");
+                return;
             }
+
+            await reportBus.PublishAsync(notification.Signal);
         }
 
         /// <summary>
-        /// Handle EventAlreadyAppliedNotification.
+        /// Handle <see cref="EventAlreadyAppliedNotification"/>.
         /// </summary>
         /// <param name="notification">Notification.</param>
         /// <param name="cancellationToken">CancellationToken.</param>
         /// <returns>Task.</returns>
         public Task Handle(EventAlreadyAppliedNotification notification, CancellationToken cancellationToken)
         {
-            log.LogInformation($"Event '{notification.Event.Id}' already applied to query model '{notification.QueryModelType}'.");
+            logger.LogInformation($"Event '{notification.Event.Id}' already applied to query model '{notification.QueryModelType}'.");
 
             return Task.CompletedTask;
         }

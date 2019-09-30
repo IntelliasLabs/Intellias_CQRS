@@ -25,7 +25,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         }
 
         [Fact]
-        public async Task HandleQueryModelUpdatedNotification_IsReplay_PublishesSignal()
+        public async Task HandleQueryModelUpdatedNotification_IsReplay_DoesntPublishSignal()
         {
             var signal = new QueryModelUpdatedSignal("x", 0, typeof(int));
             var notification = new QueryModelUpdatedNotification(signal)
@@ -39,7 +39,21 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         }
 
         [Fact]
-        public async Task HandleQueryModelUpdatedNotification_IsNotReplay_DoesntPublishesSignal()
+        public async Task HandleQueryModelUpdatedNotification_IsPrivate_DoesntPublishSignal()
+        {
+            var signal = new QueryModelUpdatedSignal("x", 0, typeof(int));
+            var notification = new QueryModelUpdatedNotification(signal)
+            {
+                IsPrivate = true
+            };
+
+            await handler.Handle(notification, CancellationToken.None);
+
+            reportBusStore.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task HandleQueryModelUpdatedNotification_IsNotReplay_PublishesSignal()
         {
             var signal = new QueryModelUpdatedSignal("x", 0, typeof(int));
             var notification = new QueryModelUpdatedNotification(signal)

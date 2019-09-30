@@ -48,6 +48,11 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
         protected IMediator Mediator { get; }
 
         /// <summary>
+        /// Should be true if <typeparamref name="TQueryModel"/> is private and changes in it shouldn't publish signals.
+        /// </summary>
+        protected virtual bool IsPrivateQueryModel { get; } = false;
+
+        /// <summary>
         /// Updates query model.
         /// </summary>
         /// <param name="notification">Event notification.</param>
@@ -81,7 +86,10 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
 
             // Save updated query model.
             var created = await Writer.CreateAsync(queryModel);
-            await Mediator.Publish(new QueryModelUpdatedNotification(@event, created));
+            await Mediator.Publish(new QueryModelUpdatedNotification(@event, created)
+            {
+                IsPrivate = IsPrivateQueryModel
+            });
         }
     }
 }
