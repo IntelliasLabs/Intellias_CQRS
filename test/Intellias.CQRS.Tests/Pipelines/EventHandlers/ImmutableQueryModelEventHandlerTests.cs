@@ -51,6 +51,31 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
                 .Which.Signal.QueryModelId.Should().BeEquivalentTo(queryModel.Id);
         }
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task HandleAsync_SetupQueryModelPrivacy_NotificationPrivacyIsCorrect(bool isPrivate)
+        {
+            // Setup query model privacy.
+            handler.SetupIsPrivateQueryModel(isPrivate);
+
+            var command = Fixtures.Pipelines.FakeCreateCommand();
+            var @event = Fixtures.Pipelines.FakeCreatedIntegrationEvent(command);
+            var notification = new IntegrationEventNotification<FakeCreatedIntegrationEvent>(@event);
+
+            await handler.Handle(notification, CancellationToken.None);
+
+            // Query model is created.
+            var queryModel = await storage.GetAsync(@event.SnapshotId.EntryId, @event.SnapshotId.EntryVersion);
+
+            queryModel.Should().NotBeNull();
+            queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent(@event.Id, @event.Created));
+
+            // Query model updated notification privacy is correct.
+            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelUpdatedNotification>()
+                .Which.IsPrivate.Should().Be(isPrivate);
+        }
+
         [Fact]
         public async Task HandleAsync_EventAlreadyApplied_PublishesAlreadyAppliedNotification()
         {
@@ -80,12 +105,21 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         private class DummyImmutableQueryModelEventHandler : ImmutableQueryModelEventHandler<FakeImmutableQueryModel>,
             INotificationHandler<IntegrationEventNotification<FakeCreatedIntegrationEvent>>
         {
+            private bool isPrivateQueryModel;
+
             public DummyImmutableQueryModelEventHandler(
                 IImmutableQueryModelReader<FakeImmutableQueryModel> reader,
                 IImmutableQueryModelWriter<FakeImmutableQueryModel> writer,
                 IMediator mediator)
                 : base(reader, writer, mediator)
             {
+            }
+
+            protected override bool IsPrivateQueryModel => isPrivateQueryModel;
+
+            public void SetupIsPrivateQueryModel(bool value)
+            {
+                isPrivateQueryModel = value;
             }
 
             public Task Handle(IntegrationEventNotification<FakeCreatedIntegrationEvent> notification, CancellationToken cancellationToken)
