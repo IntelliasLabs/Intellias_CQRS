@@ -5,6 +5,7 @@ using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.QueryStore.AzureTable.Mutable;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
+using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
 using Intellias.CQRS.Tests.Core.Queries;
 using Intellias.CQRS.Tests.Fakes;
 using Intellias.CQRS.Tests.Utils;

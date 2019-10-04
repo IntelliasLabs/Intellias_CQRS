@@ -3,12 +3,17 @@ using System.Linq;
 using FluentAssertions.Equivalency;
 using Intellias.CQRS.Core.Events;
 
-namespace Intellias.CQRS.Tests.Utils.AssertionRules
+namespace Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules
 {
+    /// <summary>
+    /// Selection rule for comparing <see cref="IIntegrationEvent"/>.
+    /// </summary>
     public class IntegrationEventSelectionRule : IMemberSelectionRule
     {
+        /// <inheritdoc />
         public bool IncludesMembers => false;
 
+        /// <inheritdoc />
         public IEnumerable<SelectedMemberInfo> SelectMembers(
             IEnumerable<SelectedMemberInfo> selectedMembers,
             IMemberInfo context,

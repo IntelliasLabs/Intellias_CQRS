@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Pipelines.CommandHandlers.Behaviors;
+using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
 using Intellias.CQRS.Tests.Core.Pipelines.Builders;
 using Intellias.CQRS.Tests.Utils;
 using Intellias.CQRS.Tests.Utils.Pipelines.Fakes;

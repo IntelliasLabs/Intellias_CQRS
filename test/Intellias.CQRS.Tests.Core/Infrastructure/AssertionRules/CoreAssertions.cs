@@ -2,12 +2,20 @@ using FluentAssertions.Equivalency;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries.Immutable;
 using Intellias.CQRS.Core.Queries.Mutable;
-using Intellias.CQRS.Tests.Utils.AssertionRules;
 
-namespace Intellias.CQRS.Tests.Utils
+namespace Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules
 {
-    public static class Assertions
+    /// <summary>
+    /// Assertion rules for solution.
+    /// </summary>
+    public static class CoreAssertions
     {
+        /// <summary>
+        /// Assertion rule for <see cref="TIntegrationEvent"/>.
+        /// </summary>
+        /// <param name="options">Assertion options.</param>
+        /// <typeparam name="TIntegrationEvent">Type of the integration event.</typeparam>
+        /// <returns>Configured assertion.</returns>
         public static EquivalencyAssertionOptions<TIntegrationEvent> ForIntegrationEvent<TIntegrationEvent>(
             this EquivalencyAssertionOptions<TIntegrationEvent> options)
             where TIntegrationEvent : IntegrationEvent
@@ -15,6 +23,12 @@ namespace Intellias.CQRS.Tests.Utils
                 .Using(new IntegrationEventSelectionRule())
                 .ComparingByMembers<TIntegrationEvent>();
 
+        /// <summary>
+        /// Assertion rule for <see cref="TMutableQueryModel"/>.
+        /// </summary>
+        /// <param name="options">Assertion options.</param>
+        /// <typeparam name="TMutableQueryModel">Type of the query model.</typeparam>
+        /// <returns>Configured assertion.</returns>
         public static EquivalencyAssertionOptions<TMutableQueryModel> ForMutableQueryModel<TMutableQueryModel>(
             this EquivalencyAssertionOptions<TMutableQueryModel> options)
             where TMutableQueryModel : IMutableQueryModel
@@ -22,6 +36,12 @@ namespace Intellias.CQRS.Tests.Utils
                 .Using(new MutableQueryModelSelectionRule())
                 .ComparingByMembers<TMutableQueryModel>();
 
+        /// <summary>
+        /// Assertion rule for <see cref="TImmutableQueryModel"/>.
+        /// </summary>
+        /// <param name="options">Assertion options.</param>
+        /// <typeparam name="TImmutableQueryModel">Type of the query model.</typeparam>
+        /// <returns>Configured assertion.</returns>
         public static EquivalencyAssertionOptions<TImmutableQueryModel> ForImmutableQueryModel<TImmutableQueryModel>(
             this EquivalencyAssertionOptions<TImmutableQueryModel> options)
             where TImmutableQueryModel : IImmutableQueryModel
