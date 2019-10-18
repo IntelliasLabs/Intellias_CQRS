@@ -13,9 +13,6 @@ using Xunit.Abstractions;
 
 namespace Intellias.CQRS.Compatibility.Tests
 {
-    /// <summary>
-    /// CrossRepoTest.
-    /// </summary>
     public class CrossRepoTest
     {
         private const string BasePath = "https://IntelliasTS@dev.azure.com/IntelliasTS/IntelliGrowth/_git/";
@@ -23,10 +20,6 @@ namespace Intellias.CQRS.Compatibility.Tests
         private readonly List<string> sourceFiles;
         private readonly ITestOutputHelper output;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CrossRepoTest"/> class.
-        /// </summary>
-        /// <param name="output">ITestOutputHelper.</param>
         public CrossRepoTest(ITestOutputHelper output)
         {
             var currentPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -36,10 +29,6 @@ namespace Intellias.CQRS.Compatibility.Tests
             this.output = output;
         }
 
-        /// <summary>
-        /// IntelliGrowthCompetenciesTest.
-        /// </summary>
-        /// <param name="repoName">name of IntelliGrowth repo.</param>
         [Theory]
         [InlineData("IntelliGrowth_Identity")]
         [InlineData("IntelliGrowth_Competencies")]
@@ -84,33 +73,6 @@ namespace Intellias.CQRS.Compatibility.Tests
             finally
             {
                 DeleteDirectory(repoPath);
-            }
-        }
-
-        private void DotNet(string args)
-        {
-            using (var process = new Process())
-            {
-                process.StartInfo.FileName = "dotnet";
-                process.StartInfo.Arguments = args;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.OutputDataReceived += (sender, e) =>
-                {
-                    if (e.Data != null)
-                    {
-                        output.WriteLine(e.Data);
-                        Trace.WriteLine(e.Data);
-                    }
-                };
-                process.Start();
-                process.BeginOutputReadLine();
-                if (!process.WaitForExit(60 * 1000))
-                {
-                    process.Kill();
-                }
-
-                Assert.Equal(0, process.ExitCode);
             }
         }
 
@@ -165,6 +127,33 @@ namespace Intellias.CQRS.Compatibility.Tests
             }
 
             Directory.Delete(directory, false);
+        }
+
+        private void DotNet(string args)
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "dotnet";
+                process.StartInfo.Arguments = args;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.OutputDataReceived += (sender, e) =>
+                {
+                    if (e.Data != null)
+                    {
+                        output.WriteLine(e.Data);
+                        Trace.WriteLine(e.Data);
+                    }
+                };
+                process.Start();
+                process.BeginOutputReadLine();
+                if (!process.WaitForExit(60 * 1000))
+                {
+                    process.Kill();
+                }
+
+                Assert.Equal(0, process.ExitCode);
+            }
         }
 
         private void CloneRepo(string name, string repoPath)

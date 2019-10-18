@@ -5,15 +5,15 @@ using Intellias.CQRS.Core.Messages;
 namespace Intellias.CQRS.Tests.Core.Commands
 {
     /// <summary>
-    /// Fake extensions for commands
+    /// Fake extensions for commands.
     /// </summary>
     public static class FakeCommandExtensions
     {
         /// <summary>
         /// Wraps command with some defaults properies like Id, CorrelationId
-        /// and metadata fields UserId, Roles to pass validation
+        /// and metadata fields UserId, Roles to pass validation.
         /// </summary>
-        /// <param name="cmd"></param>
+        /// <param name="cmd">Comamnd.</param>
         public static void Wrap(this Command cmd)
         {
             cmd.Id = Unified.NewCode();

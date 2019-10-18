@@ -6,7 +6,7 @@ namespace Intellias.CQRS.Tests.Core.Events
     public class TestUpdatedEvent : Event
     {
         /// <summary>
-        /// TestData
+        /// TestData.
         /// </summary>
         public string TestData { get; set; } = string.Empty;
     }

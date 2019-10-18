@@ -7,7 +7,7 @@ using Intellias.CQRS.Core.Messages;
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <summary>
-    /// Report bus for testing purposes
+    /// Report bus for testing purposes.
     /// </summary>
     public class FakeReportBusClient : IReportBusClient
     {
@@ -20,10 +20,10 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
-        /// Push test event to bus
+        /// Push test event to bus.
         /// </summary>
-        /// <param name="message">message</param>
-        /// <returns></returns>
+        /// <param name="message">Message.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task PushTestEventAsync(IMessage message)
         {
             foreach (var handler in handlers)

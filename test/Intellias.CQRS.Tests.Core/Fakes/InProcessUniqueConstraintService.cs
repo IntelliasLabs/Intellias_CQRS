@@ -7,19 +7,14 @@ using Intellias.CQRS.DomainServices;
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
     /// <summary>
-    /// InProcessUniqueConstraintService
+    /// In process implementation of <see cref="IUniqueConstraintService"/>.
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class InProcessUniqueConstraintService : IUniqueConstraintService
     {
         private readonly Dictionary<string, HashSet<string>> cache = new Dictionary<string, HashSet<string>>();
 
-        /// <summary>
-        /// RemoveConstraintAsync
-        /// </summary>
-        /// <param name="indexName"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<IExecutionResult> RemoveConstraintAsync(string indexName, string value)
         {
             if (!cache.ContainsKey(indexName))
@@ -36,12 +31,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             return await Task.FromResult(new SuccessfulResult());
         }
 
-        /// <summary>
-        /// ReserveConstraintAsync
-        /// </summary>
-        /// <param name="indexName"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<IExecutionResult> ReserveConstraintAsync(string indexName, string value)
         {
             if (!cache.ContainsKey(indexName))
@@ -58,13 +48,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             return await Task.FromResult(new SuccessfulResult());
         }
 
-        /// <summary>
-        /// UpdateConstraintAsync
-        /// </summary>
-        /// <param name="indexName"></param>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<IExecutionResult> UpdateConstraintAsync(string indexName, string oldValue, string newValue)
         {
             if (!cache.ContainsKey(indexName))
