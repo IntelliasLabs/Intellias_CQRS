@@ -1,5 +1,4 @@
 using AutoFixture;
-using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core.Pipelines.Builders;
 using Intellias.CQRS.Tests.Utils.Pipelines.Fakes;
 

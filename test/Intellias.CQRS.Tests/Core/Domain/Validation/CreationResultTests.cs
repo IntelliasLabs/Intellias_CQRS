@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Intellias.CQRS.Core.Domain.Validation;
-using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Tests.Utils;
 using Xunit;
@@ -50,7 +49,6 @@ namespace Intellias.CQRS.Tests.Core.Domain.Validation
 
         private class DummyEntry
         {
-            public string Data { get; set; } = Unified.NewCode();
         }
     }
 }

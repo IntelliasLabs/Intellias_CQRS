@@ -9,14 +9,8 @@ using Xunit;
 
 namespace Intellias.CQRS.Tests
 {
-    /// <summary>
-    /// WhenResolvingHandlers
-    /// </summary>
     public class WhenResolvingHandlers : TestBase
     {
-        /// <summary>
-        /// ShouldReceiveCompetencyEventHandler
-        /// </summary>
         [Fact]
         public void ShouldReceiveDemoEventHandler()
         {
@@ -30,9 +24,6 @@ namespace Intellias.CQRS.Tests
             Assert.True(result.First().GetType() == typeof(DemoEventHandlers));
         }
 
-        /// <summary>
-        /// ShouldReceiveCompetencyEventHandler
-        /// </summary>
         [Fact]
         public void ShouldReceiveDerivedEventHanderOnlyWhenRaisedDerivedEvent()
         {
@@ -46,9 +37,6 @@ namespace Intellias.CQRS.Tests
             Assert.True(wrappedHandler.GetType() == typeof(WrappedEventHandler));
         }
 
-        /// <summary>
-        /// ShouldReceiveCompetencyEventHandler
-        /// </summary>
         [Fact]
         public void ShouldRaiseErrorOnIllegalAssembly()
         {

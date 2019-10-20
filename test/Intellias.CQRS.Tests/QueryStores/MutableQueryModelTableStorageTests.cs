@@ -8,7 +8,6 @@ using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
 using Intellias.CQRS.Tests.Core.Queries;
 using Intellias.CQRS.Tests.Fakes;
-using Intellias.CQRS.Tests.Utils;
 using Intellias.CQRS.Tests.Utils.StorageAccount;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Shared.Protocol;

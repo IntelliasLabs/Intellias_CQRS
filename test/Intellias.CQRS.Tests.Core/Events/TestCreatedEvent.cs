@@ -2,11 +2,13 @@
 
 namespace Intellias.CQRS.Tests.Core.Events
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Test created event.
+    /// </summary>
     public class TestCreatedEvent : Event
     {
         /// <summary>
-        /// TestData
+        /// TestData.
         /// </summary>
         public string TestData { get; set; } = string.Empty;
     }

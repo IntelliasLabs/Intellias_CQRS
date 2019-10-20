@@ -8,7 +8,7 @@ using Intellias.CQRS.Tests.Core.Queries;
 namespace Intellias.CQRS.Tests.Core.EventHandlers
 {
     /// <summary>
-    /// Demo command handlers
+    /// Demo event handler.
     /// </summary>
     public class DemoEventHandlers :
         IEventHandler<TestCreatedEvent>,
@@ -18,19 +18,15 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
         private readonly IQueryModelWriter<TestQueryModel> store;
 
         /// <summary>
-        /// DemoEventHandlers
+        /// Initializes a new instance of the <see cref="DemoEventHandlers"/> class.
         /// </summary>
-        /// <param name="store"></param>
+        /// <param name="store">Query model writer.</param>
         public DemoEventHandlers(IQueryModelWriter<TestQueryModel> store)
         {
             this.store = store;
         }
 
-        /// <summary>
-        /// Applies create event
-        /// </summary>
-        /// <param name="event">Event</param>
-        /// <returns>Result</returns>
+        /// <inheritdoc />
         public async Task HandleAsync(TestCreatedEvent @event)
         {
             await store.CreateAsync(new TestQueryModel
@@ -42,21 +38,13 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
             });
         }
 
-        /// <summary>
-        /// Applies deleted event
-        /// </summary>
-        /// <param name="event">Event</param>
-        /// <returns>Result</returns>
+        /// <inheritdoc />
         public async Task HandleAsync(TestDeletedEvent @event)
         {
             await store.DeleteAsync(@event.AggregateRootId);
         }
 
-        /// <summary>
-        /// Applies updated event
-        /// </summary>
-        /// <param name="event">Event</param>
-        /// <returns>Result</returns>
+        /// <inheritdoc />
         public async Task HandleAsync(TestUpdatedEvent @event)
         {
             await store.UpdateAsync(@event.AggregateRootId, model =>

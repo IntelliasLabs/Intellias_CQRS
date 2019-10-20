@@ -6,17 +6,12 @@ namespace Intellias.CQRS.Tests.Utils
 {
     public class TestsConfiguration
     {
-        private static readonly IConfiguration Configuration;
-
-        static TestsConfiguration()
-        {
-            Configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false, true)
-                .AddUserSecrets(typeof(TestsConfiguration).Assembly)
-                .AddEnvironmentVariables()
-                .Build();
-        }
+        private static readonly IConfiguration Configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", false, true)
+            .AddUserSecrets(typeof(TestsConfiguration).Assembly)
+            .AddEnvironmentVariables()
+            .Build();
 
         public TestsConfiguration()
         {
