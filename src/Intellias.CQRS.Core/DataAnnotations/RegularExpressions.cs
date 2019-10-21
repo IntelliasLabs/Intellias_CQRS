@@ -6,9 +6,9 @@ namespace Intellias.CQRS.Core.DataAnnotations
     public static class RegularExpressions
     {
         /// <summary>
-        /// Regex for a string that contains only alphanumeric characters.
+        /// Regex for a string that could be used as name identifier.
         /// </summary>
-        public const string Alphanumeric = "^[a-zA-Z0-9_]*$";
+        public const string NameIdentifier = @"^[a-zA-Z0-9_\-+""'*#@&(),.:;/ ]*$";
 
         /// <summary>
         /// Regex for a string that contains a simplified list of ASCII characters.

@@ -8,15 +8,18 @@ namespace Intellias.CQRS.Tests.Core.DataAnnotations
     public class RegularExpressionsTests
     {
         [Theory]
-        [InlineData("abc123_", true)]
-        [InlineData("_123abc", true)]
-        [InlineData("abc-", false)]
-        [InlineData("#", false)]
-        [InlineData("abc abc", false)]
+        [InlineData("C#", true)]
+        [InlineData("ASP .NET Core", true)]
+        [InlineData("C++", true)]
+        [InlineData("abcezAABDSCXZ0568969_-+\"'*#@&(),.:;/ ", true)]
+        [InlineData("\n", true)]
+        [InlineData("\\", false)]
         [InlineData("кирилица", false)]
-        public void Match_AlphaNumeric_IsCorrect(string input, bool isMatch)
+        [InlineData("^", false)]
+        [InlineData("%", false)]
+        public void Match_NameIdentifier_IsCorrect(string input, bool isMatch)
         {
-            Regex.IsMatch(input, RegularExpressions.Alphanumeric).Should().Be(isMatch);
+            Regex.IsMatch(input, RegularExpressions.NameIdentifier).Should().Be(isMatch);
         }
 
         [Theory]
