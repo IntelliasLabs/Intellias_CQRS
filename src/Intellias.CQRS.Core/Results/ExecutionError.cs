@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Intellias.CQRS.Core.Results.Errors;
+using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Core.Results
 {
@@ -10,6 +11,45 @@ namespace Intellias.CQRS.Core.Results
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecutionError"/> class.
         /// </summary>
+        /// <param name="errorCodeInfo">Error Code Info.</param>
+        public ExecutionError(ErrorCodeInfo errorCodeInfo)
+        {
+            CodeInfo = errorCodeInfo;
+            Code = errorCodeInfo.Code;
+            Message = errorCodeInfo.Message;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExecutionError"/> class.
+        /// </summary>
+        /// <param name="errorCodeInfo">Error Code Info.</param>
+        /// <param name="source">Source.</param>
+        public ExecutionError(ErrorCodeInfo errorCodeInfo, string source)
+        {
+            CodeInfo = errorCodeInfo;
+            Source = source;
+            Code = errorCodeInfo.Code;
+            Message = errorCodeInfo.Message;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExecutionError"/> class.
+        /// </summary>
+        /// <param name="errorCodeInfo">Error Code Info.</param>
+        /// <param name="source">Source.</param>
+        /// <param name="customMessage">Custom message.</param>
+        public ExecutionError(ErrorCodeInfo errorCodeInfo, string source, string customMessage)
+        {
+            CodeInfo = errorCodeInfo;
+            Source = source;
+            Code = errorCodeInfo.Code;
+            Message = customMessage;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExecutionError"/> class.
+        /// LEGACY.
+        /// </summary>
         /// <param name="message">Reason of failure.</param>
         public ExecutionError(string message)
         {
@@ -19,6 +59,7 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecutionError"/> class.
+        /// LEGACY.
         /// </summary>
         /// <param name="source">Source.</param>
         /// <param name="message">Error Message.</param>
@@ -31,6 +72,7 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecutionError"/> class.
+        /// LEGACY.
         /// </summary>
         /// <param name="code">Code.</param>
         /// <param name="source">Source.</param>
@@ -49,6 +91,12 @@ namespace Intellias.CQRS.Core.Results
         protected ExecutionError()
         {
         }
+
+        /// <summary>
+        /// Error code.
+        /// </summary>
+        [JsonProperty]
+        public ErrorCodeInfo CodeInfo { get; protected set; }
 
         /// <summary>
         /// Error code.

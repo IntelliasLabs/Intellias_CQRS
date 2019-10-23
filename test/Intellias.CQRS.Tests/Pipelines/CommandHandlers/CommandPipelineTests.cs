@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 using Intellias.CQRS.Pipelines.CommandHandlers.Behaviors;
 using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
 using Intellias.CQRS.Tests.Core.Pipelines.Builders;
@@ -44,8 +46,9 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
             var updateResult = await host.SendAsync(updateCommand);
 
             // Ensure returns unhandled error.
-            updateResult.Should().BeOfType<FailedResult>()
-                .Which.Code.Should().Be(ErrorCodes.UnhandledError);
+            updateResult.Should().BeOfType<FailedResult>().Which.Code.Should().Be(CoreErrorCodes.ValidationFailed.Code);
+            updateResult.Should().BeOfType<FailedResult>().Which.Details.Single()
+              .Code.Should().Be(CoreErrorCodes.AggregateRootNotFound.Code);
         }
 
         [Fact]
@@ -67,7 +70,7 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
 
             // Ensure returns validation error.
             updateResult.Should().BeOfType<FailedResult>()
-                .Which.Code.Should().Be(ErrorCodes.ValidationFailed);
+                .Which.Code.Should().Be(CoreErrorCodes.ValidationFailed.Code);
         }
 
         [Fact]

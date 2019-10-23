@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Intellias.CQRS.Core.Results.Errors;
 using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Core.Results
@@ -13,7 +14,37 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FailedResult"/> class.
-        /// Failed Result.
+        /// </summary>
+        /// <param name="errorCodeInfo">Error Code Info.</param>
+        public FailedResult(ErrorCodeInfo errorCodeInfo)
+            : base(errorCodeInfo)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FailedResult"/> class.
+        /// </summary>
+        /// <param name="errorCodeInfo">Error Code Info.</param>
+        /// <param name="source">Source.</param>
+        public FailedResult(ErrorCodeInfo errorCodeInfo, string source)
+            : base(errorCodeInfo, source)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FailedResult"/> class.
+        /// </summary>
+        /// <param name="errorCodeInfo">Error Code Info.</param>
+        /// <param name="source">Source.</param>
+        /// <param name="customMessage">Custom message.</param>
+        public FailedResult(ErrorCodeInfo errorCodeInfo, string source, string customMessage)
+            : base(errorCodeInfo, source, customMessage)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FailedResult"/> class.
+        /// LEGACY.
         /// </summary>
         /// <param name="message">Error Message.</param>
         public FailedResult(string message)
@@ -23,7 +54,7 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FailedResult"/> class.
-        /// Execution Error.
+        /// LEGACY.
         /// </summary>
         /// <param name="code">Code.</param>
         /// <param name="message">Error Message.</param>
@@ -34,16 +65,14 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FailedResult"/> class.
-        /// Execution Error.
+        /// LEGACY.
         /// </summary>
         /// <param name="code">Code.</param>
         /// <param name="source">Source.</param>
         /// <param name="message">Error Message.</param>
         public FailedResult(string code, string source, string message)
+            : base(code, source, message)
         {
-            Code = code;
-            Source = source;
-            Message = message;
         }
 
         [JsonConstructor]
@@ -60,6 +89,55 @@ namespace Intellias.CQRS.Core.Results
         /// </summary>
         [JsonIgnore]
         public IReadOnlyCollection<ExecutionError> Details => details;
+
+        /// <summary>
+        /// Builds Failed Result using command property pass and default message.
+        /// </summary>
+        /// <param name="externalErrorCodeInfo">External Error Code Info.</param>
+        /// <param name="detailsCodeInfo">Internal Error Code Info.</param>
+        /// <returns>FailedResult.</returns>
+        public static FailedResult CreateWithInternal(ErrorCodeInfo externalErrorCodeInfo, ErrorCodeInfo detailsCodeInfo)
+        {
+            return CreateWithInternal(externalErrorCodeInfo, detailsCodeInfo, detailsCodeInfo.Message);
+        }
+
+        /// <summary>
+        /// Builds Failed Result using command property pass and custom message.
+        /// </summary>
+        /// <param name="externalErrorCodeInfo">External Error Code Info.</param>
+        /// <param name="detailsCodeInfo">Internal Error Code Info.</param>
+        /// <param name="errorMessage">Error message.</param>
+        /// <returns>FailedResult.</returns>
+        public static FailedResult CreateWithInternal(
+            ErrorCodeInfo externalErrorCodeInfo,
+            ErrorCodeInfo detailsCodeInfo,
+            string errorMessage)
+        {
+            var result = new FailedResult(externalErrorCodeInfo);
+
+            var internalError = new ExecutionError(detailsCodeInfo, null, errorMessage);
+
+            result.AddError(internalError);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Builds Validation Failed Result with all passed internal errors.
+        /// </summary>
+        /// <param name="internalErrors">Internal Execution Errors.</param>
+        /// <returns>FailedResult.</returns>
+        public static FailedResult ValidationFailedWith(IReadOnlyCollection<ExecutionError> internalErrors)
+        {
+            var result = new FailedResult(CoreErrorCodes.ValidationFailed);
+
+            foreach (var internalError in internalErrors)
+            {
+                result.AddError(internalError);
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Add Error.

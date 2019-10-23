@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 
 namespace Intellias.CQRS.Core.Domain
 {
@@ -57,6 +58,7 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <summary>
         /// Unhandled Error.
+        /// LEGACY.
         /// </summary>
         /// <param name="errorMessage">Error Message.</param>
         /// <returns>Execution Result.</returns>
@@ -67,6 +69,7 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <summary>
         /// Access Denied.
+        /// LEGACY.
         /// </summary>
         /// <param name="errorMessage">Error Message.</param>
         /// <returns>Execution Result.</returns>
@@ -77,6 +80,7 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <summary>
         /// Validation Failed.
+        /// LEGACY.
         /// </summary>
         /// <param name="errorMessage">Error Message.</param>
         /// <returns>Execution Result.</returns>
@@ -87,6 +91,7 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <summary>
         /// Failed custom domain logic.
+        /// LEGACY.
         /// </summary>
         /// <param name="errorCode">Specific error code.</param>
         /// <param name="errorMessage">Error Message.</param>
@@ -103,6 +108,47 @@ namespace Intellias.CQRS.Core.Domain
         public IExecutionResult Success()
         {
             return new SuccessfulResult();
+        }
+
+        /// <summary>
+        /// Acess Denied helper.
+        /// </summary>
+        /// <param name="internalCodeInfo">Error code info.</param>
+        /// <returns>Failed Result.</returns>
+        protected static FailedResult AccessDeniedWithCode(ErrorCodeInfo internalCodeInfo)
+        {
+            return FailedResult.CreateWithInternal(CoreErrorCodes.AccessDenied, internalCodeInfo);
+        }
+
+        /// <summary>
+        /// Validation Failed helper.
+        /// </summary>
+        /// <param name="internalCodeInfo">Error code info.</param>
+        /// <param name="customMessage">Custom error message..</param>
+        /// <returns>Failed Result.</returns>
+        protected static FailedResult ValidationFailedWithCode(ErrorCodeInfo internalCodeInfo, string customMessage)
+        {
+            return FailedResult.CreateWithInternal(CoreErrorCodes.ValidationFailed, internalCodeInfo, customMessage);
+        }
+
+        /// <summary>
+        /// Validation Failed helper.
+        /// </summary>
+        /// <param name="internalCodeInfo">Error code info.</param>
+        /// <returns>Failed Result.</returns>
+        protected static FailedResult ValidationFailedWithCode(ErrorCodeInfo internalCodeInfo)
+        {
+            return FailedResult.CreateWithInternal(CoreErrorCodes.ValidationFailed, internalCodeInfo);
+        }
+
+        /// <summary>
+        /// Validation Failed helper with internal execution errors.
+        /// </summary>
+        /// <param name="internalErrors">Internal validation errors.</param>
+        /// <returns>Failed Result.</returns>
+        protected static FailedResult ValidationFailedWithDetails(IReadOnlyCollection<ExecutionError> internalErrors)
+        {
+            return FailedResult.ValidationFailedWith(internalErrors);
         }
 
         /// <summary>

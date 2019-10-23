@@ -1,6 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
+using Intellias.CQRS.Core.Results.Extensions;
 using Intellias.CQRS.Pipelines.CommandHandlers;
 using MediatR;
 
@@ -31,7 +33,8 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines.Fakes
             var aggregate = await scope.FindAggregateAsync<FakeAggregateRoot, FakeAggregateState>(command.AggregateRootId, context);
             if (aggregate == null)
             {
-                return AggregateNotFound<FakeAggregateRoot>(command.AggregateRootId);
+                return ValidationFailedWithCode(CoreErrorCodes.AggregateRootNotFound)
+                    .ForCommand<FakeUpdateCommand>();
             }
 
             var result = aggregate.Update(command.Data);

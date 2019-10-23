@@ -1,5 +1,7 @@
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
+using Intellias.CQRS.Core.Results.Extensions;
 
 namespace Intellias.CQRS.Tests.Utils.Pipelines.Fakes
 {
@@ -20,7 +22,10 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines.Fakes
         {
             if (string.IsNullOrWhiteSpace(data))
             {
-                return ValidationFailed("Data can't be empty.");
+                var errorCode = new ErrorCodeInfo(nameof(Core), "InputCantBeNullOrEmpty", "Data can't be empty.");
+
+                return ValidationFailedWithCode(errorCode)
+                    .ForCommand<FakeUpdateCommand>(c => c.Data);
             }
 
             PublishEvent<FakeUpdatedStateEvent>(e => e.Data = data);

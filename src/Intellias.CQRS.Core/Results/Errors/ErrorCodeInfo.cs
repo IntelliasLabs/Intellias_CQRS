@@ -1,11 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Intellias.CQRS.Core.Results.Errors
+﻿namespace Intellias.CQRS.Core.Results.Errors
 {
     /// <summary>
     /// Info about Error Code.
     /// </summary>
-    [ExcludeFromCodeCoverage]
     public class ErrorCodeInfo
     {
         /// <summary>

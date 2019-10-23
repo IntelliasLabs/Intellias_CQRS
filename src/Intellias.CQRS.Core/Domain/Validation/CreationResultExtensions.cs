@@ -5,6 +5,7 @@ namespace Intellias.CQRS.Core.Domain.Validation
 {
     /// <summary>
     /// Extensions for working with <see cref="CreationResult{T}"/>.
+    /// LEGACY.
     /// </summary>
     public static class CreationResultExtensions
     {

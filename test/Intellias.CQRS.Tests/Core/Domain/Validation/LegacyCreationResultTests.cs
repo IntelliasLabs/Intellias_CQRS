@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Intellias.CQRS.Tests.Core.Domain.Validation
 {
-    public class CreationResultTests
+    public class LegacyCreationResultTests
     {
         [Fact]
         public void Constructor_Always_CreatesFailedWithoutEntry()

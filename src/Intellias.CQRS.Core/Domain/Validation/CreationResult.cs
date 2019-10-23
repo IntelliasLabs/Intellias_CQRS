@@ -5,6 +5,7 @@ namespace Intellias.CQRS.Core.Domain.Validation
 {
     /// <summary>
     /// Entry creation result.
+    /// LEGACY.
     /// </summary>
     public static class CreationResult
     {
