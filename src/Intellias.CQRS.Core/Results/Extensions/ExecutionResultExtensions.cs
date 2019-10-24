@@ -12,7 +12,7 @@ namespace Intellias.CQRS.Core.Results.Extensions
     public static class ExecutionResultExtensions
     {
         /// <summary>
-        /// Extension that fills sources for general error + internal error.
+        /// Extension that fills sources for general error + internal error if exist.
         /// </summary>
         /// <typeparam name="TCommand">Type of command.</typeparam>
         /// <param name="executionResult">Failed Execution Result.</param>
@@ -24,6 +24,12 @@ namespace Intellias.CQRS.Core.Results.Extensions
             if (!(executionResult is FailedResult failedResult))
             {
                 return executionResult;
+            }
+
+            if (failedResult.Details.Count == 0)
+            {
+                var source = SourceBuilder.BuildErrorSource(getProprty);
+                return new FailedResult(failedResult.CodeInfo, source, failedResult.Message);
             }
 
             var result = new FailedResult(failedResult.CodeInfo, typeof(TCommand).Name, failedResult.Message);
