@@ -44,5 +44,30 @@ namespace Intellias.CQRS.Core.Results.Errors
         /// Agregate root hasn't been found.
         /// </summary>
         public static ErrorCodeInfo AggregateRootNotFound => new ErrorCodeInfo(Prefix, nameof(AggregateRootNotFound), "Agregate Root hasn't been found.");
+
+        /// <summary>
+        /// The mentioned name is already in use. Please enter another one.
+        /// </summary>
+        public static ErrorCodeInfo NameIsInUse => new ErrorCodeInfo(Prefix, nameof(NameIsInUse), "The mentioned name is already in use. Please enter another one.");
+
+        /// <summary>
+        /// The mentioned name is not in use. Please enter another one.
+        /// </summary>
+        public static ErrorCodeInfo NameIsNotFound => new ErrorCodeInfo(Prefix, nameof(NameIsNotFound), "The mentioned name is not in use. Please enter another one.");
+
+        /// <summary>
+        /// Reserve operation failed.
+        /// </summary>
+        public static ErrorCodeInfo ReserveNameFailed => new ErrorCodeInfo(Prefix, nameof(ReserveNameFailed), "Reserving name failed.");
+
+        /// <summary>
+        /// Updating name failed.
+        /// </summary>
+        public static ErrorCodeInfo UpdateNameFailed => new ErrorCodeInfo(Prefix, nameof(UpdateNameFailed), "Updating name failed.");
+
+        /// <summary>
+        /// Deleting name failed.
+        /// </summary>
+        public static ErrorCodeInfo DeleteNameFailed => new ErrorCodeInfo(Prefix, nameof(DeleteNameFailed), "Deleting name failed.");
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Shared.Protocol;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -46,10 +47,11 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return new FailedResult($"The name '{value}' is not in use. Please enter another one.");
+                    var notInUseMessage = $"The name '{value}' is not in use. Please enter another one.";
+                    return new FailedResult(CoreErrorCodes.NameIsNotFound, null, notInUseMessage);
                 }
 
-                return new FailedResult("Delete operation failed.");
+                return new FailedResult(CoreErrorCodes.DeleteNameFailed);
             }
 
             return new SuccessfulResult();
@@ -67,10 +69,11 @@ namespace Intellias.CQRS.DomainServices
                 var errorCode = e.RequestInformation.ExtendedErrorInformation.ErrorCode;
                 if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return new FailedResult($"The name '{value}' is already in use. Please enter another one.");
+                    var customMessage = $"The name '{value}' is already in use. Please enter another one.";
+                    return new FailedResult(CoreErrorCodes.NameIsInUse, null, customMessage);
                 }
 
-                return new FailedResult("Reserve operation failed.");
+                return new FailedResult(CoreErrorCodes.ReserveNameFailed);
             }
 
             return new SuccessfulResult();
@@ -93,13 +96,15 @@ namespace Intellias.CQRS.DomainServices
                 switch (e.RequestInformation.ExtendedErrorInformation.ErrorCode)
                 {
                     case nameof(TableErrorCodeStrings.EntityAlreadyExists):
-                        return new FailedResult($"The name '{newValue}' is already in use. Please enter another one.");
+                        var inUseMessage = $"The name '{newValue}' is already in use. Please enter another one.";
+                        return new FailedResult(CoreErrorCodes.NameIsInUse, null, inUseMessage);
                     case nameof(StorageErrorCodeStrings.ResourceNotFound):
-                        return new FailedResult($"The name '{oldValue}' is not in use. Please enter another one.");
+                        var notInUseMessage = $"The name '{oldValue}' is not in use. Please enter another one.";
+                        return new FailedResult(CoreErrorCodes.NameIsNotFound, null, notInUseMessage);
                     case "InvalidDuplicateRow": // occures when new value duplicates old value then no error is needed
                         return new SuccessfulResult();
                     default:
-                        return new FailedResult("Update operation failed.");
+                        return new FailedResult(CoreErrorCodes.UpdateNameFailed);
                 }
             }
 

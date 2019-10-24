@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 using Intellias.CQRS.DomainServices;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -44,7 +46,10 @@ namespace Intellias.CQRS.Tests.DomainServices
             Assert.True(result.Success);
 
             result = await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
+
             Assert.False(result.Success);
+            result.Should().BeOfType<FailedResult>()
+                .Which.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsInUse);
         }
 
         [Fact]
@@ -68,7 +73,10 @@ namespace Intellias.CQRS.Tests.DomainServices
             var updatedTestId = Unified.NewCode();
 
             var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
+
             Assert.False(result.Success);
+            result.Should().BeOfType<FailedResult>()
+                .Which.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsNotFound);
         }
 
         [Fact]
@@ -96,7 +104,10 @@ namespace Intellias.CQRS.Tests.DomainServices
             var updatedTestId = Unified.NewCode();
 
             var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
+
             Assert.False(result.Success);
+            result.Should().BeOfType<FailedResult>()
+                .Which.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsNotFound);
         }
 
         [Fact]
@@ -104,7 +115,10 @@ namespace Intellias.CQRS.Tests.DomainServices
         {
             var testId = Unified.NewCode();
             var result = await uniqueConstraintService.RemoveConstraintAsync("TestIndex", testId);
+
             Assert.False(result.Success);
+            result.Should().BeOfType<FailedResult>()
+                .Which.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsNotFound);
         }
 
         [Fact]
@@ -115,8 +129,9 @@ namespace Intellias.CQRS.Tests.DomainServices
 
             await uniqueConstraintService.RemoveConstraintAsync("TestIndex", testId);
 
-            var testResult = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", testId));
-            Assert.Null(testResult.Result);
+            var result = await table.ExecuteAsync(TableOperation.Retrieve("TestIndex", testId));
+
+            Assert.Null(result.Result);
         }
 
         [Fact]

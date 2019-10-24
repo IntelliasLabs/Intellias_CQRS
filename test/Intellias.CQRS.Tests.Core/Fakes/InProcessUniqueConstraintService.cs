@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 using Intellias.CQRS.DomainServices;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
@@ -19,12 +20,14 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         {
             if (!cache.ContainsKey(indexName))
             {
-                return new FailedResult($"indexName: {indexName} not registered");
+                var customMessage = $"indexName: {indexName} not registered";
+                return new FailedResult(CoreErrorCodes.NameIsNotFound, null, customMessage);
             }
 
             if (!cache[indexName].Contains(value))
             {
-                return new FailedResult($"no such value: {value} for indexName: {indexName}");
+                var customMessage = $"no such value: {value} for indexName: {indexName}";
+                return new FailedResult(CoreErrorCodes.NameIsNotFound, null, customMessage);
             }
 
             cache[indexName].Remove(value);
@@ -41,7 +44,8 @@ namespace Intellias.CQRS.Tests.Core.Fakes
 
             if (cache[indexName].Contains(value))
             {
-                return new FailedResult($"value: {value} for indexName: {indexName} already exists");
+                var customMessage = $"value: {value} for indexName: {indexName} already exists";
+                return new FailedResult(CoreErrorCodes.NameIsInUse, null, customMessage);
             }
 
             cache[indexName].Add(value);
@@ -53,17 +57,20 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         {
             if (!cache.ContainsKey(indexName))
             {
-                return new FailedResult($"indexName: {indexName} not registered");
+                var notInUseMessage = $"indexName: {indexName} not registered";
+                return new FailedResult(CoreErrorCodes.NameIsNotFound, null, notInUseMessage);
             }
 
             if (!cache[indexName].Contains(oldValue))
             {
-                return new FailedResult($"no such oldValue: {oldValue} for indexName: {indexName}");
+                var notInUseMessage = $"no such oldValue: {oldValue} for indexName: {indexName}";
+                return new FailedResult(CoreErrorCodes.NameIsNotFound, null, notInUseMessage);
             }
 
             if (cache[indexName].Contains(newValue))
             {
-                return new FailedResult($"newValue: {newValue} for indexName: {indexName} already exists");
+                var inUseMessage = $"newValue: {newValue} for indexName: {indexName} already exists";
+                return new FailedResult(CoreErrorCodes.NameIsInUse, null, inUseMessage);
             }
 
             cache[indexName].Remove(oldValue);
