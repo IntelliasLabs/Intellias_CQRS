@@ -48,10 +48,14 @@ namespace Intellias.CQRS.DomainServices
                 if (StorageErrorCodeStrings.ResourceNotFound.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var notInUseMessage = $"The name '{value}' is not in use. Please enter another one.";
-                    return new FailedResult(CoreErrorCodes.NameIsNotFound, null, notInUseMessage);
+
+                    return FailedResult.CreateWithInternal(
+                        CoreErrorCodes.UnhandledError,
+                        CoreErrorCodes.NameIsNotFound,
+                        notInUseMessage);
                 }
 
-                return new FailedResult(CoreErrorCodes.DeleteNameFailed);
+                return FailedResult.CreateWithInternal(CoreErrorCodes.UnhandledError, CoreErrorCodes.DeleteNameFailed);
             }
 
             return new SuccessfulResult();
@@ -70,10 +74,14 @@ namespace Intellias.CQRS.DomainServices
                 if (TableErrorCodeStrings.EntityAlreadyExists.Equals(errorCode, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var customMessage = $"The name '{value}' is already in use. Please enter another one.";
-                    return new FailedResult(CoreErrorCodes.NameIsInUse, null, customMessage);
+
+                    return FailedResult.CreateWithInternal(
+                        CoreErrorCodes.ValidationFailed,
+                        CoreErrorCodes.NameIsInUse,
+                        customMessage);
                 }
 
-                return new FailedResult(CoreErrorCodes.ReserveNameFailed);
+                return FailedResult.CreateWithInternal(CoreErrorCodes.UnhandledError, CoreErrorCodes.ReserveNameFailed);
             }
 
             return new SuccessfulResult();
@@ -97,14 +105,22 @@ namespace Intellias.CQRS.DomainServices
                 {
                     case nameof(TableErrorCodeStrings.EntityAlreadyExists):
                         var inUseMessage = $"The name '{newValue}' is already in use. Please enter another one.";
-                        return new FailedResult(CoreErrorCodes.NameIsInUse, null, inUseMessage);
+
+                        return FailedResult.CreateWithInternal(
+                            CoreErrorCodes.ValidationFailed,
+                            CoreErrorCodes.NameIsInUse,
+                            inUseMessage);
                     case nameof(StorageErrorCodeStrings.ResourceNotFound):
                         var notInUseMessage = $"The name '{oldValue}' is not in use. Please enter another one.";
-                        return new FailedResult(CoreErrorCodes.NameIsNotFound, null, notInUseMessage);
+
+                        return FailedResult.CreateWithInternal(
+                            CoreErrorCodes.UnhandledError,
+                            CoreErrorCodes.NameIsNotFound,
+                            notInUseMessage);
                     case "InvalidDuplicateRow": // occures when new value duplicates old value then no error is needed
                         return new SuccessfulResult();
                     default:
-                        return new FailedResult(CoreErrorCodes.UpdateNameFailed);
+                        return FailedResult.CreateWithInternal(CoreErrorCodes.UnhandledError, CoreErrorCodes.UpdateNameFailed);
                 }
             }
 

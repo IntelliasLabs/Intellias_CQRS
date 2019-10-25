@@ -21,13 +21,21 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             if (!cache.ContainsKey(indexName))
             {
                 var customMessage = $"indexName: {indexName} not registered";
-                return new FailedResult(CoreErrorCodes.NameIsNotFound, null, customMessage);
+
+                return FailedResult.CreateWithInternal(
+                        CoreErrorCodes.UnhandledError,
+                        CoreErrorCodes.NameIsNotFound,
+                        customMessage);
             }
 
             if (!cache[indexName].Contains(value))
             {
                 var customMessage = $"no such value: {value} for indexName: {indexName}";
-                return new FailedResult(CoreErrorCodes.NameIsNotFound, null, customMessage);
+
+                return FailedResult.CreateWithInternal(
+                        CoreErrorCodes.UnhandledError,
+                        CoreErrorCodes.NameIsNotFound,
+                        customMessage);
             }
 
             cache[indexName].Remove(value);
@@ -45,7 +53,11 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             if (cache[indexName].Contains(value))
             {
                 var customMessage = $"value: {value} for indexName: {indexName} already exists";
-                return new FailedResult(CoreErrorCodes.NameIsInUse, null, customMessage);
+
+                return FailedResult.CreateWithInternal(
+                        CoreErrorCodes.ValidationFailed,
+                        CoreErrorCodes.NameIsInUse,
+                        customMessage);
             }
 
             cache[indexName].Add(value);
@@ -58,19 +70,31 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             if (!cache.ContainsKey(indexName))
             {
                 var notInUseMessage = $"indexName: {indexName} not registered";
-                return new FailedResult(CoreErrorCodes.NameIsNotFound, null, notInUseMessage);
+
+                return FailedResult.CreateWithInternal(
+                        CoreErrorCodes.UnhandledError,
+                        CoreErrorCodes.NameIsNotFound,
+                        notInUseMessage);
             }
 
             if (!cache[indexName].Contains(oldValue))
             {
                 var notInUseMessage = $"no such oldValue: {oldValue} for indexName: {indexName}";
-                return new FailedResult(CoreErrorCodes.NameIsNotFound, null, notInUseMessage);
+
+                return FailedResult.CreateWithInternal(
+                        CoreErrorCodes.UnhandledError,
+                        CoreErrorCodes.NameIsNotFound,
+                        notInUseMessage);
             }
 
             if (cache[indexName].Contains(newValue))
             {
                 var inUseMessage = $"newValue: {newValue} for indexName: {indexName} already exists";
-                return new FailedResult(CoreErrorCodes.NameIsInUse, null, inUseMessage);
+
+                return FailedResult.CreateWithInternal(
+                        CoreErrorCodes.ValidationFailed,
+                        CoreErrorCodes.NameIsInUse,
+                        inUseMessage);
             }
 
             cache[indexName].Remove(oldValue);

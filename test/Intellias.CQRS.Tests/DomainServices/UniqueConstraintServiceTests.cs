@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
@@ -48,8 +49,11 @@ namespace Intellias.CQRS.Tests.DomainServices
             result = await uniqueConstraintService.ReserveConstraintAsync("TestIndex", testId);
 
             Assert.False(result.Success);
-            result.Should().BeOfType<FailedResult>()
-                .Which.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsInUse);
+
+            var failedResult = (FailedResult)result;
+
+            failedResult.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.ValidationFailed);
+            failedResult.Details.Single().CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsInUse);
         }
 
         [Fact]
@@ -75,8 +79,11 @@ namespace Intellias.CQRS.Tests.DomainServices
             var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
 
             Assert.False(result.Success);
-            result.Should().BeOfType<FailedResult>()
-                .Which.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsNotFound);
+
+            var failedResult = (FailedResult)result;
+
+            failedResult.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.UnhandledError);
+            failedResult.Details.Single().CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsNotFound);
         }
 
         [Fact]
@@ -106,8 +113,11 @@ namespace Intellias.CQRS.Tests.DomainServices
             var result = await uniqueConstraintService.UpdateConstraintAsync("TestIndex", testId, updatedTestId);
 
             Assert.False(result.Success);
-            result.Should().BeOfType<FailedResult>()
-                .Which.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsNotFound);
+
+            var failedResult = (FailedResult)result;
+
+            failedResult.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.UnhandledError);
+            failedResult.Details.Single().CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsNotFound);
         }
 
         [Fact]
@@ -117,8 +127,11 @@ namespace Intellias.CQRS.Tests.DomainServices
             var result = await uniqueConstraintService.RemoveConstraintAsync("TestIndex", testId);
 
             Assert.False(result.Success);
-            result.Should().BeOfType<FailedResult>()
-                .Which.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsNotFound);
+
+            var failedResult = (FailedResult)result;
+
+            failedResult.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.UnhandledError);
+            failedResult.Details.Single().CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.NameIsNotFound);
         }
 
         [Fact]
