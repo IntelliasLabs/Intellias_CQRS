@@ -1,4 +1,6 @@
-﻿namespace Intellias.CQRS.Core.Results.Errors
+﻿using Newtonsoft.Json;
+
+namespace Intellias.CQRS.Core.Results.Errors
 {
     /// <summary>
     /// Info about Error Code.
@@ -17,14 +19,21 @@
             Message = message;
         }
 
+        [JsonConstructor]
+        private ErrorCodeInfo()
+        {
+        }
+
         /// <summary>
         /// Code.
         /// </summary>
+        [JsonProperty]
         public string Code { get; protected set; }
 
         /// <summary>
         /// Message.
         /// </summary>
+        [JsonProperty]
         public string Message { get; protected set; }
 
         /// <inheritdoc/>

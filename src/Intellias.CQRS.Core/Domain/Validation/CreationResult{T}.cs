@@ -6,9 +6,9 @@ namespace Intellias.CQRS.Core.Domain.Validation
 {
     /// <summary>
     /// Entry creation result.
-    /// LEGACY.
     /// </summary>
     /// <typeparam name="T">Type of the entry.</typeparam>
+    [Obsolete("Will be removed soon. Please do not use it.")]
     public class CreationResult<T>
         where T : class
     {

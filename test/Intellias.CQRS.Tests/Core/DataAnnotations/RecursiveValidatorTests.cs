@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Intellias.CQRS.Core.DataAnnotations;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Core.DataAnnotations
@@ -44,8 +45,10 @@ namespace Intellias.CQRS.Tests.Core.DataAnnotations
             result.Should().BeOfType<FailedResult>();
 
             var errorDetails = ((FailedResult)result).Details.ToArray();
-            errorDetails[0].Source.Should().Be(nameof(TypeWithCustomNestedType.Property1));
-            errorDetails[1].Source.Should().Be($"{nameof(TypeWithCustomNestedType.Property2)}.{nameof(NestedType.NestedProperty)}");
+            errorDetails[0].Source.Should().Be($"{nameof(TypeWithCustomNestedType)}.{nameof(TypeWithCustomNestedType.Property1)}");
+            errorDetails[0].CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.ValidationFailed);
+            errorDetails[1].Source.Should().Be($"{nameof(TypeWithCustomNestedType)}.{nameof(TypeWithCustomNestedType.Property2)}.{nameof(NestedType.NestedProperty)}");
+            errorDetails[1].CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.ValidationFailed);
         }
 
         [Fact]

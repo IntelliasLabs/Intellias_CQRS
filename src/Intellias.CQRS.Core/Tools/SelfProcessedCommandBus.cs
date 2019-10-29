@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 
 namespace Intellias.CQRS.Core.Tools
 {
@@ -35,7 +36,7 @@ namespace Intellias.CQRS.Core.Tools
 
                 if (method == null)
                 {
-                    return new FailedResult("Error calling HandleCommandAsync method");
+                    return new FailedResult(CoreErrorCodes.UnhandledError, null, "Error calling HandleCommandAsync method.");
                 }
 
                 await (Task)method
@@ -47,7 +48,7 @@ namespace Intellias.CQRS.Core.Tools
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
             {
-                return new FailedResult($"Error handling message: {e.Message}");
+                return new FailedResult(CoreErrorCodes.UnhandledError, null, $"Error handling message: {e.Message}.");
             }
 #pragma warning restore CA1031 // Do not catch general exception types
         }

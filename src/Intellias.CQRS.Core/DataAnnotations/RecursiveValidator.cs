@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 
 namespace Intellias.CQRS.Core.DataAnnotations
 {
@@ -36,11 +37,12 @@ namespace Intellias.CQRS.Core.DataAnnotations
             Validator.TryValidateObject(instance, validationContext, validationResults, true);
 
             var instanceType = instance.GetType();
-            var result = new FailedResult(ErrorCodes.ValidationFailed, instanceType.Name, "Instance validation failed.");
+            var result = new FailedResult(CoreErrorCodes.ValidationFailed, instanceType.Name);
             foreach (var validationResult in validationResults)
             {
                 var field = validationResult.MemberNames.FirstOrDefault() ?? string.Empty;
-                var error = new ExecutionError(field, validationResult.ErrorMessage);
+                var source = $"{instanceType.Name}.{field}";
+                var error = new ExecutionError(CoreErrorCodes.ValidationFailed, source, validationResult.ErrorMessage);
 
                 result.AddError(error);
             }
@@ -59,7 +61,14 @@ namespace Intellias.CQRS.Core.DataAnnotations
                     continue;
                 }
 
-                var nestedExecutionErrors = fr.Details.Select(er => new ExecutionError(er.Code, $"{property.Name}.{er.Source}", er.Message));
+                Func<ExecutionError, ExecutionError> buildExecutionError = (error) =>
+                {
+                    var replacedSource = error.Source.Replace(property.PropertyType.Name, property.Name);
+
+                    return new ExecutionError(error.CodeInfo, $"{instanceType.Name}.{replacedSource}", error.Message);
+                };
+
+                var nestedExecutionErrors = fr.Details.Select(buildExecutionError);
                 foreach (var executionError in nestedExecutionErrors)
                 {
                     result.AddError(executionError);

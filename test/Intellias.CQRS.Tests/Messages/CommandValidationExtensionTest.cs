@@ -42,9 +42,12 @@ namespace Intellias.CQRS.Tests.Messages
             {
                 TestData = "some data"
             };
+            cmd.Wrap();
+
+            cmd.Id = null;
 
             var result = (FailedResult)cmd.Validate();
-            Assert.Equal(nameof(cmd.AggregateRootId), result.Details.First().Source);
+            Assert.Equal($"{nameof(TestCreateCommand)}.{nameof(cmd.Id)}", result.Details.First().Source);
         }
 
         [Fact]
@@ -57,7 +60,7 @@ namespace Intellias.CQRS.Tests.Messages
             };
 
             var result = (FailedResult)cmd.Validate();
-            Assert.Equal(nameof(cmd.AggregateRootId), result.Details.First().Source);
+            Assert.Equal($"{nameof(TestCreateCommand)}.{nameof(cmd.AggregateRootId)}", result.Details.First().Source);
         }
 
         [Fact]
@@ -71,7 +74,7 @@ namespace Intellias.CQRS.Tests.Messages
             };
 
             var result = (FailedResult)cmd.Validate();
-            Assert.Equal(nameof(cmd.CorrelationId), result.Details.First().Source);
+            Assert.Equal($"{nameof(TestCreateCommand)}.{nameof(cmd.CorrelationId)}", result.Details.First().Source);
         }
 
         [Fact]
@@ -86,7 +89,7 @@ namespace Intellias.CQRS.Tests.Messages
             };
 
             var result = (FailedResult)cmd.Validate();
-            Assert.Equal(nameof(MetadataKey.Roles), result.Details.First().Source);
+            Assert.Equal($"{nameof(TestCreateCommand)}.{nameof(MetadataKey.Roles)}", result.Details.First().Source);
         }
 
         [Fact]
@@ -102,7 +105,7 @@ namespace Intellias.CQRS.Tests.Messages
             cmd.Metadata[MetadataKey.Roles] = "Admin";
 
             var result = (FailedResult)cmd.Validate();
-            Assert.Equal(nameof(MetadataKey.UserId), result.Details.First().Source);
+            Assert.Equal($"{nameof(TestCreateCommand)}.{nameof(MetadataKey.UserId)}", result.Details.First().Source);
         }
 
         [Fact]
@@ -119,7 +122,7 @@ namespace Intellias.CQRS.Tests.Messages
             cmd.Metadata[MetadataKey.UserId] = Unified.NewCode();
 
             var result = (FailedResult)cmd.Validate();
-            Assert.Equal(nameof(MetadataKey.UserId), result.Details.First().Source);
+            Assert.Equal($"{nameof(TestCreateCommand)}.{nameof(MetadataKey.UserId)}", result.Details.First().Source);
         }
 
         [Fact]

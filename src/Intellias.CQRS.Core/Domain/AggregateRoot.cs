@@ -58,10 +58,10 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <summary>
         /// Unhandled Error.
-        /// LEGACY.
         /// </summary>
         /// <param name="errorMessage">Error Message.</param>
         /// <returns>Execution Result.</returns>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         public IExecutionResult UnhandledError(string errorMessage)
         {
             return new FailedResult(ErrorCodes.UnhandledError, GetType().Name, errorMessage);
@@ -69,10 +69,10 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <summary>
         /// Access Denied.
-        /// LEGACY.
         /// </summary>
         /// <param name="errorMessage">Error Message.</param>
         /// <returns>Execution Result.</returns>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         public IExecutionResult AccessDenied(string errorMessage)
         {
             return new FailedResult(ErrorCodes.AccessDenied, GetType().Name, errorMessage);
@@ -80,10 +80,10 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <summary>
         /// Validation Failed.
-        /// LEGACY.
         /// </summary>
         /// <param name="errorMessage">Error Message.</param>
         /// <returns>Execution Result.</returns>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         public IExecutionResult ValidationFailed(string errorMessage)
         {
             return new FailedResult(ErrorCodes.ValidationFailed, GetType().Name, errorMessage);
@@ -91,11 +91,11 @@ namespace Intellias.CQRS.Core.Domain
 
         /// <summary>
         /// Failed custom domain logic.
-        /// LEGACY.
         /// </summary>
         /// <param name="errorCode">Specific error code.</param>
         /// <param name="errorMessage">Error Message.</param>
         /// <returns>Execution Result.</returns>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         public IExecutionResult Failed(string errorCode, string errorMessage)
         {
             return new FailedResult(errorCode, GetType().Name, errorMessage);

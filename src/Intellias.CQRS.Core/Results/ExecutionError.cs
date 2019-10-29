@@ -1,4 +1,5 @@
-﻿using Intellias.CQRS.Core.Results.Errors;
+﻿using System;
+using Intellias.CQRS.Core.Results.Errors;
 using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Core.Results
@@ -48,9 +49,9 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecutionError"/> class.
-        /// LEGACY.
         /// </summary>
         /// <param name="message">Reason of failure.</param>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         public ExecutionError(string message)
         {
             Message = message;
@@ -59,10 +60,10 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecutionError"/> class.
-        /// LEGACY.
         /// </summary>
         /// <param name="source">Source.</param>
         /// <param name="message">Error Message.</param>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         public ExecutionError(string source, string message)
         {
             Source = source;
@@ -72,11 +73,11 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecutionError"/> class.
-        /// LEGACY.
         /// </summary>
         /// <param name="code">Code.</param>
         /// <param name="source">Source.</param>
         /// <param name="message">Error Message.</param>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         public ExecutionError(string code, string source, string message)
         {
             Code = code;

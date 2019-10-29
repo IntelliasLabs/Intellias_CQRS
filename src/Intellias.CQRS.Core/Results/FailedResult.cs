@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intellias.CQRS.Core.Results.Errors;
 using Newtonsoft.Json;
 
@@ -44,9 +45,9 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FailedResult"/> class.
-        /// LEGACY.
         /// </summary>
         /// <param name="message">Error Message.</param>
+        [Obsolete("Will be removed soon. Please do not use it.", false)]
         public FailedResult(string message)
             : this(ErrorCodes.UnhandledError, message)
         {
@@ -54,10 +55,10 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FailedResult"/> class.
-        /// LEGACY.
         /// </summary>
         /// <param name="code">Code.</param>
         /// <param name="message">Error Message.</param>
+        [Obsolete("Will be removed soon. Please do not use it.", false)]
         public FailedResult(string code, string message)
             : this(code, string.Empty, message)
         {
@@ -65,11 +66,11 @@ namespace Intellias.CQRS.Core.Results
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FailedResult"/> class.
-        /// LEGACY.
         /// </summary>
         /// <param name="code">Code.</param>
         /// <param name="source">Source.</param>
         /// <param name="message">Error Message.</param>
+        [Obsolete("Will be removed soon. Please do not use it.", false)]
         public FailedResult(string code, string source, string message)
             : base(code, source, message)
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Intellias.CQRS.Core.Results;
 
@@ -5,8 +6,8 @@ namespace Intellias.CQRS.Core.Domain.Validation
 {
     /// <summary>
     /// Extensions for working with <see cref="CreationResult{T}"/>.
-    /// LEGACY.
     /// </summary>
+    [Obsolete("Will be removed soon. Please do not use it.")]
     public static class CreationResultExtensions
     {
         /// <summary>

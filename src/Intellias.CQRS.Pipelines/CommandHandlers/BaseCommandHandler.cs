@@ -64,10 +64,10 @@ namespace Intellias.CQRS.Pipelines.CommandHandlers
 
         /// <summary>
         /// Creates validation failed result.
-        /// LEGACY. To be removed.
         /// </summary>
         /// <param name="errorMessage">Error message.</param>
         /// <returns>Execution result.</returns>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         protected IExecutionResult ValidationFailed(string errorMessage)
         {
             return new FailedResult(ErrorCodes.ValidationFailed, errorMessage);
@@ -75,11 +75,11 @@ namespace Intellias.CQRS.Pipelines.CommandHandlers
 
         /// <summary>
         /// Creates validation failed result.
-        /// LEGACY. To be removed.
         /// </summary>
         /// <param name="source">Source of the error.</param>
         /// <param name="errorMessage">Error message.</param>
         /// <returns>Execution result.</returns>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         protected IExecutionResult ValidationFailed(string source, string errorMessage)
         {
             return new FailedResult(ErrorCodes.ValidationFailed, source, errorMessage);
@@ -90,6 +90,7 @@ namespace Intellias.CQRS.Pipelines.CommandHandlers
         /// </summary>
         /// <param name="errors">Validation errors.</param>
         /// <returns>Execution result.</returns>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         protected IExecutionResult ValidationFailed(IReadOnlyCollection<ExecutionError> errors)
         {
             // First error contains the most generic description on issue.
@@ -99,11 +100,11 @@ namespace Intellias.CQRS.Pipelines.CommandHandlers
 
         /// <summary>
         /// Creates aggregate not found result.
-        /// LEGACY. To be removed.
         /// </summary>
         /// <param name="aggregateId">Aggregate id.</param>
         /// <typeparam name="TAggregateRoot">Type of the aggregate.</typeparam>
         /// <returns>Execution result.</returns>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         protected IExecutionResult AggregateNotFound<TAggregateRoot>(string aggregateId)
             where TAggregateRoot : IAggregateRoot
         {
@@ -112,12 +113,12 @@ namespace Intellias.CQRS.Pipelines.CommandHandlers
 
         /// <summary>
         /// Creates aggregate not found result.
-        /// LEGACY. To be removed.
         /// </summary>
         /// <param name="aggregateId">Aggregate id.</param>
         /// <param name="version">Aggregate version.</param>
         /// <typeparam name="TAggregateRoot">Type of the aggregate.</typeparam>
         /// <returns>Execution result.</returns>
+        [Obsolete("Will be removed soon. Please do not use it.")]
         protected IExecutionResult AggregateNotFound<TAggregateRoot>(string aggregateId, int version)
             where TAggregateRoot : IAggregateRoot
         {
