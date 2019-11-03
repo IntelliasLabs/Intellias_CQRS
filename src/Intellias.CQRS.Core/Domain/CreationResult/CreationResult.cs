@@ -120,5 +120,19 @@ namespace Intellias.CQRS.Core.Domain.CreationResult
 
             return new CreationResult<TResult>(allErrors);
         }
+
+        /// <summary>
+        /// Converts Creation Result to Creation Result with tracking errors containing correct source in fail case.
+        /// </summary>
+        /// <typeparam name="TResult">Type of entity to be created.</typeparam>
+        /// <typeparam name="TCommand">Command type.</typeparam>
+        /// <param name="creationResult">Creation Result.</param>
+        /// <returns>Modified creation result.</returns>
+        public static CreationResult<TResult> ForCommand<TResult, TCommand>(this CreationResult<TResult> creationResult)
+            where TCommand : ICommand
+            where TResult : class
+        {
+            return creationResult.ForCommand<TResult, TCommand>(c => c);
+        }
     }
 }
