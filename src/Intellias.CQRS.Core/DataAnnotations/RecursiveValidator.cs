@@ -32,18 +32,18 @@ namespace Intellias.CQRS.Core.DataAnnotations
             }
 
             var validationContext = new ValidationContext(instance);
-            var validationResults = new List<ExecutionError>();
+            var executionErrors = new List<ExecutionError>();
 
             // Validate current level of the instance.
-            CoreValidator.TryValidateObject(instance, validationContext, validationResults, true);
+            CoreValidator.TryValidateObject(instance, validationContext, executionErrors, true);
 
             var instanceType = instance.GetType();
             var result = new FailedResult(CoreErrorCodes.ValidationFailed, instanceType.Name);
-            foreach (var validationResult in validationResults)
+            foreach (var executionError in executionErrors)
             {
-                var field = validationResult.Source ?? string.Empty;
+                var field = executionError.Source ?? string.Empty;
                 var source = $"{instanceType.Name}.{field}";
-                var error = new ExecutionError(CoreErrorCodes.ValidationFailed, source, validationResult.Message);
+                var error = new ExecutionError(executionError.CodeInfo, source);
 
                 result.AddError(error);
             }

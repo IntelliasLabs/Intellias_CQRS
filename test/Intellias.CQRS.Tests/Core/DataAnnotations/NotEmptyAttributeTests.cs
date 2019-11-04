@@ -5,6 +5,9 @@ using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Intellias.CQRS.Core.DataAnnotations;
+using Intellias.CQRS.Core.DataAnnotations.Validators;
+using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Core.DataAnnotations
@@ -28,11 +31,11 @@ namespace Intellias.CQRS.Tests.Core.DataAnnotations
             var instance = new FakeInstance();
             var context = new ValidationContext(instance);
 
-            var results = new List<ValidationResult>();
-            var isValid = Validator.TryValidateObject(instance, context, results, true);
+            var errors = new List<ExecutionError>();
+            var isValid = CoreValidator.TryValidateObject(instance, context, errors, true);
 
             isValid.Should().BeFalse();
-            results.Single().Should().BeEquivalentTo(new ValidationResult(expectedErrorMessage, new[] { expectedInvalidProperty }));
+            errors.Single().Should().BeEquivalentTo(new ExecutionError(CoreErrorCodes.CantBeEmpty, expectedInvalidProperty, expectedErrorMessage));
         }
 
         [Theory]

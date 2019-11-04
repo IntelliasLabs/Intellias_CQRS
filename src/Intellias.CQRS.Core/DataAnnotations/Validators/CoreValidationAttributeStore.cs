@@ -13,11 +13,6 @@ namespace Intellias.CQRS.Core.DataAnnotations.Validators
     /// <summary>
     /// Cache of <see cref="ValidationAttribute" />.
     /// </summary>
-    /// <remarks>
-    /// This internal class serves as a cache of validation attributes and <see cref="DisplayAttribute"/> attributes.
-    /// It exists both to help performance as well as to abstract away the differences between
-    /// Reflection and TypeDescriptor.
-    /// </remarks>
     internal class CoreValidationAttributeStore
     {
         private readonly Dictionary<Type, TypeStoreItem> typeStoreItems = new Dictionary<Type, TypeStoreItem>();

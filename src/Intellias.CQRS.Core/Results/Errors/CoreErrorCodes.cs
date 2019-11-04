@@ -44,9 +44,9 @@ namespace Intellias.CQRS.Core.Results.Errors
         public static ErrorCodeInfo AccessDenied => new ErrorCodeInfo(Prefix, nameof(AccessDenied), "Access denied.");
 
         /// <summary>
-        /// Agregate root hasn't been found.
+        /// Aggregate root hasn't been found.
         /// </summary>
-        public static ErrorCodeInfo AggregateRootNotFound => new ErrorCodeInfo(Prefix, nameof(AggregateRootNotFound), "Agregate Root hasn't been found.");
+        public static ErrorCodeInfo AggregateRootNotFound => new ErrorCodeInfo(Prefix, nameof(AggregateRootNotFound), "Aggregate Root hasn't been found.");
 
         /// <summary>
         /// The mentioned name is already in use. Please enter another one.
@@ -72,5 +72,75 @@ namespace Intellias.CQRS.Core.Results.Errors
         /// Deleting name failed.
         /// </summary>
         public static ErrorCodeInfo DeleteNameFailed => new ErrorCodeInfo(Prefix, nameof(DeleteNameFailed), "Deleting name failed.");
+
+        /// <summary>
+        /// Value must not be empty.
+        /// </summary>
+        public static ErrorCodeInfo CantBeEmpty => new ErrorCodeInfo(Prefix, nameof(CantBeEmpty), "Value must not be empty.");
+
+        /// <summary>
+        /// Properties are not equal.
+        /// </summary>
+        public static ErrorCodeInfo ComparisonFailed => new ErrorCodeInfo(Prefix, nameof(ComparisonFailed), "Properties must be equal.");
+
+        /// <summary>
+        /// Credit card number is invalid.
+        /// </summary>
+        public static ErrorCodeInfo CreditCardNumberIsInvalid => new ErrorCodeInfo(Prefix, nameof(CreditCardNumberIsInvalid), "Credit card number is invalid.");
+
+        /// <summary>
+        /// Email address is invalid.
+        /// </summary>
+        public static ErrorCodeInfo EmailAddressIsInvalid => new ErrorCodeInfo(Prefix, nameof(EmailAddressIsInvalid), "Email address is invalid.");
+
+        /// <summary>
+        /// Enum value is invalid.
+        /// </summary>
+        public static ErrorCodeInfo EnumValueIsInvalid => new ErrorCodeInfo(Prefix, nameof(EnumValueIsInvalid), "Enum value is invalid.");
+
+        /// <summary>
+        /// File extension is invalid.
+        /// </summary>
+        public static ErrorCodeInfo FileExtensionIsInvalid => new ErrorCodeInfo(Prefix, nameof(FileExtensionIsInvalid), "File extension is invalid.");
+
+        /// <summary>
+        /// Value length is greater than max length.
+        /// </summary>
+        public static ErrorCodeInfo LengthIsGreaterThanMax => new ErrorCodeInfo(Prefix, nameof(LengthIsGreaterThanMax), "Value length is greater that max length.");
+
+        /// <summary>
+        /// Value length is less than min length.
+        /// </summary>
+        public static ErrorCodeInfo LengthIsLessThanMin => new ErrorCodeInfo(Prefix, nameof(LengthIsLessThanMin), "Value length is less than min length.");
+
+        /// <summary>
+        /// Phone number is invalid.
+        /// </summary>
+        public static ErrorCodeInfo PhoneNumberIsInvalid => new ErrorCodeInfo(Prefix, nameof(PhoneNumberIsInvalid), "Phone number is invalid.");
+
+        /// <summary>
+        /// Value is out of range.
+        /// </summary>
+        public static ErrorCodeInfo ValueIsOutOfRange => new ErrorCodeInfo(Prefix, nameof(ValueIsOutOfRange), "Value is out of range.");
+
+        /// <summary>
+        /// Value doesn't match regular expression.
+        /// </summary>
+        public static ErrorCodeInfo ValueDoesntMatchRegularExpression => new ErrorCodeInfo(Prefix, nameof(ValueDoesntMatchRegularExpression), "Value doesn't match regular expression.");
+
+        /// <summary>
+        /// Value must be not null.
+        /// </summary>
+        public static ErrorCodeInfo ValueIsRequired => new ErrorCodeInfo(Prefix, nameof(ValueIsRequired), "Value must be not null.");
+
+        /// <summary>
+        /// String length is invalid.
+        /// </summary>
+        public static ErrorCodeInfo StringLengthIsInvalid => new ErrorCodeInfo(Prefix, nameof(StringLengthIsInvalid), "String length is invalid.");
+
+        /// <summary>
+        /// Url is invalid.
+        /// </summary>
+        public static ErrorCodeInfo UrlIsInvalid => new ErrorCodeInfo(Prefix, nameof(UrlIsInvalid), "Url is invalid.");
     }
 }
