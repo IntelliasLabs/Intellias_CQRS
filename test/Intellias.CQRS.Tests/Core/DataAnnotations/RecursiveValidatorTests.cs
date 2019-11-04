@@ -76,7 +76,7 @@ namespace Intellias.CQRS.Tests.Core.DataAnnotations
 
         private class NestedType
         {
-            [Required]
+            [Required(ErrorMessage = nameof(RequiredAttribute))]
             public string NestedProperty { get; set; }
         }
     }

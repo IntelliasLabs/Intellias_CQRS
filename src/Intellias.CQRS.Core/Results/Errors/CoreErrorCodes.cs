@@ -8,7 +8,10 @@ namespace Intellias.CQRS.Core.Results.Errors
     [ExcludeFromCodeCoverage]
     public static class CoreErrorCodes
     {
-        private const string Prefix = nameof(Core);
+        /// <summary>
+        /// Subdomain error codes prefix.
+        /// </summary>
+        public const string Prefix = nameof(Core);
 
         /// <summary>
         /// Validation failed.
