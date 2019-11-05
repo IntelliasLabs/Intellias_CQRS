@@ -7,7 +7,6 @@ using FluentAssertions;
 using Intellias.CQRS.Core.DataAnnotations;
 using Intellias.CQRS.Core.DataAnnotations.Validators;
 using Intellias.CQRS.Core.Results;
-using Intellias.CQRS.Core.Results.Errors;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Core.DataAnnotations
