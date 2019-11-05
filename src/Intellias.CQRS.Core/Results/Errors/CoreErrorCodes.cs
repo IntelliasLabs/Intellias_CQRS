@@ -44,6 +44,16 @@ namespace Intellias.CQRS.Core.Results.Errors
         public static ErrorCodeInfo AccessDenied => new ErrorCodeInfo(Prefix, nameof(AccessDenied), "Access denied.");
 
         /// <summary>
+        /// Value has invalid format.
+        /// </summary>
+        public static ErrorCodeInfo InvalidFormat => new ErrorCodeInfo(Prefix, nameof(InvalidFormat), "Entry has invalid format.");
+
+        /// <summary>
+        /// Value is not found.
+        /// </summary>
+        public static ErrorCodeInfo NotFound => new ErrorCodeInfo(Prefix, nameof(NotFound), "Entry is not found.");
+
+        /// <summary>
         /// Aggregate root hasn't been found.
         /// </summary>
         public static ErrorCodeInfo AggregateRootNotFound => new ErrorCodeInfo(Prefix, nameof(AggregateRootNotFound), "Aggregate Root hasn't been found.");
