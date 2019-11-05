@@ -309,15 +309,11 @@ namespace Intellias.CQRS.Core.DataAnnotations.Validators
             var errors = new List<ExecutionError>();
 
             // Get the required validator if there is one and test it first, aborting on failure.
-            ExecutionError validationError;
             var required = attributes.OfType<RequiredAttribute>().FirstOrDefault();
-            if (required != null)
+            if (required != null && !TryValidate(value, validationContext, required, out var validationError))
             {
-                if (!TryValidate(value, validationContext, required, out validationError))
-                {
-                    errors.Add(validationError);
-                    return errors;
-                }
+                errors.Add(validationError);
+                return errors;
             }
 
             // Iterate through the rest of the validators, skipping the required validator.
