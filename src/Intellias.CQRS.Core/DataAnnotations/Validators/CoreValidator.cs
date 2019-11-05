@@ -16,47 +16,6 @@ namespace Intellias.CQRS.Core.DataAnnotations.Validators
         private static readonly CoreValidationAttributeStore Store = CoreValidationAttributeStore.Instance;
 
         /// <summary>
-        /// Tests whether the given property value is valid.
-        /// </summary>
-        /// <param name="value">The value to test.</param>
-        /// <param name="validationContext">Describes the property member to validate and provides services and context for the validators.</param>
-        /// <param name="executionErrors">Optional collection to receive <see cref="ExecutionError" />s for the failures.</param>
-        /// <returns><c>true</c> if the value is valid, <c>false</c> if any validation errors are encountered.</returns>
-        public static bool TryValidateProperty(object value, ValidationContext validationContext, ICollection<ExecutionError> executionErrors)
-        {
-            // Throw if value cannot be assigned to this property. That is not a validation exception.
-            var propertyType = Store.GetPropertyType(validationContext);
-            var propertyName = validationContext.MemberName;
-            EnsureValidPropertyType(propertyName, propertyType, value);
-
-            var result = true;
-            var breakOnFirstError = executionErrors == null;
-
-            var attributes = Store.GetPropertyValidationAttributes(validationContext);
-
-            foreach (var error in GetValidationErrors(value, validationContext, attributes, breakOnFirstError))
-            {
-                result = false;
-
-                executionErrors?.Add(error);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Tests whether the given object instance is valid.
-        /// </summary>
-        /// <param name="instance">The object instance to test.  It cannot be <c>null</c>.</param>
-        /// <param name="validationContext">Describes the object to validate and provides services and context for the validators.</param>
-        /// <param name="executionErrors">Optional collection to receive <see cref="ExecutionError" />s for the failures.</param>
-        /// <returns><c>true</c> if the object is valid, <c>false</c> if any validation errors are encountered.</returns>
-        public static bool TryValidateObject(object instance, ValidationContext validationContext, ICollection<ExecutionError> executionErrors)
-        {
-            return TryValidateObject(instance, validationContext, executionErrors, validateAllProperties: false);
-        }
-
-        /// <summary>
         /// Tests whether the given object instance is valid.
         /// </summary>
         /// <param name="instance">The object instance to test.  It cannot be null.</param>
@@ -88,65 +47,6 @@ namespace Intellias.CQRS.Core.DataAnnotations.Validators
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Tests whether the given value is valid against a specified list of <see cref="ValidationAttribute" />s.
-        /// </summary>
-        /// <param name="value">The value to test. It cannot be null.</param>
-        /// <param name="validationContext">Describes the object being validated and provides services and context for the validators.</param>
-        /// <param name="executionErrors">Optional collection to receive <see cref="ExecutionError" />s for the failures.</param>
-        /// <param name="validationAttributes">The list of <see cref="ValidationAttribute" />s to validate this <paramref name="value" /> against.</param>
-        /// <returns><c>true</c> if the object is valid, <c>false</c> if any validation errors are encountered.</returns>
-        public static bool TryValidateValue(
-            object value,
-            ValidationContext validationContext,
-            ICollection<ExecutionError> executionErrors,
-            IReadOnlyCollection<ValidationAttribute> validationAttributes)
-        {
-            var result = true;
-            var breakOnFirstError = executionErrors == null;
-
-            foreach (var error in GetValidationErrors(value, validationContext, validationAttributes, breakOnFirstError))
-            {
-                result = false;
-
-                executionErrors?.Add(error);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Determine whether the given value can legally be assigned into the specified type.
-        /// </summary>
-        /// <param name="destinationType">The destination <see cref="Type" /> for the value.</param>
-        /// <param name="value">The value to test to see if it can be assigned as the Type indicated by <paramref name="destinationType" />.</param>
-        /// <returns><c>true</c> if the assignment is legal.</returns>
-        private static bool CanBeAssigned(Type destinationType, object value)
-        {
-            if (value == null)
-            {
-                // Null can be assigned only to reference types or Nullable or Nullable<>.
-                return !destinationType.IsValueType || (destinationType.IsGenericType && destinationType.GetGenericTypeDefinition() == typeof(Nullable<>));
-            }
-
-            // Not null -- be sure it can be cast to the right type.
-            return destinationType.IsInstanceOfType(value);
-        }
-
-        /// <summary>
-        /// Determines whether the given value can legally be assigned to the given property.
-        /// </summary>
-        /// <param name="propertyName">The name of the property.</param>
-        /// <param name="propertyType">The type of the property.</param>
-        /// <param name="value">The value.  Null is permitted only if the property will accept it.</param>
-        private static void EnsureValidPropertyType(string propertyName, Type propertyType, object value)
-        {
-            if (!CanBeAssigned(propertyType, value))
-            {
-                throw new ArgumentException($"The value for property '{propertyName}' must be of type '{propertyType}'.", nameof(value));
-            }
         }
 
         /// <summary>
