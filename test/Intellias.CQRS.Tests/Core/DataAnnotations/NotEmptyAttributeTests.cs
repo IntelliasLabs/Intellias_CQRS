@@ -35,7 +35,7 @@ namespace Intellias.CQRS.Tests.Core.DataAnnotations
             var isValid = CoreValidator.TryValidateObject(instance, context, errors, true);
 
             isValid.Should().BeFalse();
-            errors.Single().Should().BeEquivalentTo(new ExecutionError(CoreErrorCodes.CantBeEmpty, expectedInvalidProperty, expectedErrorMessage));
+            errors.Single().Should().BeEquivalentTo(new ExecutionError(AnnotationErrorCodes.Required, expectedInvalidProperty, expectedErrorMessage));
         }
 
         [Theory]

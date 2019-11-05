@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Intellias.CQRS.Core.Results;
-using Intellias.CQRS.Core.Results.Errors;
 
 namespace Intellias.CQRS.Core.DataAnnotations.Validators
 {
@@ -369,47 +368,10 @@ namespace Intellias.CQRS.Core.DataAnnotations.Validators
 
         private static ExecutionError CreateExecutionError(ValidationAttribute attribute, ValidationResult validationResult)
         {
-            var errorCode = GetErrorCode(attribute);
+            var errorCode = AnnotationErrorCodes.GetErrorCodeFromAttribute(attribute.GetType());
             var source = validationResult.MemberNames.FirstOrDefault();
 
             return new ExecutionError(errorCode, source, validationResult.ErrorMessage);
-        }
-
-        private static ErrorCodeInfo GetErrorCode(ValidationAttribute validationAttribute)
-        {
-            switch (validationAttribute)
-            {
-                case CompareAttribute _:
-                    return CoreErrorCodes.ComparisonFailed;
-                case CreditCardAttribute _:
-                    return CoreErrorCodes.CreditCardNumberIsInvalid;
-                case EmailAddressAttribute _:
-                    return CoreErrorCodes.EmailAddressIsInvalid;
-                case EnumDataTypeAttribute _:
-                    return CoreErrorCodes.EnumValueIsInvalid;
-                case FileExtensionsAttribute _:
-                    return CoreErrorCodes.FileExtensionIsInvalid;
-                case MaxLengthAttribute _:
-                    return CoreErrorCodes.LengthIsGreaterThanMax;
-                case MinLengthAttribute _:
-                    return CoreErrorCodes.LengthIsLessThanMin;
-                case PhoneAttribute _:
-                    return CoreErrorCodes.PhoneNumberIsInvalid;
-                case RangeAttribute _:
-                    return CoreErrorCodes.ValueIsOutOfRange;
-                case RegularExpressionAttribute _:
-                    return CoreErrorCodes.ValueDoesntMatchRegularExpression;
-                case RequiredAttribute _:
-                    return CoreErrorCodes.ValueIsRequired;
-                case StringLengthAttribute _:
-                    return CoreErrorCodes.StringLengthIsInvalid;
-                case UrlAttribute _:
-                    return CoreErrorCodes.UrlIsInvalid;
-                case CoreValidationAttribute va:
-                    return va.ErrorCode;
-                default:
-                    return CoreErrorCodes.ValidationFailed;
-            }
         }
     }
 }

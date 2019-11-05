@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Intellias.CQRS.Core.DataAnnotations.Validators;
-using Intellias.CQRS.Core.Results.Errors;
 
 namespace Intellias.CQRS.Core.DataAnnotations
 {
@@ -11,7 +10,7 @@ namespace Intellias.CQRS.Core.DataAnnotations
     /// For strings ensures that string is not empty or white space.
     /// For collections ensures that collection length is non-zero.
     /// </summary>
-    public sealed class NotEmptyAttribute : CoreValidationAttribute
+    public sealed class NotEmptyAttribute : ValidationAttribute
     {
         /// <summary>
         /// Template of the error message for <see cref="NotEmptyAttribute"/>.
@@ -25,9 +24,6 @@ namespace Intellias.CQRS.Core.DataAnnotations
             : base(ErrorMessageTemplate)
         {
         }
-
-        /// <inheritdoc />
-        public override ErrorCodeInfo ErrorCode => CoreErrorCodes.CantBeEmpty;
 
         /// <inheritdoc />
         public override bool IsValid(object value)
