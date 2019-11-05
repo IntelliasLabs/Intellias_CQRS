@@ -47,9 +47,9 @@ namespace Intellias.CQRS.Tests.Core.DataAnnotations
 
             var errorDetails = ((FailedResult)result).Details.ToArray();
             errorDetails[0].Source.Should().Be($"{nameof(TypeWithCustomNestedType)}.{nameof(TypeWithCustomNestedType.Property1)}");
-            errorDetails[0].CodeInfo.Should().BeEquivalentTo(AnnotationErrorCodes.Required);
+            errorDetails[0].CodeInfo.Code.Should().BeEquivalentTo(AnnotationErrorCodes.Required.Code);
             errorDetails[1].Source.Should().Be($"{nameof(TypeWithCustomNestedType)}.{nameof(TypeWithCustomNestedType.Property2)}.{nameof(NestedType.NestedProperty)}");
-            errorDetails[1].CodeInfo.Should().BeEquivalentTo(AnnotationErrorCodes.Required);
+            errorDetails[1].CodeInfo.Code.Should().BeEquivalentTo(AnnotationErrorCodes.Required.Code);
         }
 
         [Fact]

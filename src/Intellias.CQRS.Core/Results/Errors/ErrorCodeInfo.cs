@@ -3,10 +3,31 @@
 namespace Intellias.CQRS.Core.Results.Errors
 {
     /// <summary>
-    /// Info about Error Code.
+    /// Info about error code.
     /// </summary>
     public class ErrorCodeInfo
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorCodeInfo"/> class.
+        /// </summary>
+        /// <param name="code">Value for <see cref="Code"/>.</param>
+        public ErrorCodeInfo(string code)
+            : this(code, string.Empty)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorCodeInfo"/> class.
+        /// </summary>
+        /// <param name="code">Value for <see cref="Code"/>.</param>
+        /// <param name="message">Value for <see cref="Message"/>.</param>
+        [JsonConstructor]
+        public ErrorCodeInfo(string code, string message)
+        {
+            Code = code;
+            Message = message;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorCodeInfo"/> class.
         /// </summary>
@@ -14,32 +35,24 @@ namespace Intellias.CQRS.Core.Results.Errors
         /// <param name="internalCode">InternalCode.</param>
         /// <param name="message">Message.</param>
         public ErrorCodeInfo(string subDomain, string internalCode, string message)
-        {
-            Code = $"{subDomain}.{internalCode}";
-            Message = message;
-        }
-
-        [JsonConstructor]
-        private ErrorCodeInfo()
+            : this($"{subDomain}.{internalCode}", message)
         {
         }
 
         /// <summary>
-        /// Code.
+        /// Error code.
         /// </summary>
-        [JsonProperty]
-        public string Code { get; protected set; }
+        public string Code { get; }
 
         /// <summary>
-        /// Message.
+        /// Error message.
         /// </summary>
-        [JsonProperty]
-        public string Message { get; protected set; }
+        public string Message { get; }
 
         /// <inheritdoc/>
         public override string ToString()
         {
-            return Message;
+            return $"{Code}: '{Message}'";
         }
     }
 }

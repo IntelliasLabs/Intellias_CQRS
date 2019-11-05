@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 
 namespace Intellias.CQRS.Core.DataAnnotations.Validators
 {
@@ -369,9 +370,10 @@ namespace Intellias.CQRS.Core.DataAnnotations.Validators
         private static ExecutionError CreateExecutionError(ValidationAttribute attribute, ValidationResult validationResult)
         {
             var errorCode = AnnotationErrorCodes.GetErrorCodeFromAttribute(attribute.GetType());
+            var errorCodeInfo = new ErrorCodeInfo(errorCode, validationResult.ErrorMessage);
             var source = validationResult.MemberNames.FirstOrDefault();
 
-            return new ExecutionError(errorCode, source, validationResult.ErrorMessage);
+            return new ExecutionError(errorCodeInfo, source, validationResult.ErrorMessage);
         }
     }
 }
