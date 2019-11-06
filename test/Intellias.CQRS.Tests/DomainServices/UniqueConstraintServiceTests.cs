@@ -6,6 +6,7 @@ using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
 using Intellias.CQRS.DomainServices;
+using Intellias.CQRS.Tests.Utils;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Xunit;
@@ -19,7 +20,8 @@ namespace Intellias.CQRS.Tests.DomainServices
 
         public UniqueConstraintServiceTests()
         {
-            var account = CloudStorageAccount.DevelopmentStorageAccount;
+            var cfg = new TestsConfiguration();
+            var account = CloudStorageAccount.Parse(cfg.StorageAccount.ConnectionString);
             uniqueConstraintService = new UniqueConstraintService(account);
 
             var client = account.CreateCloudTableClient();

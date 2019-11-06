@@ -10,6 +10,7 @@ using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.EventHandlers;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Intellias.CQRS.Tests.Core.Queries;
+using Intellias.CQRS.Tests.Utils;
 using Microsoft.WindowsAzure.Storage;
 using Xunit;
 
@@ -22,8 +23,9 @@ namespace Intellias.CQRS.Tests.PerformenceTests
 
         public AzureTableEventStorePerformenceTest()
         {
-            // Let's use real event Store to test related performence issues with it
-            var storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
+            // Let's use real event Store to test related performance issues with it
+            var cfg = new TestsConfiguration();
+            var storageAccount = CloudStorageAccount.Parse(cfg.StorageAccount.ConnectionString);
             eventStore = new AzureTableEventStore(storageAccount);
 
             // Fake part
@@ -41,10 +43,10 @@ namespace Intellias.CQRS.Tests.PerformenceTests
             commandBus.AddAllHandlers(commandHandlers);
         }
 
-        [Fact]
+        [Fact(Skip = "Events concurency is verified on Azure Service Bus sessions now.")]
         public async Task AzureTableStoreWhenManyCommandsProcessedPerformenceTest()
         {
-            // Preconditions: let's create an test entity
+            // Preconditions: let's create a test entity
             var createCmd = new TestCreateCommand
             {
                 AggregateRootId = $"Performence_CQRS_Test_{Unified.NewCode()}",
@@ -53,8 +55,8 @@ namespace Intellias.CQRS.Tests.PerformenceTests
 
             await commandBus.PublishAsync(createCmd);
 
-            // Then let's create and push 10 update commands to the command bus in the same moment
-            const int numberOfUpdates = 10;
+            // Then let's create and push 10 up date commands to the command bus in the same moment
+            const int numberOfUpdates = 100;
             var values = new string[numberOfUpdates];
 
             for (var i = 0; i < numberOfUpdates; i++)
