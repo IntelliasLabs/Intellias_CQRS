@@ -1,11 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Intellias.CQRS.Core.Domain;
+using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Core.Results.Errors
 {
     /// <summary>
     /// Info about error code.
     /// </summary>
-    public class ErrorCodeInfo
+    public class ErrorCodeInfo : ValueObject<ErrorCodeInfo>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorCodeInfo"/> class.
@@ -53,6 +55,18 @@ namespace Intellias.CQRS.Core.Results.Errors
         public override string ToString()
         {
             return $"{Code}: '{Message}'";
+        }
+
+        /// <inheritdoc />
+        protected override bool EqualsCore(ErrorCodeInfo other)
+        {
+            return Code.Equals(other.Code, StringComparison.Ordinal);
+        }
+
+        /// <inheritdoc />
+        protected override int GetHashCodeCore()
+        {
+            return Code.GetHashCode();
         }
     }
 }

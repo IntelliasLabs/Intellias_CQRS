@@ -53,6 +53,17 @@ namespace Intellias.CQRS.Tests.Core.Results
             errorCodeInfo.Should().BeEquivalentTo(new ErrorCodeInfo(code, message));
         }
 
+        [Fact]
+        public void TwoErrorCodes_CodesAreEqual_ErrorCodesAreEqual()
+        {
+            var code = FixtureUtils.String();
+            var message1 = FixtureUtils.String();
+            var message2 = FixtureUtils.String();
+
+            new ErrorCodeInfo(code, message1).Equals(new ErrorCodeInfo(code, message2))
+                .Should().BeTrue();
+        }
+
         private ErrorCodeInfo SerializeDeserialize(ErrorCodeInfo errorCodeInfo)
         {
             return JsonConvert.DeserializeObject<ErrorCodeInfo>(JsonConvert.SerializeObject(errorCodeInfo));
