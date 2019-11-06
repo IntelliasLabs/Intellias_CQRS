@@ -3,6 +3,7 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Domain;
+using Intellias.CQRS.Tests.Utils;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
@@ -24,9 +25,11 @@ namespace Intellias.CQRS.Tests.Core
 
             BusMock = new Mock<IEventBus>();
 
-            Store = new AzureTableEventStore(CloudStorageAccount.DevelopmentStorageAccount);
+            var cfg = new TestsConfiguration();
+            var account = CloudStorageAccount.Parse(cfg.StorageAccount.ConnectionString);
+            Store = new AzureTableEventStore(account);
 
-            var tableClient = CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient();
+            var tableClient = account.CreateCloudTableClient();
 
             AggregateTable = tableClient.GetTableReference("AggregateStore");
             EventTable = tableClient.GetTableReference(nameof(EventStore));

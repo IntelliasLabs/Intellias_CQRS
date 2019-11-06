@@ -1,5 +1,6 @@
 ﻿using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.QueryStore.AzureTable;
+using Intellias.CQRS.Tests.Utils;
 using Microsoft.WindowsAzure.Storage;
 
 namespace Intellias.CQRS.Tests.Core
@@ -9,7 +10,8 @@ namespace Intellias.CQRS.Tests.Core
     {
         public BaseQueryTest()
         {
-            Store = new TableQueryModelStorage<TQueryModel>(CloudStorageAccount.DevelopmentStorageAccount);
+            var cfg = new TestsConfiguration();
+            Store = new TableQueryModelStorage<TQueryModel>(CloudStorageAccount.Parse(cfg.StorageAccount.ConnectionString));
         }
 
         protected TableQueryModelStorage<TQueryModel> Store { get; }
