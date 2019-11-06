@@ -8,7 +8,10 @@ namespace Intellias.CQRS.Core.Results.Errors
     [ExcludeFromCodeCoverage]
     public static class CoreErrorCodes
     {
-        private const string Prefix = nameof(Core);
+        /// <summary>
+        /// Subdomain error codes prefix.
+        /// </summary>
+        public const string Prefix = nameof(Core);
 
         /// <summary>
         /// Validation failed.
@@ -41,9 +44,19 @@ namespace Intellias.CQRS.Core.Results.Errors
         public static ErrorCodeInfo AccessDenied => new ErrorCodeInfo(Prefix, nameof(AccessDenied), "Access denied.");
 
         /// <summary>
-        /// Agregate root hasn't been found.
+        /// Value has invalid format.
         /// </summary>
-        public static ErrorCodeInfo AggregateRootNotFound => new ErrorCodeInfo(Prefix, nameof(AggregateRootNotFound), "Agregate Root hasn't been found.");
+        public static ErrorCodeInfo InvalidFormat => new ErrorCodeInfo(Prefix, nameof(InvalidFormat), "Entry has invalid format.");
+
+        /// <summary>
+        /// Value is not found.
+        /// </summary>
+        public static ErrorCodeInfo NotFound => new ErrorCodeInfo(Prefix, nameof(NotFound), "Entry is not found.");
+
+        /// <summary>
+        /// Aggregate root hasn't been found.
+        /// </summary>
+        public static ErrorCodeInfo AggregateRootNotFound => new ErrorCodeInfo(Prefix, nameof(AggregateRootNotFound), "Aggregate Root hasn't been found.");
 
         /// <summary>
         /// The mentioned name is already in use. Please enter another one.

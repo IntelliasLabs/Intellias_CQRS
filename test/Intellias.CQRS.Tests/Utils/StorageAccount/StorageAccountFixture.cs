@@ -39,7 +39,7 @@ namespace Intellias.CQRS.Tests.Utils.StorageAccount
 
         private async Task DeleteAllTablesAsync(string prefix)
         {
-            TableContinuationToken? continuationToken = null;
+            TableContinuationToken continuationToken = null;
 
             do
             {
@@ -56,7 +56,7 @@ namespace Intellias.CQRS.Tests.Utils.StorageAccount
 
         private async Task DeleteAllContainersAsync(string prefix)
         {
-            BlobContinuationToken? continuationToken = null;
+            BlobContinuationToken continuationToken = null;
 
             do
             {

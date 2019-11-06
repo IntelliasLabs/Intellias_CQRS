@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using Intellias.CQRS.Core.DataAnnotations.Validators;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
 
 namespace Intellias.CQRS.Core.DataAnnotations
 {
     /// <summary>
-    /// <see cref="Validator"/> that does recursive validation on IntelliGrowth types.
+    /// <see cref="CoreValidator"/> that does recursive validation on IntelliGrowth types.
     /// </summary>
     public static class RecursiveValidator
     {
@@ -31,18 +32,18 @@ namespace Intellias.CQRS.Core.DataAnnotations
             }
 
             var validationContext = new ValidationContext(instance);
-            var validationResults = new List<ValidationResult>();
+            var executionErrors = new List<ExecutionError>();
 
             // Validate current level of the instance.
-            Validator.TryValidateObject(instance, validationContext, validationResults, true);
+            CoreValidator.TryValidateObject(instance, validationContext, executionErrors, true);
 
             var instanceType = instance.GetType();
             var result = new FailedResult(CoreErrorCodes.ValidationFailed, instanceType.Name);
-            foreach (var validationResult in validationResults)
+            foreach (var executionError in executionErrors)
             {
-                var field = validationResult.MemberNames.FirstOrDefault() ?? string.Empty;
+                var field = executionError.Source ?? string.Empty;
                 var source = $"{instanceType.Name}.{field}";
-                var error = new ExecutionError(CoreErrorCodes.ValidationFailed, source, validationResult.ErrorMessage);
+                var error = new ExecutionError(executionError.CodeInfo, source);
 
                 result.AddError(error);
             }
@@ -61,14 +62,12 @@ namespace Intellias.CQRS.Core.DataAnnotations
                     continue;
                 }
 
-                Func<ExecutionError, ExecutionError> buildExecutionError = (error) =>
+                var nestedExecutionErrors = fr.Details.Select(error =>
                 {
                     var replacedSource = error.Source.Replace(property.PropertyType.Name, property.Name);
-
                     return new ExecutionError(error.CodeInfo, $"{instanceType.Name}.{replacedSource}", error.Message);
-                };
+                });
 
-                var nestedExecutionErrors = fr.Details.Select(buildExecutionError);
                 foreach (var executionError in nestedExecutionErrors)
                 {
                     result.AddError(executionError);

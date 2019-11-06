@@ -63,7 +63,7 @@ namespace Intellias.CQRS.Tests.Utils
             return Rnd.Next(0, 100) < nullPossibility ? string.Empty : generator();
         }
 
-        public static T JsonCopy<T>(T source, Action<T>? setup = null)
+        public static T JsonCopy<T>(T source, Action<T> setup = null)
         {
             var serialized = JsonConvert.SerializeObject(source);
             var deserialized = JsonConvert.DeserializeObject<T>(serialized);
