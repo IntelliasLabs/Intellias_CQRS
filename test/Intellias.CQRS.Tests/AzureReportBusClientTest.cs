@@ -33,8 +33,8 @@ namespace Intellias.CQRS.Tests
                      handler?.Invoke(sessionMock.Object, msg, CancellationToken.None);
                  });
 
-            var logMock = new Mock<ILogger<AzureReportBusClientV2>>();
-            var reportBus = new AzureReportBusClientV2(logMock.Object, mock.Object);
+            var logMock = new Mock<ILogger<AzureReportBusClient>>();
+            var reportBus = new AzureReportBusClient(logMock.Object, mock.Object);
 
             IMessage expectedMessage = null;
 
