@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace Intellias.CQRS.EventBus.AzureServiceBus
 {
     /// <inheritdoc />
+    [Obsolete("Please use see AzureReportBusClient as a copy of this class.")]
     [ExcludeFromCodeCoverage]
     public class AzureReportBusClientV2 : IReportBusClient
     {
