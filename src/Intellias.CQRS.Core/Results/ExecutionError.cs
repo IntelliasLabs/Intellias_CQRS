@@ -1,5 +1,4 @@
-﻿using System;
-using Intellias.CQRS.Core.Results.Errors;
+﻿using Intellias.CQRS.Core.Results.Errors;
 using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Core.Results
@@ -45,44 +44,6 @@ namespace Intellias.CQRS.Core.Results
             Source = source;
             Code = errorCodeInfo.Code;
             Message = customMessage;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExecutionError"/> class.
-        /// </summary>
-        /// <param name="message">Reason of failure.</param>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        public ExecutionError(string message)
-        {
-            Message = message;
-            Code = ErrorCodes.UnhandledError;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExecutionError"/> class.
-        /// </summary>
-        /// <param name="source">Source.</param>
-        /// <param name="message">Error Message.</param>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        public ExecutionError(string source, string message)
-        {
-            Source = source;
-            Message = message;
-            Code = ErrorCodes.ValidationFailed;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExecutionError"/> class.
-        /// </summary>
-        /// <param name="code">Code.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="message">Error Message.</param>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        public ExecutionError(string code, string source, string message)
-        {
-            Code = code;
-            Source = source;
-            Message = message;
         }
 
         /// <summary>

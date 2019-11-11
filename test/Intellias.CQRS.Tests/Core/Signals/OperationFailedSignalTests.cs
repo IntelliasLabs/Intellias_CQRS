@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Tests.Core.Events;
 using Xunit;
@@ -12,7 +13,7 @@ namespace Intellias.CQRS.Tests.Core.Signals
         [Fact]
         public void OperationFailedSignalShouldCopyPropertiesFromSource()
         {
-            const string error = "Some error";
+            var error = CoreErrorCodes.ValidationFailed;
             var message = new TestCreatedEvent
             {
                 AggregateRootId = "aggregate root",
@@ -25,7 +26,8 @@ namespace Intellias.CQRS.Tests.Core.Signals
             failedEvent.Should()
                 .Match<OperationFailedSignal>(x => x.CorrelationId == message.CorrelationId).And
                 .Match<OperationFailedSignal>(x => x.AggregateRootId == message.AggregateRootId).And
-                .Match<OperationFailedSignal>(x => x.Error.Message == error).And
+                .Match<OperationFailedSignal>(x => x.Error.CodeInfo.Message == error.Message).And
+                .Match<OperationFailedSignal>(x => x.Error.CodeInfo.Code == error.Code).And
                 .Match<OperationFailedSignal>(x => x.Source.Equals(message));
         }
     }

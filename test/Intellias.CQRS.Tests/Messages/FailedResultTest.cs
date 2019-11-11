@@ -10,22 +10,6 @@ namespace Intellias.CQRS.Tests.Messages
     public class FailedResultTest
     {
         [Fact]
-        public void LegacySerializeTest()
-        {
-            var result = new FailedResult("Test error");
-            result.AddError(new ExecutionError("Name", "Test field error"));
-            result.AddError(new ExecutionError("Test field error"));
-            result.AddError(new ExecutionError(ErrorCodes.ValidationFailed, "Name", "Test field error"));
-
-            var json = result.ToJson();
-            var deserialized = json.FromJson<FailedResult>();
-
-            Assert.Equal(result.Message, deserialized.Message);
-            Assert.Equal(result.Success, deserialized.Success);
-            Assert.Equal(result.Details.First().Message, deserialized.Details.First().Message);
-        }
-
-        [Fact]
         public void FailedResultSerializeTest()
         {
             var input = new FailedResult(CoreErrorCodes.ValidationFailed, "Some source", "Some message");

@@ -6,6 +6,7 @@ using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Results.Errors;
 using Intellias.CQRS.Pipelines.CommandHandlers;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Intellias.CQRS.Tests.Core.Pipelines.CommandHandlers;
@@ -51,7 +52,7 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
         [Fact]
         public async Task SubdomainTestFlow_ExecutionFailed_StopsExecution()
         {
-            mediator.SetupRequestHandler<CommandRequest<FakeCommand>, IExecutionResult>(request => new FailedResult("Something bad happened."));
+            mediator.SetupRequestHandler<CommandRequest<FakeCommand>, IExecutionResult>(request => new FailedResult(CoreErrorCodes.UnhandledError));
 
             var step1 = new FakeCommandStep();
             var step2 = new FakeCommandStep();

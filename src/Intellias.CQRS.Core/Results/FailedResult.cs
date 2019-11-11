@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Intellias.CQRS.Core.Results.Errors;
 using Newtonsoft.Json;
 
@@ -40,39 +39,6 @@ namespace Intellias.CQRS.Core.Results
         /// <param name="customMessage">Custom message.</param>
         public FailedResult(ErrorCodeInfo errorCodeInfo, string source, string customMessage)
             : base(errorCodeInfo, source, customMessage)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FailedResult"/> class.
-        /// </summary>
-        /// <param name="message">Error Message.</param>
-        [Obsolete("Will be removed soon. Please do not use it.", false)]
-        public FailedResult(string message)
-            : this(ErrorCodes.UnhandledError, message)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FailedResult"/> class.
-        /// </summary>
-        /// <param name="code">Code.</param>
-        /// <param name="message">Error Message.</param>
-        [Obsolete("Will be removed soon. Please do not use it.", false)]
-        public FailedResult(string code, string message)
-            : this(code, string.Empty, message)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FailedResult"/> class.
-        /// </summary>
-        /// <param name="code">Code.</param>
-        /// <param name="source">Source.</param>
-        /// <param name="message">Error Message.</param>
-        [Obsolete("Will be removed soon. Please do not use it.", false)]
-        public FailedResult(string code, string source, string message)
-            : base(code, source, message)
         {
         }
 

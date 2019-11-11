@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Results;
@@ -60,69 +59,6 @@ namespace Intellias.CQRS.Pipelines.CommandHandlers
             setup(@event);
 
             return new IntegrationEventExecutionResult(@event);
-        }
-
-        /// <summary>
-        /// Creates validation failed result.
-        /// </summary>
-        /// <param name="errorMessage">Error message.</param>
-        /// <returns>Execution result.</returns>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        protected IExecutionResult ValidationFailed(string errorMessage)
-        {
-            return new FailedResult(ErrorCodes.ValidationFailed, errorMessage);
-        }
-
-        /// <summary>
-        /// Creates validation failed result.
-        /// </summary>
-        /// <param name="source">Source of the error.</param>
-        /// <param name="errorMessage">Error message.</param>
-        /// <returns>Execution result.</returns>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        protected IExecutionResult ValidationFailed(string source, string errorMessage)
-        {
-            return new FailedResult(ErrorCodes.ValidationFailed, source, errorMessage);
-        }
-
-        /// <summary>
-        /// Creates validation failed result.
-        /// </summary>
-        /// <param name="errors">Validation errors.</param>
-        /// <returns>Execution result.</returns>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        protected IExecutionResult ValidationFailed(IReadOnlyCollection<ExecutionError> errors)
-        {
-            // First error contains the most generic description on issue.
-            var topError = errors.First();
-            return new FailedResult(topError.Code, topError.Source, topError.Message);
-        }
-
-        /// <summary>
-        /// Creates aggregate not found result.
-        /// </summary>
-        /// <param name="aggregateId">Aggregate id.</param>
-        /// <typeparam name="TAggregateRoot">Type of the aggregate.</typeparam>
-        /// <returns>Execution result.</returns>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        protected IExecutionResult AggregateNotFound<TAggregateRoot>(string aggregateId)
-            where TAggregateRoot : IAggregateRoot
-        {
-            return new FailedResult($"Aggregate of type '{typeof(TAggregateRoot)}' with id '{aggregateId}' is not found.");
-        }
-
-        /// <summary>
-        /// Creates aggregate not found result.
-        /// </summary>
-        /// <param name="aggregateId">Aggregate id.</param>
-        /// <param name="version">Aggregate version.</param>
-        /// <typeparam name="TAggregateRoot">Type of the aggregate.</typeparam>
-        /// <returns>Execution result.</returns>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        protected IExecutionResult AggregateNotFound<TAggregateRoot>(string aggregateId, int version)
-            where TAggregateRoot : IAggregateRoot
-        {
-            return new FailedResult($"Aggregate of type '{typeof(TAggregateRoot)}' with id '{aggregateId}' and version '{version}' is not found.");
         }
     }
 }

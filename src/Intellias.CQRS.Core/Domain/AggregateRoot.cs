@@ -57,51 +57,6 @@ namespace Intellias.CQRS.Core.Domain
         }
 
         /// <summary>
-        /// Unhandled Error.
-        /// </summary>
-        /// <param name="errorMessage">Error Message.</param>
-        /// <returns>Execution Result.</returns>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        public IExecutionResult UnhandledError(string errorMessage)
-        {
-            return new FailedResult(ErrorCodes.UnhandledError, GetType().Name, errorMessage);
-        }
-
-        /// <summary>
-        /// Access Denied.
-        /// </summary>
-        /// <param name="errorMessage">Error Message.</param>
-        /// <returns>Execution Result.</returns>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        public IExecutionResult AccessDenied(string errorMessage)
-        {
-            return new FailedResult(ErrorCodes.AccessDenied, GetType().Name, errorMessage);
-        }
-
-        /// <summary>
-        /// Validation Failed.
-        /// </summary>
-        /// <param name="errorMessage">Error Message.</param>
-        /// <returns>Execution Result.</returns>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        public IExecutionResult ValidationFailed(string errorMessage)
-        {
-            return new FailedResult(ErrorCodes.ValidationFailed, GetType().Name, errorMessage);
-        }
-
-        /// <summary>
-        /// Failed custom domain logic.
-        /// </summary>
-        /// <param name="errorCode">Specific error code.</param>
-        /// <param name="errorMessage">Error Message.</param>
-        /// <returns>Execution Result.</returns>
-        [Obsolete("Will be removed soon. Please do not use it.")]
-        public IExecutionResult Failed(string errorCode, string errorMessage)
-        {
-            return new FailedResult(errorCode, GetType().Name, errorMessage);
-        }
-
-        /// <summary>
         /// Successful result.
         /// </summary>
         /// <returns>Execution Result.</returns>
