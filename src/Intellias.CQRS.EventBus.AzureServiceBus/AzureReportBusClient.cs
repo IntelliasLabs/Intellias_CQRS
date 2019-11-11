@@ -51,6 +51,13 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
                 }, options);
         }
 
+        /// <inheritdoc />
+        public async Task UnsubscribeAllAsync()
+        {
+            await sub.CloseAsync();
+            log.LogInformation($"'{nameof(AzureReportBusClient)}' is unsubscribed from all registered handlers.");
+        }
+
         private Task ExceptionReceivedHandlerAsync(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
             log.LogError(exceptionReceivedEventArgs.Exception, exceptionReceivedEventArgs.Exception.Message);

@@ -48,6 +48,26 @@ namespace Intellias.CQRS.Tests
         }
 
         [Fact]
+        public async Task UnsubscribeTest()
+        {
+            var isUnsubscribeInvoked = false;
+
+            var mock = new Mock<ISubscriptionClient>();
+            mock.Setup(s => s.CloseAsync())
+                .Callback(() =>
+                {
+                    isUnsubscribeInvoked = true;
+                });
+
+            var logMock = new Mock<ILogger<AzureReportBusClient>>();
+            var reportBus = new AzureReportBusClient(logMock.Object, mock.Object);
+
+            await reportBus.UnsubscribeAllAsync();
+
+            isUnsubscribeInvoked.Should().BeTrue();
+        }
+
+        [Fact]
         public void ServiceBusMessageTest()
         {
             var e = new TestCreatedEvent();

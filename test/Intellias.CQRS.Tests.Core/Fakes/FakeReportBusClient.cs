@@ -19,6 +19,13 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             handlers.Add(handler);
         }
 
+        /// <inheritdoc />
+        public Task UnsubscribeAllAsync()
+        {
+            handlers.Clear();
+            return Task.CompletedTask;
+        }
+
         /// <summary>
         /// Push test event to bus.
         /// </summary>

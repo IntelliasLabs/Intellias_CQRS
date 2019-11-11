@@ -14,5 +14,11 @@ namespace Intellias.CQRS.Core.Events
         /// </summary>
         /// <param name="handler">Handler func.</param>
         void Subscribe(Func<IMessage, Task> handler);
+
+        /// <summary>
+        /// Unsubscribe from all handlers.
+        /// </summary>
+        /// <returns>Simple task.</returns>
+        Task UnsubscribeAllAsync();
     }
 }
