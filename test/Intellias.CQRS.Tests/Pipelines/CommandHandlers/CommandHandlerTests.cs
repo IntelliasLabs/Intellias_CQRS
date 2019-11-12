@@ -53,49 +53,5 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
             failedResult.CodeInfo.Should().Be(CoreErrorCodes.ValidationFailed);
             failedResult.Details.Should().BeEquivalentTo<ExecutionError>(errors);
         }
-
-        [Fact]
-        public void LegacyValidationFailed_WithoutMessage_Test()
-        {
-            var errorCodeInfo = CoreErrorCodes.UnhandledError;
-
-            var result = ValidationFailedWithCode(errorCodeInfo);
-
-            var failedResult = (FailedResult)result;
-
-            failedResult.CodeInfo.Should().Be(CoreErrorCodes.ValidationFailed);
-            failedResult.Details.Single().CodeInfo.Should().Be(CoreErrorCodes.UnhandledError);
-        }
-
-        [Fact]
-        public void LegacyValidationFailed_WithMessage_Test()
-        {
-            var errorCodeInfo = CoreErrorCodes.UnhandledError;
-            var errorMessage = FixtureUtils.String();
-
-            var result = ValidationFailedWithCode(errorCodeInfo, errorMessage);
-
-            var failedResult = (FailedResult)result;
-
-            failedResult.CodeInfo.Should().Be(CoreErrorCodes.ValidationFailed);
-            failedResult.Details.Single().CodeInfo.Should().Be(CoreErrorCodes.UnhandledError);
-            failedResult.Details.Single().Message.Should().Be(errorMessage);
-        }
-
-        [Fact]
-        public void LegacyValidationFailed_WithErrors_Test()
-        {
-            var errors = new[]
-            {
-                new ExecutionError(CoreErrorCodes.UnhandledError)
-            };
-
-            var result = ValidationFailedWithDetails(errors);
-
-            var failedResult = (FailedResult)result;
-
-            failedResult.CodeInfo.Should().Be(CoreErrorCodes.ValidationFailed);
-            failedResult.Details.Should().BeEquivalentTo<ExecutionError>(errors);
-        }
     }
 }

@@ -70,51 +70,6 @@ namespace Intellias.CQRS.Core.Domain
         /// </summary>
         /// <param name="internalCodeInfo">Error code info.</param>
         /// <returns>Failed Result.</returns>
-        [Obsolete("Please use alternative method name")]
-        protected static FailedResult AccessDeniedWithCode(ErrorCodeInfo internalCodeInfo)
-        {
-            return FailedResult.Create(CoreErrorCodes.AccessDenied, internalCodeInfo);
-        }
-
-        /// <summary>
-        /// Validation Failed helper.
-        /// </summary>
-        /// <param name="internalCodeInfo">Error code info.</param>
-        /// <param name="customMessage">Custom error message..</param>
-        /// <returns>Failed Result.</returns>
-        [Obsolete("Please use alternative method name")]
-        protected static FailedResult ValidationFailedWithCode(ErrorCodeInfo internalCodeInfo, string customMessage)
-        {
-            return FailedResult.Create(CoreErrorCodes.ValidationFailed, internalCodeInfo, customMessage);
-        }
-
-        /// <summary>
-        /// Validation Failed helper.
-        /// </summary>
-        /// <param name="internalCodeInfo">Error code info.</param>
-        /// <returns>Failed Result.</returns>
-        [Obsolete("Please use alternative method name")]
-        protected static FailedResult ValidationFailedWithCode(ErrorCodeInfo internalCodeInfo)
-        {
-            return FailedResult.Create(CoreErrorCodes.ValidationFailed, internalCodeInfo);
-        }
-
-        /// <summary>
-        /// Validation Failed helper with internal execution errors.
-        /// </summary>
-        /// <param name="internalErrors">Internal validation errors.</param>
-        /// <returns>Failed Result.</returns>
-        [Obsolete("Please use alternative method name")]
-        protected static FailedResult ValidationFailedWithDetails(IReadOnlyCollection<ExecutionError> internalErrors)
-        {
-            return FailedResult.ValidationFailed(internalErrors);
-        }
-
-        /// <summary>
-        /// Acess Denied helper.
-        /// </summary>
-        /// <param name="internalCodeInfo">Error code info.</param>
-        /// <returns>Failed Result.</returns>
         protected static FailedResult AccessDenied(ErrorCodeInfo internalCodeInfo)
         {
             return FailedResult.Create(CoreErrorCodes.AccessDenied, internalCodeInfo);
