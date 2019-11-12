@@ -33,6 +33,7 @@ namespace Intellias.CQRS.Compatibility.Tests
         [InlineData("IntelliGrowth_Identity")]
         [InlineData("IntelliGrowth_Competencies")]
         [InlineData("IntelliGrowth_JobProfiles")]
+        [InlineData("IntelliGrowth_Feedbacks")]
         [InlineData("IntelliGrowth_API")]
         public void RepoConsistencyTest(string repoName)
         {
