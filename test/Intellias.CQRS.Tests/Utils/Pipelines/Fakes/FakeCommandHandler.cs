@@ -33,7 +33,7 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines.Fakes
             var aggregate = await scope.FindAggregateAsync<FakeAggregateRoot, FakeAggregateState>(command.AggregateRootId, context);
             if (aggregate == null)
             {
-                return ValidationFailedWithCode(CoreErrorCodes.AggregateRootNotFound)
+                return ValidationFailed(CoreErrorCodes.AggregateRootNotFound)
                     .ForCommand<FakeUpdateCommand>();
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intellias.CQRS.Core.Results.Errors;
 using Newtonsoft.Json;
 
@@ -63,9 +64,10 @@ namespace Intellias.CQRS.Core.Results
         /// <param name="externalErrorCodeInfo">External Error Code Info.</param>
         /// <param name="detailsCodeInfo">Internal Error Code Info.</param>
         /// <returns>FailedResult.</returns>
+        [Obsolete("Please use alternative method name")]
         public static FailedResult CreateWithInternal(ErrorCodeInfo externalErrorCodeInfo, ErrorCodeInfo detailsCodeInfo)
         {
-            return CreateWithInternal(externalErrorCodeInfo, detailsCodeInfo, detailsCodeInfo.Message);
+            return Create(externalErrorCodeInfo, detailsCodeInfo, detailsCodeInfo.Message);
         }
 
         /// <summary>
@@ -75,6 +77,7 @@ namespace Intellias.CQRS.Core.Results
         /// <param name="detailsCodeInfo">Internal Error Code Info.</param>
         /// <param name="errorMessage">Error message.</param>
         /// <returns>FailedResult.</returns>
+        [Obsolete("Please use alternative method name")]
         public static FailedResult CreateWithInternal(
             ErrorCodeInfo externalErrorCodeInfo,
             ErrorCodeInfo detailsCodeInfo,
@@ -94,7 +97,57 @@ namespace Intellias.CQRS.Core.Results
         /// </summary>
         /// <param name="internalErrors">Internal Execution Errors.</param>
         /// <returns>FailedResult.</returns>
+        [Obsolete("Please use alternative method name")]
         public static FailedResult ValidationFailedWith(IReadOnlyCollection<ExecutionError> internalErrors)
+        {
+            var result = new FailedResult(CoreErrorCodes.ValidationFailed);
+
+            foreach (var internalError in internalErrors)
+            {
+                result.AddError(internalError);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Builds Failed Result using command property pass and default message.
+        /// </summary>
+        /// <param name="externalErrorCodeInfo">External Error Code Info.</param>
+        /// <param name="detailsCodeInfo">Internal Error Code Info.</param>
+        /// <returns>FailedResult.</returns>
+        public static FailedResult Create(ErrorCodeInfo externalErrorCodeInfo, ErrorCodeInfo detailsCodeInfo)
+        {
+            return Create(externalErrorCodeInfo, detailsCodeInfo, detailsCodeInfo.Message);
+        }
+
+        /// <summary>
+        /// Builds Failed Result using command property pass and custom message.
+        /// </summary>
+        /// <param name="externalErrorCodeInfo">External Error Code Info.</param>
+        /// <param name="detailsCodeInfo">Internal Error Code Info.</param>
+        /// <param name="errorMessage">Error message.</param>
+        /// <returns>FailedResult.</returns>
+        public static FailedResult Create(
+            ErrorCodeInfo externalErrorCodeInfo,
+            ErrorCodeInfo detailsCodeInfo,
+            string errorMessage)
+        {
+            var result = new FailedResult(externalErrorCodeInfo);
+
+            var internalError = new ExecutionError(detailsCodeInfo, null, errorMessage);
+
+            result.AddError(internalError);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Builds Validation Failed Result with all passed internal errors.
+        /// </summary>
+        /// <param name="internalErrors">Internal Execution Errors.</param>
+        /// <returns>FailedResult.</returns>
+        public static FailedResult ValidationFailed(IReadOnlyCollection<ExecutionError> internalErrors)
         {
             var result = new FailedResult(CoreErrorCodes.ValidationFailed);
 

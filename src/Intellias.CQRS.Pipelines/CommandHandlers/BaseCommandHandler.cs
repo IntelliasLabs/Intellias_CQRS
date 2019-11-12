@@ -14,24 +14,26 @@ namespace Intellias.CQRS.Pipelines.CommandHandlers
     public abstract class BaseCommandHandler
     {
         /// <summary>
-        /// Creates Validation Failed result with some internal error.(to be moved to CQRS).
+        /// Creates Validation Failed result with some internal error.
         /// </summary>
         /// <param name="codeInfo">Error code info about internal error.</param>
         /// <returns>Execution result.</returns>
+        [Obsolete("Please use alternative method name")]
         protected static IExecutionResult ValidationFailedWithCode(ErrorCodeInfo codeInfo)
         {
-            return FailedResult.CreateWithInternal(CoreErrorCodes.ValidationFailed, codeInfo);
+            return FailedResult.Create(CoreErrorCodes.ValidationFailed, codeInfo);
         }
 
         /// <summary>
-        /// Creates Validation Failed result with some internal error and custom message for it.(to be moved to CQRS).
+        /// Creates Validation Failed result with some internal error and custom message for it.
         /// </summary>
         /// <param name="codeInfo">Error code info about internal error.</param>
         /// <param name="customMessage">Custom message.</param>
         /// <returns>Execution result.</returns>
+        [Obsolete("Please use alternative method name")]
         protected static IExecutionResult ValidationFailedWithCode(ErrorCodeInfo codeInfo, string customMessage)
         {
-            return FailedResult.CreateWithInternal(CoreErrorCodes.ValidationFailed, codeInfo, customMessage);
+            return FailedResult.Create(CoreErrorCodes.ValidationFailed, codeInfo, customMessage);
         }
 
         /// <summary>
@@ -39,9 +41,41 @@ namespace Intellias.CQRS.Pipelines.CommandHandlers
         /// </summary>
         /// <param name="internalErrors">Internal errors.</param>
         /// <returns>Execution result.</returns>
+        [Obsolete("Please use alternative method name")]
         protected static IExecutionResult ValidationFailedWithDetails(IReadOnlyCollection<ExecutionError> internalErrors)
         {
-            return FailedResult.ValidationFailedWith(internalErrors);
+            return FailedResult.ValidationFailed(internalErrors);
+        }
+
+        /// <summary>
+        /// Creates Validation Failed result with some internal error.
+        /// </summary>
+        /// <param name="codeInfo">Error code info about internal error.</param>
+        /// <returns>Execution result.</returns>
+        protected static IExecutionResult ValidationFailed(ErrorCodeInfo codeInfo)
+        {
+            return FailedResult.Create(CoreErrorCodes.ValidationFailed, codeInfo);
+        }
+
+        /// <summary>
+        /// Creates Validation Failed result with some internal error and custom message for it.
+        /// </summary>
+        /// <param name="codeInfo">Error code info about internal error.</param>
+        /// <param name="customMessage">Custom message.</param>
+        /// <returns>Execution result.</returns>
+        protected static IExecutionResult ValidationFailed(ErrorCodeInfo codeInfo, string customMessage)
+        {
+            return FailedResult.Create(CoreErrorCodes.ValidationFailed, codeInfo, customMessage);
+        }
+
+        /// <summary>
+        /// Creates Validation Failed result with internal errors.
+        /// </summary>
+        /// <param name="internalErrors">Internal errors.</param>
+        /// <returns>Execution result.</returns>
+        protected static IExecutionResult ValidationFailed(IReadOnlyCollection<ExecutionError> internalErrors)
+        {
+            return FailedResult.ValidationFailed(internalErrors);
         }
 
         /// <summary>

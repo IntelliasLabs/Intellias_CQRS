@@ -37,7 +37,7 @@ namespace Intellias.CQRS.Tests.Core.Results
         public void ForCommand_WithInnerDetails_ReturnsResultWithCorrectSource()
         {
             var internalCodeInfo = CoreErrorCodes.AggregateRootNotFound;
-            var input = FailedResult.CreateWithInternal(CoreErrorCodes.ValidationFailed, internalCodeInfo);
+            var input = FailedResult.Create(CoreErrorCodes.ValidationFailed, internalCodeInfo);
 
             var result = input.ForCommand<TestCommand>(c => c.AggregateRootId);
 

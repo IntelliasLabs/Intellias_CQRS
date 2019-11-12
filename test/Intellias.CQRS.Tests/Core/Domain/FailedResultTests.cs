@@ -15,7 +15,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
             var externalCode = new ErrorCodeInfo(nameof(Core), FixtureUtils.String(), FixtureUtils.String());
             var internalCode = new ErrorCodeInfo(nameof(Core), FixtureUtils.String(), FixtureUtils.String());
 
-            var result = FailedResult.CreateWithInternal(externalCode, internalCode);
+            var result = FailedResult.Create(externalCode, internalCode);
 
             result.Code.Should().Be(externalCode.Code);
             result.Message.Should().Be(externalCode.Message);
@@ -32,7 +32,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
             var internalCode = new ErrorCodeInfo(nameof(Core), FixtureUtils.String(), FixtureUtils.String());
             var customMessage = FixtureUtils.String();
 
-            var result = FailedResult.CreateWithInternal(externalCode, internalCode, customMessage);
+            var result = FailedResult.Create(externalCode, internalCode, customMessage);
 
             result.Code.Should().Be(externalCode.Code);
             result.Message.Should().Be(externalCode.Message);
@@ -51,7 +51,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
                 new ExecutionError(new ErrorCodeInfo(nameof(Core), FixtureUtils.String(), FixtureUtils.String()))
             };
 
-            var result = FailedResult.ValidationFailedWith(executionErrors);
+            var result = FailedResult.ValidationFailed(executionErrors);
 
             result.CodeInfo.Should().BeEquivalentTo(CoreErrorCodes.ValidationFailed);
             result.Details.Should().BeEquivalentTo<ExecutionError>(executionErrors);

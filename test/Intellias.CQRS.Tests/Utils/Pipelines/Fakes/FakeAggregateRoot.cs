@@ -24,7 +24,7 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines.Fakes
             {
                 var errorCode = new ErrorCodeInfo(nameof(Core), "InputCantBeNullOrEmpty", "Data can't be empty.");
 
-                return ValidationFailedWithCode(errorCode)
+                return ValidationFailed(errorCode)
                     .ForCommand<FakeUpdateCommand>(c => c.Data);
             }
 

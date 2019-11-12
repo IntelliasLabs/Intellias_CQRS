@@ -40,7 +40,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
         {
             if (command.TestData.Length < 10)
             {
-                return ValidationFailedWithCode(CoreErrorCodes.ValidationFailed, "Text is too small.");
+                return ValidationFailed(CoreErrorCodes.ValidationFailed, "Text is too small.");
             }
 
             PublishEvent(new TestUpdatedEvent

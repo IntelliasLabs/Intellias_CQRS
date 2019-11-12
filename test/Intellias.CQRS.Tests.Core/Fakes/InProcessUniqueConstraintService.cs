@@ -22,7 +22,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             {
                 var customMessage = $"indexName: {indexName} not registered";
 
-                return FailedResult.CreateWithInternal(
+                return FailedResult.Create(
                         CoreErrorCodes.UnhandledError,
                         CoreErrorCodes.NameIsNotFound,
                         customMessage);
@@ -32,7 +32,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             {
                 var customMessage = $"no such value: {value} for indexName: {indexName}";
 
-                return FailedResult.CreateWithInternal(
+                return FailedResult.Create(
                         CoreErrorCodes.UnhandledError,
                         CoreErrorCodes.NameIsNotFound,
                         customMessage);
@@ -54,7 +54,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             {
                 var customMessage = $"value: {value} for indexName: {indexName} already exists";
 
-                return FailedResult.CreateWithInternal(
+                return FailedResult.Create(
                         CoreErrorCodes.ValidationFailed,
                         CoreErrorCodes.NameIsInUse,
                         customMessage);
@@ -71,7 +71,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             {
                 var notInUseMessage = $"indexName: {indexName} not registered";
 
-                return FailedResult.CreateWithInternal(
+                return FailedResult.Create(
                         CoreErrorCodes.UnhandledError,
                         CoreErrorCodes.NameIsNotFound,
                         notInUseMessage);
@@ -81,7 +81,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             {
                 var notInUseMessage = $"no such oldValue: {oldValue} for indexName: {indexName}";
 
-                return FailedResult.CreateWithInternal(
+                return FailedResult.Create(
                         CoreErrorCodes.UnhandledError,
                         CoreErrorCodes.NameIsNotFound,
                         notInUseMessage);
@@ -91,7 +91,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             {
                 var inUseMessage = $"newValue: {newValue} for indexName: {indexName} already exists";
 
-                return FailedResult.CreateWithInternal(
+                return FailedResult.Create(
                         CoreErrorCodes.ValidationFailed,
                         CoreErrorCodes.NameIsInUse,
                         inUseMessage);
