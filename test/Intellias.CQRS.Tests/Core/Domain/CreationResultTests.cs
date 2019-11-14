@@ -131,6 +131,105 @@ namespace Intellias.CQRS.Tests.Core.Domain
             result.Errors.Should().ContainEquivalentOf(expectedError2);
         }
 
+        [Fact]
+        public void WithSource_SuccessResult_ShouldReturnTheSameResult()
+        {
+            var creationResult = CreationResult.Succeeded(new DummyEntry());
+
+            var result = creationResult
+                .ForCommand<DummyEntry, FakeCreateCommand>(c => c.SomeArray[0].SomeInternalArray[0].SomeInt)
+                .WithSource<DummyEntry, FakeCreateCommand>(c => c.SomeArray[3].SomeInternalArray[1]);
+
+            result.Should().BeEquivalentTo(creationResult);
+        }
+
+        [Fact]
+        public void WithSource_FailedResultWithTheSameSource_ShouldReturnTheSameSource()
+        {
+            var errorCode = new ErrorCodeInfo(nameof(Core), FixtureUtils.String(), FixtureUtils.String());
+            var creationResult = CreationResult.Failed<DummyEntry>(errorCode);
+
+            var result = creationResult
+                .ForCommand<DummyEntry, FakeCreateCommand>(c => c.SomeArray[0].SomeInternalArray[0].SomeInt)
+                .WithSource<DummyEntry, FakeCreateCommand>(c => c.SomeArray[0].SomeInternalArray[0].SomeInt);
+
+            result.Entry.Should().BeNull();
+
+            var internalError = result.Errors.Single();
+            internalError.CodeInfo.Should().Be(errorCode);
+            internalError.Code.Should().Be(errorCode.Code);
+            internalError.Message.Should().Be(errorCode.Message);
+            internalError.Source.Should().Be("FakeCreateCommand.SomeArray.0.SomeInternalArray.0.SomeInt");
+        }
+
+        [Fact]
+        public void WithSource_FailedResultWithUpdatedSource_ShouldReturnUpdatedSource()
+        {
+            var errorCode = new ErrorCodeInfo(nameof(Core), FixtureUtils.String(), FixtureUtils.String());
+            var creationResult = CreationResult.Failed<DummyEntry>(errorCode);
+
+            var result = creationResult
+                .ForCommand<DummyEntry, FakeCreateCommand>(c => c.SomeArray[0].SomeInternalArray[0].SomeInt)
+                .WithSource<DummyEntry, FakeCreateCommand>(c => c.SomeArray[3].SomeInternalArray[1].SomeInt);
+
+            result.Entry.Should().BeNull();
+
+            var internalError = result.Errors.Single();
+            internalError.CodeInfo.Should().Be(errorCode);
+            internalError.Code.Should().Be(errorCode.Code);
+            internalError.Message.Should().Be(errorCode.Message);
+            internalError.Source.Should().Be("FakeCreateCommand.SomeArray.3.SomeInternalArray.1.SomeInt");
+        }
+
+        [Fact]
+        public void WithSource_FailedResultWithShorterSource_ShouldReturnCorrectSource()
+        {
+            var errorCode = new ErrorCodeInfo(nameof(Core), FixtureUtils.String(), FixtureUtils.String());
+            var creationResult = CreationResult.Failed<DummyEntry>(errorCode);
+
+            var result = creationResult
+                .ForCommand<DummyEntry, FakeCreateCommand>(c => c.SomeArray[0].SomeInternalArray[0].SomeInt)
+                .WithSource<DummyEntry, FakeCreateCommand>(c => c.SomeArray[3]);
+
+            result.Entry.Should().BeNull();
+
+            var internalError = result.Errors.Single();
+            internalError.CodeInfo.Should().Be(errorCode);
+            internalError.Code.Should().Be(errorCode.Code);
+            internalError.Message.Should().Be(errorCode.Message);
+            internalError.Source.Should().Be("FakeCreateCommand.SomeArray.3.SomeInternalArray.0.SomeInt");
+        }
+
+        [Fact]
+        public void WithSource_FailedResultWith2Errors_ShouldUpdateOnlyNeededSource()
+        {
+            var errorSource1 = SourceBuilder.BuildErrorSource<FakeCreateCommand>(c => c.AggregateRootId);
+            var errorSource2 = SourceBuilder.BuildErrorSource<FakeCreateCommand>(c => c.SomeArray[0].SomeInternalArray[0].SomeInt);
+
+            var executionErrors = new[]
+            {
+                new ExecutionError(new ErrorCodeInfo(nameof(Core), FixtureUtils.String(), FixtureUtils.String()), errorSource1),
+                new ExecutionError(new ErrorCodeInfo(nameof(Core), FixtureUtils.String(), FixtureUtils.String()), errorSource2)
+            };
+
+            var result = new CreationResult<DummyEntry>(executionErrors)
+                .WithSource<DummyEntry, FakeCreateCommand>(c => c.SomeArray[3]);
+
+            result.Entry.Should().BeNull();
+
+            var internalErrors = result.Errors.ToArray();
+
+            internalErrors[0].CodeInfo.Should().Be(executionErrors[0].CodeInfo);
+            internalErrors[0].Code.Should().Be(executionErrors[0].Code);
+            internalErrors[0].Message.Should().Be(executionErrors[0].Message);
+            internalErrors[0].Source.Should().Be(errorSource1);
+
+            internalErrors[1].CodeInfo.Should().Be(executionErrors[1].CodeInfo);
+            internalErrors[1].Code.Should().Be(executionErrors[1].Code);
+            internalErrors[1].Message.Should().Be(executionErrors[1].Message);
+            internalErrors[1].Source.Should().Be("FakeCreateCommand.SomeArray.3.SomeInternalArray.0.SomeInt");
+        }
+
         private class DummyEntry
         {
         }

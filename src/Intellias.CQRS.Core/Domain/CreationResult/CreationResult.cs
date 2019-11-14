@@ -134,5 +134,71 @@ namespace Intellias.CQRS.Core.Domain.CreationResult
         {
             return creationResult.ForCommand<TResult, TCommand>(c => c);
         }
+
+        /// <summary>
+        /// Extension for Creation Result that fixes path with incorrect indices.
+        /// </summary>
+        /// <typeparam name="TResult">Type of entity to be created.</typeparam>
+        /// <typeparam name="TCommand">Command type.</typeparam>
+        /// <param name="creationResult">Creation Result.</param>
+        /// <param name="getProperty">Property of command to fill as source.</param>
+        /// <returns>Modified creation result.</returns>
+        public static CreationResult<TResult> WithSource<TResult, TCommand>(
+            this CreationResult<TResult> creationResult,
+            Expression<Func<TCommand, object>> getProperty)
+            where TCommand : ICommand
+            where TResult : class
+        {
+            if (creationResult.Entry != null)
+            {
+                return creationResult;
+            }
+
+            var newSource = SourceBuilder.BuildErrorSource(getProperty);
+            var allErrors = new List<ExecutionError>();
+
+            foreach (var error in creationResult.Errors)
+            {
+                var updatedError = UpdateErrorWithSource(error, newSource);
+
+                allErrors.Add(updatedError);
+            }
+
+            return new CreationResult<TResult>(allErrors);
+        }
+
+        private static ExecutionError UpdateErrorWithSource(ExecutionError error, string newSource)
+        {
+            var currentChunks = error.Source.Split('.');
+            var newChunks = newSource.Split('.');
+
+            for (var i = 0; i < currentChunks.Length; i++)
+            {
+                // If new path we want to change is shorter than initial => skip elements that are longer.
+                if (i >= newChunks.Length)
+                {
+                    break;
+                }
+
+                if (currentChunks[i] != newChunks[i])
+                {
+                    var isInteger = int.TryParse(newChunks[i], out _);
+
+                    if (isInteger)
+                    {
+                        currentChunks[i] = newChunks[i];
+                    }
+                    else
+                    {
+                        // In case where it's not an integer and not should be rewritten.
+                        break;
+                    }
+                }
+            }
+
+            var resultSource = string.Join(".", currentChunks);
+
+            return new ExecutionError(error.CodeInfo, resultSource, error.Message);
+        }
     }
 }
