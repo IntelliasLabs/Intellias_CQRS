@@ -43,6 +43,21 @@ namespace Intellias.CQRS.Core.Results.Errors
                 {
                     var arrayExpression = (BinaryExpression)currentExpression;
 
+                    Func<MemberExpression, string> getValue = (member) =>
+                    {
+                        var objectMember = Expression.Convert(member, typeof(object));
+                        var getterLambda = Expression.Lambda<Func<object>>(objectMember);
+                        var getter = getterLambda.Compile();
+
+                        return getter().ToString();
+                    };
+
+                    var index = arrayExpression.Right is ConstantExpression
+                        ? ((ConstantExpression)arrayExpression.Right).Value
+                        : getValue((MemberExpression)arrayExpression.Right);
+
+                    source = $"{index}.{source}";
+
                     currentExpression = arrayExpression.Left;
                     continue;
                 }

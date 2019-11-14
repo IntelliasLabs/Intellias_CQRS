@@ -24,12 +24,23 @@ namespace Intellias.CQRS.Tests.Core.Domain
             result.Should().Be("TestSourceCommand.SomeInt");
         }
 
-        [Fact]
-        public void BuildErrorSource_ArrayTypeExpression_SuccessTest()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(999)]
+        public void BuildErrorSource_ArrayTypeExpressionWithIndexParameter_SuccessTest(int index)
         {
-            var result = SourceBuilder.BuildErrorSource<TestSourceCommand>(c => c.SomeArray[0].SomeString);
+            var result = SourceBuilder.BuildErrorSource<TestSourceCommand>(c => c.SomeArray[index].SomeString);
 
-            result.Should().Be("TestSourceCommand.SomeArray.SomeString");
+            result.Should().Be($"TestSourceCommand.SomeArray.{index}.SomeString");
+        }
+
+        [Fact]
+        public void BuildErrorSource_ArrayTypeExpressionWithConstantIndexParameter_SuccessTest()
+        {
+            var result = SourceBuilder.BuildErrorSource<TestSourceCommand>(c => c.SomeArray[3].SomeString);
+
+            result.Should().Be($"TestSourceCommand.SomeArray.3.SomeString");
         }
 
         private class TestSourceCommand : Command
