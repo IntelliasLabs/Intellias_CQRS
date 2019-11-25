@@ -50,6 +50,56 @@ namespace Intellias.CQRS.Core.DataAnnotations.Validators
         }
 
         /// <summary>
+        /// Returns all validation errors for an object through inpout attributes collection.
+        /// </summary>
+        /// <param name="value">The value to pass to the validation attributes.</param>
+        /// <param name="validationContext">Describes the type/member being evaluated.</param>
+        /// <param name="attributes">The validation attributes to evaluate.</param>
+        /// <param name="breakOnFirstError">
+        /// Whether or not to break on the first validation failure. A <see cref="RequiredAttribute" /> failure will always abort with that sole failure.
+        /// </param>
+        /// <returns>The collection of validation errors.</returns>
+        public static IEnumerable<ExecutionError> GetValidationErrors(
+            object value,
+            ValidationContext validationContext,
+            IReadOnlyCollection<ValidationAttribute> attributes,
+            bool breakOnFirstError)
+        {
+            var errors = new List<ExecutionError>();
+
+            // Get the required validator if there is one and test it first, aborting on failure.
+            var required = attributes.OfType<RequiredAttribute>().FirstOrDefault();
+            if (required != null && !TryValidate(value, validationContext, required, out var validationError))
+            {
+                errors.Add(validationError);
+                return errors;
+            }
+
+            // Iterate through the rest of the validators, skipping the required validator.
+            foreach (var attribute in attributes)
+            {
+                if (ReferenceEquals(attribute, required))
+                {
+                    continue;
+                }
+
+                if (TryValidate(value, validationContext, attribute, out validationError))
+                {
+                    continue;
+                }
+
+                errors.Add(validationError);
+
+                if (breakOnFirstError)
+                {
+                    break;
+                }
+            }
+
+            return errors;
+        }
+
+        /// <summary>
         /// Internal iterator to enumerate all validation errors for the given object instance.
         /// </summary>
         /// <param name="instance">Object instance to test.</param>
@@ -188,56 +238,6 @@ namespace Intellias.CQRS.Core.DataAnnotations.Validators
             }
 
             return items;
-        }
-
-        /// <summary>
-        /// Internal iterator to enumerate all validation errors for an value.
-        /// </summary>
-        /// <param name="value">The value to pass to the validation attributes.</param>
-        /// <param name="validationContext">Describes the type/member being evaluated.</param>
-        /// <param name="attributes">The validation attributes to evaluate.</param>
-        /// <param name="breakOnFirstError">
-        /// Whether or not to break on the first validation failure. A <see cref="RequiredAttribute" /> failure will always abort with that sole failure.
-        /// </param>
-        /// <returns>The collection of validation errors.</returns>
-        private static IEnumerable<ExecutionError> GetValidationErrors(
-            object value,
-            ValidationContext validationContext,
-            IReadOnlyCollection<ValidationAttribute> attributes,
-            bool breakOnFirstError)
-        {
-            var errors = new List<ExecutionError>();
-
-            // Get the required validator if there is one and test it first, aborting on failure.
-            var required = attributes.OfType<RequiredAttribute>().FirstOrDefault();
-            if (required != null && !TryValidate(value, validationContext, required, out var validationError))
-            {
-                errors.Add(validationError);
-                return errors;
-            }
-
-            // Iterate through the rest of the validators, skipping the required validator.
-            foreach (var attribute in attributes)
-            {
-                if (ReferenceEquals(attribute, required))
-                {
-                    continue;
-                }
-
-                if (TryValidate(value, validationContext, attribute, out validationError))
-                {
-                    continue;
-                }
-
-                errors.Add(validationError);
-
-                if (breakOnFirstError)
-                {
-                    break;
-                }
-            }
-
-            return errors;
         }
 
         /// <summary>

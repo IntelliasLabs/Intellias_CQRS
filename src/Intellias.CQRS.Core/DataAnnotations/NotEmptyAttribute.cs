@@ -31,8 +31,8 @@ namespace Intellias.CQRS.Core.DataAnnotations
             switch (value)
             {
                 case string s when string.IsNullOrWhiteSpace(s):
-                case ICollection c when c.Count == 0:
                 case Array a when a.Length == 0:
+                case ICollection c when c.Count == 0:
                 case IEnumerable e when !e.Cast<object>().Any():
                     return false;
                 default:
