@@ -1,15 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Intellias.CQRS.CommandStore.AzureTable.Extensions;
 using Intellias.CQRS.Core.Commands;
+using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Intellias.CQRS.CommandStore.AzureTable
 {
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public class AzureTableCommandStore : ICommandStore
     {
-        private readonly CloudTable commandTable;
+        private readonly CloudTableProxy tableProxy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureTableCommandStore"/> class.
@@ -21,12 +24,9 @@ namespace Intellias.CQRS.CommandStore.AzureTable
                 .Parse(storeConnectionString)
                 .CreateCloudTableClient();
 
-            commandTable = client.GetTableReference(nameof(CommandStore));
+            var commandTableReference = client.GetTableReference(nameof(CommandStore));
 
-            if (!commandTable.ExistsAsync().GetAwaiter().GetResult())
-            {
-                commandTable.CreateIfNotExistsAsync().Wait();
-            }
+            tableProxy = new CloudTableProxy(commandTableReference, ensureTableExists: true);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Intellias.CQRS.CommandStore.AzureTable
         public Task SaveAsync(ICommand command)
         {
             var operation = TableOperation.Insert(command.ToStoreCommand());
-            return commandTable.ExecuteAsync(operation);
+            return tableProxy.ExecuteAsync(operation);
         }
     }
 }
