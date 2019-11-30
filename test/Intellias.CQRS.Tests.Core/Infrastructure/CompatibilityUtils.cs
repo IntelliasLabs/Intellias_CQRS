@@ -93,7 +93,10 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
             var doc = new XmlDocument();
             doc.Load(projectFile);
 
-            var packageReferences = doc.GetElementsByTagName("PackageReference").Cast<XmlNode>().ToList();
+            var packageReferences = doc.GetElementsByTagName("PackageReference")
+                .Cast<XmlNode>()
+                .Where(x => x != null)
+                .ToList();
             foreach (var packageReference in packageReferences)
             {
                 var packageName = packageReference
