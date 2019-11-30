@@ -98,15 +98,10 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
                 .ToList();
             foreach (var packageReference in packageReferences)
             {
-                if (packageReference != null)
+                var packageName = packageReference.Attributes["Include"].Value;
+                if (packageName != null && packageName.StartsWith(startWith, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var packageName = packageReference
-                    .Attributes["Include"]
-                    .Value;
-                    if (packageName != null && packageName.StartsWith(startWith, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        packages.Add(packageName);
-                    }
+                    packages.Add(packageName);
                 }
             }
 
