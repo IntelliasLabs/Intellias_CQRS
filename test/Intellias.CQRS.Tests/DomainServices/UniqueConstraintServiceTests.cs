@@ -6,7 +6,7 @@ using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
 using Intellias.CQRS.DomainServices;
-using Intellias.CQRS.Tests.Utils;
+using Intellias.CQRS.Tests.Core.Infrastructure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Xunit;

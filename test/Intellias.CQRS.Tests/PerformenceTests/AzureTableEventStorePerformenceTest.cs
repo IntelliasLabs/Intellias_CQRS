@@ -9,8 +9,8 @@ using Intellias.CQRS.Tests.Core.CommandHandlers;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.EventHandlers;
 using Intellias.CQRS.Tests.Core.Fakes;
+using Intellias.CQRS.Tests.Core.Infrastructure;
 using Intellias.CQRS.Tests.Core.Queries;
-using Intellias.CQRS.Tests.Utils;
 using Microsoft.WindowsAzure.Storage;
 using Xunit;
 

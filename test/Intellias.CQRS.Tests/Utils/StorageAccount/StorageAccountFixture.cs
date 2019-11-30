@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Intellias.CQRS.Tests.Core.Infrastructure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;

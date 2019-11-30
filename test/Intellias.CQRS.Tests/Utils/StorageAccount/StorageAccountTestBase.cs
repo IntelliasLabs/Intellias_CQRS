@@ -1,3 +1,4 @@
+using Intellias.CQRS.Tests.Core.Infrastructure;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Utils.StorageAccount
