@@ -95,10 +95,14 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
 
             var packageReferences = doc.GetElementsByTagName("PackageReference")
                 .Cast<XmlNode>()
-                .Where(x => x != null)
                 .ToList();
             foreach (var packageReference in packageReferences)
             {
+                if (packageReference == null)
+                {
+                    continue;
+                }
+
                 var packageName = packageReference
                     .Attributes["Include"]
                     .Value;
