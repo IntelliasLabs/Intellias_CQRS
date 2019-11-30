@@ -84,6 +84,11 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
 
         private static List<string> GetPackages(string projectFile, string startWith)
         {
+            if (string.IsNullOrWhiteSpace(startWith))
+            {
+                throw new ArgumentNullException(nameof(startWith));
+            }
+
             var packages = new List<string>();
             var doc = new XmlDocument();
             doc.Load(projectFile);
@@ -92,7 +97,7 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
             foreach (var packageReference in packageReferences)
             {
                 var packageName = packageReference.Attributes["Include"].Value;
-                if (packageName != null && packageName.StartsWith(startWith, StringComparison.InvariantCultureIgnoreCase))
+                if (packageName.StartsWith(startWith, StringComparison.InvariantCultureIgnoreCase))
                 {
                     packages.Add(packageName);
                 }
