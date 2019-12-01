@@ -98,6 +98,7 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
                 .ToList();
 
             foreach (var packageName in packageReferences
+                .Where(x => x.Attributes != null)
                 .Select(x => x.Attributes["Include"])
                 .Select(x => x.Value))
             {
