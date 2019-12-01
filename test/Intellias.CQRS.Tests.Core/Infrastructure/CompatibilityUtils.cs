@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,6 +16,7 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
     /// <summary>
     /// Compatibility Utils.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class CompatibilityUtils
     {
         private const string BasePath = "https://IntelliasTS@dev.azure.com/IntelliasTS/IntelliGrowth/_git/";
