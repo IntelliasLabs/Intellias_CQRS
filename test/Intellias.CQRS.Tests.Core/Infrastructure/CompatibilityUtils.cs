@@ -96,9 +96,11 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
             var packageReferences = doc.GetElementsByTagName("PackageReference")
                 .Cast<XmlNode>()
                 .ToList();
-            foreach (var packageReference in packageReferences)
+
+            foreach (var packageName in packageReferences
+                .Select(x => x.Attributes["Include"])
+                .Select(x => x.Value))
             {
-                var packageName = packageReference.Attributes["Include"].Value;
                 if (packageName != null && packageName.StartsWith(startWith, StringComparison.InvariantCultureIgnoreCase))
                 {
                     packages.Add(packageName);
