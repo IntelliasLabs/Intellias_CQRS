@@ -3,7 +3,7 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Domain;
-using Intellias.CQRS.Tests.Utils;
+using Intellias.CQRS.Tests.Core.Infrastructure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Moq;

@@ -1,9 +1,12 @@
 using System.IO;
-using Intellias.CQRS.Tests.Utils.Options;
+using Intellias.CQRS.Tests.Core.Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 
-namespace Intellias.CQRS.Tests.Utils
+namespace Intellias.CQRS.Tests.Core.Infrastructure
 {
+    /// <summary>
+    /// Tests Configuration.
+    /// </summary>
     public class TestsConfiguration
     {
         private static readonly IConfiguration Configuration = new ConfigurationBuilder()
@@ -13,17 +16,26 @@ namespace Intellias.CQRS.Tests.Utils
             .AddEnvironmentVariables()
             .Build();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TestsConfiguration"/> class.
+        /// </summary>
         public TestsConfiguration()
         {
-            this.StorageAccount = Configuration
+            StorageAccount = Configuration
                 .GetSection(StorageAccountOptions.SectionName)
                 .Get<StorageAccountOptions>();
 
-            this.AzureDevOpsAccessToken = Configuration.GetValue<string>(nameof(AzureDevOpsAccessToken));
+            AzureDevOpsAccessToken = Configuration.GetValue<string>(nameof(AzureDevOpsAccessToken));
         }
 
+        /// <summary>
+        /// Storage Account.
+        /// </summary>
         public StorageAccountOptions StorageAccount { get; }
 
+        /// <summary>
+        /// Azure DevOps Access Token.
+        /// </summary>
         public string AzureDevOpsAccessToken { get; }
     }
 }
