@@ -7,16 +7,11 @@ namespace Intellias.CQRS.Configuration
     /// IngrowthIdentityConfig.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class IngrowthIdentityConfig
+    public class IngrowthIdentityConfig : IngrowthBusConfig
     {
         /// <summary>
         /// CoE Groups Root-Node Id.
         /// </summary>
         public Guid CoEGroupsRootNodeId { get; set; }
-
-        /// <summary>
-        /// StorageAccountConnectionString.
-        /// </summary>
-        public string StorageAccountConnectionString { get; set; } = string.Empty;
     }
 }
