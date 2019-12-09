@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;

@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Persistence.AzureStorage\Intellias.CQRS.Persistence.AzureStorage.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Polly" Version="7.1.1" />
