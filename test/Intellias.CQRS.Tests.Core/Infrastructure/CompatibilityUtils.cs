@@ -44,7 +44,7 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
         /// <param name="repoName">repoName.</param>
         public void RepoConsistencyTest(string startWith, string repoName)
         {
-            var repoPath = Path.Combine("repos", repoName);
+            var repoPath = Path.Combine("../../repos", repoName);
             if (Directory.Exists(repoPath))
             {
                 DeleteDirectory(repoPath);
@@ -76,7 +76,14 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
                 DotNet($"sln {solutionFile} add {projectsToAdd}");
 
                 DotNet($"build {solutionFile}");
-                DotNet($"test {solutionFile}");
+
+                var testProjects = projectFiles
+                    .Where(x => x.Contains("Tests"))
+                    .Where(x => !x.Contains("Compatibility"));
+                foreach (var testProject in testProjects)
+                {
+                    DotNet($"test {testProject}");
+                }
             }
             finally
             {
