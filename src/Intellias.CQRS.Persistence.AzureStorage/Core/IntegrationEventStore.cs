@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
@@ -14,7 +15,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Core
     [ExcludeFromCodeCoverage]
     public class IntegrationEventStore : IIntegrationEventStore
     {
-        private readonly CloudTable table;
+        private readonly CloudTableProxy tableProxy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationEventStore"/> class.
@@ -26,18 +27,15 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Core
                 .Parse(connectionString)
                 .CreateCloudTableClient();
 
-            table = client.GetTableReference(nameof(IntegrationEventStore));
+            var tableReference = client.GetTableReference(nameof(IntegrationEventStore));
 
-            if (!table.ExistsAsync().GetAwaiter().GetResult())
-            {
-                table.CreateIfNotExistsAsync().GetAwaiter().GetResult();
-            }
+            tableProxy = new CloudTableProxy(tableReference, ensureTableExists: true);
         }
 
         /// <inheritdoc />
         public Task SaveUnpublishedAsync(IIntegrationEvent @event)
         {
-            return table.ExecuteAsync(TableOperation.Insert(new DomainStoreEntity(@event)));
+            return tableProxy.ExecuteAsync(TableOperation.Insert(new DomainStoreEntity(@event)));
         }
 
         /// <inheritdoc />
@@ -48,7 +46,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Core
                 { nameof(DomainStoreEntity.IsPublished), new EntityProperty(true) }
             });
 
-            return table.ExecuteAsync(TableOperation.Merge(entity));
+            return tableProxy.ExecuteAsync(TableOperation.Merge(entity));
         }
 
         private static string GetRowKey(DateTime created)
