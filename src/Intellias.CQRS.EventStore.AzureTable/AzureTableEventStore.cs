@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
+using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
@@ -15,22 +16,34 @@ namespace Intellias.CQRS.EventStore.AzureTable
     /// </summary>
     public class AzureTableEventStore : IEventStore
     {
-        private readonly CloudTable eventTable;
+        private readonly CloudTableProxy tableProxy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureTableEventStore"/> class.
         /// </summary>
         /// <param name="account">Azure Table Storage Account.</param>
+        [Obsolete("Use constructor with string connection string.")]
         public AzureTableEventStore(CloudStorageAccount account)
         {
             var client = account.CreateCloudTableClient();
+            var tableReference = client.GetTableReference(nameof(EventStore));
 
-            eventTable = client.GetTableReference(nameof(EventStore));
+            tableProxy = new CloudTableProxy(tableReference, ensureTableExists: true);
+        }
 
-            if (!eventTable.ExistsAsync().GetAwaiter().GetResult())
-            {
-                eventTable.CreateIfNotExistsAsync().Wait();
-            }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureTableEventStore"/> class.
+        /// </summary>
+        /// <param name="connectionString">Connection string to table..</param>
+        public AzureTableEventStore(string connectionString)
+        {
+            var client = CloudStorageAccount
+                .Parse(connectionString)
+                .CreateCloudTableClient();
+
+            var tableReference = client.GetTableReference(nameof(EventStore));
+
+            tableProxy = new CloudTableProxy(tableReference, ensureTableExists: true);
         }
 
         /// <inheritdoc />
@@ -43,7 +56,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
 
             var batchOperation = new TableBatchOperation();
             entity.Events.ToList().ForEach(e => batchOperation.Insert(new EventStoreEvent(e)));
-            await eventTable.ExecuteBatchAsync(batchOperation);
+            await tableProxy.ExecuteBatchAsync(batchOperation);
 
             return entity.Events;
         }
@@ -62,7 +75,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
 
             do
             {
-                var queryResults = await eventTable.ExecuteQuerySegmentedAsync(query, continuationToken);
+                var queryResults = await tableProxy.ExecuteQuerySegmentedAsync(query, continuationToken);
 
                 if (!queryResults.Results.Any())
                 {

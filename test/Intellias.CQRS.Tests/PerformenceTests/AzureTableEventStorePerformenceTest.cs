@@ -25,8 +25,7 @@ namespace Intellias.CQRS.Tests.PerformenceTests
         {
             // Let's use real event Store to test related performance issues with it
             var cfg = new TestsConfiguration();
-            var storageAccount = CloudStorageAccount.Parse(cfg.StorageAccount.ConnectionString);
-            eventStore = new AzureTableEventStore(storageAccount);
+            eventStore = new AzureTableEventStore(cfg.StorageAccount.ConnectionString);
 
             // Fake part
             var eventBus = new InProcessEventBus();

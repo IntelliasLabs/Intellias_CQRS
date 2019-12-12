@@ -8,5 +8,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Persistence.AzureStorage\Intellias.CQRS.Persistence.AzureStorage.csproj" />
   </ItemGroup>
 </Project>

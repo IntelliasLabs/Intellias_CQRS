@@ -26,9 +26,9 @@ namespace Intellias.CQRS.Tests.Core
             BusMock = new Mock<IEventBus>();
 
             var cfg = new TestsConfiguration();
-            var account = CloudStorageAccount.Parse(cfg.StorageAccount.ConnectionString);
-            Store = new AzureTableEventStore(account);
+            Store = new AzureTableEventStore(cfg.StorageAccount.ConnectionString);
 
+            var account = CloudStorageAccount.Parse(cfg.StorageAccount.ConnectionString);
             var tableClient = account.CreateCloudTableClient();
 
             AggregateTable = tableClient.GetTableReference("AggregateStore");
