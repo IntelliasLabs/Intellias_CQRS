@@ -18,7 +18,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
     {
         private const string ContinuationTokenKey = nameof(ContinuationTokenKey);
         private const string TableKey = nameof(TableKey);
-        private const string OperationKey = nameof(OperationKey);
+        private const string BatchOperationKey = nameof(BatchOperationKey);
         private const string QueryKey = nameof(QueryKey);
 
         private static readonly Random Random = new Random(Environment.TickCount);
@@ -83,14 +83,36 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
                 context =>
                 {
                     var policyTable = (CloudTable)context[TableKey];
-                    var policyOperation = (TableOperation)context[OperationKey];
+                    var policyOperation = (TableOperation)context[BatchOperationKey];
 
                     return policyTable.ExecuteAsync(policyOperation);
                 },
                 new Dictionary<string, object>
                 {
                     [TableKey] = table,
-                    [OperationKey] = operation
+                    [BatchOperationKey] = operation
+                });
+        }
+
+        /// <summary>
+        /// Executes <paramref name="batch"/>.
+        /// </summary>
+        /// <param name="batch">Operations in batch to be executed.</param>
+        /// <returns>Operation result.</returns>
+        public async Task<IList<TableResult>> ExecuteBatchAsync(TableBatchOperation batch)
+        {
+            return await CreateTablePolicy.ExecuteAsync(
+                context =>
+                {
+                    var policyTable = (CloudTable)context[TableKey];
+                    var policyOperation = (TableBatchOperation)context[BatchOperationKey];
+
+                    return policyTable.ExecuteBatchAsync(policyOperation);
+                },
+                new Dictionary<string, object>
+                {
+                    [TableKey] = table,
+                    [BatchOperationKey] = batch
                 });
         }
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Intellias.CQRS.Pipelines.Transactions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -17,7 +18,10 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
     [ExcludeFromCodeCoverage]
     public class TransactionStore : ITransactionStore
     {
-        private readonly CloudTable table;
+        /// <summary>
+        /// Table proxy.
+        /// </summary>
+        private readonly CloudTableProxy tableProxy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransactionStore"/> class.
@@ -26,15 +30,12 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
         public TransactionStore(string connectionString)
         {
             var client = CloudStorageAccount
-                .Parse(connectionString)
-                .CreateCloudTableClient();
+               .Parse(connectionString)
+               .CreateCloudTableClient();
 
-            table = client.GetTableReference(nameof(TransactionStore));
+            var tableReference = client.GetTableReference(nameof(TransactionStore));
 
-            if (!table.ExistsAsync().GetAwaiter().GetResult())
-            {
-                table.CreateIfNotExistsAsync().GetAwaiter().GetResult();
-            }
+            tableProxy = new CloudTableProxy(tableReference, ensureTableExists: true);
         }
 
         /// <inheritdoc />
@@ -50,7 +51,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
                 batchOperation.Insert(new TransactionStoreDataEntity(transactionId, @event));
             }
 
-            return table.ExecuteBatchAsync(batchOperation);
+            return tableProxy.ExecuteBatchAsync(batchOperation);
         }
 
         /// <inheritdoc />
@@ -61,7 +62,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
                 { nameof(TransactionStoreFlagEntity.IsCommited), new EntityProperty(true) }
             });
 
-            return table.ExecuteAsync(TableOperation.Merge(entity));
+            return tableProxy.ExecuteAsync(TableOperation.Merge(entity));
         }
 
         private class TransactionStoreDataEntity : TableEntity
