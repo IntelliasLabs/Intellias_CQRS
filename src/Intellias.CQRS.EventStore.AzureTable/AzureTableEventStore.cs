@@ -21,19 +21,6 @@ namespace Intellias.CQRS.EventStore.AzureTable
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureTableEventStore"/> class.
         /// </summary>
-        /// <param name="account">Azure Table Storage Account.</param>
-        [Obsolete("Use constructor with string connection string.")]
-        public AzureTableEventStore(CloudStorageAccount account)
-        {
-            var client = account.CreateCloudTableClient();
-            var tableReference = client.GetTableReference(nameof(EventStore));
-
-            tableProxy = new CloudTableProxy(tableReference, ensureTableExists: true);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AzureTableEventStore"/> class.
-        /// </summary>
         /// <param name="connectionString">Connection string to table..</param>
         public AzureTableEventStore(string connectionString)
         {
