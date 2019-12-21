@@ -21,10 +21,9 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
     /// </summary>
     /// <typeparam name="TEventHandler">Event handler type.</typeparam>
     /// <typeparam name="TQueryModel">Query model type.</typeparam>
-    [Obsolete("Please use newer version (v2)")]
-    public abstract class ImmutableQueryModelEventHandlerTests<TEventHandler, TQueryModel>
+    public abstract class ImmutableQueryModelEventHandlerTestsv2<TEventHandler, TQueryModel>
         where TQueryModel : class, IImmutableQueryModel, new()
-        where TEventHandler : ImmutableQueryModelEventHandler<TQueryModel>
+        where TEventHandler : ImmutableQueryModelEventHandlerv2<TQueryModel>
     {
         /// <summary>
         /// Fixture.
@@ -34,7 +33,7 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
         /// <summary>
         /// Storage.
         /// </summary>
-        protected abstract InProcessImmutableQueryModelStorage<TQueryModel> Storage { get; }
+        protected abstract InProcessImmutableQueryModelStoragev2<TQueryModel> Storage { get; }
 
         /// <summary>
         /// Event handler.
@@ -42,22 +41,22 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
         protected abstract TEventHandler EventHandler { get; }
 
         /// <summary>
-        /// ctor.
+        /// Standard ctor.
         /// </summary>
         /// <typeparam name="TIntegrationEvent">Type of integration event.</typeparam>
-        /// <param name="getSnapshotId">Func which is gets snapshot Id.</param>
-        /// <param name="getExpectedQueryModel">Func that gets expected query model.</param>
+        /// <param name="getSnapshotIdFunc">Func which is gets snapshot Id.</param>
+        /// <param name="getExpectedQueryModelFunc">Func that gets expected query model.</param>
         /// <returns>Simple Task.</returns>
         protected async Task TestHandleAsync<TIntegrationEvent>(
-            Func<TIntegrationEvent, SnapshotId> getSnapshotId,
-            Func<TIntegrationEvent, Task<TQueryModel>> getExpectedQueryModel)
+            Func<TIntegrationEvent, SnapshotId> getSnapshotIdFunc,
+            Func<TIntegrationEvent, Task<TQueryModel>> getExpectedQueryModelFunc)
             where TIntegrationEvent : Event
         {
             var request = Fixture.Create<IntegrationEventNotification<TIntegrationEvent>>();
             var @event = request.IntegrationEvent;
 
-            var snapshotId = getSnapshotId(@event);
-            var expectedQueryModel = await getExpectedQueryModel(@event);
+            var snapshotId = getSnapshotIdFunc(@event);
+            var expectedQueryModel = await getExpectedQueryModelFunc(@event);
 
             await HandleGenericEventAsync(EventHandler, @event);
 
@@ -71,14 +70,14 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
         /// </summary>
         /// <typeparam name="TIntegrationEvent">Type of integration event.</typeparam>
         /// <param name="event">Event.</param>
-        /// <param name="getSnapshotId">Func that should return snapshot Id.</param>
+        /// <param name="getSnapshotIdFunc">Func that should return snapshot Id.</param>
         /// <returns>Set up query model.</returns>
         protected async Task<TQueryModel> SetupQueryModelAsync<TIntegrationEvent>(
             TIntegrationEvent @event,
-            Func<TIntegrationEvent, SnapshotId> getSnapshotId)
+            Func<TIntegrationEvent, SnapshotId> getSnapshotIdFunc)
             where TIntegrationEvent : Event
         {
-            var snapshotId = getSnapshotId(@event);
+            var snapshotId = getSnapshotIdFunc(@event);
 
             // Setup query model in store.
             var queryModel = Fixture.Build<TQueryModel>()
@@ -89,8 +88,8 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
 
             await Storage.CreateAsync(queryModel);
 
-            queryModel.Version = snapshotId.EntryVersion;
             queryModel.AppliedEvent = new AppliedEvent(@event.Id, @event.Created);
+            queryModel.Version = snapshotId.EntryVersion;
 
             return queryModel;
         }
@@ -98,18 +97,18 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
         private async Task HandleGenericEventAsync<TIntegrationEvent>(TEventHandler handler, TIntegrationEvent @event)
         {
             var eventType = @event.GetType();
-            var eventRequestType = typeof(IntegrationEventNotification<>).MakeGenericType(eventType);
-            var eventRequest = Activator.CreateInstance(eventRequestType, @event);
+            var requestType = typeof(IntegrationEventNotification<>).MakeGenericType(eventType);
+            var request = Activator.CreateInstance(requestType, @event);
 
             var methodInfo = EventHandler.GetType()
-                .GetMethod(nameof(INotificationHandler<IntegrationEventNotification<IntegrationEvent>>.Handle), new[] { eventRequestType, typeof(CancellationToken) });
+                .GetMethod(nameof(INotificationHandler<IntegrationEventNotification<IntegrationEvent>>.Handle), new[] { requestType, typeof(CancellationToken) });
 
             if (methodInfo == null)
             {
                 throw new InvalidOperationException($"No immutable query model handler is found for event of type '{eventType}'.");
             }
 
-            await (Task)methodInfo.Invoke(handler, new[] { eventRequest, CancellationToken.None });
+            await (Task)methodInfo.Invoke(handler, new[] { request, CancellationToken.None });
         }
     }
 }

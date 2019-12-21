@@ -1,5 +1,5 @@
 using FluentAssertions;
-using Intellias.CQRS.Core.Queries.Immutable;
+using Intellias.CQRS.Core.Queries.Immutable.Interfaces;
 using Intellias.CQRS.Core.Queries.Mutable;
 using Intellias.CQRS.QueryStore.AzureTable;
 using Intellias.CQRS.QueryStore.AzureTable.Options;

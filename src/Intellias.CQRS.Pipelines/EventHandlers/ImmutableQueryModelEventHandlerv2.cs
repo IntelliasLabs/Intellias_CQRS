@@ -13,19 +13,18 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
     /// Event handler for <see cref="IImmutableQueryModel"/>.
     /// </summary>
     /// <typeparam name="TQueryModel">Query model type.</typeparam>
-    [Obsolete("Please use 'ImmutableQueryModelEventHandlerv2' version.")]
-    public abstract class ImmutableQueryModelEventHandler<TQueryModel>
+    public abstract class ImmutableQueryModelEventHandlerv2<TQueryModel>
         where TQueryModel : class, IImmutableQueryModel, new()
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImmutableQueryModelEventHandler{TQueryModel}"/> class.
+        /// Initializes a new instance of the <see cref="ImmutableQueryModelEventHandlerv2{TQueryModel}"/> class.
         /// </summary>
         /// <param name="reader">Value for <see cref="Reader"/>.</param>
         /// <param name="writer">Value for <see cref="Writer"/>.</param>
         /// <param name="mediator">Value for <see cref="Mediator"/>.</param>
-        protected ImmutableQueryModelEventHandler(
-            IImmutableQueryModelReader<TQueryModel> reader,
-            IImmutableQueryModelWriter<TQueryModel> writer,
+        protected ImmutableQueryModelEventHandlerv2(
+            Core.Queries.Immutable.Interfaces.IImmutableQueryModelReader<TQueryModel> reader,
+            Core.Queries.Immutable.Interfaces.IImmutableQueryModelWriter<TQueryModel> writer,
             IMediator mediator)
         {
             Reader = reader;
@@ -36,12 +35,12 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
         /// <summary>
         /// <typeparamref name="TQueryModel"/> storage reader.
         /// </summary>
-        protected IImmutableQueryModelReader<TQueryModel> Reader { get; }
+        protected Core.Queries.Immutable.Interfaces.IImmutableQueryModelReader<TQueryModel> Reader { get; }
 
         /// <summary>
         /// <typeparamref name="TQueryModel"/> storage writer.
         /// </summary>
-        protected IImmutableQueryModelWriter<TQueryModel> Writer { get; }
+        protected Core.Queries.Immutable.Interfaces.IImmutableQueryModelWriter<TQueryModel> Writer { get; }
 
         /// <summary>
         /// Instance of MediatR.
@@ -71,7 +70,7 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
             var snapshotId = getSnapshotId(@event);
 
             // Find query model.
-            var queryModel = await Reader.GetLatestAsync(snapshotId.EntryId) ?? new TQueryModel();
+            var queryModel = await Reader.FindLatestAsync(snapshotId.EntryId) ?? new TQueryModel();
             if (queryModel.AppliedEvent.Created >= @event.Created)
             {
                 await Mediator.Publish(new EventAlreadyAppliedNotification(@event, queryModel));

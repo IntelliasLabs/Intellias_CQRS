@@ -11,18 +11,18 @@ namespace Intellias.CQRS.Tests.Core.Fakes
     /// Mock for Immutable query model storage.
     /// </summary>
     /// <typeparam name="TQueryModel">Type of immutable uery model.</typeparam>
-    public class InProcessImmutableQueryModelStorage<TQueryModel> :
-        IImmutableQueryModelReader<TQueryModel>,
-        IImmutableQueryModelWriter<TQueryModel>
+    public class InProcessImmutableQueryModelStoragev2<TQueryModel> :
+        CQRS.Core.Queries.Immutable.Interfaces.IImmutableQueryModelReader<TQueryModel>,
+        CQRS.Core.Queries.Immutable.Interfaces.IImmutableQueryModelWriter<TQueryModel>
         where TQueryModel : class, IImmutableQueryModel, new()
     {
         private readonly InProcessTableStorage<TQueryModel> storage;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InProcessImmutableQueryModelStorage{TQueryModel}"/> class.
+        /// Initializes a new instance of the <see cref="InProcessImmutableQueryModelStoragev2{TQueryModel}"/> class.
         /// </summary>
         /// <param name="storage">Storage in memory.</param>
-        public InProcessImmutableQueryModelStorage(InProcessTableStorage<TQueryModel> storage)
+        public InProcessImmutableQueryModelStoragev2(InProcessTableStorage<TQueryModel> storage)
         {
             this.storage = storage;
         }
@@ -35,7 +35,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc />
-        public Task<TQueryModel> GetLatestAsync(string id)
+        public Task<TQueryModel> FindLatestAsync(string id)
         {
             var queryModel = storage.Where(qm => qm.Id == id).OrderByDescending(qm => qm.Version).FirstOrDefault();
             return Task.FromResult(queryModel);
@@ -46,6 +46,13 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         {
             var result = await FindAsync(id, version);
             return result ?? throw new KeyNotFoundException();
+        }
+
+        /// <inheritdoc />
+        public async Task<TQueryModel> GetLatestAsync(string id)
+        {
+            var queryModel = await FindLatestAsync(id);
+            return queryModel ?? throw new KeyNotFoundException();
         }
 
         /// <inheritdoc />

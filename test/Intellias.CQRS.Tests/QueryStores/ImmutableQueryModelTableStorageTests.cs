@@ -63,9 +63,27 @@ namespace Intellias.CQRS.Tests.QueryStores
         }
 
         [Fact]
-        public async Task GetLatestAsync_NoQueryModel_ReturnsDefault()
+        public async Task FindLatestAsync_NoQueryModel_ReturnsDefault()
         {
-            (await storage.GetLatestAsync(Unified.NewCode())).Should().BeNull();
+            (await storage.FindLatestAsync(Unified.NewCode())).Should().BeNull();
+        }
+
+        [Fact]
+        public async Task FindLatestAsync_HasQueryModels_ReturnsLatest()
+        {
+            var id = Unified.NewCode();
+            await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 1 });
+            var qm2 = await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 2 });
+
+            var latest = await storage.FindLatestAsync(id);
+
+            latest.Should().BeEquivalentTo(qm2);
+        }
+
+        [Fact]
+        public async Task GetLatestAsync_NoQueryModel_Throws()
+        {
+            await storage.Awaiting(s => s.GetLatestAsync(Unified.NewCode())).Should().ThrowAsync<KeyNotFoundException>();
         }
 
         [Fact]
@@ -75,7 +93,7 @@ namespace Intellias.CQRS.Tests.QueryStores
             await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 1 });
             var qm2 = await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 2 });
 
-            var latest = await storage.GetLatestAsync(id);
+            var latest = await storage.FindLatestAsync(id);
 
             latest.Should().BeEquivalentTo(qm2);
         }

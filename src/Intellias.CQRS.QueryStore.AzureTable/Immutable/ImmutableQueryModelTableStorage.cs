@@ -15,8 +15,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
     /// <typeparam name="TQueryModel">Type of the query model.</typeparam>
     public class ImmutableQueryModelTableStorage<TQueryModel> :
         BaseTableStorage<ImmutableTableEntity<TQueryModel>>,
-        IImmutableQueryModelReader<TQueryModel>,
-        IImmutableQueryModelWriter<TQueryModel>
+        Core.Queries.Immutable.Interfaces.IImmutableQueryModelReader<TQueryModel>,
+        Core.Queries.Immutable.Interfaces.IImmutableQueryModelWriter<TQueryModel>
         where TQueryModel : class, IImmutableQueryModel, new()
     {
         /// <summary>
@@ -36,6 +36,13 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
         }
 
         /// <inheritdoc />
+        public async Task<TQueryModel> FindLatestAsync(string id)
+        {
+            var entity = (await QueryFirstAsync(id, 1)).FirstOrDefault();
+            return entity?.DeserializeData();
+        }
+
+        /// <inheritdoc />
         public async Task<TQueryModel> GetAsync(string id, int version)
         {
             var queryModel = await FindAsync(id, version);
@@ -50,8 +57,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
         /// <inheritdoc />
         public async Task<TQueryModel> GetLatestAsync(string id)
         {
-            var entity = (await QueryFirstAsync(id, 1)).FirstOrDefault();
-            return entity?.DeserializeData();
+            var queryModel = await FindLatestAsync(id);
+            return queryModel ?? throw new KeyNotFoundException($"No query model '{typeof(TQueryModel)}' with id '{id}' is found.");
         }
 
         /// <inheritdoc />
