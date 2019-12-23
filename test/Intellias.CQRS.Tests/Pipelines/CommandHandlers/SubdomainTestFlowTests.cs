@@ -78,6 +78,17 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
             context.ExpectedEvents.Should().BeEmpty();
         }
 
+        [Fact]
+        public async Task SubdomainTestFlow_StateBasedFlow_UpdatesState()
+        {
+            var (_, context) = await testHost.CreateFlow<FakeSubdomainState>()
+                .With(new FakeIncrementStateCounterStep())
+                .With(new FakeIncrementStateCounterStep())
+                .RunAsync();
+
+            context.State.Counter.Should().Be(2);
+        }
+
         private class FakeEmptyStep : ITestFlowStep
         {
             public ITestFlowStepResult Execute(TestFlowExecutionContext context)
@@ -96,6 +107,11 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
             {
                 return new CommandStepResult(new FakeCommand(CommandKey), new FakeIntegrationEvent(EventKey));
             }
+        }
+
+        private class FakeSubdomainState
+        {
+            public int Counter { get; set; }
         }
 
         private class FakeCommand : Command
@@ -117,6 +133,15 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
             }
 
             public string Key { get; }
+        }
+
+        private class FakeIncrementStateCounterStep : ITestFlowStep<FakeSubdomainState>
+        {
+            public ITestFlowStepResult Execute(TestFlowExecutionContext<FakeSubdomainState> context)
+            {
+                context.State.Counter++;
+                return new EmptyStepResult();
+            }
         }
     }
 }
