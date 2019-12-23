@@ -78,15 +78,78 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
             context.ExpectedEvents.Should().BeEmpty();
         }
 
-        private class FakeEmptyStep : ITestFlowStep
+        [Fact]
+        public async Task SubdomainTestFlowWithState_ExecutionSucceed_UpdatesContext()
+        {
+            mediator.SetupRequestHandler<CommandRequest<FakeCommand>, IExecutionResult>(request => new SuccessfulResult());
+
+            var step = new FakeCommandStep();
+
+            var (result, context) = await testHost.CreateFlow<FakeSubdomainState>()
+                .With(step)
+                .RunAsync();
+
+            result.Should().BeOfType<SuccessfulResult>();
+            context.ExecutedCommands.Single().Should().BeOfType<FakeCommand>()
+                .Which.Key.Should().Be(step.CommandKey);
+            context.ExpectedEvents.Single().Should().BeOfType<FakeIntegrationEvent>()
+                .Which.Key.Should().Be(step.EventKey);
+        }
+
+        [Fact]
+        public async Task SubdomainTestFlowWithState_ExecutionFailed_StopsExecution()
+        {
+            mediator.SetupRequestHandler<CommandRequest<FakeCommand>, IExecutionResult>(request => new FailedResult(CoreErrorCodes.UnhandledError));
+
+            var step1 = new FakeCommandStep();
+            var step2 = new FakeCommandStep();
+
+            var (result, context) = await testHost.CreateFlow<FakeSubdomainState>()
+                .With(step1)
+                .With(step2)
+                .RunAsync();
+
+            result.Should().BeOfType<FailedResult>();
+            context.ExecutedCommands.Should().HaveCount(1);
+            context.ExpectedEvents.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public async Task SubdomainTestFlowWithState_Always_KeepsStateChanges()
+        {
+            var (_, context) = await testHost.CreateFlow<FakeSubdomainState>()
+                .With(new FakeIncrementStateCounterStep())
+                .With(new FakeIncrementStateCounterStep())
+                .RunAsync();
+
+            context.State.Counter.Should().Be(2);
+        }
+
+        [Fact]
+        public async Task SubdomainTestFlowWithState_EmptyStepResult_DoesntUpdateContext()
+        {
+            var (_, context) = await testHost.CreateFlow<FakeSubdomainState>()
+                .With(new FakeEmptyStep())
+                .RunAsync();
+
+            context.ExecutedCommands.Should().BeEmpty();
+            context.ExpectedEvents.Should().BeEmpty();
+        }
+
+        private class FakeEmptyStep : ITestFlowStep, ITestFlowStep<FakeSubdomainState>
         {
             public ITestFlowStepResult Execute(TestFlowExecutionContext context)
             {
                 return new EmptyStepResult();
             }
+
+            public ITestFlowStepResult Execute(TestFlowExecutionContext<FakeSubdomainState> context)
+            {
+                return new EmptyStepResult();
+            }
         }
 
-        private class FakeCommandStep : ITestFlowStep
+        private class FakeCommandStep : ITestFlowStep, ITestFlowStep<FakeSubdomainState>
         {
             public string CommandKey { get; } = FixtureUtils.String();
 
@@ -96,6 +159,16 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
             {
                 return new CommandStepResult(new FakeCommand(CommandKey), new FakeIntegrationEvent(EventKey));
             }
+
+            public ITestFlowStepResult Execute(TestFlowExecutionContext<FakeSubdomainState> context)
+            {
+                return new CommandStepResult(new FakeCommand(CommandKey), new FakeIntegrationEvent(EventKey));
+            }
+        }
+
+        private class FakeSubdomainState
+        {
+            public int Counter { get; set; }
         }
 
         private class FakeCommand : Command
@@ -117,6 +190,15 @@ namespace Intellias.CQRS.Tests.Pipelines.CommandHandlers
             }
 
             public string Key { get; }
+        }
+
+        private class FakeIncrementStateCounterStep : ITestFlowStep<FakeSubdomainState>
+        {
+            public ITestFlowStepResult Execute(TestFlowExecutionContext<FakeSubdomainState> context)
+            {
+                context.State.Counter++;
+                return new EmptyStepResult();
+            }
         }
     }
 }

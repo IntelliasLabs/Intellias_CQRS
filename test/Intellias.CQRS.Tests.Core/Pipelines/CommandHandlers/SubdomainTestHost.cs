@@ -69,5 +69,16 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.CommandHandlers
         {
             return new SubdomainTestFlow(this);
         }
+
+        /// <summary>
+        /// Creates state based test flow.
+        /// </summary>
+        /// <typeparam name="TState">Test flow state.</typeparam>
+        /// <returns>Created flow.</returns>
+        public SubdomainTestFlow<TState> CreateFlow<TState>()
+            where TState : class, new()
+        {
+            return new SubdomainTestFlow<TState>(this);
+        }
     }
 }
