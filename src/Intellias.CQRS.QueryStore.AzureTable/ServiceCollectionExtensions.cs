@@ -1,5 +1,5 @@
 using System;
-using Intellias.CQRS.Core.Queries.Immutable.Interfaces;
+using Intellias.CQRS.Core.Queries.Immutable;
 using Intellias.CQRS.Core.Queries.Mutable;
 using Intellias.CQRS.QueryStore.AzureTable.Immutable;
 using Intellias.CQRS.QueryStore.AzureTable.Mutable;
@@ -29,8 +29,8 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             // Register Table Storage services.
             services.AddSingleton(typeof(IMutableQueryModelReader<>), typeof(MutableQueryModelTableStorage<>));
             services.AddSingleton(typeof(IMutableQueryModelWriter<>), typeof(MutableQueryModelTableStorage<>));
-            services.AddSingleton(typeof(IImmutableQueryModelReader<>), typeof(ImmutableQueryModelTableStorage<>));
-            services.AddSingleton(typeof(IImmutableQueryModelWriter<>), typeof(ImmutableQueryModelTableStorage<>));
+            services.AddSingleton(typeof(IImmutableQueryModelReader<>), typeof(ImmutableQueryModelStorage<>));
+            services.AddSingleton(typeof(IImmutableQueryModelWriter<>), typeof(ImmutableQueryModelStorage<>));
 
             // Register Table Storage options.
             services.Configure(configure);

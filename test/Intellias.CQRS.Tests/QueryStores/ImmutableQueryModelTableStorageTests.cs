@@ -16,7 +16,7 @@ namespace Intellias.CQRS.Tests.QueryStores
 {
     public class ImmutableQueryModelTableStorageTests : StorageAccountTestBase
     {
-        private readonly ImmutableQueryModelTableStorage<FakeImmutableQueryModel> storage;
+        private readonly ImmutableQueryModelStorage<FakeImmutableQueryModel> storage;
 
         public ImmutableQueryModelTableStorageTests(StorageAccountFixture fixture)
         {
@@ -26,7 +26,7 @@ namespace Intellias.CQRS.Tests.QueryStores
                 ConnectionString = fixture.Configuration.StorageAccount.ConnectionString
             };
 
-            storage = new ImmutableQueryModelTableStorage<FakeImmutableQueryModel>(new OptionsMonitorFake<TableStorageOptions>(options));
+            storage = new ImmutableQueryModelStorage<FakeImmutableQueryModel>(new OptionsMonitorFake<TableStorageOptions>(options));
         }
 
         [Fact]
@@ -96,6 +96,72 @@ namespace Intellias.CQRS.Tests.QueryStores
             var latest = await storage.FindLatestAsync(id);
 
             latest.Should().BeEquivalentTo(qm2);
+        }
+
+        [Fact]
+        public async Task FindEqualOrOlderAsync_NoQueryModels_ReturnsNull()
+        {
+            (await storage.FindEqualOrLessAsync(Unified.NewCode(), 1)).Should().BeNull();
+        }
+
+        [Fact]
+        public async Task FindEqualOrOlderAsync_ExactlyVersion_ReturnsExactlyVersion()
+        {
+            var id = Unified.NewCode();
+
+            await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 1 });
+            var queryModel = await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 3 });
+
+            var result = await storage.FindEqualOrLessAsync(id, 3);
+
+            result.Should().BeEquivalentTo(queryModel);
+        }
+
+        [Fact]
+        public async Task FindEqualOrOlderAsync_OlderVersion_ReturnsClosestOlderVersionVersion()
+        {
+            var id = Unified.NewCode();
+
+            await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 1 });
+            var queryModel = await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 4 });
+            await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 10 });
+
+            var result = await storage.FindEqualOrLessAsync(id, 7);
+
+            result.Should().BeEquivalentTo(queryModel);
+        }
+
+        [Fact]
+        public async Task GetEqualOrOlderAsync_NoQueryModels_Throws()
+        {
+            await storage.Awaiting(s => s.GetEqualOrLessAsync(Unified.NewCode(), 1)).Should().ThrowAsync<KeyNotFoundException>();
+        }
+
+        [Fact]
+        public async Task GetEqualOrOlderAsync_ExactlyVersion_ReturnsExactlyVersion()
+        {
+            var id = Unified.NewCode();
+
+            await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 1 });
+            var queryModel = await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 3 });
+
+            var result = await storage.GetEqualOrLessAsync(id, 3);
+
+            result.Should().BeEquivalentTo(queryModel);
+        }
+
+        [Fact]
+        public async Task GetEqualOrOlderAsync_OlderVersion_ReturnsClosestOlderVersionVersion()
+        {
+            var id = Unified.NewCode();
+
+            await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 1 });
+            var queryModel = await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 4 });
+            await storage.CreateAsync(new FakeImmutableQueryModel { Id = id, Version = 10 });
+
+            var result = await storage.GetEqualOrLessAsync(id, 7);
+
+            result.Should().BeEquivalentTo(queryModel);
         }
     }
 }

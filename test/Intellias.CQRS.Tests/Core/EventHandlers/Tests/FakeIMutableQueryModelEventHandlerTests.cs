@@ -14,11 +14,11 @@ using Xunit;
 
 namespace Intellias.CQRS.Tests.Core.EventHandlers.Tests
 {
-    public class FakeIMutableQueryModelEventHandlerTests : ImmutableQueryModelEventHandlerTestsv2<FakeImmutableEventHandler, FakeImmutableQueryModel>
+    public class FakeIMutableQueryModelEventHandlerTests : ImmutableQueryModelEventHandlerTests<FakeImmutableEventHandler, FakeImmutableQueryModel>
     {
         public FakeIMutableQueryModelEventHandlerTests()
         {
-            var storage = new InProcessImmutableQueryModelStoragev2<FakeImmutableQueryModel>(new InProcessTableStorage<FakeImmutableQueryModel>());
+            var storage = new InProcessImmutableQueryModelStorage<FakeImmutableQueryModel>(new InProcessTableStorage<FakeImmutableQueryModel>());
             var mediator = new Mock<IMediator>();
 
             Fixture = new Fixture();
@@ -28,7 +28,7 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers.Tests
 
         protected override Fixture Fixture { get; }
 
-        protected override InProcessImmutableQueryModelStoragev2<FakeImmutableQueryModel> Storage { get; }
+        protected override InProcessImmutableQueryModelStorage<FakeImmutableQueryModel> Storage { get; }
 
         protected override FakeImmutableEventHandler EventHandler { get; }
 
@@ -64,13 +64,13 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers.Tests
     }
 
     public class FakeImmutableEventHandler :
-        ImmutableQueryModelEventHandlerv2<FakeImmutableQueryModel>,
+        ImmutableQueryModelEventHandler<FakeImmutableQueryModel>,
         INotificationHandler<IntegrationEventNotification<FakeImmutableCreatedIntegrationEvent>>,
         INotificationHandler<IntegrationEventNotification<FakeImmutableUpdatedIntegrationEvent>>
     {
         public FakeImmutableEventHandler(
-            CQRS.Core.Queries.Immutable.Interfaces.IImmutableQueryModelReader<FakeImmutableQueryModel> reader,
-            CQRS.Core.Queries.Immutable.Interfaces.IImmutableQueryModelWriter<FakeImmutableQueryModel> writer,
+            IImmutableQueryModelReader<FakeImmutableQueryModel> reader,
+            IImmutableQueryModelWriter<FakeImmutableQueryModel> writer,
             IMediator mediator)
             : base(reader, writer, mediator)
         {

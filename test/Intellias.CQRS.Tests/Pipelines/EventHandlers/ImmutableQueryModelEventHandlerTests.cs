@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Queries;
+using Intellias.CQRS.Core.Queries.Immutable;
 using Intellias.CQRS.Pipelines.EventHandlers;
 using Intellias.CQRS.Pipelines.EventHandlers.Notifications;
 using Intellias.CQRS.Tests.Core.Fakes;
@@ -16,13 +17,13 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
 {
     public class ImmutableQueryModelEventHandlerTests
     {
-        private readonly InProcessImmutableQueryModelStoragev2<FakeImmutableQueryModel> storage;
+        private readonly InProcessImmutableQueryModelStorage<FakeImmutableQueryModel> storage;
         private readonly FakeMediator mediator;
         private readonly DummyImmutableQueryModelEventHandler handler;
 
         public ImmutableQueryModelEventHandlerTests()
         {
-            storage = new InProcessImmutableQueryModelStoragev2<FakeImmutableQueryModel>(new InProcessTableStorage<FakeImmutableQueryModel>());
+            storage = new InProcessImmutableQueryModelStorage<FakeImmutableQueryModel>(new InProcessTableStorage<FakeImmutableQueryModel>());
             mediator = new FakeMediator();
             handler = new DummyImmutableQueryModelEventHandler(storage, storage, mediator);
         }
@@ -101,14 +102,14 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
                 .Which.QueryModelType.Should().Be(typeof(FakeImmutableQueryModel));
         }
 
-        private class DummyImmutableQueryModelEventHandler : ImmutableQueryModelEventHandlerv2<FakeImmutableQueryModel>,
+        private class DummyImmutableQueryModelEventHandler : ImmutableQueryModelEventHandler<FakeImmutableQueryModel>,
             INotificationHandler<IntegrationEventNotification<FakeCreatedIntegrationEvent>>
         {
             private bool isPrivateQueryModel;
 
             public DummyImmutableQueryModelEventHandler(
-                CQRS.Core.Queries.Immutable.Interfaces.IImmutableQueryModelReader<FakeImmutableQueryModel> reader,
-                CQRS.Core.Queries.Immutable.Interfaces.IImmutableQueryModelWriter<FakeImmutableQueryModel> writer,
+                IImmutableQueryModelReader<FakeImmutableQueryModel> reader,
+                IImmutableQueryModelWriter<FakeImmutableQueryModel> writer,
                 IMediator mediator)
                 : base(reader, writer, mediator)
             {
