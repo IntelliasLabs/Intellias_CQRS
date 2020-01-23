@@ -14,5 +14,10 @@ namespace Intellias.CQRS.Core.DataAnnotations
         /// Regex for a string that contains a simplified list of ASCII characters.
         /// </summary>
         public const string SimplifiedAscii = @"^[a-zA-Z0-9_\-+=><~!?""'*#@&(){}\[\],.:;\/\\| ]*$";
+
+        /// <summary>
+        /// Regex for a markdown string.
+        /// </summary>
+        public const string Markdown = @"^[a-zA-Z0-9_\-+=><~!?""'`\%*#@&(){}\[\],.:;\/\\| \n\r\t]*$";
     }
 }

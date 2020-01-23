@@ -36,5 +36,27 @@ namespace Intellias.CQRS.Tests.Core.DataAnnotations
         {
             Regex.IsMatch(input, RegularExpressions.SimplifiedAscii).Should().Be(isMatch);
         }
+
+        [Theory]
+        [InlineData("C#", true)]
+        [InlineData("ASP .NET Core", true)]
+        [InlineData("C++", true)]
+        [InlineData("abcezAABDSCXZ0-9_-+=><~!?\"'*#@&(){}[],.:;/| ", true)]
+        [InlineData("`code`", true)]
+        [InlineData("10%", true)]
+        [InlineData("\\", true)]
+        [InlineData("\n", true)]
+        [InlineData("\r", true)]
+        [InlineData("\t", true)]
+        [InlineData(
+            @"My feedback:
+            1. One.
+            * Two.    ", true)]
+        [InlineData("кирилица", false)]
+        [InlineData("^", false)]
+        public void Match_Markdown_IsCorrect(string input, bool isMatch)
+        {
+            Regex.IsMatch(input, RegularExpressions.Markdown).Should().Be(isMatch);
+        }
     }
 }
