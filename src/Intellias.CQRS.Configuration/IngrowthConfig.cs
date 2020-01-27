@@ -55,6 +55,11 @@ namespace Intellias.CQRS.Configuration
         public IngrowthBusConfig Feedback { get; set; } = new IngrowthBusConfig();
 
         /// <summary>
+        /// Notification section.
+        /// </summary>
+        public NotificationConfig Notification { get; set; } = new NotificationConfig();
+
+        /// <summary>
         /// Shared section.
         /// </summary>
         public IngrowthSharedConfig Shared { get; set; } = new IngrowthSharedConfig();
