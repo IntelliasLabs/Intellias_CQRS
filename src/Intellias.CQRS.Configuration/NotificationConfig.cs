@@ -11,6 +11,6 @@ namespace Intellias.CQRS.Configuration
         /// <summary>
         /// Email configuration.
         /// </summary>
-        public EmailConfig Email { get; set; }
+        public EmailConfig Email { get; set; } = new EmailConfig();
     }
 }
