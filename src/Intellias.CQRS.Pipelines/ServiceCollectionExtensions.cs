@@ -79,6 +79,7 @@ namespace Intellias.CQRS.Pipelines
             Assembly integrationEventHandlersAssemble)
         {
             services.AddMediatR(integrationEventHandlersAssemble)
+                .AddTransient<IMediator, ParallelMediator>()
                 .AddTransient<INotificationHandler<QueryModelUpdatedNotification>, ExecutionResultNotificationHandler>()
                 .AddTransient<INotificationHandler<EventAlreadyAppliedNotification>, ExecutionResultNotificationHandler>()
                 .AddTransient<IMessageDispatcher, MessageDispatcher>();
