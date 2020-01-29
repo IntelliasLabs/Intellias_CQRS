@@ -91,11 +91,6 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
                     DotNet($"test {testProject}");
                 }
             }
-            catch (Exception ex)
-            {
-                this.output.WriteLine($"An exception was thrown during tests run: '{ex.Message}'.");
-                this.output.WriteLine($"Stacktrace: '{ex.StackTrace}'.");
-            }
             finally
             {
                 DeleteDirectory(repoPath);
