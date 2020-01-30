@@ -4,7 +4,7 @@ using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
 
-namespace Intellias.CQRS.Core.Tools
+namespace Intellias.CQRS.Tests.Tools
 {
     /// <summary>
     /// Self Processed Command Bus used for process manager needs.

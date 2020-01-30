@@ -4,7 +4,7 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
 
-namespace Intellias.CQRS.Core.Tools
+namespace Intellias.CQRS.Tests.Tools
 {
     /// <summary>
     /// SelfProcessed EventBus.
