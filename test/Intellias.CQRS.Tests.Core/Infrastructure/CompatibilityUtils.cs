@@ -78,8 +78,14 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
                 DotNet($"build {solutionFile}");
 
                 var testProjects = projectFiles
-                    .Where(x => x.Contains("Tests"))
-                    .Where(x => !x.Contains("Compatibility"));
+                    .Where(x =>
+                     {
+                         var testProjectFileName = Path.GetFileName(x);
+                         return testProjectFileName != null
+                             && testProjectFileName.Contains("Tests")
+                             && !testProjectFileName.Contains("Compatibility");
+                     });
+
                 foreach (var testProject in testProjects)
                 {
                     DotNet($"test {testProject}");
