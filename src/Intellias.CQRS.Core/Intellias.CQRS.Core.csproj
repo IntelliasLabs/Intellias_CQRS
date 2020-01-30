@@ -4,7 +4,7 @@
     <ProjectGuid>{aa48fc21-a626-4f33-9fdb-77f03b74ca5b}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 </Project>
