@@ -4,7 +4,7 @@ using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Results;
 
-namespace Intellias.CQRS.Core.Tools
+namespace Intellias.CQRS.Tests.Tools
 {
     /// <summary>
     /// Handles event for all.

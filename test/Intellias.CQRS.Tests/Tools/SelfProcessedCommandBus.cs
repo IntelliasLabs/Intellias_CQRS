@@ -1,42 +1,42 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
 
-namespace Intellias.CQRS.Core.Tools
+namespace Intellias.CQRS.Tests.Tools
 {
     /// <summary>
-    /// SelfProcessed EventBus.
+    /// Self Processed Command Bus used for process manager needs.
     /// </summary>
-    public class SelfProcessedEventBus : IEventBus
+    public class SelfProcessedCommandBus : ICommandBus
     {
         private readonly HandlerManager handlerManager;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SelfProcessedEventBus"/> class.
+        /// Initializes a new instance of the <see cref="SelfProcessedCommandBus"/> class.
         /// </summary>
-        /// <param name="handlerManager">Handle Manager.</param>
-        public SelfProcessedEventBus(HandlerManager handlerManager)
+        /// <param name="handlerManager">Handler Manager.</param>
+        public SelfProcessedCommandBus(HandlerManager handlerManager)
         {
             this.handlerManager = handlerManager;
         }
 
         /// <summary>
-        /// PublishAsync.
+        /// PublishAsync ICommand.
         /// </summary>
         /// <param name="msg">Message.</param>
         /// <returns>Execution Result.</returns>
-        public async Task<IExecutionResult> PublishAsync(IEvent msg)
+        public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
             try
             {
                 var method = typeof(HandlerManager)
-                        .GetMethod("HandleEventAsync");
+                        .GetMethod("HandleCommandAsync");
 
                 if (method == null)
                 {
-                    return new FailedResult(CoreErrorCodes.UnhandledError, null, "Error calling HandleEventAsync method");
+                    return new FailedResult(CoreErrorCodes.UnhandledError, null, "Error calling HandleCommandAsync method.");
                 }
 
                 await (Task)method

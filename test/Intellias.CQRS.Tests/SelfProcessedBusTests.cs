@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Tools;
 using Intellias.CQRS.Tests.Core.CommandHandlers;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
+using Intellias.CQRS.Tests.Tools;
 using Moq;
 using Xunit;
 

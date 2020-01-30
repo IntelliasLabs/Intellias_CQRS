@@ -7,16 +7,32 @@ using MediatR;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
+    /// <summary>
+    /// FakeMediator.
+    /// </summary>
     public class FakeMediator : IMediator
     {
         private readonly List<object> sentRequests = new List<object>();
         private readonly List<INotification> publishedNotifications = new List<INotification>();
         private readonly List<Handler> handlers = new List<Handler>();
 
+        /// <summary>
+        /// SentRequests.
+        /// </summary>
         public IReadOnlyList<object> SentRequests => sentRequests.AsReadOnly();
 
+        /// <summary>
+        /// PublishedNotifications.
+        /// </summary>
         public IReadOnlyList<INotification> PublishedNotifications => publishedNotifications.AsReadOnly();
 
+        /// <summary>
+        /// Send.
+        /// </summary>
+        /// <typeparam name="TResponse">TResponse.</typeparam>
+        /// <param name="request">request.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>TResponse task.</returns>
         public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
             sentRequests.Add(request);
@@ -29,18 +45,37 @@ namespace Intellias.CQRS.Tests.Core.Fakes
             return Task.FromResult(response);
         }
 
+        /// <summary>
+        /// Publish.
+        /// </summary>
+        /// <param name="notification">notification.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>Task.</returns>
         public Task Publish(object notification, CancellationToken cancellationToken = default)
         {
             publishedNotifications.Add((INotification)notification);
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Publish.
+        /// </summary>
+        /// <typeparam name="TNotification">TNotification.</typeparam>
+        /// <param name="notification">notification.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>Task.</returns>
         public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
             where TNotification : INotification
         {
             return Publish((object)notification, cancellationToken);
         }
 
+        /// <summary>
+        /// SetupRequestHandler.
+        /// </summary>
+        /// <typeparam name="TRequest">TRequest.</typeparam>
+        /// <typeparam name="TResponse">TResponse.</typeparam>
+        /// <param name="handle">handle.</param>
         public void SetupRequestHandler<TRequest, TResponse>(Func<TRequest, TResponse> handle)
             where TRequest : IRequest<TResponse>
         {

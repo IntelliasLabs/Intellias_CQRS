@@ -2,7 +2,7 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Intellias.CQRS.Core.Tools
+namespace Intellias.CQRS.Tests.Tools
 {
     /// <summary>
     /// HandlerResolverExtensions.

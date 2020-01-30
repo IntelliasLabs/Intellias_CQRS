@@ -5,10 +5,10 @@ using System.Reflection;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
 
-namespace Intellias.CQRS.Core.Tools
+namespace Intellias.CQRS.Tests.Tools
 {
     /// <summary>
-    /// Used to return all handler instanses from handler's assembly.
+    /// Used to return all handler instances from handler's assembly.
     /// </summary>
     public class HandlerDependencyResolver
     {

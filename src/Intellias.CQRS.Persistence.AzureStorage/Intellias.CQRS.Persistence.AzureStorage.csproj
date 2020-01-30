@@ -4,7 +4,7 @@
     <ProjectGuid>{d0245f14-6dc2-452d-9d03-9be399c5f7f1}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Polly" Version="7.1.1" />
+    <PackageReference Include="Polly" Version="7.2.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
   <ItemGroup>
