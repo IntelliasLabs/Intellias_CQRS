@@ -8,7 +8,7 @@ using Intellias.CQRS.Core.Events;
 namespace Intellias.CQRS.Core.Tools
 {
     /// <summary>
-    /// Used to return all handler instanses from handler's assembly.
+    /// Used to return all handler instances from handler's assembly.
     /// </summary>
     public class HandlerDependencyResolver
     {

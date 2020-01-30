@@ -2,7 +2,7 @@
   <PropertyGroup Label="Projects metadata">
     <Authors>IntelliGrowth@intellias.com</Authors>
     <Company>Intellias</Company>
-    <Copyright>Copyright © Intellias 2019</Copyright>
+    <Copyright>Copyright © Intellias 2020</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <DebugType>Full</DebugType>
     <LangVersion>8.0</LangVersion>
@@ -20,19 +20,19 @@
     <MicrosoftExtensionsPackageVersion>2.2.0</MicrosoftExtensionsPackageVersion>
   </PropertyGroup>
   <ItemGroup Label="Analyzer packages">
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.3.1">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.4.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="3.3.1">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="3.4.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.7">
+    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.9.7">
+    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SecurityCodeScan" Version="3.3.0">
+    <PackageReference Include="SecurityCodeScan" Version="3.4.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
