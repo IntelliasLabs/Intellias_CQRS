@@ -67,7 +67,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                 throw new StorageException();
             }
 
-            storage.Remove(existing);
+            storage.RemoveAll(m => m.Id == existing.Id);
             storage.Add(model);
 
             model.Timestamp = DateTimeOffset.UtcNow;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,13 +7,12 @@ using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
-    public class InProcessTableStorage<T> : IList<T>, IReadOnlyCollection<T>
+    public class InProcessTableStorage<T> : IReadOnlyList<T>
+        where T : class
     {
-        private readonly List<string> storage = new List<string>();
+        private List<string> storage = new List<string>();
 
         public int Count => storage.Count;
-
-        public bool IsReadOnly => false;
 
         public T this[int index]
         {
@@ -32,23 +32,14 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         public void Clear() =>
             storage.Clear();
 
-        public bool Contains(T item) =>
-            Deserialize(storage).Contains(item);
-
-        public void CopyTo(T[] array, int arrayIndex) =>
-            Deserialize(storage).ToList().CopyTo(array, arrayIndex);
-
-        public bool Remove(T item) =>
-            storage.RemoveAll(e => e == Serialize(item)) > 0;
-
-        public int IndexOf(T item) =>
-            storage.IndexOf(Serialize(item));
-
         public void Insert(int index, T item) =>
             storage.Insert(index, Serialize(item));
 
         public void RemoveAt(int index) =>
             storage.RemoveAt(index);
+
+        public void RemoveAll(Func<T, bool> predicate) =>
+            storage = this.Where(e => !predicate(e)).Select(Serialize).ToList();
 
         private static string Serialize(object entity) =>
             JsonConvert.SerializeObject(entity, TableStorageJsonSerializerSettings.GetDefault());
