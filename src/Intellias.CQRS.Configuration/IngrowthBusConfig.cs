@@ -14,11 +14,6 @@ namespace Intellias.CQRS.Configuration
         public string StorageAccountConnectionString { get; set; } = string.Empty;
 
         /// <summary>
-        /// CommandBusTopic.
-        /// </summary>
-        public string CommandBusTopic { get; set; } = string.Empty;
-
-        /// <summary>
         /// CommandBusQueue.
         /// </summary>
         public string CommandBusQueue { get; set; } = string.Empty;
