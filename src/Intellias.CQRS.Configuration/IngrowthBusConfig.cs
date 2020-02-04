@@ -19,6 +19,11 @@ namespace Intellias.CQRS.Configuration
         public string CommandBusTopic { get; set; } = string.Empty;
 
         /// <summary>
+        /// CommandBusQueue.
+        /// </summary>
+        public string CommandBusQueue { get; set; } = string.Empty;
+
+        /// <summary>
         /// EventBusTopic.
         /// </summary>
         public string EventBusTopic { get; set; } = string.Empty;
