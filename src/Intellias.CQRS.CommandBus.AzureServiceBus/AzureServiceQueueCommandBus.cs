@@ -7,36 +7,35 @@ using Microsoft.Azure.ServiceBus;
 
 namespace Intellias.CQRS.CommandBus.AzureServiceBus
 {
-    /// <inheritdoc />
     /// <summary>
-    /// Publishing events to Azure Service Bus.
+    /// Publishing events to Azure Service Bus Queue.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class AzureServiceTopicCommandBus : ICommandBus
+    public class AzureServiceQueueCommandBus : ICommandBus
     {
-        private readonly ITopicClient topicClient;
+        private readonly IQueueClient queueClient;
         private readonly ICommandStore commandStore;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AzureServiceTopicCommandBus"/> class.
+        /// Initializes a new instance of the <see cref="AzureServiceQueueCommandBus"/> class.
         /// </summary>
         /// <param name="connectionString">Connection String.</param>
-        /// <param name="topic">Azure Topic.</param>
+        /// <param name="queueName">Azure QueueName.</param>
         /// <param name="commandStore">Command Store.</param>
-        public AzureServiceTopicCommandBus(
+        public AzureServiceQueueCommandBus(
             string connectionString,
-            string topic,
+            string queueName,
             ICommandStore commandStore)
         {
             this.commandStore = commandStore;
-            topicClient = new TopicClient(connectionString, topic);
+            queueClient = new QueueClient(connectionString, queueName);
         }
 
         /// <inheritdoc />
         public async Task<IExecutionResult> PublishAsync(ICommand msg)
         {
             await commandStore.SaveAsync(msg);
-            await topicClient.SendAsync(msg.ToBusMessage());
+            await queueClient.SendAsync(msg.ToBusMessage());
             return new SuccessfulResult();
         }
     }
