@@ -37,7 +37,7 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus
         {
             await commandStore.SaveAsync(msg);
             await topicClient.SendAsync(msg.ToBusMessage());
-            return await Task.FromResult(new SuccessfulResult());
+            return new SuccessfulResult();
         }
     }
 }
