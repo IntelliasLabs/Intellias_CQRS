@@ -1,6 +1,6 @@
 using System.Globalization;
 using Intellias.CQRS.Core.Queries.Immutable;
-using Intellias.CQRS.QueryStore.AzureTable.Common;
+using Intellias.CQRS.Persistence.AzureStorage.Common;
 
 namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
 {

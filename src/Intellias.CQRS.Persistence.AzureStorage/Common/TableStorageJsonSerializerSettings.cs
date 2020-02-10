@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Intellias.CQRS.QueryStore.AzureTable.Common
+namespace Intellias.CQRS.Persistence.AzureStorage.Common
 {
     /// <summary>
     /// Default <see cref="JsonSerializerSettings"/> for Azure Table Storage.

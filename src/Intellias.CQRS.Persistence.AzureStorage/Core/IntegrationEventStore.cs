@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Microsoft.WindowsAzure.Storage;
@@ -55,23 +54,22 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Core
             return string.Format(CultureInfo.InvariantCulture, "{0:D20}", DateTime.MaxValue.Ticks - created.Ticks);
         }
 
-        private class DomainStoreEntity : TableEntity
+        private class DomainStoreEntity : BaseJsonTableEntity<IIntegrationEvent>
         {
             public const string EntityPartitionKey = "DomainEntity";
 
             public DomainStoreEntity(IIntegrationEvent integrationEvent)
+                : base(integrationEvent, true)
             {
                 PartitionKey = EntityPartitionKey;
                 RowKey = GetRowKey(integrationEvent.Created);
-                TypeName = integrationEvent.GetType().FullName;
-                Data = integrationEvent.ToJson();
             }
 
-            public string TypeName { get; set; }
-
-            public string Data { get; set; }
-
             public bool IsPublished { get; set; }
+
+            protected override void SetupDeserializedData(IIntegrationEvent data)
+            {
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 using FluentAssertions;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Messages;
-using Intellias.CQRS.QueryStore.AzureTable.Common;
+using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.QueryStores

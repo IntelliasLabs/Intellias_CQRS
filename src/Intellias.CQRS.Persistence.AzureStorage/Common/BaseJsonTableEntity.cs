@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 
-namespace Intellias.CQRS.QueryStore.AzureTable.Common
+namespace Intellias.CQRS.Persistence.AzureStorage.Common
 {
     /// <summary>
     /// Base abstraction for storing JSON data in <see cref="TableEntity"/>.

@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
@@ -65,19 +64,18 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
             return tableProxy.ExecuteAsync(TableOperation.Merge(entity));
         }
 
-        private class TransactionStoreDataEntity : TableEntity
+        private class TransactionStoreDataEntity : BaseJsonTableEntity<IEvent>
         {
             public TransactionStoreDataEntity(string transactionId, IEvent @event)
+                : base(@event, true)
             {
                 PartitionKey = transactionId;
                 RowKey = GetRowKey(@event.Created);
-                TypeName = @event.TypeName;
-                Data = @event.ToJson();
             }
 
-            public string TypeName { get; set; }
-
-            public string Data { get; set; }
+            protected override void SetupDeserializedData(IEvent data)
+            {
+            }
 
             private static string GetRowKey(DateTime created)
             {
