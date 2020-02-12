@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core;
-using Intellias.CQRS.Tests.Core.Events;
 using Intellias.CQRS.Tests.Core.Queries;
 using Microsoft.WindowsAzure.Storage;
 using Xunit;
@@ -102,22 +101,6 @@ namespace Intellias.CQRS.Tests
             {
                 queryModel.TestList.Should().Contain(val);
             }
-        }
-
-        [Fact]
-        public void PreventEventDublication()
-        {
-            // Arrange
-            var e = new TestUpdatedEvent
-            {
-                AggregateRootId = Unified.NewCode()
-            };
-
-            // Act
-            Store.ReserveEventAsync(e).Wait();
-
-            // Assert
-            Assert.Throws<AggregateException>(() => Store.ReserveEventAsync(e).Wait());
         }
     }
 }

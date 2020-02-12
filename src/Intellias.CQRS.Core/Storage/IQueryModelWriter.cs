@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries;
 
 namespace Intellias.CQRS.Core.Storage
@@ -39,12 +38,5 @@ namespace Intellias.CQRS.Core.Storage
         /// <param name="updateAction">Update action.</param>
         /// <returns>Simple Task.</returns>
         Task UpdateAsync(string id, Action<TQueryModel> updateAction);
-
-        /// <summary>
-        /// Reserve Event Dublication.
-        /// </summary>
-        /// <param name="event">event for processing.</param>
-        /// <returns>Simple Task.</returns>
-        Task ReserveEventAsync(IEvent @event);
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
 using Microsoft.WindowsAzure.Storage;
@@ -17,12 +16,10 @@ namespace Intellias.CQRS.QueryStore.AzureTable
     /// <typeparam name="TQueryModel">Query Model Type.</typeparam>
     public class TableQueryModelStorage<TQueryModel> :
         IQueryModelWriter<TQueryModel>,
-        IQueryModelReader<TQueryModel>,
-        ITableQueryReader<TQueryModel>
+        IQueryModelReader<TQueryModel>
         where TQueryModel : class, IQueryModel, new()
     {
         private readonly CloudTable queryTable;
-        private readonly CloudTable queryVersioningTable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TableQueryModelStorage{TQueryModel}"/> class.
@@ -37,20 +34,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             {
                 queryTable.CreateIfNotExistsAsync().Wait();
             }
-
-            queryVersioningTable = client.GetTableReference($"{typeof(TQueryModel).Name}QueryVersioning");
-            if (!queryVersioningTable.ExistsAsync().GetAwaiter().GetResult())
-            {
-                queryVersioningTable.CreateIfNotExistsAsync().Wait();
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task ReserveEventAsync(IEvent @event)
-        {
-            var entity = new DynamicTableEntity(@event.AggregateRootId, @event.Id);
-            var op = TableOperation.Insert(entity);
-            await queryVersioningTable.ExecuteAsync(op); // Will fail for second event if it was dublicated
         }
 
         /// <inheritdoc />
@@ -82,26 +65,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             // Removing
             var deleteOperation = TableOperation.Delete(entity);
             await queryTable.ExecuteAsync(deleteOperation);
-        }
-
-        /// <inheritdoc />
-        public async Task<IReadOnlyCollection<TQueryModel>> GetAllAsync(TableQuery<DynamicTableEntity> query)
-        {
-            var results = new List<TQueryModel>();
-            var continuationToken = new TableContinuationToken();
-
-            do
-            {
-                var querySegment = await queryTable.ExecuteQuerySegmentedAsync(query, continuationToken);
-
-                continuationToken = querySegment.ContinuationToken;
-
-                var queryResults = querySegment.Results.Select(item => DynamicPropertyConverter.ConvertBack<TQueryModel>(item));
-                results.AddRange(queryResults);
-            }
-            while (continuationToken != null);
-
-            return results;
         }
 
         /// <inheritdoc />
@@ -152,6 +115,25 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             };
 
             return entity;
+        }
+
+        private async Task<IReadOnlyCollection<TQueryModel>> GetAllAsync(TableQuery<DynamicTableEntity> query)
+        {
+            var results = new List<TQueryModel>();
+            var continuationToken = new TableContinuationToken();
+
+            do
+            {
+                var querySegment = await queryTable.ExecuteQuerySegmentedAsync(query, continuationToken);
+
+                continuationToken = querySegment.ContinuationToken;
+
+                var queryResults = querySegment.Results.Select(item => DynamicPropertyConverter.ConvertBack<TQueryModel>(item));
+                results.AddRange(queryResults);
+            }
+            while (continuationToken != null);
+
+            return results;
         }
 
         private async Task UpdateActionAsync(string id, Action<TQueryModel> updateAction)
