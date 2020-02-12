@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Storage;
 
@@ -17,7 +16,6 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         where TQueryModel : class, IQueryModel, new()
     {
         private readonly Dictionary<string, object> store;
-        private readonly Dictionary<string, object> storeVersioning;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InProcessQueryStore{TQueryModel}"/> class.
@@ -35,8 +33,6 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                 store = new Dictionary<string, object>();
                 tables.Add(typeof(TQueryModel), store);
             }
-
-            storeVersioning = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -97,22 +93,6 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         {
             store.Add(queryModel.Id, queryModel);
             return Task.FromResult(queryModel);
-        }
-
-        /// <inheritdoc />
-        public Task ReserveEventAsync(IEvent @event)
-        {
-            var key = $"{@event.AggregateRootId}{@event.Id}";
-            if (storeVersioning.ContainsKey(key))
-            {
-                throw new AggregateException($"Event {@event.Id} was dublicated");
-            }
-            else
-            {
-                storeVersioning.Add(key, @event.Id);
-            }
-
-            return Task.FromResult(@event);
         }
     }
 }
