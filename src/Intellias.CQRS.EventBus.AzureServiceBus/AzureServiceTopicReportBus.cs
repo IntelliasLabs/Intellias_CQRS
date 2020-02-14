@@ -40,7 +40,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
                 ContentType = message.GetType().AssemblyQualifiedName,
                 PartitionKey = message.AggregateRootId,
                 CorrelationId = message.CorrelationId,
-                SessionId = AbstractMessage.GlobalSessionId,
+                SessionId = message.AggregateRootId,
                 Label = message.GetType().Name
             };
         }

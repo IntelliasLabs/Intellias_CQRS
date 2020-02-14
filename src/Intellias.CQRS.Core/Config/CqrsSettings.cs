@@ -25,7 +25,6 @@ namespace Intellias.CQRS.Core.Config
         public static Func<JsonSerializerSettings> JsonConfig =>
             () => new JsonSerializerSettings
             {
-                Formatting = Formatting.Indented,
                 TypeNameHandling = TypeNameHandling.None,
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 MissingMemberHandling = MissingMemberHandling.Ignore,
