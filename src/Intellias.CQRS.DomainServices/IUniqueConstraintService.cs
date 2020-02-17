@@ -7,7 +7,6 @@ namespace Intellias.CQRS.DomainServices
     /// <summary>
     /// IUniqueConstraintService.
     /// </summary>
-    [Obsolete("Cross-aggregate constraints logic should be handled either via query-side or SAGA choreography")]
     public interface IUniqueConstraintService
     {
         /// <summary>
