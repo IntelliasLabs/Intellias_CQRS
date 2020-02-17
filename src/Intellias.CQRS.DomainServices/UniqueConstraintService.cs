@@ -16,7 +16,6 @@ namespace Intellias.CQRS.DomainServices
     /// Unique-constraint service.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    [Obsolete("Cross-aggregate constraints logic should be handled either via query-side or SAGA choreography")]
     public class UniqueConstraintService : IUniqueConstraintService
     {
         private readonly CloudTable table;
