@@ -3,10 +3,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Pipelines.EventHandlers;
 using Intellias.CQRS.Pipelines.EventHandlers.Notifications;
+using Intellias.CQRS.Tests.Core.EventHandlers.Tests;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
@@ -27,8 +29,9 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         [Fact]
         public async Task HandleQueryModelUpdatedNotification_IsReplay_DoesntPublishSignal()
         {
-            var signal = new QueryModelUpdatedSignal("x", 0, typeof(int));
-            var notification = new QueryModelUpdatedNotification(signal)
+            var integrationEvent = new IntegrationEvent { CorrelationId = Unified.NewCode(), AggregateRootId = Unified.NewCode() };
+            var queryModel = new FakeMutableQueryModel { Id = Unified.NewCode() };
+            var notification = new QueryModelUpdatedNotification(integrationEvent, queryModel)
             {
                 IsReplay = true
             };
@@ -41,8 +44,9 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         [Fact]
         public async Task HandleQueryModelUpdatedNotification_IsPrivate_DoesntPublishSignal()
         {
-            var signal = new QueryModelUpdatedSignal("x", 0, typeof(int));
-            var notification = new QueryModelUpdatedNotification(signal)
+            var integrationEvent = new IntegrationEvent { CorrelationId = Unified.NewCode(), AggregateRootId = Unified.NewCode() };
+            var queryModel = new FakeMutableQueryModel { Id = Unified.NewCode() };
+            var notification = new QueryModelUpdatedNotification(integrationEvent, queryModel)
             {
                 IsPrivate = true
             };
@@ -55,15 +59,26 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         [Fact]
         public async Task HandleQueryModelUpdatedNotification_IsNotReplay_PublishesSignal()
         {
-            var signal = new QueryModelUpdatedSignal("x", 0, typeof(int));
-            var notification = new QueryModelUpdatedNotification(signal)
+            var integrationEvent = new IntegrationEvent { CorrelationId = Unified.NewCode(), AggregateRootId = Unified.NewCode() };
+            var queryModel = new FakeMutableQueryModel { Id = Unified.NewCode() };
+            var notification = new QueryModelUpdatedNotification(integrationEvent, queryModel)
             {
                 IsReplay = false
             };
 
             await handler.Handle(notification, CancellationToken.None);
 
-            reportBusStore.Single().Value.Should().BeEquivalentTo(signal);
+            reportBusStore.Single().Value.Should().BeEquivalentTo(CreateSignal(notification));
+        }
+
+        private QueryModelUpdatedSignal CreateSignal(QueryModelUpdatedNotification notification)
+        {
+            return new QueryModelUpdatedSignal(notification.Signal.QueryModelId, notification.Signal.QueryModelVersion, notification.Signal.QueryModelType)
+            {
+                Id = notification.Signal.Id,
+                AggregateRootId = notification.Signal.AggregateRootId,
+                CorrelationId = notification.Signal.CorrelationId
+            };
         }
     }
 }
