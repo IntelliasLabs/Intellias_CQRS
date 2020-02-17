@@ -15,21 +15,13 @@ namespace Intellias.CQRS.Pipelines.EventHandlers.Notifications
         /// <summary>
         /// Initializes a new instance of the <see cref="QueryModelUpdatedNotification"/> class.
         /// </summary>
-        /// <param name="signal">Query model changed signal. </param>
-        public QueryModelUpdatedNotification(QueryModelUpdatedSignal signal)
-        {
-            Signal = signal;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QueryModelUpdatedNotification"/> class.
-        /// </summary>
         /// <param name="event">Event that updated query model.</param>
         /// <param name="queryModel">Update query model.</param>
         public QueryModelUpdatedNotification(IEvent @event, IImmutableQueryModel queryModel)
         {
             Signal = new QueryModelUpdatedSignal(queryModel.Id, queryModel.Version, queryModel.GetType())
             {
+                AggregateRootId = @event.AggregateRootId,
                 CorrelationId = @event.CorrelationId
             };
 
@@ -45,6 +37,7 @@ namespace Intellias.CQRS.Pipelines.EventHandlers.Notifications
         {
             Signal = new QueryModelUpdatedSignal(queryModel.Id, 0, queryModel.GetType())
             {
+                AggregateRootId = @event.AggregateRootId,
                 CorrelationId = @event.CorrelationId
             };
 
