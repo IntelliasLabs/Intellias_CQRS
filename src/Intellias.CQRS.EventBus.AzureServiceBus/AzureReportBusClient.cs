@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
-using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.EventBus.AzureServiceBus.Extensions;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Logging;
 
@@ -38,8 +37,7 @@ namespace Intellias.CQRS.EventBus.AzureServiceBus
             sub.RegisterSessionHandler(
                 async (session, msg, token) =>
                 {
-                    var json = Encoding.UTF8.GetString(msg.Body);
-                    var message = json.FromJson<IMessage>();
+                    var message = msg.GetMessage();
 
                     // Invoke handler
                     if (handler != null)
