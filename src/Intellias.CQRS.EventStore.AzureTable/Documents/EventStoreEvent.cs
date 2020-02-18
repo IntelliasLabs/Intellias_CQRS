@@ -20,7 +20,7 @@ namespace Intellias.CQRS.EventStore.AzureTable.Documents
             PartitionKey = @event.AggregateRootId;
             RowKey = @event.Version.ToString("D9", CultureInfo.InvariantCulture);
             Data = @event.ToJson();
-            TypeName = @event.TypeName;
+            TypeName = @event.GetType().AssemblyQualifiedName;
         }
 
         /// <summary>

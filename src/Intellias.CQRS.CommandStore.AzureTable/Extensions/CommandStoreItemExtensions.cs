@@ -20,7 +20,7 @@ namespace Intellias.CQRS.CommandStore.AzureTable.Extensions
         {
             PartitionKey = command.AggregateRootId,
             RowKey = command.Id,
-            TypeName = command.TypeName,
+            TypeName = command.GetType().AssemblyQualifiedName,
             ExpectedVersion = command.ExpectedVersion,
             Data = command.ToJson(),
             ETag = "*",
