@@ -1,16 +1,12 @@
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
-using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Pipelines.CommandHandlers;
 using Intellias.CQRS.Pipelines.EventHandlers.Notifications;
 using MediatR;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Intellias.CQRS.Pipelines
 {
@@ -28,20 +24,6 @@ namespace Intellias.CQRS.Pipelines
         public MessageDispatcher(IMediator mediator)
         {
             this.mediator = mediator;
-        }
-
-        /// <inheritdoc />
-        public async Task DispatchCommandAsync(string message)
-        {
-            var messageObject = DeserializeMessage(message);
-            await DispatchCommandAsync((ICommand)messageObject);
-        }
-
-        /// <inheritdoc />
-        public async Task DispatchEventAsync(string message)
-        {
-            var messageObject = DeserializeMessage(message);
-            await DispatchEventAsync((IEvent)messageObject);
         }
 
         /// <inheritdoc/>
@@ -94,31 +76,6 @@ namespace Intellias.CQRS.Pipelines
                 throw new InvalidOperationException(
                     $"Unhandled error occured during dispatching message with id '{@event.Id}' of type '{@event.GetType()}'.",
                     exception);
-            }
-        }
-
-        private static IMessage DeserializeMessage(string message)
-        {
-            using (var reader = new JsonTextReader(new StringReader(message)))
-            {
-                var messageJObject = JObject.Load(reader);
-                var messageTypeName = messageJObject.TryGetValue(nameof(IMessage.TypeName), StringComparison.OrdinalIgnoreCase, out var value)
-                    ? value.Value<string>()
-                    : null;
-
-                if (string.IsNullOrWhiteSpace(messageTypeName))
-                {
-                    throw new ArgumentException($"Message type name at json path '{messageTypeName}' is not found in json '{message}'.");
-                }
-
-                var messageType = Type.GetType(messageTypeName);
-
-                if (!(messageJObject.ToObject(messageType) is IMessage messageObject))
-                {
-                    throw new ArgumentException($"Expected message of type '{typeof(IMessage)}' but was '${messageType}'.");
-                }
-
-                return messageObject;
             }
         }
     }
