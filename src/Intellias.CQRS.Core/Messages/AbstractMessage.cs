@@ -13,14 +13,6 @@ namespace Intellias.CQRS.Core.Messages
         /// </summary>
         public const string GlobalSessionId = nameof(GlobalSessionId);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AbstractMessage"/> class.
-        /// </summary>
-        protected AbstractMessage()
-        {
-            TypeName = GetType().AssemblyQualifiedName;
-        }
-
         /// <inheritdoc />
         [Key]
         [Required]
@@ -43,10 +35,6 @@ namespace Intellias.CQRS.Core.Messages
         [DataType(DataType.DateTime)]
         [JsonProperty]
         public DateTime Created { get; protected set; } = DateTime.UtcNow;
-
-        /// <inheritdoc />
-        [Required]
-        public string TypeName { get; private set; }
 
         /// <inheritdoc />
         public IDictionary<MetadataKey, string> Metadata { get; } = new Dictionary<MetadataKey, string>();

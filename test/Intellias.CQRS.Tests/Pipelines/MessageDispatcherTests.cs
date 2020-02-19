@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Results;
@@ -46,41 +45,19 @@ namespace Intellias.CQRS.Tests.Pipelines
         public async Task DispatchCommand_HasHandler_DispatchesToCommandHandler()
         {
             var command = Fixtures.Pipelines.FakeDispatcherCommand();
-            var serializedMessage = command.ToJson();
 
-            await dispatcher.DispatchCommandAsync(serializedMessage);
+            await dispatcher.DispatchCommandAsync(command);
             var dispatchedCommand = commandHandler.DispatchedMessages.Single();
 
             dispatchedCommand.Should().BeEquivalentTo(command);
         }
 
         [Fact]
-        public async Task DispatchCommand_NotTypeName_Throws()
-        {
-            var command = new { a = 1 };
-            var serializedMessage = command.ToJson();
-
-            await dispatcher.Awaiting(d => d.DispatchCommandAsync(serializedMessage)).Should()
-                .ThrowAsync<ArgumentException>();
-        }
-
-        [Fact]
-        public async Task DispatchCommand_NotIMessage_Throws()
-        {
-            var command = new { a = 1, typeName = typeof(object) };
-            var serializedMessage = command.ToJson();
-
-            await dispatcher.Awaiting(d => d.DispatchCommandAsync(serializedMessage)).Should()
-                .ThrowAsync<ArgumentException>();
-        }
-
-        [Fact]
         public async Task DispatchCommand_NoHandler_Throws()
         {
             var command = new NoHandlerCommand();
-            var serializedMessage = command.ToJson();
 
-            await dispatcher.Awaiting(d => d.DispatchCommandAsync(serializedMessage)).Should()
+            await dispatcher.Awaiting(d => d.DispatchCommandAsync(command)).Should()
                 .ThrowAsync<InvalidOperationException>();
         }
 
@@ -88,61 +65,28 @@ namespace Intellias.CQRS.Tests.Pipelines
         public async Task DispatchCommand_CommandIsNotForMediatR_DispatchesToCommandHandler()
         {
             var command = new InvalidCommand();
-            var serializedMessage = command.ToJson();
 
-            await dispatcher.Awaiting(d => d.DispatchCommandAsync(serializedMessage)).Should()
+            await dispatcher.Awaiting(d => d.DispatchCommandAsync(command)).Should()
                 .ThrowAsync<InvalidOperationException>();
-        }
-
-        [Fact]
-        public async Task DispatchCommand_InvalidRequestType_DispatchesToCommandHandler()
-        {
-            var command = new { a = 1 };
-            var serializedMessage = command.ToJson();
-
-            await dispatcher.Awaiting(d => d.DispatchCommandAsync(serializedMessage)).Should()
-                .ThrowAsync<ArgumentException>();
         }
 
         [Fact]
         public async Task DispatchEvent_HasHandler_DispatchesToEventHandler()
         {
             var @event = Fixtures.Pipelines.FakeDispatcherEvent();
-            var serializedMessage = @event.ToJson();
 
-            await dispatcher.DispatchEventAsync(serializedMessage);
+            await dispatcher.DispatchEventAsync(@event);
             var dispatchedEvent = eventHandler.DispatchedMessages.Single();
 
             dispatchedEvent.Should().BeEquivalentTo(@event);
         }
 
         [Fact]
-        public async Task DispatchEvent_NotTypeName_Throws()
-        {
-            var @event = new { a = 1 };
-            var serializedMessage = @event.ToJson();
-
-            await dispatcher.Awaiting(d => d.DispatchEventAsync(serializedMessage)).Should()
-                .ThrowAsync<ArgumentException>();
-        }
-
-        [Fact]
-        public async Task DispatchEvent_NotIMessage_Throws()
-        {
-            var @event = new { a = 1, typeName = typeof(object) };
-            var serializedMessage = @event.ToJson();
-
-            await dispatcher.Awaiting(d => d.DispatchEventAsync(serializedMessage)).Should()
-                .ThrowAsync<ArgumentException>();
-        }
-
-        [Fact]
         public async Task DispatchEvent_NoHandler_NoExceptions()
         {
             var @event = new NoHandlerEvent();
-            var serializedMessage = @event.ToJson();
 
-            await dispatcher.Awaiting(d => d.DispatchEventAsync(serializedMessage)).Should()
+            await dispatcher.Awaiting(d => d.DispatchEventAsync(@event)).Should()
                 .NotThrowAsync();
         }
 

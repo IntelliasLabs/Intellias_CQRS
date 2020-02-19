@@ -72,8 +72,7 @@ namespace Intellias.CQRS.Tests
         {
             var e = new TestCreatedEvent();
             var msg = e.ToBusMessage();
-            var json = Encoding.UTF8.GetString(msg.Body);
-            var tms = json.FromJson<IMessage>();
+            var tms = msg.GetEvent();
 
             Assert.Equal(e.Id, tms.Id);
         }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
+using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Core.Signals
 {
@@ -29,6 +31,8 @@ namespace Intellias.CQRS.Core.Signals
         /// <summary>
         /// Source.
         /// </summary>
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Auto)]
+        [SuppressMessage("Security", "SCS0028:TypeNameHandling is set to other value than 'None' that may lead to deserialization vulnerability", Justification = "Temporary")]
         public IMessage Source { get; private set; }
 
         /// <summary>
