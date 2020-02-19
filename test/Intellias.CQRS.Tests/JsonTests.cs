@@ -1,6 +1,9 @@
-﻿using Intellias.CQRS.Core;
+﻿using System.Text;
+using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.EventBus.AzureServiceBus.Extensions;
 using Intellias.CQRS.Tests.Core.Commands;
+using Microsoft.Azure.ServiceBus;
 using Xunit;
 
 namespace Intellias.CQRS.Tests
@@ -34,6 +37,26 @@ namespace Intellias.CQRS.Tests
             dynamic cmdResult = json.FromJson<IMessage>();
 
             Assert.Equal(sample.TestData, cmdResult.TestData);
+        }
+
+        [Fact]
+        public void MessageExtensionServiceBusTest()
+        {
+            var json = sample.ToJson();
+
+            var msg = new Message(Encoding.UTF8.GetBytes(json))
+            {
+                MessageId = sample.Id,
+                ContentType = sample.GetType().AssemblyQualifiedName,
+                PartitionKey = sample.AggregateRootId,
+                CorrelationId = sample.CorrelationId,
+                SessionId = AbstractMessage.GlobalSessionId,
+                Label = sample.GetType().Name
+            };
+
+            var cmd = msg.GetCommand();
+
+            Assert.Equal(sample.AggregateRootId, cmd.AggregateRootId);
         }
     }
 }

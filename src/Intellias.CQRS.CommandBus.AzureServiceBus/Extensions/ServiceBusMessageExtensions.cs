@@ -12,7 +12,7 @@ namespace Intellias.CQRS.CommandBus.AzureServiceBus.Extensions
             new Message(Encoding.UTF8.GetBytes(command.ToJson()))
             {
                 MessageId = command.Id,
-                ContentType = command.GetType().FullName,
+                ContentType = command.GetType().AssemblyQualifiedName,
                 PartitionKey = command.AggregateRootId,
                 CorrelationId = command.CorrelationId,
                 SessionId = AbstractMessage.GlobalSessionId,
