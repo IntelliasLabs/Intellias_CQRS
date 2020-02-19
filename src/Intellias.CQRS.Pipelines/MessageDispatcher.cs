@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Intellias.CQRS.Core.Commands;
+using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Pipelines.CommandHandlers;
@@ -32,8 +34,19 @@ namespace Intellias.CQRS.Pipelines
         public async Task DispatchCommandAsync(string message)
         {
             var messageObject = DeserializeMessage(message);
-            var messageType = messageObject.GetType();
+            await DispatchCommandAsync((ICommand)messageObject);
+        }
 
+        /// <inheritdoc />
+        public async Task DispatchEventAsync(string message)
+        {
+            var messageObject = DeserializeMessage(message);
+            await DispatchEventAsync((IEvent)messageObject);
+        }
+
+        /// <inheritdoc/>
+        public async Task DispatchCommandAsync(ICommand command)
+        {
             var sendMethodInfo = mediator.GetType().GetMethod(nameof(IMediator.Send));
             if (sendMethodInfo == null)
             {
@@ -42,8 +55,8 @@ namespace Intellias.CQRS.Pipelines
 
             try
             {
-                var requestType = typeof(CommandRequest<>).MakeGenericType(messageType);
-                var request = Activator.CreateInstance(requestType, messageObject);
+                var requestType = typeof(CommandRequest<>).MakeGenericType(command.GetType());
+                var request = Activator.CreateInstance(requestType, command);
 
                 var sendGenericMethodInfo = sendMethodInfo.MakeGenericMethod(typeof(IExecutionResult));
                 var result = (Task<IExecutionResult>)sendGenericMethodInfo.Invoke(mediator, new[] { request, CancellationToken.None });
@@ -53,17 +66,14 @@ namespace Intellias.CQRS.Pipelines
             catch (Exception exception)
             {
                 throw new InvalidOperationException(
-                    $"Unhandled error occured during dispatching message with id '{messageObject.Id}' of type '{messageObject.GetType()}'.",
+                    $"Unhandled error occured during dispatching message with id '{command.Id}' of type '{command.GetType()}'.",
                     exception);
             }
         }
 
-        /// <inheritdoc />
-        public async Task DispatchEventAsync(string message)
+        /// <inheritdoc/>
+        public async Task DispatchEventAsync(IEvent @event)
         {
-            var messageObject = DeserializeMessage(message);
-            var messageType = messageObject.GetType();
-
             var sendMethodInfo = mediator.GetType().GetMethod(nameof(IMediator.Publish), new[] { typeof(INotification), typeof(CancellationToken) });
             if (sendMethodInfo == null)
             {
@@ -72,8 +82,8 @@ namespace Intellias.CQRS.Pipelines
 
             try
             {
-                var notificationType = typeof(IntegrationEventNotification<>).MakeGenericType(messageType);
-                var notification = Activator.CreateInstance(notificationType, messageObject);
+                var notificationType = typeof(IntegrationEventNotification<>).MakeGenericType(@event.GetType());
+                var notification = Activator.CreateInstance(notificationType, @event);
                 var result = sendMethodInfo.Invoke(mediator, new[] { notification, CancellationToken.None })
                     ?? throw new NullReferenceException($"Invocation result of '{sendMethodInfo}' can't be null.");
 
@@ -82,7 +92,7 @@ namespace Intellias.CQRS.Pipelines
             catch (Exception exception)
             {
                 throw new InvalidOperationException(
-                    $"Unhandled error occured during dispatching message with id '{messageObject.Id}' of type '{messageObject.GetType()}'.",
+                    $"Unhandled error occured during dispatching message with id '{@event.Id}' of type '{@event.GetType()}'.",
                     exception);
             }
         }
