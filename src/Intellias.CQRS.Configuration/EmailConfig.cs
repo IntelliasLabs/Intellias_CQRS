@@ -14,6 +14,16 @@ namespace Intellias.CQRS.Configuration
         public UserConfig PaceUser { get; set; } = new UserConfig();
 
         /// <summary>
+        /// User name.
+        /// </summary>
+        public string UserName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// user password.
+        /// </summary>
+        public string UserPassword { get; set; } = string.Empty;
+
+        /// <summary>
         /// SMTP host.
         /// </summary>
         public string SmtpHost { get; set; } = string.Empty;
