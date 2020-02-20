@@ -90,20 +90,6 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
             /// </summary>
             public string Data { get; set; } = string.Empty;
 
-            public IIntegrationEvent DeserializeData()
-            {
-                if (string.IsNullOrWhiteSpace(Data))
-                {
-                    throw new InvalidOperationException($"Unable to deserialize entity partition key '{PartitionKey}' and row key '{RowKey}' from empty json.");
-                }
-
-                var json = IsCompressed ? Data.Unzip() : Data;
-                var type = Type.GetType(TypeName);
-                var data = (IIntegrationEvent)JsonConvert.DeserializeObject(json, type, TableStorageJsonSerializerSettings.GetDefault());
-
-                return data;
-            }
-
             private static string GetRowKey(DateTime created)
             {
                 // Build from Created row key that stores data in reverse order.
