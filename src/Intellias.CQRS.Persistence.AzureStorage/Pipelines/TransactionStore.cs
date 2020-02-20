@@ -74,6 +74,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
 
                 TypeName = @event.GetType().AssemblyQualifiedName;
                 IsCompressed = true;
+                IsPublished = false;
 
                 var json = JsonConvert.SerializeObject(@event, TableStorageJsonSerializerSettings.GetDefault());
                 Data = IsCompressed ? json.Zip() : json;
@@ -88,7 +89,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
             /// <summary>
             /// Serialized data stored in Table Entity.
             /// </summary>
-            public string Data { get; set; } = string.Empty;
+            public string Data { get; set; }
 
             private static string GetRowKey(DateTime created)
             {

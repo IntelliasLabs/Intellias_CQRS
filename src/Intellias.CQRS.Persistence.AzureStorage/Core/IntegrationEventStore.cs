@@ -83,7 +83,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Core
             /// <summary>
             /// Serialized data stored in Table Entity.
             /// </summary>
-            public string Data { get; set; } = string.Empty;
+            public string Data { get; set; }
         }
     }
 }
