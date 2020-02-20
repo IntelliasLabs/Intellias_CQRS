@@ -59,10 +59,6 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Core
         {
             public const string EntityPartitionKey = "DomainEntity";
 
-            public DomainStoreEntity()
-            {
-            }
-
             public DomainStoreEntity(IIntegrationEvent integrationEvent)
             {
                 TypeName = integrationEvent.GetType().AssemblyQualifiedName;
@@ -72,6 +68,10 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Core
 
                 var json = JsonConvert.SerializeObject(integrationEvent, TableStorageJsonSerializerSettings.GetDefault());
                 Data = IsCompressed ? json.Zip() : json;
+            }
+
+            protected DomainStoreEntity()
+            {
             }
 
             public bool IsPublished { get; set; }

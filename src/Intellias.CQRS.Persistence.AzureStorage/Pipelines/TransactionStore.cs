@@ -80,6 +80,10 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
                 Data = IsCompressed ? json.Zip() : json;
             }
 
+            protected TransactionStoreDataEntity()
+            {
+            }
+
             public bool IsPublished { get; set; }
 
             public bool IsCompressed { get; set; }
