@@ -48,7 +48,6 @@ namespace Intellias.CQRS.Pipelines
             {
                 var notificationType = typeof(IntegrationEventNotification<>).MakeGenericType(@event.GetType());
                 var notification = Activator.CreateInstance(notificationType, @event);
-
                 await mediator.Publish(notification);
             }
             catch (Exception exception)
