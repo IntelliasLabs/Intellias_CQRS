@@ -10,6 +10,7 @@ using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Intellias.CQRS.Pipelines.Transactions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
 {
@@ -64,18 +65,36 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
             return tableProxy.ExecuteAsync(TableOperation.Merge(entity));
         }
 
-        private class TransactionStoreDataEntity : BaseJsonTableEntity<IEvent>
+        private class TransactionStoreDataEntity : TableEntity
         {
             public TransactionStoreDataEntity(string transactionId, IEvent @event)
-                : base(@event, true)
+                : this()
             {
                 PartitionKey = transactionId;
                 RowKey = GetRowKey(@event.Created);
+
+                TypeName = @event.GetType().AssemblyQualifiedName;
+                IsCompressed = true;
+                IsPublished = false;
+
+                var json = JsonConvert.SerializeObject(@event, TableStorageJsonSerializerSettings.GetDefault());
+                Data = IsCompressed ? json.Zip() : json;
             }
 
-            protected override void SetupDeserializedData(IEvent data)
+            protected TransactionStoreDataEntity()
             {
             }
+
+            public bool IsPublished { get; set; }
+
+            public bool IsCompressed { get; set; }
+
+            public string TypeName { get; set; }
+
+            /// <summary>
+            /// Serialized data stored in Table Entity.
+            /// </summary>
+            public string Data { get; set; }
 
             private static string GetRowKey(DateTime created)
             {

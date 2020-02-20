@@ -7,6 +7,7 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Persistence.AzureStorage.Core
 {
@@ -54,22 +55,36 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Core
             return string.Format(CultureInfo.InvariantCulture, "{0:D20}", DateTime.MaxValue.Ticks - created.Ticks);
         }
 
-        private class DomainStoreEntity : BaseJsonTableEntity<IIntegrationEvent>
+        private class DomainStoreEntity : TableEntity
         {
             public const string EntityPartitionKey = "DomainEntity";
 
             public DomainStoreEntity(IIntegrationEvent integrationEvent)
-                : base(integrationEvent, true)
+                : this()
             {
+                TypeName = integrationEvent.GetType().AssemblyQualifiedName;
                 PartitionKey = EntityPartitionKey;
                 RowKey = GetRowKey(integrationEvent.Created);
+                IsCompressed = true;
+
+                var json = JsonConvert.SerializeObject(integrationEvent, TableStorageJsonSerializerSettings.GetDefault());
+                Data = IsCompressed ? json.Zip() : json;
+            }
+
+            protected DomainStoreEntity()
+            {
             }
 
             public bool IsPublished { get; set; }
 
-            protected override void SetupDeserializedData(IIntegrationEvent data)
-            {
-            }
+            public bool IsCompressed { get; set; }
+
+            public string TypeName { get; set; }
+
+            /// <summary>
+            /// Serialized data stored in Table Entity.
+            /// </summary>
+            public string Data { get; set; }
         }
     }
 }

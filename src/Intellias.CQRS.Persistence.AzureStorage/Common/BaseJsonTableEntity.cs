@@ -1,7 +1,4 @@
 using System;
-using System.IO;
-using System.IO.Compression;
-using System.Text;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 
@@ -53,7 +50,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
                 throw new InvalidOperationException($"Unable to deserialize entity partition key '{PartitionKey}' and row key '{RowKey}' from empty json.");
             }
 
-            var json = IsCompressed ? Unzip(Data) : Data;
+            var json = IsCompressed ? Data.Unzip() : Data;
             var data = JsonConvert.DeserializeObject<TData>(json, TableStorageJsonSerializerSettings.GetDefault());
 
             SetupDeserializedData(data);
@@ -67,40 +64,10 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
         /// <param name="data">Table Entity data.</param>
         protected abstract void SetupDeserializedData(TData data);
 
-        private static string Zip(string str)
-        {
-            var bytes = Encoding.UTF8.GetBytes(str);
-
-            using (var msi = new MemoryStream(bytes))
-            using (var mso = new MemoryStream())
-            {
-                using (var gs = new GZipStream(mso, CompressionMode.Compress))
-                {
-                    msi.CopyTo(gs);
-                }
-
-                return Convert.ToBase64String(mso.ToArray());
-            }
-        }
-
-        private static string Unzip(string bytes)
-        {
-            using (var msi = new MemoryStream(Convert.FromBase64String(bytes)))
-            using (var mso = new MemoryStream())
-            {
-                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
-                {
-                    gs.CopyTo(mso);
-                }
-
-                return Encoding.UTF8.GetString(mso.ToArray());
-            }
-        }
-
         private string SerializeData(TData data)
         {
             var json = JsonConvert.SerializeObject(data, TableStorageJsonSerializerSettings.GetDefault());
-            return IsCompressed ? Zip(json) : json;
+            return IsCompressed ? json.Zip() : json;
         }
     }
 }
