@@ -10,6 +10,7 @@ using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Intellias.CQRS.Pipelines.Transactions;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
 {
@@ -64,17 +65,43 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
             return tableProxy.ExecuteAsync(TableOperation.Merge(entity));
         }
 
-        private class TransactionStoreDataEntity : BaseJsonTableEntity<IEvent>
+        private class TransactionStoreDataEntity : TableEntity
         {
             public TransactionStoreDataEntity(string transactionId, IEvent @event)
-                : base(@event, true)
             {
                 PartitionKey = transactionId;
                 RowKey = GetRowKey(@event.Created);
+
+                TypeName = @event.GetType().AssemblyQualifiedName;
+                IsCompressed = true;
+
+                var json = JsonConvert.SerializeObject(@event, TableStorageJsonSerializerSettings.GetDefault());
+                Data = IsCompressed ? json.Zip() : json;
             }
 
-            protected override void SetupDeserializedData(IEvent data)
+            public bool IsPublished { get; set; }
+
+            public bool IsCompressed { get; set; }
+
+            public string TypeName { get; set; }
+
+            /// <summary>
+            /// Serialized data stored in Table Entity.
+            /// </summary>
+            public string Data { get; set; } = string.Empty;
+
+            public IIntegrationEvent DeserializeData()
             {
+                if (string.IsNullOrWhiteSpace(Data))
+                {
+                    throw new InvalidOperationException($"Unable to deserialize entity partition key '{PartitionKey}' and row key '{RowKey}' from empty json.");
+                }
+
+                var json = IsCompressed ? Data.Unzip() : Data;
+                var type = Type.GetType(TypeName);
+                var data = (IIntegrationEvent)JsonConvert.DeserializeObject(json, type, TableStorageJsonSerializerSettings.GetDefault());
+
+                return data;
             }
 
             private static string GetRowKey(DateTime created)
