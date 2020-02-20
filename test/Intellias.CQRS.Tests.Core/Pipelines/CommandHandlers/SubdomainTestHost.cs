@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Results;
@@ -30,7 +29,7 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.CommandHandlers
         /// </summary>
         /// <param name="command">Command to be handled.</param>
         /// <returns>Execution result.</returns>
-        public Task<IExecutionResult> SendAsync(Command command)
+        public async Task<IExecutionResult> SendAsync(Command command)
         {
             // Restore real command type to have MediatR handle it right.
             var commandType = command.GetType();
@@ -39,16 +38,8 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.CommandHandlers
 
             // Execute MediatR pipeline.
             var mediator = this.serviceProvider.GetRequiredService<IMediator>();
-            var sendMethodInfo = mediator.GetType().GetMethod(nameof(IMediator.Send));
-            if (sendMethodInfo == null)
-            {
-                throw new InvalidOperationException($"Unable to resolve '{nameof(IMediator.Send)}' from '{mediator.GetType()}'.");
-            }
 
-            var sendGenericMethodInfo = sendMethodInfo.MakeGenericMethod(typeof(IExecutionResult));
-            var result = (Task<IExecutionResult>)sendGenericMethodInfo.Invoke(mediator, new[] { commandRequest, CancellationToken.None });
-
-            return result;
+            return (IExecutionResult)await mediator.Send(commandRequest);
         }
 
         /// <summary>
