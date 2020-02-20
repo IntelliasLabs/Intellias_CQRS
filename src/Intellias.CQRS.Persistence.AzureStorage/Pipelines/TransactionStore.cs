@@ -68,6 +68,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines
         private class TransactionStoreDataEntity : TableEntity
         {
             public TransactionStoreDataEntity(string transactionId, IEvent @event)
+                : this()
             {
                 PartitionKey = transactionId;
                 RowKey = GetRowKey(@event.Created);

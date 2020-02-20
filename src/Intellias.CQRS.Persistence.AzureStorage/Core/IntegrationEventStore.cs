@@ -60,6 +60,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Core
             public const string EntityPartitionKey = "DomainEntity";
 
             public DomainStoreEntity(IIntegrationEvent integrationEvent)
+                : this()
             {
                 TypeName = integrationEvent.GetType().AssemblyQualifiedName;
                 PartitionKey = EntityPartitionKey;
