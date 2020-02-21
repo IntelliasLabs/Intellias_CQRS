@@ -2,7 +2,7 @@
 using System.Globalization;
 using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Events;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace Intellias.CQRS.EventStore.AzureTable.Documents
 {

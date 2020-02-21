@@ -8,8 +8,7 @@ using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Intellias.CQRS.Pipelines.Transactions;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Persistence.AzureStorage.Pipelines

@@ -3,9 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Intellias.CQRS.QueryStore.AzureTable.Common
 {

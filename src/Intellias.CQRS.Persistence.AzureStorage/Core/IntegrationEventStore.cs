@@ -5,8 +5,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Persistence.AzureStorage.Core

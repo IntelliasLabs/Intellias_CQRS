@@ -1,15 +1,14 @@
 using System;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using Intellias.CQRS.Tests.Core.Infrastructure;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace Intellias.CQRS.Tests.Utils.StorageAccount
 {
     public class StorageAccountFixture : IDisposable
     {
-        private readonly CloudBlobClient blobClient;
+        private readonly BlobServiceClient blobClient;
         private readonly CloudTableClient tableClient;
 
         public StorageAccountFixture()
@@ -19,9 +18,9 @@ namespace Intellias.CQRS.Tests.Utils.StorageAccount
 
             var storageAccount = CloudStorageAccount
                 .Parse(Configuration.StorageAccount.ConnectionString);
-
-            this.blobClient = storageAccount.CreateCloudBlobClient();
             this.tableClient = storageAccount.CreateCloudTableClient();
+
+            this.blobClient = new BlobServiceClient(Configuration.StorageAccount.ConnectionString);
         }
 
         public TestsExecutionContext ExecutionContext { get; }
@@ -57,19 +56,12 @@ namespace Intellias.CQRS.Tests.Utils.StorageAccount
 
         private async Task DeleteAllContainersAsync(string prefix)
         {
-            BlobContinuationToken continuationToken = null;
+            var pagenable = this.blobClient.GetBlobContainersAsync(prefix: prefix);
 
-            do
+            await foreach (var blobItem in pagenable)
             {
-                var response = await this.blobClient.ListContainersSegmentedAsync(prefix, continuationToken);
-                foreach (var container in response.Results)
-                {
-                    await container.DeleteIfExistsAsync();
-                }
-
-                continuationToken = response.ContinuationToken;
+                await this.blobClient.DeleteBlobContainerAsync(blobItem.Name);
             }
-            while (continuationToken != null);
         }
     }
 }

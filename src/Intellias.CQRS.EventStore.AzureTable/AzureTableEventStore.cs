@@ -6,8 +6,7 @@ using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace Intellias.CQRS.EventStore.AzureTable
 {

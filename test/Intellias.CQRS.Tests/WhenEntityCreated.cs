@@ -4,7 +4,7 @@ using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.EventStore.AzureTable.Documents;
 using Intellias.CQRS.Tests.Core;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 using Xunit;
 
 namespace Intellias.CQRS.Tests

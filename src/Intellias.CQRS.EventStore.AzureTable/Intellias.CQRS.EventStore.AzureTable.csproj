@@ -4,7 +4,7 @@
     <ProjectGuid>{c49d3944-445a-431a-b57f-d1fbcb04573d}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+    <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />

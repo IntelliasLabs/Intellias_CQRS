@@ -8,8 +8,8 @@ using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
 using Intellias.CQRS.Tests.Core.Queries;
 using Intellias.CQRS.Tests.Fakes;
 using Intellias.CQRS.Tests.Utils.StorageAccount;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table.Protocol;
+using Microsoft.Azure.Cosmos.Table;
+using Microsoft.Azure.Cosmos.Table.Protocol;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.QueryStores

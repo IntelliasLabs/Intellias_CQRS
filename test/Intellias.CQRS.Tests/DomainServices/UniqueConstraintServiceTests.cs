@@ -7,8 +7,7 @@ using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
 using Intellias.CQRS.DomainServices;
 using Intellias.CQRS.Tests.Core.Infrastructure;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.DomainServices

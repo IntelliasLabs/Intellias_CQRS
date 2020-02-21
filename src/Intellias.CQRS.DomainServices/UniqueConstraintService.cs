@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Shared.Protocol;
-using Microsoft.WindowsAzure.Storage.Table;
-using Microsoft.WindowsAzure.Storage.Table.Protocol;
+using Microsoft.Azure.Cosmos.Table;
+using Microsoft.Azure.Cosmos.Table.Protocol;
+using Microsoft.Azure.Cosmos.Tables.SharedFiles;
 
 namespace Intellias.CQRS.DomainServices
 {

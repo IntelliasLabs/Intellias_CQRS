@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Intellias.CQRS.Core.Queries.Immutable;
 using Intellias.CQRS.QueryStore.AzureTable.Common;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Intellias.CQRS.QueryStore.AzureTable.Immutable
 {
