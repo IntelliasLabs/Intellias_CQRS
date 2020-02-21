@@ -46,6 +46,24 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <summary>
+        /// Send.
+        /// </summary>
+        /// <param name="request">request.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>object.</returns>
+        public Task<object> Send(object request, CancellationToken cancellationToken = default)
+        {
+            sentRequests.Add(request);
+
+            var handler = handlers.FirstOrDefault(h => h.RequestType == request.GetType())
+                ?? throw new KeyNotFoundException($"No handler for request type of '{request.GetType()}' is found.");
+
+            var response = handler.Handle(request) ?? throw new NullReferenceException("Response can't be null.");
+
+            return Task.FromResult(response);
+        }
+
+        /// <summary>
         /// Publish.
         /// </summary>
         /// <param name="notification">notification.</param>

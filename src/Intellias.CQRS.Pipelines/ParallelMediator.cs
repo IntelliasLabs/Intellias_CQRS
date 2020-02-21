@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
@@ -21,9 +22,9 @@ namespace Intellias.CQRS.Pipelines
         }
 
         /// <inheritdoc />
-        protected override Task PublishCore(IEnumerable<Func<Task>> allHandlers)
+        protected override Task PublishCore(IEnumerable<Func<INotification, CancellationToken, Task>> allHandlers, INotification notification, CancellationToken cancellationToken)
         {
-            return Task.WhenAll(allHandlers.Select(handler => handler()));
+            return Task.WhenAll(allHandlers.Select(handler => handler(notification, cancellationToken)));
         }
     }
 }
