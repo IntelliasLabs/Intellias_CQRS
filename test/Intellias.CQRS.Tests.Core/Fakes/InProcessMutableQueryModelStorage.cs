@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Queries.Mutable;
-using Microsoft.WindowsAzure.Storage;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {

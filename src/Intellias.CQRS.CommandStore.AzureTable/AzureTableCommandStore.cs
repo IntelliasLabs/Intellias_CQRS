@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using Intellias.CQRS.CommandStore.AzureTable.Extensions;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace Intellias.CQRS.CommandStore.AzureTable
 {

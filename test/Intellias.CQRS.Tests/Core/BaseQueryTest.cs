@@ -1,7 +1,7 @@
 ﻿using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.QueryStore.AzureTable;
 using Intellias.CQRS.Tests.Core.Infrastructure;
-using Microsoft.WindowsAzure.Storage;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace Intellias.CQRS.Tests.Core
 {

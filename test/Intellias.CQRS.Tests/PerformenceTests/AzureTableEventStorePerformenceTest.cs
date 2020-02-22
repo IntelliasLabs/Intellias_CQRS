@@ -11,7 +11,7 @@ using Intellias.CQRS.Tests.Core.EventHandlers;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Intellias.CQRS.Tests.Core.Infrastructure;
 using Intellias.CQRS.Tests.Core.Queries;
-using Microsoft.WindowsAzure.Storage;
+using Microsoft.Azure.Cosmos.Table;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.PerformenceTests

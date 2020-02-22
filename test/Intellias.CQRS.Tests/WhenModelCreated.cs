@@ -5,7 +5,7 @@ using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Tests.Core;
 using Intellias.CQRS.Tests.Core.Queries;
-using Microsoft.WindowsAzure.Storage;
+using Microsoft.Azure.Cosmos.Table;
 using Xunit;
 
 namespace Intellias.CQRS.Tests
