@@ -46,7 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Compatibilit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Pipelines", "src\Intellias.CQRS.Pipelines\Intellias.CQRS.Pipelines.csproj", "{9A5E14A1-8AE5-4B1F-97B3-79416CC3EA62}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intellias.CQRS.Persistence.AzureStorage", "src\Intellias.CQRS.Persistence.AzureStorage\Intellias.CQRS.Persistence.AzureStorage.csproj", "{D0245F14-6DC2-452D-9D03-9BE399C5F7F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intellias.CQRS.Persistence.AzureStorage", "src\Intellias.CQRS.Persistence.AzureStorage\Intellias.CQRS.Persistence.AzureStorage.csproj", "{D0245F14-6DC2-452D-9D03-9BE399C5F7F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -124,6 +124,7 @@ Global
 		{36062571-C384-4818-9F2E-A5C621153409} = {66AA23B1-E838-419A-AD8C-253D796AFB39}
 		{B47C11A3-A42C-4B0C-85AE-B7771A573E46} = {0D3C6160-9287-4C5F-BC52-27321F544756}
 		{9A5E14A1-8AE5-4B1F-97B3-79416CC3EA62} = {428BE606-30C0-4D28-870B-A892A2854C43}
+		{D0245F14-6DC2-452D-9D03-9BE399C5F7F1} = {428BE606-30C0-4D28-870B-A892A2854C43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6B79CBDF-C02A-4448-96B6-CEB6CE59D144}
