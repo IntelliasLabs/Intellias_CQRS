@@ -3,9 +3,9 @@
 namespace Intellias.CQRS.Configuration.Environments
 {
     /// <summary>
-    /// Ingrowth host environment.
+    /// Ingrowth environment.
     /// </summary>
-    public class IngrowthHostEnvironment : IIngrowthHostEnvironment
+    public class IngrowthEnvironment : IIngrowthEnvironment
     {
         /// <summary>
         /// Local.
@@ -38,7 +38,7 @@ namespace Intellias.CQRS.Configuration.Environments
         /// <summary>
         /// Current environment name.
         /// </summary>
-        public string EnvironmentName => currentEnvironmentName.Value;
+        public string Name => currentEnvironmentName.Value;
 
         /// <inheritdoc/>
         public bool IsEnvironment(string environmentName)

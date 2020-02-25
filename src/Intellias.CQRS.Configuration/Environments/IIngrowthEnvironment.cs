@@ -1,10 +1,15 @@
 ﻿namespace Intellias.CQRS.Configuration.Environments
 {
     /// <summary>
-    /// Ingrowth host environment.
+    /// Ingrowth environment.
     /// </summary>
-    public interface IIngrowthHostEnvironment
+    public interface IIngrowthEnvironment
     {
+        /// <summary>
+        /// Current environment name.
+        /// </summary>
+        string Name { get; }
+
         /// <summary>
         /// Is environment.
         /// </summary>

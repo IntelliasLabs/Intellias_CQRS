@@ -1,24 +1,23 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Intellias.CQRS.Configuration.Environments;
+using Intellias.CQRS.Tests.Core.Configuration;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Configuration.Environments
 {
-    public class IngrowthEnvironmentTests
+    public class FakeIngrowthEnvironmentTests
     {
-        private const string VariableName = "INGROWTH_ENVIRONMENT";
-        private readonly IngrowthEnvironment environment;
+        private readonly FakeIngrowthEnvironment environment;
 
-        public IngrowthEnvironmentTests()
+        public FakeIngrowthEnvironmentTests()
         {
-            environment = new IngrowthEnvironment();
+            environment = new FakeIngrowthEnvironment(IngrowthEnvironment.Local);
         }
 
         [Fact]
         public void IsLocal_Local_True()
         {
-            Environment.SetEnvironmentVariable(VariableName, IngrowthEnvironment.Local);
+            environment.SetEnvironmentName(IngrowthEnvironment.Local);
 
             environment.IsLocal()
                 .Should()
@@ -28,7 +27,7 @@ namespace Intellias.CQRS.Tests.Configuration.Environments
         [Fact]
         public void IsDevelopment_Dev_True()
         {
-            Environment.SetEnvironmentVariable(VariableName, IngrowthEnvironment.Development);
+            environment.SetEnvironmentName(IngrowthEnvironment.Development);
 
             environment.IsDevelopment()
                 .Should()
@@ -38,7 +37,7 @@ namespace Intellias.CQRS.Tests.Configuration.Environments
         [Fact]
         public void IsStaging_Stage_True()
         {
-            Environment.SetEnvironmentVariable(VariableName, IngrowthEnvironment.Staging);
+            environment.SetEnvironmentName(IngrowthEnvironment.Staging);
 
             environment.IsStaging()
                 .Should()
@@ -48,7 +47,7 @@ namespace Intellias.CQRS.Tests.Configuration.Environments
         [Fact]
         public void IsProduction_Prod_True()
         {
-            Environment.SetEnvironmentVariable(VariableName, IngrowthEnvironment.Production);
+            environment.SetEnvironmentName(IngrowthEnvironment.Production);
 
             environment.IsProduction()
                 .Should()
@@ -63,7 +62,7 @@ namespace Intellias.CQRS.Tests.Configuration.Environments
         [InlineData(IngrowthEnvironment.Production)]
         public void IsEnvironment_EnvironmentName_True(string environmentName)
         {
-            Environment.SetEnvironmentVariable(VariableName, environmentName);
+            environment.SetEnvironmentName(environmentName);
 
             environment.IsEnvironment(environmentName)
                 .Should()
