@@ -7,6 +7,7 @@ namespace Intellias.CQRS.Configuration
     /// Ingrowth environment.
     /// </summary>
     [ExcludeFromCodeCoverage]
+    [Obsolete("New version of 'IngrowthEnvironment' was moved to Environments namespace.")]
     public static class IngrowthEnvironment
     {
         /// <summary>

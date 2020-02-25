@@ -9,11 +9,6 @@ namespace Intellias.CQRS.Configuration
     public class EmailConfig
     {
         /// <summary>
-        /// PACE user section.
-        /// </summary>
-        public UserConfig PaceUser { get; set; } = new UserConfig();
-
-        /// <summary>
         /// User name.
         /// </summary>
         public string UserName { get; set; } = string.Empty;

@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Intellias.CQRS.CommandStore.AzureTable\Intellias.CQRS.CommandStore.AzureTable.csproj" />
+    <ProjectReference Include="..\..\src\Intellias.CQRS.Configuration\Intellias.CQRS.Configuration.csproj" />
     <ProjectReference Include="..\..\src\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
     <ProjectReference Include="..\..\src\Intellias.CQRS.DomainServices\Intellias.CQRS.DomainServices.csproj" />
     <ProjectReference Include="..\..\src\Intellias.CQRS.EventBus.AzureServiceBus\Intellias.CQRS.EventBus.AzureServiceBus.csproj" />
