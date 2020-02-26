@@ -101,7 +101,7 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
 
             // Update query model.
             queryModel.Id = id;
-            queryModel.AppliedEvent = new AppliedEvent(@event.Id, @event.Created);
+            queryModel.AppliedEvent = new AppliedEvent { Id = @event.Id, Created = @event.Created };
 
             await setup(@event, queryModel);
 

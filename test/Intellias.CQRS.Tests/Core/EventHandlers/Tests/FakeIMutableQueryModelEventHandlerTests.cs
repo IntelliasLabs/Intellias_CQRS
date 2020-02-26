@@ -42,7 +42,7 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers.Tests
                     Id = e.SnapshotId.EntryId,
                     Version = e.SnapshotId.EntryVersion,
                     Data = e.Data,
-                    AppliedEvent = new AppliedEvent(e.Id, e.Created),
+                    AppliedEvent = new AppliedEvent { Id = e.Id, Created = e.Created }
                 };
 
                 return Task.FromResult(expectedQueryModel);

@@ -83,14 +83,14 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
             // Setup query model in store.
             var queryModel = Fixture.Build<TQueryModel>()
                 .With(s => s.Id, id)
-                .With(s => s.AppliedEvent, new AppliedEvent(Unified.NewCode(), @event.Created.AddMinutes(-1)))
+                .With(s => s.AppliedEvent, new AppliedEvent { Id = Unified.NewCode(), Created = @event.Created.AddMinutes(-1) })
                 .Create();
 
             setup?.Invoke(queryModel);
 
             await Storage.CreateAsync(queryModel);
 
-            queryModel.AppliedEvent = new AppliedEvent(@event.Id, @event.Created);
+            queryModel.AppliedEvent = new AppliedEvent { Id = @event.Id, Created = @event.Created };
 
             return queryModel;
         }

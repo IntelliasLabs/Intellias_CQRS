@@ -83,12 +83,12 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
             var model = Fixture.Build<TQueryModel>()
                 .With(s => s.Id, snapshotId.EntryId)
                 .With(s => s.Version, snapshotId.EntryVersion - 1)
-                .With(s => s.AppliedEvent, new AppliedEvent(Unified.NewCode(), @event.Created.AddMinutes(-1)))
+                .With(s => s.AppliedEvent, new AppliedEvent { Id = Unified.NewCode(), Created = @event.Created.AddMinutes(-1) })
                 .Create();
 
             await Storage.CreateAsync(model);
 
-            model.AppliedEvent = new AppliedEvent(@event.Id, @event.Created);
+            model.AppliedEvent = new AppliedEvent { Id = @event.Id, Created = @event.Created };
             model.Version = snapshotId.EntryVersion;
 
             return model;
