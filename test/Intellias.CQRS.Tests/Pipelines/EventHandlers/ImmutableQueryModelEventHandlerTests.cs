@@ -44,7 +44,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
             var queryModel = await storage.GetAsync(@event.SnapshotId.EntryId, @event.SnapshotId.EntryVersion);
 
             queryModel.Should().NotBeNull();
-            queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent(@event.Id, @event.Created));
+            queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent { Id = @event.Id, Created = @event.Created });
 
             // Query model updated notification is fired.
             mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelUpdatedNotification>()
@@ -69,7 +69,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
             var queryModel = await storage.GetAsync(@event.SnapshotId.EntryId, @event.SnapshotId.EntryVersion);
 
             queryModel.Should().NotBeNull();
-            queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent(@event.Id, @event.Created));
+            queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent { Id = @event.Id, Created = @event.Created });
 
             // Query model updated notification privacy is correct.
             mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelUpdatedNotification>()
@@ -87,7 +87,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
             {
                 Id = @event.SnapshotId.EntryId,
                 Version = @event.SnapshotId.EntryVersion,
-                AppliedEvent = new AppliedEvent(@event.Id, @event.Created)
+                AppliedEvent = new AppliedEvent { Id = @event.Id, Created = @event.Created }
             };
 
             await storage.CreateAsync(queryModel);

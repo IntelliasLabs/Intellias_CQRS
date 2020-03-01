@@ -80,7 +80,7 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
             // Update query model.
             model.Id = snapshotId.EntryId;
             model.Version = snapshotId.EntryVersion;
-            model.AppliedEvent = new AppliedEvent(@event.Id, @event.Created);
+            model.AppliedEvent = new AppliedEvent { Id = @event.Id, Created = @event.Created };
 
             setup(@event, model);
 

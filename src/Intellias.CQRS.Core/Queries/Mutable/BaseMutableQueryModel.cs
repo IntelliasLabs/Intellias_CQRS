@@ -15,6 +15,6 @@ namespace Intellias.CQRS.Core.Queries.Mutable
         public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
 
         /// <inheritdoc />
-        public AppliedEvent AppliedEvent { get; set; } = AppliedEvent.Empty;
+        public AppliedEvent AppliedEvent { get; set; } = new AppliedEvent();
     }
 }

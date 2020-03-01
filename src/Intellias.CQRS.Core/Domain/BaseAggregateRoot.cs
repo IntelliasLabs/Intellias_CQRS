@@ -25,7 +25,7 @@ namespace Intellias.CQRS.Core.Domain
         /// <summary>
         /// Aggregate snapshot id.
         /// </summary>
-        public SnapshotId SnapshotId => new SnapshotId(Id, Version);
+        public SnapshotId SnapshotId => new SnapshotId { EntryId = Id, EntryVersion = Version };
 
         /// <summary>
         /// Aggregate execution context.
