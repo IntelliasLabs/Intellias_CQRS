@@ -78,5 +78,11 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Mutable
 
             return result.DeserializeData();
         }
+
+        /// <inheritdoc />
+        public Task DeleteAsync(string id)
+        {
+            return DeleteAsync(typeof(TQueryModel).Name, id);
+        }
     }
 }

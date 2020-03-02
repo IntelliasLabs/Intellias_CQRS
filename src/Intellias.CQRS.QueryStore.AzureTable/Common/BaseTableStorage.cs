@@ -84,6 +84,19 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
         }
 
         /// <summary>
+        /// Deletes entity.
+        /// </summary>
+        /// <param name="partitionKey">Partition key.</param>
+        /// <param name="rowKey">Row key.</param>
+        /// <returns>Deleted entity.</returns>
+        protected Task DeleteAsync(string partitionKey, string rowKey)
+        {
+            var operation = TableOperation.Delete(new DynamicTableEntity(partitionKey, rowKey, "*", new Dictionary<string, EntityProperty>()));
+
+            return TableProxy.ExecuteAsync(operation);
+        }
+
+        /// <summary>
         /// Queries first N entities from partition.
         /// </summary>
         /// <param name="partitionKey">Partition key.</param>

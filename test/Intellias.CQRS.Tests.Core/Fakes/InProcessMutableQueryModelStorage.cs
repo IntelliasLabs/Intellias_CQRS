@@ -75,5 +75,11 @@ namespace Intellias.CQRS.Tests.Core.Fakes
 
             return model;
         }
+
+        public Task DeleteAsync(string id)
+        {
+            storage.RemoveAll(m => m.Id == id);
+            return Task.CompletedTask;
+        }
     }
 }

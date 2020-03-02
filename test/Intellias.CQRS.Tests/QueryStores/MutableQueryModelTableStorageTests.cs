@@ -104,6 +104,26 @@ namespace Intellias.CQRS.Tests.QueryStores
         }
 
         [Fact]
+        public async Task Delete_QueryModelExist_Deletes()
+        {
+            var queryModel = new FakeMutableQueryModel();
+            var created = await storage.CreateAsync(queryModel);
+
+            await storage.DeleteAsync(created.Id);
+
+            var deleted = await storage.FindAsync(queryModel.Id);
+
+            deleted.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task Delete_NoQueryModel_Throws()
+        {
+            (await storage.Awaiting(s => s.DeleteAsync(Unified.NewCode())).Should().ThrowAsync<StorageException>())
+                .And.RequestInformation.HttpStatusCode.Should().Be(404);
+        }
+
+        [Fact]
         public async Task GetAll_NoQueryModels_ReturnsEmpty()
         {
             (await storage.GetAllAsync()).Should().BeEmpty();
