@@ -101,7 +101,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
             catch (StorageException exception)
                 when (exception.RequestInformation?.ExtendedErrorInformation?.ErrorCode == StorageErrorCodeStrings.ResourceNotFound)
             {
-                // Swallow 404 response to support idempotence in delete operation.
+                // Swallow ResourceNotFound response to support idempotence in delete operation.
             }
         }
 
