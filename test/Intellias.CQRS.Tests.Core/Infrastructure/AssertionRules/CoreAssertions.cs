@@ -1,5 +1,6 @@
 using FluentAssertions.Equivalency;
 using Intellias.CQRS.Core.Events;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Queries.Immutable;
 using Intellias.CQRS.Core.Queries.Mutable;
 
@@ -22,6 +23,19 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules
             => options
                 .Using(new IntegrationEventSelectionRule())
                 .ComparingByMembers<TIntegrationEvent>();
+
+        /// <summary>
+        /// Assertion rule for <see cref="TSignal"/>.
+        /// </summary>
+        /// <param name="options">Assertion options.</param>
+        /// <typeparam name="TSignal">Type of the signal.</typeparam>
+        /// <returns>Configured assertion.</returns>
+        public static EquivalencyAssertionOptions<TSignal> ForSignal<TSignal>(
+            this EquivalencyAssertionOptions<TSignal> options)
+            where TSignal : IMessage
+            => options
+                .Using(new SignalSelectionRule())
+                .ComparingByMembers<TSignal>();
 
         /// <summary>
         /// Assertion rule for <see cref="TMutableQueryModel"/>.
