@@ -24,7 +24,7 @@ namespace Intellias.CQRS.Core.Queries.Mutable
         Task<TQueryModel> ReplaceAsync(TQueryModel model);
 
         /// <summary>
-        /// Deletes query model.
+        /// Deletes query model. Idempotent.
         /// </summary>
         /// <param name="id">Query model id.</param>
         /// <returns>Deleted query model.</returns>
