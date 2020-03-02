@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Messages;
@@ -8,6 +9,7 @@ using Microsoft.Azure.Cosmos.Table;
 
 namespace Intellias.CQRS.Tests.Core.Fakes
 {
+    [ExcludeFromCodeCoverage]
     public class InProcessMutableQueryModelStorage<TQueryModel> :
         IMutableQueryModelReader<TQueryModel>,
         IMutableQueryModelWriter<TQueryModel>
