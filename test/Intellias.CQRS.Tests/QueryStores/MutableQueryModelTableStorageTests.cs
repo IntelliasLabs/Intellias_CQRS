@@ -117,10 +117,9 @@ namespace Intellias.CQRS.Tests.QueryStores
         }
 
         [Fact]
-        public async Task Delete_NoQueryModel_Throws()
+        public async Task Delete_NoQueryModel_DoesNothing()
         {
-            (await storage.Awaiting(s => s.DeleteAsync(Unified.NewCode())).Should().ThrowAsync<StorageException>())
-                .And.RequestInformation.HttpStatusCode.Should().Be(404);
+            await storage.Awaiting(s => s.DeleteAsync(Unified.NewCode())).Should().NotThrowAsync();
         }
 
         [Fact]

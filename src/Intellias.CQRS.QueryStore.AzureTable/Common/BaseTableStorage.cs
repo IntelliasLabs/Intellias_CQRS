@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Microsoft.Azure.Cosmos.Table;
+using Microsoft.Azure.Cosmos.Tables.SharedFiles;
 using Microsoft.Extensions.Options;
 
 namespace Intellias.CQRS.QueryStore.AzureTable.Common
@@ -84,16 +85,24 @@ namespace Intellias.CQRS.QueryStore.AzureTable.Common
         }
 
         /// <summary>
-        /// Deletes entity.
+        /// Deletes entity. Idempotent.
         /// </summary>
         /// <param name="partitionKey">Partition key.</param>
         /// <param name="rowKey">Row key.</param>
         /// <returns>Deleted entity.</returns>
-        protected Task DeleteAsync(string partitionKey, string rowKey)
+        protected async Task DeleteAsync(string partitionKey, string rowKey)
         {
             var operation = TableOperation.Delete(new DynamicTableEntity(partitionKey, rowKey, "*", new Dictionary<string, EntityProperty>()));
 
-            return TableProxy.ExecuteAsync(operation);
+            try
+            {
+                await TableProxy.ExecuteAsync(operation);
+            }
+            catch (StorageException exception)
+                when (exception.RequestInformation?.ExtendedErrorInformation?.ErrorCode == StorageErrorCodeStrings.ResourceNotFound)
+            {
+                // Swallow ResourceNotFound response to support idempotence in delete operation.
+            }
         }
 
         /// <summary>

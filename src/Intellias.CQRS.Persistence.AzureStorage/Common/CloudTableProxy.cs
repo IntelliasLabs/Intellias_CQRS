@@ -24,7 +24,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
 
         // Policy for recreating table for queries and table operations.
         private static readonly AsyncRetryPolicy CreateTablePolicy = Policy
-            .Handle<StorageException>(e => e.RequestInformation.ExtendedErrorInformation.ErrorCode == TableErrorCodeStrings.TableNotFound)
+            .Handle<StorageException>(e => e.RequestInformation?.ExtendedErrorInformation?.ErrorCode == TableErrorCodeStrings.TableNotFound)
             .WaitAndRetryAsync(3, GetJitter, (result, i, context) => CreateTableAsync(context));
 
         private readonly CloudTable table;
