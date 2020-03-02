@@ -91,6 +91,20 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
                 .Which.Signal.Should().BeEquivalentTo(expectedSignal, options => options.ForSignal());
         }
 
+        [Fact]
+        public async Task HandleAsync_EventIsReplay_AddIsReplayToNotification()
+        {
+            var command = Fixtures.Pipelines.FakeCreateCommand();
+            var @event = Fixtures.Pipelines.FakeCreatedIntegrationEvent(command);
+            @event.IsReplay = true;
+            var notification = new IntegrationEventNotification<FakeCreatedIntegrationEvent>(@event);
+
+            await handler.Handle(notification, CancellationToken.None);
+
+            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelChangedNotification>()
+                .Which.IsReplay.Should().BeTrue();
+        }
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]

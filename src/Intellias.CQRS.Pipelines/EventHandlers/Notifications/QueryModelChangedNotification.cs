@@ -23,6 +23,11 @@ namespace Intellias.CQRS.Pipelines.EventHandlers.Notifications
         public QueryModelChangedSignal Signal { get; }
 
         /// <summary>
+        /// Indicates whether notification source is replay.
+        /// </summary>
+        public bool IsReplay { get; set; }
+
+        /// <summary>
         /// Indicates whether notification is private, thus shouldn't be published.
         /// </summary>
         public bool IsPrivate { get; set; }

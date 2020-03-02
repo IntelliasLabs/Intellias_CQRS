@@ -33,10 +33,10 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
         /// <inheritdoc />
         public async Task Handle(QueryModelChangedNotification notification, CancellationToken cancellationToken)
         {
-            if (notification.IsPrivate)
+            if (notification.IsReplay || notification.IsPrivate)
             {
                 logger.LogDebug(
-                    "Query model '{QueryModelType}' of id '{QueryModelId}' signal is private and wouldn't be published.",
+                    "Query model '{QueryModelType}' of id '{QueryModelId}' signal is private or it's a replay and it wouldn't be published.",
                     notification.Signal.QueryModelType,
                     notification.Signal.QueryModelId);
 

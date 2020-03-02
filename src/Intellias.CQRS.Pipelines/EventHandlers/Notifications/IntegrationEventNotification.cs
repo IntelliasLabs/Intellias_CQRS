@@ -8,7 +8,7 @@ namespace Intellias.CQRS.Pipelines.EventHandlers.Notifications
     /// </summary>
     /// <typeparam name="TIntegrationEvent">Event.</typeparam>
     public class IntegrationEventNotification<TIntegrationEvent> : INotification
-        where TIntegrationEvent : Event
+        where TIntegrationEvent : IIntegrationEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationEventNotification{TIntegrationEvent}"/> class.

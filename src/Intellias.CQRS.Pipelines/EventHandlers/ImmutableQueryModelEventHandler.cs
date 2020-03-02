@@ -65,7 +65,7 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
             IntegrationEventNotification<TEvent> notification,
             Func<TEvent, SnapshotId> getSnapshotId,
             Action<TEvent, TQueryModel> setup)
-            where TEvent : Event
+            where TEvent : IIntegrationEvent
         {
             var @event = notification.IntegrationEvent;
             var snapshotId = getSnapshotId(@event);
@@ -91,6 +91,7 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
 
             await Mediator.Publish(new QueryModelChangedNotification(signal)
             {
+                IsReplay = @event.IsReplay,
                 IsPrivate = IsPrivateQueryModel
             });
         }

@@ -86,6 +86,20 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         }
 
         [Fact]
+        public async Task HandleAsync_EventIsReplay_AddIsReplayToNotification()
+        {
+            var command = Fixtures.Pipelines.FakeCreateCommand();
+            var @event = Fixtures.Pipelines.FakeCreatedIntegrationEvent(command);
+            @event.IsReplay = true;
+            var notification = new IntegrationEventNotification<FakeCreatedIntegrationEvent>(@event);
+
+            await handler.Handle(notification, CancellationToken.None);
+
+            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelChangedNotification>()
+                .Which.IsReplay.Should().BeTrue();
+        }
+
+        [Fact]
         public async Task HandleAsync_EventAlreadyApplied_PublishesAlreadyAppliedNotification()
         {
             var command = Fixtures.Pipelines.FakeCreateCommand();

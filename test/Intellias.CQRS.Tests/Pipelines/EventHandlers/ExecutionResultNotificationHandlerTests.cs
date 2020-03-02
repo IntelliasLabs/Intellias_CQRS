@@ -40,6 +40,21 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         }
 
         [Fact]
+        public async Task HandleQueryModelChangedNotification_IsReplay_DoesntPublishesSignal()
+        {
+            var integrationEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent();
+            var signal = Fixtures.Pipelines.FakeQueryModelChangedSignal(integrationEvent);
+            var notification = new QueryModelChangedNotification(signal)
+            {
+                IsReplay = true
+            };
+
+            await handler.Handle(notification, CancellationToken.None);
+
+            reportBusStore.Should().BeEmpty();
+        }
+
+        [Fact]
         public async Task HandleQueryModelChangedNotification_IsPublic_PublishesSignal()
         {
             var integrationEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent();
