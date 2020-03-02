@@ -22,5 +22,12 @@ namespace Intellias.CQRS.Core.Queries.Mutable
         /// <param name="model">Query model to be created.</param>
         /// <returns>Stored query model.</returns>
         Task<TQueryModel> ReplaceAsync(TQueryModel model);
+
+        /// <summary>
+        /// Deletes query model.
+        /// </summary>
+        /// <param name="id">Query model id.</param>
+        /// <returns>Deleted query model.</returns>
+        Task DeleteAsync(string id);
     }
 }
