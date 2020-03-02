@@ -7,9 +7,9 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
 {
     internal static class Extensions
     {
-        public static string Zip(this string base64text)
+        public static string Zip(this string base64Text)
         {
-            var bytes = Encoding.UTF8.GetBytes(base64text);
+            var bytes = Encoding.UTF8.GetBytes(base64Text);
 
             using (var msi = new MemoryStream(bytes))
             using (var mso = new MemoryStream())
@@ -23,9 +23,9 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
             }
         }
 
-        public static string Unzip(this string base64text)
+        public static string Unzip(this string base64Text)
         {
-            using (var msi = new MemoryStream(Convert.FromBase64String(base64text)))
+            using (var msi = new MemoryStream(Convert.FromBase64String(base64Text)))
             using (var mso = new MemoryStream())
             {
                 using (var gs = new GZipStream(msi, CompressionMode.Decompress))
