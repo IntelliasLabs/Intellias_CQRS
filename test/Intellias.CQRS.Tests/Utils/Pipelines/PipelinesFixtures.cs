@@ -1,4 +1,6 @@
 using Intellias.CQRS.Core.Domain;
+using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Tests.Core.Pipelines.Builders;
 using Intellias.CQRS.Tests.Utils.Pipelines.Builder;
 using Intellias.CQRS.Tests.Utils.Pipelines.Fakes;
@@ -49,6 +51,16 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines
                 e.SnapshotId = new SnapshotId(command.AggregateRootId, 0);
                 e.Data = command.Data;
             });
+        }
+
+        public QueryModelChangedSignal FakeQueryModelChangedSignal(FakeCreatedIntegrationEvent integrationEvent)
+        {
+            return QueryModelChangedSignal.CreateFromSource(
+                integrationEvent,
+                Unified.NewCode(),
+                FixtureUtils.Int(),
+                typeof(int),
+                FixtureUtils.FromEnum<QueryModelChangeOperation>());
         }
     }
 }

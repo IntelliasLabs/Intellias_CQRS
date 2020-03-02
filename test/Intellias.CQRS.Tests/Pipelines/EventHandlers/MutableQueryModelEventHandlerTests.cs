@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Queries.Mutable;
+using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Pipelines.EventHandlers;
 using Intellias.CQRS.Pipelines.EventHandlers.Notifications;
 using Intellias.CQRS.Tests.Core.Fakes;
+using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
 using Intellias.CQRS.Tests.Core.Queries;
 using Intellias.CQRS.Tests.Utils;
 using Intellias.CQRS.Tests.Utils.Pipelines.Fakes;
@@ -47,8 +49,60 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
             queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent { Id = @event.Id, Created = @event.Created });
 
             // Query model updated notification is fired.
-            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelUpdatedNotification>()
-                .Which.Signal.QueryModelId.Should().BeEquivalentTo(queryModel.Id);
+            var expectedSignal = QueryModelChangedSignal.CreateFromSource(
+                @event,
+                queryModel.Id,
+                queryModel.GetType(),
+                QueryModelChangeOperation.Create);
+
+            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelChangedNotification>()
+                .Which.Signal.Should().BeEquivalentTo(expectedSignal, options => options.ForSignal());
+        }
+
+        [Fact]
+        public async Task HandleAsync_QueryModelExist_UpdatesExisting()
+        {
+            var command = Fixtures.Pipelines.FakeCreateCommand();
+
+            // Creates query model.
+            var createEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent(command);
+            var createNotification = new IntegrationEventNotification<FakeCreatedIntegrationEvent>(createEvent);
+            await handler.Handle(createNotification, CancellationToken.None);
+
+            // Updates query model.
+            var updateEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent(command);
+            var updateNotification = new IntegrationEventNotification<FakeCreatedIntegrationEvent>(updateEvent);
+            await handler.Handle(updateNotification, CancellationToken.None);
+
+            // Get existing query model.
+            var queryModel = await storage.GetAsync(createEvent.SnapshotId.EntryId);
+
+            queryModel.Should().NotBeNull();
+            queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent { Id = updateEvent.Id, Created = updateEvent.Created });
+
+            // Query model updated notification is fired.
+            var expectedSignal = QueryModelChangedSignal.CreateFromSource(
+                updateEvent,
+                queryModel.Id,
+                queryModel.GetType(),
+                QueryModelChangeOperation.Update);
+
+            mediator.PublishedNotifications[^1].Should().BeOfType<QueryModelChangedNotification>()
+                .Which.Signal.Should().BeEquivalentTo(expectedSignal, options => options.ForSignal());
+        }
+
+        [Fact]
+        public async Task HandleAsync_EventIsReplay_AddIsReplayToNotification()
+        {
+            var command = Fixtures.Pipelines.FakeCreateCommand();
+            var @event = Fixtures.Pipelines.FakeCreatedIntegrationEvent(command);
+            @event.IsReplay = true;
+            var notification = new IntegrationEventNotification<FakeCreatedIntegrationEvent>(@event);
+
+            await handler.Handle(notification, CancellationToken.None);
+
+            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelChangedNotification>()
+                .Which.IsReplay.Should().BeTrue();
         }
 
         [Theory]
@@ -72,7 +126,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
             queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent { Id = @event.Id, Created = @event.Created });
 
             // Query model updated notification privacy is correct.
-            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelUpdatedNotification>()
+            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelChangedNotification>()
                 .Which.IsPrivate.Should().Be(isPrivate);
         }
 

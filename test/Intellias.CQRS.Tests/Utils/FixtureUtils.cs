@@ -35,14 +35,15 @@ namespace Intellias.CQRS.Tests.Utils
             return fixture;
         }
 
-        public static T FromEnum<T>(this IFixture fixture)
-            where T : IConvertible
+        public static T FromEnum<T>()
+            where T : Enum
         {
-            return fixture.Create<Generator<T>>().First();
+            var values = Enum.GetValues(typeof(T));
+            return (T)values.GetValue(Rnd.Next(0, values.Length - 1));
         }
 
-        public static T[] FromEnumMany<T>(this IFixture fixture)
-            where T : IConvertible
+        public static T[] FromEnumMany<T>()
+            where T : Enum
         {
             var names = Enum.GetValues(typeof(T));
             return names.Cast<T>().Take(Rnd.Next(1, names.Length)).ToArray();

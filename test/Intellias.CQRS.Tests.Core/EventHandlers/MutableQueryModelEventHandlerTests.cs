@@ -49,7 +49,7 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
         protected async Task TestHandleAsync<TIntegrationEvent>(
             Func<TIntegrationEvent, string> getId,
             Func<TIntegrationEvent, Task<TQueryModel>> getExpectedQueryModel)
-            where TIntegrationEvent : Event
+            where TIntegrationEvent : IIntegrationEvent
         {
             var request = Fixture.Create<IntegrationEventNotification<TIntegrationEvent>>();
             var @event = request.IntegrationEvent;

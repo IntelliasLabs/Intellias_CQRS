@@ -50,7 +50,7 @@ namespace Intellias.CQRS.Tests.Core.EventHandlers
         protected async Task TestHandleAsync<TIntegrationEvent>(
             Func<TIntegrationEvent, SnapshotId> getSnapshotIdFunc,
             Func<TIntegrationEvent, Task<TQueryModel>> getExpectedQueryModelFunc)
-            where TIntegrationEvent : Event
+            where TIntegrationEvent : IIntegrationEvent
         {
             var eventRequest = Fixture.Create<IntegrationEventNotification<TIntegrationEvent>>();
             var @event = eventRequest.IntegrationEvent;
