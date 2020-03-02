@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Queries.Mutable;
+using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Pipelines.EventHandlers.Notifications;
 using MediatR;
 
@@ -110,7 +111,11 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
                 ? await Writer.CreateAsync(queryModel)
                 : await Writer.ReplaceAsync(queryModel);
 
-            await Mediator.Publish(new QueryModelUpdatedNotification(@event, saved)
+            // Publish signal.
+            var operation = isNew ? QueryModelChangeOperation.Create : QueryModelChangeOperation.Update;
+            var signal = QueryModelChangedSignal.CreateFromSource(@event, saved.Id, saved.GetType(), operation);
+
+            await Mediator.Publish(new QueryModelChangedNotification(signal)
             {
                 IsPrivate = IsPrivateQueryModel
             });

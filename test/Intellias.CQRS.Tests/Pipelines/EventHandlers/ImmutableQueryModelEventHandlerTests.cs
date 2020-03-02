@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Queries.Immutable;
+using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Pipelines.EventHandlers;
 using Intellias.CQRS.Pipelines.EventHandlers.Notifications;
 using Intellias.CQRS.Tests.Core.Fakes;
+using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
 using Intellias.CQRS.Tests.Core.Queries;
 using Intellias.CQRS.Tests.Utils;
 using Intellias.CQRS.Tests.Utils.Pipelines.Fakes;
@@ -47,8 +49,15 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
             queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent { Id = @event.Id, Created = @event.Created });
 
             // Query model updated notification is fired.
-            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelUpdatedNotification>()
-                .Which.Signal.QueryModelId.Should().BeEquivalentTo(queryModel.Id);
+            var expectedSignal = QueryModelChangedSignal.CreateFromSource(
+                @event,
+                queryModel.Id,
+                queryModel.Version,
+                queryModel.GetType(),
+                QueryModelChangeOperation.Create);
+
+            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelChangedNotification>()
+                .Which.Signal.Should().BeEquivalentTo(expectedSignal, options => options.ForSignal());
         }
 
         [Theory]
@@ -72,7 +81,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
             queryModel.AppliedEvent.Should().BeEquivalentTo(new AppliedEvent { Id = @event.Id, Created = @event.Created });
 
             // Query model updated notification privacy is correct.
-            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelUpdatedNotification>()
+            mediator.PublishedNotifications.Single().Should().BeOfType<QueryModelChangedNotification>()
                 .Which.IsPrivate.Should().Be(isPrivate);
         }
 

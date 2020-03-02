@@ -4,6 +4,7 @@ using Intellias.CQRS.Core.Domain;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Core.Queries.Immutable;
+using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Pipelines.EventHandlers.Notifications;
 using MediatR;
 
@@ -86,7 +87,9 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
 
             // Save updated query model.
             var created = await Writer.CreateAsync(model);
-            await Mediator.Publish(new QueryModelUpdatedNotification(@event, created)
+            var signal = QueryModelChangedSignal.CreateFromSource(@event, created.Id, created.Version, created.GetType(), QueryModelChangeOperation.Create);
+
+            await Mediator.Publish(new QueryModelChangedNotification(signal)
             {
                 IsPrivate = IsPrivateQueryModel
             });
