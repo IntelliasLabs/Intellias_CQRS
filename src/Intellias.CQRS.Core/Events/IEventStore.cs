@@ -14,7 +14,7 @@ namespace Intellias.CQRS.Core.Events
         /// </summary>
         /// <param name="entity">IAggregateRoot.</param>
         /// <returns>Awaiter.</returns>
-        Task<IEnumerable<IEvent>> SaveAsync(IAggregateRoot entity);
+        Task<IReadOnlyCollection<IEvent>> SaveAsync(IAggregateRoot entity);
 
         /// <summary>
         /// Get events for specified version of AR.
@@ -22,6 +22,6 @@ namespace Intellias.CQRS.Core.Events
         /// <param name="aggregateId">ARID.</param>
         /// <param name="fromVersion">ARV.</param>
         /// <returns>Events.</returns>
-        Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion);
+        Task<IReadOnlyCollection<IEvent>> GetAsync(string aggregateId, int fromVersion);
     }
 }

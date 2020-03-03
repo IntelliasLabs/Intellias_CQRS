@@ -119,7 +119,7 @@ namespace Intellias.CQRS.Core.Domain
 
             if (string.IsNullOrWhiteSpace(@event.AggregateRootId))
             {
-                @event.AggregateRootId = Id;
+                throw new NullReferenceException($"{nameof(@event.AggregateRootId)} is null or empty.");
             }
 
             State.ApplyEvent(@event);

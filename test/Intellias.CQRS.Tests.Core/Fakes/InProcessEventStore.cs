@@ -12,7 +12,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         private readonly Dictionary<string, List<IEvent>> inMemoryDb = new Dictionary<string, List<IEvent>>();
 
         /// <inheritdoc />
-        public Task<IEnumerable<IEvent>> SaveAsync(IAggregateRoot entity)
+        public Task<IReadOnlyCollection<IEvent>> SaveAsync(IAggregateRoot entity)
         {
             foreach (var @event in entity.Events)
             {
@@ -26,16 +26,16 @@ namespace Intellias.CQRS.Tests.Core.Fakes
                 list.Add(@event);
             }
 
-            return Task.FromResult((IEnumerable<IEvent>)entity.Events);
+            return Task.FromResult(entity.Events);
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion)
+        public Task<IReadOnlyCollection<IEvent>> GetAsync(string aggregateId, int fromVersion)
         {
             var arExist = inMemoryDb.TryGetValue(aggregateId, out var events);
 
             return arExist
-                ? Task.FromResult(events?.Where(x => x.Version > fromVersion) ?? new List<IEvent>())
+                ? Task.FromResult((IReadOnlyCollection<IEvent>)(events?.Where(x => x.Version > fromVersion) ?? new List<IEvent>()).ToList().AsReadOnly())
                 : throw new KeyNotFoundException($"Aggregate Root with id = '{aggregateId}' hasn't been found");
         }
     }
