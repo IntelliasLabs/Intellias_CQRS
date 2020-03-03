@@ -12,7 +12,7 @@ namespace Intellias.CQRS.Core.Commands
         /// <summary>
         /// Expected version of aggregate root.
         /// </summary>
-        int ExpectedVersion { get; set; }
+        int ExpectedVersion { get; }
 
         /// <summary>
         /// Validate Command.

@@ -5,6 +5,7 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Tests.Core.CommandHandlers;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Core.Events;
+using Intellias.CQRS.Tests.Core.Fakes;
 using Intellias.CQRS.Tests.Tools;
 using Moq;
 using Xunit;
@@ -16,10 +17,10 @@ namespace Intellias.CQRS.Tests
         [Fact]
         public void SelfCommandBusTest()
         {
-            var es = new Mock<IEventStore>();
+            var es = new InProcessEventStore();
             var eb = new Mock<IEventBus>();
             var sp = new Mock<IServiceProvider>();
-            sp.Setup(x => x.GetService(typeof(DemoCommandHandlers))).Returns(new DemoCommandHandlers(es.Object, eb.Object));
+            sp.Setup(x => x.GetService(typeof(DemoCommandHandlers))).Returns(new DemoCommandHandlers(es, eb.Object));
             var bus = new SelfProcessedCommandBus(new HandlerManager(new HandlerDependencyResolver(sp.Object, new List<Assembly> { typeof(DemoCommandHandlers).Assembly })));
 
             var result = bus.PublishAsync(new TestCreateCommand { AggregateRootId = "test" }).Result;

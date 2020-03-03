@@ -10,12 +10,12 @@ namespace Intellias.CQRS.Core.Queries
         /// <summary>
         /// Generic Id of read model.
         /// </summary>
-        string Id { get; set; }
+        string Id { get; }
 
         /// <summary>
         /// Version of Query Model.
         /// </summary>
-        int Version { get; set; }
+        int Version { get; }
 
         /// <summary>
         /// Timestamp of last query item update.

@@ -33,7 +33,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<IEvent>> SaveAsync(IAggregateRoot entity)
+        public async Task<IReadOnlyCollection<IEvent>> SaveAsync(IAggregateRoot entity)
         {
             if (!entity.Events.Any())
             {
@@ -48,7 +48,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<IEvent>> GetAsync(string aggregateId, int fromVersion)
+        public async Task<IReadOnlyCollection<IEvent>> GetAsync(string aggregateId, int fromVersion)
         {
             var query = new TableQuery<EventStoreEvent>()
                 .Where(TableQuery.GenerateFilterCondition(
@@ -56,7 +56,7 @@ namespace Intellias.CQRS.EventStore.AzureTable
                     QueryComparisons.Equal,
                     aggregateId));
 
-            var results = new List<EventStoreEvent>();
+            var results = new List<IEvent>();
             var continuationToken = new TableContinuationToken();
 
             do
@@ -69,11 +69,11 @@ namespace Intellias.CQRS.EventStore.AzureTable
                 }
 
                 continuationToken = queryResults.ContinuationToken;
-                results.AddRange(queryResults.Results);
+                results.AddRange(queryResults.Results.Select(tableEntity => tableEntity.ToEvent()));
             }
             while (continuationToken != null);
 
-            return results.Select(tableEntity => tableEntity.ToEvent());
+            return results.AsReadOnly();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Intellias.CQRS.Core.Messages
         /// Id of operation (Operation can consist of several commands / events).
         /// Used for operations tracking or operation rejecting for example.
         /// </summary>
-        string CorrelationId { get; set; }
+        string CorrelationId { get; }
 
         /// <summary>
         /// Aggregate Root Identifier.
@@ -28,10 +28,7 @@ namespace Intellias.CQRS.Core.Messages
         /// Gets the time stamp for this message creation.
         /// </summary>
         /// <value>a <see cref="DateTime"/> UTC value that represents the point in time where this event occurred.</value>
-        DateTime Created
-        {
-            get;
-        }
+        DateTime Created { get; }
 
         /// <summary>
         /// Message Metadata.
