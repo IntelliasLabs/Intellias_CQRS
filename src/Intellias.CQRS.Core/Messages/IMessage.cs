@@ -22,7 +22,7 @@ namespace Intellias.CQRS.Core.Messages
         /// <summary>
         /// Aggregate Root Identifier.
         /// </summary>
-        string AggregateRootId { get; }
+        string AggregateRootId { get; set; }
 
         /// <summary>
         /// Gets the time stamp for this message creation.
