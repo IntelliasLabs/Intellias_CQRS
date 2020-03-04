@@ -31,5 +31,11 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines.Fakes
             PublishEvent<FakeUpdatedStateEvent>(e => e.Data = data);
             return Success();
         }
+
+        public IExecutionResult Delete()
+        {
+            PublishEvent<FakeDeletedStateEvent>(e => { });
+            return Success();
+        }
     }
 }

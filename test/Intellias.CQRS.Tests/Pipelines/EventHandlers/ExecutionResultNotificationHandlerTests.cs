@@ -28,7 +28,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         public async Task HandleQueryModelChangedNotification_IsPrivate_DoesntPublishesSignal()
         {
             var integrationEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent();
-            var signal = Fixtures.Pipelines.FakeQueryModelChangedSignal(integrationEvent);
+            var signal = Fixtures.Pipelines.FakeQueryModelCreatedSignal<int>(integrationEvent);
             var notification = new QueryModelChangedNotification(signal)
             {
                 IsPrivate = true
@@ -43,7 +43,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         public async Task HandleQueryModelChangedNotification_IsReplay_DoesntPublishesSignal()
         {
             var integrationEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent();
-            var signal = Fixtures.Pipelines.FakeQueryModelChangedSignal(integrationEvent);
+            var signal = Fixtures.Pipelines.FakeQueryModelCreatedSignal<int>(integrationEvent);
             var notification = new QueryModelChangedNotification(signal)
             {
                 IsReplay = true
@@ -58,7 +58,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers
         public async Task HandleQueryModelChangedNotification_IsPublic_PublishesSignal()
         {
             var integrationEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent();
-            var signal = Fixtures.Pipelines.FakeQueryModelChangedSignal(integrationEvent);
+            var signal = Fixtures.Pipelines.FakeQueryModelCreatedSignal<int>(integrationEvent);
             var notification = new QueryModelChangedNotification(signal);
 
             await handler.Handle(notification, CancellationToken.None);

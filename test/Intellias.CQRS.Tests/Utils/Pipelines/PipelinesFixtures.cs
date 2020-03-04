@@ -1,5 +1,4 @@
 using Intellias.CQRS.Core.Domain;
-using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Tests.Core.Pipelines.Builders;
 using Intellias.CQRS.Tests.Utils.Pipelines.Builder;
@@ -29,6 +28,16 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines
             return Fixtures.CommandFromBuilder(f => new FakeUpdateCommandBuilder(f, seed));
         }
 
+        public FakeDeleteCommand FakeDeleteCommand()
+        {
+            return FakeDeleteCommand(new CommandSeed<FakeDeleteCommand>());
+        }
+
+        public FakeDeleteCommand FakeDeleteCommand(CommandSeed<FakeDeleteCommand> seed)
+        {
+            return Fixtures.CommandFromBuilder(f => new FakeDeleteCommandBuilder(f, seed));
+        }
+
         public FakeDispatcherCommand FakeDispatcherCommand()
         {
             return Fixtures.CommandFromBuilder(f => new FakeDispatcherCommandBuilder(f, new CommandSeed<FakeDispatcherCommand>()));
@@ -53,14 +62,37 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines
             });
         }
 
-        public QueryModelChangedSignal FakeQueryModelChangedSignal(FakeCreatedIntegrationEvent integrationEvent)
+        public FakeDeletedIntegrationEvent FakeDeletedIntegrationEvent()
+        {
+            return FakeDeletedIntegrationEvent(FakeDeleteCommand());
+        }
+
+        public FakeDeletedIntegrationEvent FakeDeletedIntegrationEvent(FakeDeleteCommand command)
+        {
+            return Fixtures.IntegrationEvent<FakeDeletedIntegrationEvent>(command, e =>
+            {
+                e.SnapshotId = new SnapshotId { EntryId = command.AggregateRootId, EntryVersion = 0 };
+            });
+        }
+
+        public QueryModelChangedSignal FakeQueryModelCreatedSignal<TQueryModel>(FakeCreatedIntegrationEvent integrationEvent)
         {
             return QueryModelChangedSignal.CreateFromSource(
                 integrationEvent,
-                Unified.NewCode(),
-                FixtureUtils.Int(),
-                typeof(int),
-                FixtureUtils.FromEnum<QueryModelChangeOperation>());
+                integrationEvent.AggregateRootId,
+                0,
+                typeof(TQueryModel),
+                QueryModelChangeOperation.Create);
+        }
+
+        public QueryModelChangedSignal FakeQueryModelDeletedSignal<TQueryModel>(FakeDeletedIntegrationEvent integrationEvent)
+        {
+            return QueryModelChangedSignal.CreateFromSource(
+                integrationEvent,
+                integrationEvent.AggregateRootId,
+                0,
+                typeof(TQueryModel),
+                QueryModelChangeOperation.Delete);
         }
     }
 }

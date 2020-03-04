@@ -121,5 +121,28 @@ namespace Intellias.CQRS.Pipelines.EventHandlers
                 IsPrivate = IsPrivateQueryModel
             });
         }
+
+        /// <summary>
+        /// Deletes query model.
+        /// </summary>
+        /// <param name="notification">Event notification.</param>
+        /// <param name="getId">Returns query model id from provided event.</param>
+        /// <typeparam name="TEvent">Event type.</typeparam>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        protected async Task DeleteAsync<TEvent>(IntegrationEventNotification<TEvent> notification, Func<TEvent, string> getId)
+            where TEvent : IIntegrationEvent
+        {
+            var @event = notification.IntegrationEvent;
+            var id = getId(@event);
+
+            await Writer.DeleteAsync(id);
+
+            var signal = QueryModelChangedSignal.CreateFromSource(@event, id, typeof(TQueryModel), QueryModelChangeOperation.Delete);
+            await Mediator.Publish(new QueryModelChangedNotification(signal)
+            {
+                IsReplay = @event.IsReplay,
+                IsPrivate = IsPrivateQueryModel
+            });
+        }
     }
 }
