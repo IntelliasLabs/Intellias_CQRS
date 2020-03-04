@@ -48,7 +48,7 @@ namespace Intellias.CQRS.Tests.Utils.Pipelines
         {
             return Fixtures.IntegrationEvent<FakeCreatedIntegrationEvent>(command, e =>
             {
-                e.SnapshotId = new SnapshotId(command.AggregateRootId, 0);
+                e.SnapshotId = new SnapshotId { EntryId = command.AggregateRootId, EntryVersion = 0 };
                 e.Data = command.Data;
             });
         }
