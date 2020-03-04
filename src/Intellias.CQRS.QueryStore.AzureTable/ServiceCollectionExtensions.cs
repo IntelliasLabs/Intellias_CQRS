@@ -21,16 +21,42 @@ namespace Intellias.CQRS.QueryStore.AzureTable
         /// <param name="services">Services collection.</param>
         /// <param name="configure">Configures <see cref="TableStorageOptions"/>.</param>
         /// <returns>Services collection Query Model Table Storage services.</returns>
+        public static IServiceCollection AddTableQueryModelReader(this IServiceCollection services, Action<TableStorageOptions> configure)
+        {
+            // Add required services.
+            services.AddTableQueryModelOptions(configure);
+
+            // Register Table Storage services.
+            services.AddSingleton(typeof(IMutableQueryModelReader<>), typeof(MutableQueryModelTableStorage<>));
+            services.AddSingleton(typeof(IImmutableQueryModelReader<>), typeof(ImmutableQueryModelStorage<>));
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds Query Models Table Storage services.
+        /// </summary>
+        /// <param name="services">Services collection.</param>
+        /// <param name="configure">Configures <see cref="TableStorageOptions"/>.</param>
+        /// <returns>Services collection Query Model Table Storage services.</returns>
         public static IServiceCollection AddTableQueryModelStorage(this IServiceCollection services, Action<TableStorageOptions> configure)
         {
             // Add required services.
-            services.AddOptions();
+            services.AddTableQueryModelOptions(configure);
 
             // Register Table Storage services.
             services.AddSingleton(typeof(IMutableQueryModelReader<>), typeof(MutableQueryModelTableStorage<>));
             services.AddSingleton(typeof(IMutableQueryModelWriter<>), typeof(MutableQueryModelTableStorage<>));
             services.AddSingleton(typeof(IImmutableQueryModelReader<>), typeof(ImmutableQueryModelStorage<>));
             services.AddSingleton(typeof(IImmutableQueryModelWriter<>), typeof(ImmutableQueryModelStorage<>));
+
+            return services;
+        }
+
+        private static IServiceCollection AddTableQueryModelOptions(this IServiceCollection services, Action<TableStorageOptions> configure)
+        {
+            // Add required services.
+            services.AddOptions();
 
             // Register Table Storage options.
             services.Configure(configure);
