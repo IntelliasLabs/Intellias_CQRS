@@ -53,7 +53,7 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             return services;
         }
 
-        private static IServiceCollection AddTableQueryModelOptions(this IServiceCollection services, Action<TableStorageOptions> configure)
+        private static void AddTableQueryModelOptions(this IServiceCollection services, Action<TableStorageOptions> configure)
         {
             // Add required services.
             services.AddOptions();
@@ -61,8 +61,6 @@ namespace Intellias.CQRS.QueryStore.AzureTable
             // Register Table Storage options.
             services.Configure(configure);
             services.AddSingleton<IValidateOptions<TableStorageOptions>>(new DataAnnotationValidateOptions<TableStorageOptions>(MicrosoftOptions.DefaultName));
-
-            return services;
         }
     }
 }
