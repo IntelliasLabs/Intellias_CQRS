@@ -12,7 +12,7 @@ namespace Intellias.CQRS.Tests.Pipelines.EventHandlers.Notifications
         {
             var isPrivate = FixtureUtils.Bool();
             var integrationEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent();
-            var signal = Fixtures.Pipelines.FakeQueryModelChangedSignal(integrationEvent);
+            var signal = Fixtures.Pipelines.FakeQueryModelCreatedSignal<int>(integrationEvent);
 
             var notification = new QueryModelChangedNotification(signal) { IsPrivate = isPrivate };
 

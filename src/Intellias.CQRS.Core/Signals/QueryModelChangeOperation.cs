@@ -13,6 +13,11 @@ namespace Intellias.CQRS.Core.Signals
         /// <summary>
         /// Query model was updated.
         /// </summary>
-        Update
+        Update,
+
+        /// <summary>
+        /// Query model was deleted.
+        /// </summary>
+        Delete
     }
 }
