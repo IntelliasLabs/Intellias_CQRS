@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using Intellias.CQRS.Core.Queries.Immutable;
 using Intellias.CQRS.Core.Queries.Mutable;
@@ -13,22 +14,17 @@ namespace Intellias.CQRS.Tests.QueryStores
 {
     public class ServiceCollectionExtensionsTests : StorageAccountTestBase
     {
-        private readonly ServiceProvider serviceProvider;
+        private readonly StorageAccountFixture fixture;
 
         public ServiceCollectionExtensionsTests(StorageAccountFixture fixture)
         {
-            serviceProvider = new ServiceCollection()
-                .AddTableQueryModelStorage(o =>
-                {
-                    o.ConnectionString = fixture.Configuration.StorageAccount.ConnectionString;
-                    o.TableNamePrefix = fixture.ExecutionContext.GetSessionPrefix();
-                })
-                .BuildServiceProvider();
+            this.fixture = fixture;
         }
 
         [Fact]
-        public void ServiceProvider_Always_HasConfiguredOptions()
+        public void AddTableQueryModelStorage_Always_HasConfiguredOptions()
         {
+            var serviceProvider = RegisterStorage();
             var options = serviceProvider.GetRequiredService<IOptionsMonitor<TableStorageOptions>>();
 
             options.CurrentValue.Should().BeEquivalentTo(new TableStorageOptions
@@ -39,17 +35,58 @@ namespace Intellias.CQRS.Tests.QueryStores
         }
 
         [Fact]
-        public void ServiceProvider_Always_HasRegisteredMutableQueryModelsStorage()
+        public void AddTableQueryModelReader_Always_HasConfiguredOptions()
         {
-            serviceProvider.Invoking(sp => sp.GetRequiredService<IMutableQueryModelWriter<FakeMutableQueryModel>>()).Should().NotThrow();
-            serviceProvider.Invoking(sp => sp.GetRequiredService<IMutableQueryModelReader<FakeMutableQueryModel>>()).Should().NotThrow();
+            var serviceProvider = RegisterReader();
+            var options = serviceProvider.GetRequiredService<IOptionsMonitor<TableStorageOptions>>();
+
+            options.CurrentValue.Should().BeEquivalentTo(new TableStorageOptions
+            {
+                ConnectionString = Configuration.StorageAccount.ConnectionString,
+                TableNamePrefix = ExecutionContext.GetSessionPrefix()
+            });
         }
 
         [Fact]
-        public void ServiceProvider_Always_HasRegisteredImmutableQueryModelsStorage()
+        public void AddTableQueryModelStorage_Always_HasRegisteredQueryModelsStorage()
         {
+            var serviceProvider = RegisterStorage();
+            serviceProvider.Invoking(sp => sp.GetRequiredService<IMutableQueryModelWriter<FakeMutableQueryModel>>()).Should().NotThrow();
+            serviceProvider.Invoking(sp => sp.GetRequiredService<IMutableQueryModelReader<FakeMutableQueryModel>>()).Should().NotThrow();
             serviceProvider.Invoking(sp => sp.GetRequiredService<IImmutableQueryModelWriter<FakeImmutableQueryModel>>()).Should().NotThrow();
             serviceProvider.Invoking(sp => sp.GetRequiredService<IImmutableQueryModelReader<FakeImmutableQueryModel>>()).Should().NotThrow();
+        }
+
+        [Fact]
+        public void AddTableQueryModelReader_Always_HasRegisteredOnlyQueryModelsReader()
+        {
+            var serviceProvider = RegisterReader();
+            serviceProvider.Invoking(sp => sp.GetRequiredService<IMutableQueryModelReader<FakeMutableQueryModel>>()).Should().NotThrow();
+            serviceProvider.Invoking(sp => sp.GetRequiredService<IImmutableQueryModelReader<FakeImmutableQueryModel>>()).Should().NotThrow();
+            serviceProvider.GetService<IMutableQueryModelWriter<FakeMutableQueryModel>>().Should().BeNull();
+            serviceProvider.GetService<IImmutableQueryModelWriter<FakeImmutableQueryModel>>().Should().BeNull();
+        }
+
+        private IServiceProvider RegisterReader()
+        {
+            return new ServiceCollection()
+                .AddTableQueryModelReader(o =>
+                {
+                    o.ConnectionString = fixture.Configuration.StorageAccount.ConnectionString;
+                    o.TableNamePrefix = fixture.ExecutionContext.GetSessionPrefix();
+                })
+                .BuildServiceProvider();
+        }
+
+        private IServiceProvider RegisterStorage()
+        {
+            return new ServiceCollection()
+                .AddTableQueryModelStorage(o =>
+                {
+                    o.ConnectionString = fixture.Configuration.StorageAccount.ConnectionString;
+                    o.TableNamePrefix = fixture.ExecutionContext.GetSessionPrefix();
+                })
+                .BuildServiceProvider();
         }
     }
 }
