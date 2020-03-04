@@ -32,7 +32,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         [Fact]
         public void Serialization_PropertyIsImmutable_UpdatesValue()
         {
-            var data = new DummyData { SnapshotId = new SnapshotId(Unified.NewCode(), 1) };
+            var data = new DummyData { SnapshotId = new SnapshotId { EntryId = Unified.NewCode(), EntryVersion = 1 } };
 
             var entity = new DummyJsonTableEntity(data);
 
@@ -105,7 +105,7 @@ namespace Intellias.CQRS.Tests.QueryStores
         {
             public DateTimeOffset DateTimeOffset { get; set; } = DateTimeOffset.UtcNow;
 
-            public SnapshotId SnapshotId { get; set; } = SnapshotId.Empty;
+            public SnapshotId SnapshotId { get; set; }
         }
     }
 }

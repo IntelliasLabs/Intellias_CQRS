@@ -86,7 +86,7 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.CommandHandlers
 
             AggregateVersions = AggregateVersions.SetItem(aggregateId, currentVersion);
 
-            return new SnapshotId(aggregateId, currentVersion);
+            return new SnapshotId { EntryId = aggregateId, EntryVersion = currentVersion };
         }
     }
 }
