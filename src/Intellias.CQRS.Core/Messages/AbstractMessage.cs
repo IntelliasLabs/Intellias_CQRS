@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Intellias.CQRS.Core.Security;
 using Newtonsoft.Json;
 
 namespace Intellias.CQRS.Core.Messages
@@ -35,6 +36,10 @@ namespace Intellias.CQRS.Core.Messages
         [DataType(DataType.DateTime)]
         [JsonProperty]
         public DateTime Created { get; protected set; } = DateTime.UtcNow;
+
+        /// <inheritdoc />
+        [Required]
+        public Actor Actor { get; set; } = new Actor();
 
         /// <inheritdoc />
         public IDictionary<MetadataKey, string> Metadata { get; } = new Dictionary<MetadataKey, string>();

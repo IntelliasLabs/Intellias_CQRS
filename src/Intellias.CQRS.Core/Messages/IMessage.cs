@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intellias.CQRS.Core.Security;
 
 namespace Intellias.CQRS.Core.Messages
 {
@@ -34,5 +35,10 @@ namespace Intellias.CQRS.Core.Messages
         /// Message Metadata.
         /// </summary>
         IDictionary<MetadataKey, string> Metadata { get; }
+
+        /// <summary>
+        /// Identity who it the source of a message.
+        /// </summary>
+        Actor Actor { get; }
     }
 }

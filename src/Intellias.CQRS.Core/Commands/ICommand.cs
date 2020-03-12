@@ -1,5 +1,6 @@
 ﻿using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
+using Intellias.CQRS.Core.Security;
 
 namespace Intellias.CQRS.Core.Commands
 {
@@ -13,6 +14,11 @@ namespace Intellias.CQRS.Core.Commands
         /// Expected version of aggregate root.
         /// </summary>
         int ExpectedVersion { get; }
+
+        /// <summary>
+        /// Contains a security context in which message is handled.
+        /// </summary>
+        Principal Principal { get; }
 
         /// <summary>
         /// Validate Command.

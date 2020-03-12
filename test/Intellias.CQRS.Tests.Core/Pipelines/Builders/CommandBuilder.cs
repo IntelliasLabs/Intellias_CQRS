@@ -19,6 +19,7 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.Builders
 
         protected override TCommand Create(ISpecimenContext context)
         {
+            var userId = (Seed.UserId ?? Guid.NewGuid()).ToString();
             var command = new TCommand
             {
                 Id = Unified.NewCode(),
@@ -27,8 +28,13 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.Builders
                 ExpectedVersion = 0,
                 Metadata =
                 {
-                    [MetadataKey.UserId] = (Seed.UserId ?? Guid.NewGuid()).ToString(),
+                    [MetadataKey.UserId] = userId,
                     [MetadataKey.Roles] = "[]"
+                },
+                Principal =
+                {
+                    IdentityId = userId,
+                    UserId = userId
                 }
             };
 
