@@ -12,7 +12,7 @@ namespace Intellias.CQRS.Core.Security
         /// <summary>
         /// Identity id.
         /// </summary>
-        public string Id { get; set; } = string.Empty;
+        public string IdentityId { get; set; } = string.Empty;
 
         /// <summary>
         /// User id.

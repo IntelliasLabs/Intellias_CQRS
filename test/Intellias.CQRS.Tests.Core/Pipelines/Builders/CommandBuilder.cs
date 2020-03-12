@@ -33,7 +33,7 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.Builders
                 },
                 Principal =
                 {
-                    Id = userId,
+                    IdentityId = userId,
                     UserId = userId
                 }
             };
