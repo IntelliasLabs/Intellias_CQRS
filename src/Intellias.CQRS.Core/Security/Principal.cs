@@ -1,8 +1,6 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
-using Intellias.CQRS.Core.DataAnnotations;
 
 namespace Intellias.CQRS.Core.Security
 {
@@ -14,27 +12,21 @@ namespace Intellias.CQRS.Core.Security
         /// <summary>
         /// Identity id.
         /// </summary>
-        [Required]
-        [NotEmpty]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// User id.
         /// </summary>
-        [Required]
-        [NotEmpty]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         /// <summary>
         /// Identity claims.
         /// </summary>
-        [Required]
         public IdentityClaim[] Claims { get; set; } = Array.Empty<IdentityClaim>();
 
         /// <summary>
         /// Identity permissions.
         /// </summary>
-        [Required]
         public string[] Permissions { get; set; } = Array.Empty<string>();
 
         /// <summary>
