@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using AutoFixture;
 using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Security;
@@ -32,6 +33,18 @@ namespace Intellias.CQRS.Tests.Core.Security
             var principal = new Principal { Claims = new[] { new IdentityClaim { Type = ClaimTypes.Role, Value = role } } };
 
             principal.IsInRole(role).Should().BeTrue();
+        }
+
+        [Fact]
+        public void AsActor_Always_ConvertsCorrectly()
+        {
+            var principal = new Fixture().Create<Principal>();
+
+            principal.AsActor().Should().BeEquivalentTo(new Actor
+            {
+                IdentityId = principal.IdentityId,
+                UserId = principal.UserId
+            });
         }
     }
 }

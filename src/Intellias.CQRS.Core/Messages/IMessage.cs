@@ -32,13 +32,13 @@ namespace Intellias.CQRS.Core.Messages
         DateTime Created { get; }
 
         /// <summary>
-        /// Contains a security context in which message is handled.
-        /// </summary>
-        Principal Principal { get; }
-
-        /// <summary>
         /// Message Metadata.
         /// </summary>
         IDictionary<MetadataKey, string> Metadata { get; }
+
+        /// <summary>
+        /// Identity who it the source of a message.
+        /// </summary>
+        Actor Actor { get; }
     }
 }

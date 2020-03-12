@@ -39,7 +39,7 @@ namespace Intellias.CQRS.Core.Messages
 
         /// <inheritdoc />
         [Required]
-        public Principal Principal { get; set; } = new Principal();
+        public Actor Actor { get; set; } = new Actor();
 
         /// <inheritdoc />
         public IDictionary<MetadataKey, string> Metadata { get; } = new Dictionary<MetadataKey, string>();

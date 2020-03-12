@@ -7,6 +7,7 @@ using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
+using Intellias.CQRS.Core.Security;
 
 namespace Intellias.CQRS.Core.Commands
 {
@@ -15,6 +16,9 @@ namespace Intellias.CQRS.Core.Commands
     {
         /// <inheritdoc />
         public int ExpectedVersion { get; set; }
+
+        /// <inheritdoc />
+        public Principal Principal { get; set; } = new Principal();
 
         /// <summary>
         /// Converts common command data to event.

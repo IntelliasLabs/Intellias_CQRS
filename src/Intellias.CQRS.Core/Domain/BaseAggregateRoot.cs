@@ -45,7 +45,7 @@ namespace Intellias.CQRS.Core.Domain
                 Id = Unified.NewCode(),
                 AggregateRootId = Id,
                 CorrelationId = Context.CorrelationId,
-                Principal = Context.Principal,
+                Actor = Context.Principal.AsActor(),
                 Version = Version,
                 SourceId = Context.SourceId
             };

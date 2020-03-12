@@ -76,9 +76,9 @@ namespace Intellias.CQRS.Core.Domain
                 Id = Unified.NewCode(),
                 AggregateRootId = AggregateRootId,
                 CorrelationId = CorrelationId,
+                Actor = Principal.AsActor(),
                 Version = ExpectedVersion,
-                SourceId = SourceId,
-                Principal = Principal
+                SourceId = SourceId
             };
 
             foreach (var pair in Metadata)

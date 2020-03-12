@@ -39,5 +39,18 @@ namespace Intellias.CQRS.Core.Security
             var roleClaim = Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Role && string.Equals(c.Value, roleName, StringComparison.OrdinalIgnoreCase));
             return roleClaim != null;
         }
+
+        /// <summary>
+        /// Converts <see cref="Principal"/> to <see cref="Actor"/>.
+        /// </summary>
+        /// <returns>Principal Actor.</returns>
+        public Actor AsActor()
+        {
+            return new Actor
+            {
+                IdentityId = IdentityId,
+                UserId = UserId
+            };
+        }
     }
 }
