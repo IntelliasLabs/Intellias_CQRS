@@ -65,7 +65,8 @@ namespace Intellias.CQRS.Core
             {
                 Id = Unified.NewCode(),
                 AggregateRootId = source.AggregateRootId,
-                CorrelationId = source.CorrelationId
+                CorrelationId = source.CorrelationId,
+                Principal = source.Principal
             };
 
             source.CopyMetadata(result);

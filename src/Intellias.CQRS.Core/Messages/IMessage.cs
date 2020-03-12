@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intellias.CQRS.Core.Security;
 
 namespace Intellias.CQRS.Core.Messages
 {
@@ -29,6 +30,11 @@ namespace Intellias.CQRS.Core.Messages
         /// </summary>
         /// <value>a <see cref="DateTime"/> UTC value that represents the point in time where this event occurred.</value>
         DateTime Created { get; }
+
+        /// <summary>
+        /// Contains a security context in which message is handled.
+        /// </summary>
+        Principal Principal { get; }
 
         /// <summary>
         /// Message Metadata.

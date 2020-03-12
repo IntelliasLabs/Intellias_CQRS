@@ -4,6 +4,7 @@ using System.Linq;
 using Intellias.CQRS.Core.Commands;
 using Intellias.CQRS.Core.Events;
 using Intellias.CQRS.Core.Messages;
+using Intellias.CQRS.Core.Security;
 
 namespace Intellias.CQRS.Core.Domain
 {
@@ -21,6 +22,7 @@ namespace Intellias.CQRS.Core.Domain
             AggregateRootId = command.AggregateRootId;
             CorrelationId = command.CorrelationId;
             Metadata = command.Metadata.ToDictionary(k => k.Key, v => v.Value);
+            Principal = command.Principal;
             ExpectedVersion = command.ExpectedVersion;
             SourceId = command.Id;
             UserId = Guid.Parse(Metadata[MetadataKey.UserId]);
@@ -40,6 +42,11 @@ namespace Intellias.CQRS.Core.Domain
         /// Command metadata.
         /// </summary>
         public IReadOnlyDictionary<MetadataKey, string> Metadata { get; }
+
+        /// <summary>
+        /// Principal for the command.
+        /// </summary>
+        public Principal Principal { get; }
 
         /// <summary>
         /// Expected version of the aggregate.
@@ -70,7 +77,8 @@ namespace Intellias.CQRS.Core.Domain
                 AggregateRootId = AggregateRootId,
                 CorrelationId = CorrelationId,
                 Version = ExpectedVersion,
-                SourceId = SourceId
+                SourceId = SourceId,
+                Principal = Principal
             };
 
             foreach (var pair in Metadata)
