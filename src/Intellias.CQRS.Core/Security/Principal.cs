@@ -20,6 +20,11 @@ namespace Intellias.CQRS.Core.Security
         public string UserId { get; set; } = string.Empty;
 
         /// <summary>
+        /// True if Actor is Process Manager.
+        /// </summary>
+        public bool IsProcessManager { get; set; }
+
+        /// <summary>
         /// Identity claims.
         /// </summary>
         public IdentityClaim[] Claims { get; set; } = Array.Empty<IdentityClaim>();
@@ -49,7 +54,8 @@ namespace Intellias.CQRS.Core.Security
             return new Actor
             {
                 IdentityId = IdentityId,
-                UserId = UserId
+                UserId = UserId,
+                IsProcessManager = IsProcessManager
             };
         }
     }

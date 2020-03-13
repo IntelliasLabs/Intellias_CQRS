@@ -21,6 +21,7 @@ namespace Intellias.CQRS.Core.Signals
             Id = Unified.NewCode();
             AggregateRootId = source.AggregateRootId;
             CorrelationId = source.CorrelationId;
+            Actor = source.Actor;
 
             source.CopyMetadata(this);
         }

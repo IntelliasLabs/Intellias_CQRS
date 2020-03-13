@@ -43,7 +43,8 @@ namespace Intellias.CQRS.Tests.Core.Security
             principal.AsActor().Should().BeEquivalentTo(new Actor
             {
                 IdentityId = principal.IdentityId,
-                UserId = principal.UserId
+                UserId = principal.UserId,
+                IsProcessManager = principal.IsProcessManager
             });
         }
     }

@@ -85,7 +85,8 @@ namespace Intellias.CQRS.Core.Signals
             var signal = new QueryModelChangedSignal(queryModelId, queryModelVersion, queryModelType, operation)
             {
                 CorrelationId = message.CorrelationId,
-                AggregateRootId = message.AggregateRootId
+                AggregateRootId = message.AggregateRootId,
+                Actor = message.Actor
             };
 
             message.CopyMetadata(signal);

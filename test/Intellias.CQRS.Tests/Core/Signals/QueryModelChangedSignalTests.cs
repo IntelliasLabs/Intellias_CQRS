@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Intellias.CQRS.Core;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
@@ -18,7 +17,8 @@ namespace Intellias.CQRS.Tests.Core.Signals
             {
                 CorrelationId = Unified.NewCode(),
                 AggregateRootId = Unified.NewCode(),
-                Metadata = { [MetadataKey.UserId] = Unified.NewCode() }
+                Metadata = { [MetadataKey.UserId] = Unified.NewCode() },
+                Actor = { IdentityId = Unified.NewCode(), UserId = Unified.NewCode(), IsProcessManager = true }
             };
 
             var json = JsonConvert.SerializeObject(signal);
@@ -47,43 +47,29 @@ namespace Intellias.CQRS.Tests.Core.Signals
         public void CreateFromSource1_Always_CopiesMessageCorrelationData()
         {
             var integrationEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent();
-            var expected = new QueryModelChangedSignal(Unified.NewCode(), FixtureUtils.Int(), typeof(int), FixtureUtils.FromEnum<QueryModelChangeOperation>())
-            {
-                CorrelationId = integrationEvent.CorrelationId,
-                AggregateRootId = integrationEvent.AggregateRootId
-            };
-
-            integrationEvent.CopyMetadata(expected);
 
             var signal = QueryModelChangedSignal.CreateFromSource(
                 integrationEvent,
-                expected.QueryModelId,
-                expected.QueryModelVersion,
-                expected.QueryModelType,
-                expected.Operation);
+                Unified.NewCode(),
+                FixtureUtils.Int(),
+                typeof(int),
+                FixtureUtils.FromEnum<QueryModelChangeOperation>());
 
-            signal.Should().BeEquivalentTo(expected, options => options.ForSignal());
+            signal.Should().BeEquivalentTo(integrationEvent, options => options.ForMessage());
         }
 
         [Fact]
         public void CreateFromSource2_Always_CopiesMessageCorrelationData()
         {
             var integrationEvent = Fixtures.Pipelines.FakeCreatedIntegrationEvent();
-            var expected = new QueryModelChangedSignal(Unified.NewCode(), 0, typeof(int), FixtureUtils.FromEnum<QueryModelChangeOperation>())
-            {
-                CorrelationId = integrationEvent.CorrelationId,
-                AggregateRootId = integrationEvent.AggregateRootId
-            };
-
-            integrationEvent.CopyMetadata(expected);
 
             var signal = QueryModelChangedSignal.CreateFromSource(
                 integrationEvent,
-                expected.QueryModelId,
-                expected.QueryModelType,
-                expected.Operation);
+                Unified.NewCode(),
+                typeof(int),
+                FixtureUtils.FromEnum<QueryModelChangeOperation>());
 
-            signal.Should().BeEquivalentTo(expected, options => options.ForSignal());
+            signal.Should().BeEquivalentTo(integrationEvent, options => options.ForMessage());
         }
     }
 }

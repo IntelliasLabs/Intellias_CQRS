@@ -12,6 +12,21 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules
     public static class CoreAssertions
     {
         /// <summary>
+        /// Assertion rule for <see cref="TMessage"/>.
+        /// </summary>
+        /// <param name="options">Assertion options.</param>
+        /// <typeparam name="TMessage">Type of the message.</typeparam>
+        /// <returns>Configured assertion.</returns>
+        public static EquivalencyAssertionOptions<TMessage> ForMessage<TMessage>(
+            this EquivalencyAssertionOptions<TMessage> options)
+            where TMessage : IMessage
+            => options
+                .Excluding(m => m.Id)
+                .Excluding(m => m.Created)
+                .ExcludingMissingMembers()
+                .ComparingByMembers<IMessage>();
+
+        /// <summary>
         /// Assertion rule for <see cref="TIntegrationEvent"/>.
         /// </summary>
         /// <param name="options">Assertion options.</param>

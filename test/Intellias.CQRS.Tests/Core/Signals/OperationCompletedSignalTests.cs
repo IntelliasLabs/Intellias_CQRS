@@ -1,27 +1,36 @@
-﻿using FluentAssertions;
+﻿using AutoFixture;
+using FluentAssertions;
 using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Tests.Core.Events;
+using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Core.Signals
 {
     public class OperationCompletedSignalTests
     {
+        private readonly Fixture fixture = new Fixture();
+
         [Fact]
-        public void OperationCompletedSignalTestshouldCopyPropertiesFromSource()
+        public void OperationCompletedSignal_Always_Serializable()
         {
-            var message = new TestCreatedEvent
-            {
-                AggregateRootId = "aggregate root",
-                CorrelationId = "correlationId",
-            };
+            var source = new OperationCompletedSignal(fixture.Create<TestCreatedEvent>());
 
-            var failedEvent = new OperationCompletedSignal(message);
+            var serialized = JsonConvert.SerializeObject(source);
+            var deserialized = JsonConvert.DeserializeObject<OperationCompletedSignal>(serialized);
 
-            failedEvent.Should()
-                .Match<OperationCompletedSignal>(x => x.CorrelationId == message.CorrelationId).And
-                .Match<OperationCompletedSignal>(x => x.AggregateRootId == message.AggregateRootId).And
-                .Match<OperationCompletedSignal>(x => x.Source.Equals(message));
+            deserialized.Should().BeEquivalentTo(source);
+        }
+
+        [Fact]
+        public void OperationCompletedSignal_Always_CopiesMessageData()
+        {
+            var @event = fixture.Create<TestCreatedEvent>();
+
+            var signal = new OperationCompletedSignal(@event);
+
+            signal.Should().BeEquivalentTo(@event, options => options.ForMessage());
         }
     }
 }
