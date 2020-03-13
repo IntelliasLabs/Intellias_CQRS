@@ -31,6 +31,11 @@ namespace Intellias.CQRS.Tests.Core.Pipelines.Builders
                     [MetadataKey.UserId] = userId,
                     [MetadataKey.Roles] = "[]"
                 },
+                Actor =
+                {
+                    IdentityId = userId,
+                    UserId = userId
+                },
                 Principal =
                 {
                     IdentityId = userId,

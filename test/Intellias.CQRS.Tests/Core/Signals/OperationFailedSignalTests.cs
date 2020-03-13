@@ -1,34 +1,38 @@
-﻿using FluentAssertions;
-using Intellias.CQRS.Core;
+﻿using AutoFixture;
+using FluentAssertions;
 using Intellias.CQRS.Core.Results;
 using Intellias.CQRS.Core.Results.Errors;
 using Intellias.CQRS.Core.Signals;
 using Intellias.CQRS.Tests.Core.Events;
+using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Core.Signals
 {
     public class OperationFailedSignalTests
     {
+        private readonly Fixture fixture = new Fixture();
+
         [Fact]
-        public void OperationFailedSignalShouldCopyPropertiesFromSource()
+        public void OperationFailedSignal_Always_Serializable()
         {
-            var error = CoreErrorCodes.ValidationFailed;
-            var message = new TestCreatedEvent
-            {
-                AggregateRootId = "aggregate root",
-                CorrelationId = "correlationId",
-            };
+            var source = new OperationFailedSignal(fixture.Create<TestCreatedEvent>(), new FailedResult(CoreErrorCodes.ValidationFailed));
 
-            var failedEvent = new OperationFailedSignal(message, new FailedResult(error));
-            failedEvent = failedEvent.ToJson().FromJson<OperationFailedSignal>();
+            var serialized = JsonConvert.SerializeObject(source);
+            var deserialized = JsonConvert.DeserializeObject<OperationFailedSignal>(serialized);
 
-            failedEvent.Should()
-                .Match<OperationFailedSignal>(x => x.CorrelationId == message.CorrelationId).And
-                .Match<OperationFailedSignal>(x => x.AggregateRootId == message.AggregateRootId).And
-                .Match<OperationFailedSignal>(x => x.Error.CodeInfo.Message == error.Message).And
-                .Match<OperationFailedSignal>(x => x.Error.CodeInfo.Code == error.Code).And
-                .Match<OperationFailedSignal>(x => x.Source.Equals(message));
+            deserialized.Should().BeEquivalentTo(source);
+        }
+
+        [Fact]
+        public void OperationFailedSignal_Always_CopiesMessageData()
+        {
+            var @event = fixture.Create<TestCreatedEvent>();
+
+            var signal = new OperationFailedSignal(@event, new FailedResult(CoreErrorCodes.ValidationFailed));
+
+            signal.Should().BeEquivalentTo(@event, options => options.ForMessage());
         }
     }
 }
