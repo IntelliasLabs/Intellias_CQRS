@@ -14,5 +14,10 @@ namespace Intellias.CQRS.Core.Security
         /// User id.
         /// </summary>
         public string UserId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// True if Actor is Process Manager.
+        /// </summary>
+        public bool IsProcessManager { get; set; }
     }
 }
