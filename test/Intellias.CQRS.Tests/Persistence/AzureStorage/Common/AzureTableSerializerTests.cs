@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 using AutoFixture;
@@ -13,6 +14,7 @@ using Xunit;
 
 namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Common
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "Classes are instantiated and filled by AutoFixture to verify serialization.")]
     public class AzureTableSerializerTests
     {
         private readonly Fixture fixture;
