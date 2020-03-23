@@ -34,7 +34,7 @@ namespace Intellias.CQRS.Core.Messages
         /// <summary>
         /// Message Metadata.
         /// </summary>
-        IDictionary<MetadataKey, string> Metadata { get; }
+        Dictionary<MetadataKey, string> Metadata { get; }
 
         /// <summary>
         /// Identity who it the source of a message.
