@@ -42,7 +42,7 @@ namespace Intellias.CQRS.Core.Messages
         public Actor Actor { get; set; } = new Actor();
 
         /// <inheritdoc />
-        public Dictionary<MetadataKey, string> Metadata { get; } = new Dictionary<MetadataKey, string>();
+        public Dictionary<MetadataKey, string> Metadata { get; set; } = new Dictionary<MetadataKey, string>();
 
         /// <inheritdoc />
         public override string ToString() => Id;

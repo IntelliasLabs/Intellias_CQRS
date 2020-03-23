@@ -6,8 +6,10 @@ using System.Runtime.Serialization;
 using AutoFixture;
 using FluentAssertions;
 using Intellias.CQRS.Core.Domain;
+using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Core.Queries;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
+using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Utils;
 using Microsoft.Azure.Cosmos.Table;
 using Xunit;
@@ -250,6 +252,22 @@ namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Common
             serialized.Keys.Any(k => k.Contains("GZip", StringComparison.Ordinal)).Should().BeTrue();
             deserialized.Should().BeEquivalentTo(source, options => options
                 .Excluding(o => o.Timestamp));
+        }
+
+        [Fact]
+        public void Deserialize_CommandWithMetadata_WorksCorrectly()
+        {
+            var command = new TestCreateCommand
+            {
+                AggregateRootId = Unified.NewCode(),
+                Metadata = new Dictionary<MetadataKey, string> { { MetadataKey.UserId, Unified.NewCode() } }
+            };
+
+            var serialized = AzureTableSerializer.Serialize(command, true);
+            var deserialized = AzureTableSerializer.Deserialize(Entity(serialized));
+
+            deserialized.Should().BeEquivalentTo(command, options => options
+                .Excluding(o => o.Created));
         }
 
         private static DynamicTableEntity Entity(Dictionary<string, EntityProperty> properties)
