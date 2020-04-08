@@ -20,6 +20,7 @@
     <ProjectReference Include="..\..\src\Intellias.CQRS.DomainServices\Intellias.CQRS.DomainServices.csproj" />
     <ProjectReference Include="..\..\src\Intellias.CQRS.EventStore.AzureTable\Intellias.CQRS.EventStore.AzureTable.csproj" />
     <ProjectReference Include="..\..\src\Intellias.CQRS.Pipelines\Intellias.CQRS.Pipelines.csproj" />
+    <ProjectReference Include="..\..\src\Intellias.CQRS.ProcessManager\Intellias.CQRS.ProcessManager.csproj" />
     <ProjectReference Include="..\..\src\Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj" />
   </ItemGroup>
 </Project>

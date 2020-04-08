@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProjectGuid>{e985ecd0-c46a-407b-bc8e-1e8d59b53a5d}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Intellias.CQRS.CommandBus.AzureServiceBus\Intellias.CQRS.CommandBus.AzureServiceBus.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Core\Intellias.CQRS.Core.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Messaging.AzureServiceBus\Intellias.CQRS.Messaging.AzureServiceBus.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.Persistence.AzureStorage\Intellias.CQRS.Persistence.AzureStorage.csproj" />
+    <ProjectReference Include="..\Intellias.CQRS.QueryStore.AzureTable\Intellias.CQRS.QueryStore.AzureTable.csproj" />
+  </ItemGroup>
+</Project>
