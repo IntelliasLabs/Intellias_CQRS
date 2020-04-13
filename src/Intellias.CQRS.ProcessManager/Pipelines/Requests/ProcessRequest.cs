@@ -14,17 +14,6 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Requests
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessRequest{TState}"/> class.
         /// </summary>
-        /// <param name="event">Integration event.</param>
-        public ProcessRequest(IIntegrationEvent @event)
-        {
-            Id = @event.Id;
-            State = @event as TState;
-            IsReplay = @event.IsReplay;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessRequest{TState}"/> class.
-        /// </summary>
         /// <param name="queryModel">Query model.</param>
         /// <param name="getId">Get query model snapshot id.</param>
         public ProcessRequest(TState queryModel, Func<TState, SnapshotId> getId)
@@ -36,6 +25,27 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Requests
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ProcessRequest{TState}"/> class.
+        /// </summary>
+        /// <param name="state">Input state.</param>
+        /// <param name="getId">Get query model snapshot id.</param>
+        public ProcessRequest(TState state, Func<TState, string> getId)
+        {
+            Id = getId(state);
+            State = state;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProcessRequest{TState}"/> class.
+        /// </summary>
+        /// <param name="event">Integration event.</param>
+        public ProcessRequest(IIntegrationEvent @event)
+        {
+            Id = @event.Id;
+            State = @event as TState;
+        }
+
+        /// <summary>
         /// Request id.
         /// </summary>
         public string Id { get; }
@@ -44,10 +54,5 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Requests
         /// State.
         /// </summary>
         public TState State { get; }
-
-        /// <summary>
-        /// Is replay.
-        /// </summary>
-        public bool IsReplay { get; }
     }
 }

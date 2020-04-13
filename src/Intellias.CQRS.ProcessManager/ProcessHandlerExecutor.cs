@@ -30,6 +30,21 @@ namespace Intellias.CQRS.ProcessManager
         /// <summary>
         /// Execute process manager.
         /// </summary>
+        /// <param name="state">State.</param>
+        /// <param name="getId">Get id.</param>
+        /// <typeparam name="TProcessHandler">Process handler.</typeparam>
+        /// <typeparam name="TState">Process manager state.</typeparam>
+        /// <returns>Task.</returns>
+        public Task ExecuteAsync<TProcessHandler, TState>(TState state, Func<TState, string> getId)
+            where TState : class, new()
+            where TProcessHandler : BaseProcessHandler, IProcessHandler<TState>
+        {
+            return ExecuteAsync<TProcessHandler, TState>(new ProcessRequest<TState>(state, getId));
+        }
+
+        /// <summary>
+        /// Execute process manager.
+        /// </summary>
         /// <param name="state">Query model state.</param>
         /// <param name="getId">Get id.</param>
         /// <typeparam name="TProcessHandler">Process handler.</typeparam>
@@ -51,9 +66,16 @@ namespace Intellias.CQRS.ProcessManager
         public Task ExecuteAsync<TProcessHandler>(IntegrationEvent @event)
             where TProcessHandler : BaseProcessHandler
         {
+            if (@event.IsReplay)
+            {
+                return Task.CompletedTask;
+            }
+
             var stateType = @event.GetType();
             var requestType = typeof(ProcessRequest<>).MakeGenericType(stateType);
-            var request = Activator.CreateInstance(requestType, new object[] { @event });
+            Func<IntegrationEvent, string> getId = ie => ie.Id;
+
+            var request = Activator.CreateInstance(requestType, new object[] { @event, getId });
 
             var method = GetType()
                 .GetMethod(nameof(ExecuteAsync), BindingFlags.NonPublic | BindingFlags.Instance);
@@ -81,7 +103,7 @@ namespace Intellias.CQRS.ProcessManager
             var instance = serviceProvider.GetService<TProcessHandler>();
             if (instance is IProcessHandler<TState> handler)
             {
-                var piplineExecutor = serviceProvider.GetService<ProcessPipelineExecutor<TState>>();
+                var piplineExecutor = serviceProvider.GetService<ProcessPipelineExecutor<TState, TProcessHandler>>();
                 return piplineExecutor.ExecutePipline(request, handler, CancellationToken.None);
             }
 

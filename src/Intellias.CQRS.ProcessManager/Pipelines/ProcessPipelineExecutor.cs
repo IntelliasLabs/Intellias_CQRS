@@ -11,16 +11,18 @@ namespace Intellias.CQRS.ProcessManager.Pipelines
     /// Process pipeline executor.
     /// </summary>
     /// <typeparam name="TState">Process state.</typeparam>
-    public class ProcessPipelineExecutor<TState>
+    /// <typeparam name="TProcessHandler">Process handler type.</typeparam>
+    public class ProcessPipelineExecutor<TState, TProcessHandler>
         where TState : class
+        where TProcessHandler : BaseProcessHandler
     {
-        private readonly IEnumerable<IProcessMiddleware<TState>> middlewares;
+        private readonly IEnumerable<IProcessMiddleware<TState, TProcessHandler>> middlewares;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessPipelineExecutor{TState}"/> class.
+        /// Initializes a new instance of the <see cref="ProcessPipelineExecutor{TState, TProcessHandler}"/> class.
         /// </summary>
         /// <param name="middlewares">Middlewares.</param>
-        public ProcessPipelineExecutor(IEnumerable<IProcessMiddleware<TState>> middlewares)
+        public ProcessPipelineExecutor(IEnumerable<IProcessMiddleware<TState, TProcessHandler>> middlewares)
         {
             this.middlewares = middlewares;
         }

@@ -15,8 +15,10 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Middlewares
     /// Process middleware.
     /// </summary>
     /// <typeparam name="TState">Pipeline state.</typeparam>
-    public interface IProcessMiddleware<TState>
+    /// <typeparam name="TProcessHandler">Process handler type.</typeparam>
+    public interface IProcessMiddleware<TState, TProcessHandler>
         where TState : class
+        where TProcessHandler : BaseProcessHandler
     {
         /// <summary>
         /// Execute Pipeline.

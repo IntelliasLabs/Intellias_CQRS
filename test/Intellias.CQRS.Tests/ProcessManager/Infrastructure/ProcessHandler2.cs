@@ -13,7 +13,8 @@ namespace Intellias.CQRS.Tests.ProcessManager.Infrastructure
 {
     public class ProcessHandler2 : BaseProcessHandler,
         IProcessHandler<FakeSnapshotQueryModel>,
-        IProcessHandler<FakeUpdatedIntegrationEvent>
+        IProcessHandler<FakeUpdatedIntegrationEvent>,
+        IProcessHandler<CustomState>
     {
         public Task<ProcessResponse> Handle(ProcessRequest<FakeSnapshotQueryModel> request, CancellationToken cancellationToken)
         {
@@ -36,11 +37,29 @@ namespace Intellias.CQRS.Tests.ProcessManager.Infrastructure
                 TestData = state.Data
             });
         }
+
+        public Task<ProcessResponse> Handle(ProcessRequest<CustomState> request, CancellationToken cancellationToken)
+        {
+            var state = request.State;
+
+            return ResponseAsync(request, new TestCreateCommand
+            {
+                AggregateRootId = Unified.NewCode(),
+                TestData = state.Data
+            });
+        }
     }
 
     public class FakeSnapshotQueryModel : BaseMutableQueryModel
     {
         public SnapshotId First { get; set; }
+
+        public string Data { get; set; }
+    }
+
+    public class CustomState
+    {
+        public string Id { get; set; }
 
         public string Data { get; set; }
     }

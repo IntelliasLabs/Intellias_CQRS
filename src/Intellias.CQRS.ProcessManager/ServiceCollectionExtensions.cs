@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using Intellias.CQRS.ProcessManager.Pipelines;
 using Intellias.CQRS.ProcessManager.Pipelines.Middlewares;
+using Intellias.CQRS.ProcessManager.Stores;
+using Intellias.CQRS.QueryStore.AzureTable.Options;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Intellias.CQRS.ProcessManager
@@ -28,11 +31,26 @@ namespace Intellias.CQRS.ProcessManager
             }
 
             return services
-                .AddTransient(typeof(IProcessMiddleware<>), typeof(PersistMessageMiddleware<>))
-                .AddTransient(typeof(IProcessMiddleware<>), typeof(PublishMessageMiddleware<>))
-                .AddTransient(typeof(IProcessMiddleware<>), typeof(ReplayMessageMiddleware<>))
-                .AddTransient(typeof(ProcessPipelineExecutor<>))
+                .AddTransient(typeof(IProcessMiddleware<,>), typeof(PersistMessagesMiddleware<,>))
+                .AddTransient(typeof(IProcessMiddleware<,>), typeof(PublishMessagesMiddleware<,>))
+                .AddTransient(typeof(IProcessMiddleware<,>), typeof(PrepareMessagesMiddleware<,>))
+                .AddTransient(typeof(ProcessPipelineExecutor<,>))
                 .AddTransient<ProcessHandlerExecutor>();
+        }
+
+        /// <summary>
+        /// Add process store.
+        /// </summary>
+        /// <param name="services">Services collection.</param>
+        /// <param name="configure">Configures <see cref="TableStorageOptions"/>.</param>
+        /// <returns>Service collection.</returns>
+        public static IServiceCollection AddProcessStore(
+            this IServiceCollection services, Action<TableStorageOptions> configure)
+        {
+            return services
+                .AddOptions()
+                .Configure(configure)
+                .AddSingleton(typeof(IProcessStore<>), typeof(ProcessStore<>));
         }
     }
 }

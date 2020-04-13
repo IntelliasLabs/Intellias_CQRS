@@ -17,23 +17,25 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Middlewares
     /// Publish messages middleware.
     /// </summary>
     /// <typeparam name="TState">State of request.</typeparam>
-    public class PublishMessageMiddleware<TState> : IProcessMiddleware<TState>
+    /// <typeparam name="TProcessHandler">Process handler type.</typeparam>
+    public class PublishMessagesMiddleware<TState, TProcessHandler> : IProcessMiddleware<TState, TProcessHandler>
         where TState : class
+        where TProcessHandler : BaseProcessHandler
     {
         private readonly ICommandBus<DefaultCommandBusOptions> commandBuse;
         private readonly INotificationBus notificaitonBus;
-        private readonly IProcessManagerStore store;
+        private readonly IProcessStore<TProcessHandler> store;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PublishMessageMiddleware{TState}"/> class.
+        /// Initializes a new instance of the <see cref="PublishMessagesMiddleware{TState, TProcessHandler}"/> class.
         /// </summary>
         /// <param name="commandBuse">Command bus.</param>
         /// <param name="notificaitonBus">Notification bus.</param>
         /// <param name="store">Process manager command store.</param>
-        public PublishMessageMiddleware(
+        public PublishMessagesMiddleware(
             ICommandBus<DefaultCommandBusOptions> commandBuse,
             INotificationBus notificaitonBus,
-            IProcessManagerStore store)
+            IProcessStore<TProcessHandler> store)
         {
             this.commandBuse = commandBuse;
             this.notificaitonBus = notificaitonBus;
