@@ -66,7 +66,18 @@ namespace Intellias.CQRS.Core.Domain
         }
 
         /// <summary>
-        /// Acess Denied helper.
+        /// Successful result that returns value.
+        /// </summary>
+        /// <param name="value">Returned value.</param>
+        /// <typeparam name="TValue">Returned value type.</typeparam>
+        /// <returns>Execution Result.</returns>
+        public IExecutionResult Success<TValue>(TValue value)
+        {
+            return new SuccessfulValueResult(value);
+        }
+
+        /// <summary>
+        /// Access denied helper.
         /// </summary>
         /// <param name="internalCodeInfo">Error code info.</param>
         /// <returns>Failed Result.</returns>
@@ -76,7 +87,7 @@ namespace Intellias.CQRS.Core.Domain
         }
 
         /// <summary>
-        /// Validation Failed helper.
+        /// Validation failed helper.
         /// </summary>
         /// <param name="internalCodeInfo">Error code info.</param>
         /// <param name="customMessage">Custom error message..</param>
@@ -87,7 +98,7 @@ namespace Intellias.CQRS.Core.Domain
         }
 
         /// <summary>
-        /// Validation Failed helper.
+        /// Validation failed helper.
         /// </summary>
         /// <param name="internalCodeInfo">Error code info.</param>
         /// <returns>Failed Result.</returns>
@@ -97,7 +108,7 @@ namespace Intellias.CQRS.Core.Domain
         }
 
         /// <summary>
-        /// Validation Failed helper with internal execution errors.
+        /// Validation failed helper with internal execution errors.
         /// </summary>
         /// <param name="internalErrors">Internal validation errors.</param>
         /// <returns>Failed Result.</returns>

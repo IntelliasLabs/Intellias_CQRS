@@ -18,7 +18,20 @@ namespace Intellias.CQRS.Tests.Core.Domain
         }
 
         [Fact]
-        public void AccessDenied_Test()
+        public void Success_Always_CreatesSuccessfulResult()
+        {
+            Success().Should().BeEquivalentTo(new SuccessfulResult());
+        }
+
+        [Fact]
+        public void SuccessValue_Always_CreatesSuccessfulValueResult()
+        {
+            var value = FixtureUtils.String();
+            Success(value).Should().BeEquivalentTo(new SuccessfulValueResult(value));
+        }
+
+        [Fact]
+        public void AccessDenied_Always_CreatesFailedResult()
         {
             var errorCodeInfo = CoreErrorCodes.UnhandledError;
 
@@ -29,7 +42,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
         }
 
         [Fact]
-        public void ValidationFailed_WithoutMessage_Test()
+        public void ValidationFailed_WithoutMessage_CreatesFailedResult()
         {
             var errorCodeInfo = CoreErrorCodes.UnhandledError;
 
@@ -40,7 +53,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
         }
 
         [Fact]
-        public void ValidationFailed_WithMessage_Test()
+        public void ValidationFailed_WithMessage_CreatesFailedResult()
         {
             var errorCodeInfo = CoreErrorCodes.UnhandledError;
             var errorMessage = FixtureUtils.String();
@@ -53,7 +66,7 @@ namespace Intellias.CQRS.Tests.Core.Domain
         }
 
         [Fact]
-        public void ValidationFailed_WithErrors_Test()
+        public void ValidationFailed_WithErrors_CreatesFailedResult()
         {
             var errors = new[]
             {
