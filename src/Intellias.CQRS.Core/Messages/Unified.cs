@@ -26,6 +26,20 @@ namespace Intellias.CQRS.Core.Messages
         public static string Dummy => "0000000000";
 
         /// <summary>
+        /// Get uniform virtual partition for unified key.
+        /// </summary>
+        /// <param name="unifiedCode">unified key.</param>
+        /// <param name="count">partition count.</param>
+        /// <returns>uniform virtual partition.</returns>
+        public static string Partition(string unifiedCode, int count = 50)
+        {
+            var code = Decode(unifiedCode);
+            var absoluteScalar = code - Offset;
+            var partitionIndex = absoluteScalar / ((ulong.MaxValue - Prime) / (ulong)count);
+            return $"{partitionIndex}".PadLeft(CountOfDigit(count), '0');
+        }
+
+        /// <summary>
         /// Generate x64 FNV hash based on random GUID.
         /// </summary>
         /// <param name="id">Source data.</param>
@@ -144,6 +158,30 @@ namespace Intellias.CQRS.Core.Messages
             }
 
             return hash;
+        }
+
+        /// <summary>
+        /// Return the number of digits that divides the number.
+        /// </summary>
+        /// <param name="number">Number.</param>
+        /// <returns>Count.</returns>
+        private static int CountOfDigit(int number)
+        {
+            int temp = number, count = 0;
+            while (temp != 0)
+            {
+                // Fetching each digit of the number.
+                var d = temp % 10;
+                temp /= 10;
+
+                // Checking if digit is greater than 0 and can divides n.
+                if (d > 0 && number % d == 0)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
     }
 }
