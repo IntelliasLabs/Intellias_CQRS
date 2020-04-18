@@ -145,9 +145,16 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
             columnName = string.Join(DefaultPropertyNameDelimiter, Path);
             entityProperty = null;
 
-            if (PrimitiveTypes.TryGetValue(Value.GetType(), out var factory))
+            var valueType = Value.GetType();
+            if (PrimitiveTypes.TryGetValue(valueType, out var factory))
             {
                 entityProperty = factory(Value);
+                return true;
+            }
+
+            if (valueType.IsEnum)
+            {
+                entityProperty = new EntityProperty(Value.ToString());
                 return true;
             }
 
