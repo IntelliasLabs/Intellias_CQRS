@@ -28,6 +28,15 @@ namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Common
             customization.Customize(fixture);
         }
 
+        private enum TestEnum
+        {
+            Value1 = 1,
+
+            Value2 = 2,
+
+            Value3 = 3
+        }
+
         [Fact]
         public void Serialize_NullObject_ReturnsEmptyResult()
         {
@@ -270,6 +279,22 @@ namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Common
                 .Excluding(o => o.Created));
         }
 
+        [Fact]
+        public void Deserialize_EnumObject_WorksCorrectly()
+        {
+            var source = new EnumObject
+            {
+                TestEnumProperty = FixtureUtils.FromEnum<TestEnum>(),
+                ChildEnumObjectProperty = new ChildEnumObject { TestEnumProperty = FixtureUtils.FromEnum<TestEnum>() }
+            };
+
+            var serialized = AzureTableSerializer.Serialize(source);
+            var deserialized = AzureTableSerializer.Deserialize<EnumObject>(Entity(serialized));
+
+            deserialized.Should().BeEquivalentTo(source, options => options
+                .Excluding(o => o.Timestamp));
+        }
+
         private static DynamicTableEntity Entity(Dictionary<string, EntityProperty> properties)
         {
             return new DynamicTableEntity
@@ -412,6 +437,18 @@ namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Common
             public TimeSpan TimeSpanProperty { get; set; }
 
             public TimeSpan? NullableTimeSpanProperty { get; set; }
+        }
+
+        private class EnumObject : TestObject
+        {
+            public TestEnum TestEnumProperty { get; set; }
+
+            public ChildEnumObject ChildEnumObjectProperty { get; set; }
+        }
+
+        private class ChildEnumObject : TestObject
+        {
+            public TestEnum TestEnumProperty { get; set; }
         }
 
         private abstract class TestObject : IQueryModel
