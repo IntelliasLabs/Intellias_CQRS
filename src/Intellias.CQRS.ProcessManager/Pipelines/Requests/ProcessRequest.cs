@@ -1,6 +1,5 @@
 ﻿using System;
 using Intellias.CQRS.Core.Domain;
-using Intellias.CQRS.Core.Events;
 
 namespace Intellias.CQRS.ProcessManager.Pipelines.Requests
 {
@@ -33,16 +32,6 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Requests
         {
             Id = getId(state);
             State = state;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProcessRequest{TState}"/> class.
-        /// </summary>
-        /// <param name="event">Integration event.</param>
-        public ProcessRequest(IIntegrationEvent @event)
-        {
-            Id = @event.Id;
-            State = @event as TState;
         }
 
         /// <summary>
