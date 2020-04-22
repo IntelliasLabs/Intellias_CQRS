@@ -43,5 +43,20 @@ namespace Intellias.CQRS.Configuration
         /// MsGraphClientSecret.
         /// </summary>
         public string MsGraphClientSecret { get; set; } = string.Empty;
+
+        /// <summary>
+        /// JIRA server host URI.
+        /// </summary>
+        public Uri JiraHost { get; set; }
+
+        /// <summary>
+        /// JIRA server user login.
+        /// </summary>
+        public string JiraLogin { get; set; } = string.Empty;
+
+        /// <summary>
+        /// JIRA server user password.
+        /// </summary>
+        public string JiraPassword { get; set; } = string.Empty;
     }
 }
