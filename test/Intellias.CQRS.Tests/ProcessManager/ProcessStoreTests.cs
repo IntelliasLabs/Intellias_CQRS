@@ -48,6 +48,18 @@ namespace Intellias.CQRS.Tests.ProcessManager
         }
 
         [Fact]
+        public async Task PersistCommands_MaxBatSize_NotSupportedException()
+        {
+            var id = Unified.NewCode();
+            var commands = fixture.CreateMany<TestCreateCommand>(100)
+                .ToArray();
+
+            Func<Task> act = async () => await storage.PersistMessagesAsync(id, commands);
+
+            await act.Should().ThrowAsync<NotSupportedException>();
+        }
+
+        [Fact]
         public async Task MarkCommnadAsPublished_All_CommandsPublished()
         {
             var id = Unified.NewCode();

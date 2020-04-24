@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
@@ -16,8 +17,8 @@ namespace Intellias.CQRS.ProcessManager.Stores
     public class ProcessStore<TProcessHandler> : IProcessStore<TProcessHandler>
         where TProcessHandler : BaseProcessHandler
     {
-        private const string IsPersitedColumnName = "_IsPersisted";
         private const string IsPublishedColumnName = "_IsPublished";
+        private const int MaxBatchSize = 100;
 
         private readonly CloudTableProxy tableProxy;
 
@@ -51,6 +52,11 @@ namespace Intellias.CQRS.ProcessManager.Stores
         /// <inheritdoc/>
         public Task PersistMessagesAsync(string id, IReadOnlyCollection<IMessage> messages)
         {
+            if (messages.Count >= MaxBatchSize)
+            {
+                throw new NotSupportedException($"Storage unable to persist '{messages.Count}' messages. Supported message count is up to '{MaxBatchSize}'.");
+            }
+
             var batchOperation = new TableBatchOperation();
             foreach (var msg in messages)
             {
@@ -76,11 +82,10 @@ namespace Intellias.CQRS.ProcessManager.Stores
             foreach (var entity in tableResult.Results)
             {
                 var isPublished = entity.Properties.TryGetValue(IsPublishedColumnName, out var published) && published.BooleanValue.GetValueOrDefault();
-                var isPersisted = entity.Properties.TryGetValue(IsPersitedColumnName, out var persited) && persited.BooleanValue.GetValueOrDefault();
 
                 var message = (IMessage)AzureTableSerializer.Deserialize(entity);
 
-                processMessages.Add(new ProcessMessage(message, isPublished || isPersisted));
+                processMessages.Add(new ProcessMessage(message, isPublished));
             }
 
             return processMessages.ToArray();
