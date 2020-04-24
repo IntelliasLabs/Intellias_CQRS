@@ -40,11 +40,6 @@ namespace Intellias.CQRS.Configuration
         public IngrowthIdentityConfig Identity { get; set; } = new IngrowthIdentityConfig();
 
         /// <summary>
-        /// AAD section.
-        /// </summary>
-        public IngrowthBusConfig Aad { get; set; } = new IngrowthBusConfig();
-
-        /// <summary>
         /// JobProfile section.
         /// </summary>
         public IngrowthBusConfig JobProfile { get; set; } = new IngrowthBusConfig();
