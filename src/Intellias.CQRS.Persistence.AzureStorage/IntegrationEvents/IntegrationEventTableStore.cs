@@ -66,7 +66,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.IntegrationEvents
             return new IntegrationEventRecord
             {
                 IntegrationEvent = integrationEvent,
-                IsPublished = entity.Properties[IsPublishedColumnName].BooleanValue!.Value
+                IsPublished = entity.Properties[IsPublishedColumnName].BooleanValue.GetValueOrDefault()
             };
         }
     }
