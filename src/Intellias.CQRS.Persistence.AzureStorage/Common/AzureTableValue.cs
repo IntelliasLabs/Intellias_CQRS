@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -158,7 +159,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
                 return true;
             }
 
-            if (!(Value is IEnumerable))
+            if (CanSerializeWithoutNewtonsoftJson(Value))
             {
                 return false;
             }
@@ -250,6 +251,36 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
                 || Attribute.IsDefined(propertyInfo, typeof(IgnorePropertyAttribute))
                 || propertyInfo.Name.Equals("ETag", StringComparison.Ordinal)
                 || propertyInfo.Name.Equals("Timestamp", StringComparison.Ordinal);
+        }
+
+        private static bool CanSerializeWithoutNewtonsoftJson(object value)
+        {
+            if (value is IEnumerable)
+            {
+                return false;
+            }
+
+            var constructors = value.GetType().GetConstructors();
+
+            // No public ctor.
+            if (constructors.Length == 0)
+            {
+                return false;
+            }
+
+            // All ctors have parameters.
+            if (constructors.All(c => c.GetParameters().Length > 0))
+            {
+                return false;
+            }
+
+            // Have ctor with [JsonConstructor] attribute.
+            if (constructors.Any(c => c.CustomAttributes.Any(ca => ca.AttributeType == typeof(JsonConstructorAttribute))))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private static object ConvertToPropertyType(object value, Type propertyType)

@@ -12,6 +12,7 @@ using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Intellias.CQRS.Tests.Core.Commands;
 using Intellias.CQRS.Tests.Utils;
 using Microsoft.Azure.Cosmos.Table;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Common
@@ -295,6 +296,22 @@ namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Common
                 .Excluding(o => o.Timestamp));
         }
 
+        [Fact]
+        public void Deserialize_NewtonsoftJsonSerializableObject_WorksCorrectly()
+        {
+            var source = new NewtonsoftJsonSerializableObject
+            {
+                ChildPrivateConstructorObject = ChildPrivateConstructorObject.CreateRandom(),
+                ChildNoDefaultConstructorObject = new ChildNoDefaultConstructorObject(FixtureUtils.String())
+            };
+
+            var serialized = AzureTableSerializer.Serialize(source);
+            var deserialized = AzureTableSerializer.Deserialize<NewtonsoftJsonSerializableObject>(Entity(serialized));
+
+            deserialized.Should().BeEquivalentTo(source, options => options
+                .Excluding(o => o.Timestamp));
+        }
+
         private static DynamicTableEntity Entity(Dictionary<string, EntityProperty> properties)
         {
             return new DynamicTableEntity
@@ -449,6 +466,47 @@ namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Common
         private class ChildEnumObject : TestObject
         {
             public TestEnum TestEnumProperty { get; set; }
+        }
+
+        private class NewtonsoftJsonSerializableObject : TestObject
+        {
+            public ChildPrivateConstructorObject ChildPrivateConstructorObject { get; set; }
+
+            public ChildNoDefaultConstructorObject ChildNoDefaultConstructorObject { get; set; }
+        }
+
+        private class ChildPrivateConstructorObject
+        {
+            [JsonConstructor]
+            private ChildPrivateConstructorObject(
+                ChildNoDefaultConstructorObject childNoDefaultConstructorObject,
+                TestEnum testEnum)
+            {
+                ChildNoDefaultConstructorObject = childNoDefaultConstructorObject;
+                TestEnum = testEnum;
+            }
+
+            public ChildNoDefaultConstructorObject ChildNoDefaultConstructorObject { get; }
+
+            public TestEnum TestEnum { get; }
+
+            public static ChildPrivateConstructorObject CreateRandom()
+            {
+                return new ChildPrivateConstructorObject(
+                    new ChildNoDefaultConstructorObject(FixtureUtils.String()),
+                    FixtureUtils.FromEnum<TestEnum>());
+            }
+        }
+
+        private class ChildNoDefaultConstructorObject
+        {
+            [JsonConstructor]
+            public ChildNoDefaultConstructorObject(string stringProperty)
+            {
+                StringProperty = stringProperty;
+            }
+
+            public string StringProperty { get; }
         }
 
         private abstract class TestObject : IQueryModel
