@@ -20,7 +20,7 @@ namespace Intellias.CQRS.Persistence.AzureStorage.StateEvents
         /// </summary>
         /// <param name="options">Table storage options.</param>
         public StateEventTableStore(ITableStorageOptions options)
-            : base(options, "EventStore")
+            : base(options, "StateEventStore")
         {
         }
 

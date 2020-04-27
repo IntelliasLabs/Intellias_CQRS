@@ -32,8 +32,7 @@ namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Commands
             var command = Fixtures.Pipelines.FakeCreateCommand();
 
             await store.SaveAsync(command);
-            var savedCommand = (await store.GetAllAsync())
-                .FirstOrDefault(c => c.Id == command.Id);
+            var savedCommand = (await store.GetAllAsync()).First(c => c.Id == command.Id);
 
             savedCommand.Should().BeEquivalentTo(command, options => options.ForMessage());
         }

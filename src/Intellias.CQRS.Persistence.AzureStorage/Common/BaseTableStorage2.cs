@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos.Table;
@@ -88,6 +89,19 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
         protected async Task<DynamicTableEntity> ReplaceAsync(DynamicTableEntity entity)
         {
             var operation = TableOperation.Replace(entity);
+            var result = await TableProxy.ExecuteAsync(operation);
+
+            return (DynamicTableEntity)result.Result;
+        }
+
+        /// <summary>
+        /// Merges entity.
+        /// </summary>
+        /// <param name="entity">Entity to be merged with existing.</param>
+        /// <returns>Merged entity.</returns>
+        protected async Task<DynamicTableEntity> MergeAsync(DynamicTableEntity entity)
+        {
+            var operation = TableOperation.Merge(entity);
             var result = await TableProxy.ExecuteAsync(operation);
 
             return (DynamicTableEntity)result.Result;
@@ -295,6 +309,16 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Common
 
                 yield return new TableQuery<TEntity>().Where(filter);
             }
+        }
+
+        /// <summary>
+        /// Create row key from date time that will be stored in reverse order.
+        /// </summary>
+        /// <param name="dt">Date time.</param>
+        /// <returns>Row key.</returns>
+        protected string GetRowKey(DateTime dt)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0:D20}", DateTime.MaxValue.Ticks - dt.Ticks);
         }
     }
 }

@@ -22,10 +22,10 @@ namespace Intellias.CQRS.Persistence.AzureStorage.Commands
         }
 
         /// <inheritdoc />
-        public async Task SaveAsync(ICommand command)
+        public Task SaveAsync(ICommand command)
         {
             var entity = Serialize(command);
-            await this.InsertAsync(entity);
+            return this.InsertAsync(entity);
         }
 
         /// <summary>
