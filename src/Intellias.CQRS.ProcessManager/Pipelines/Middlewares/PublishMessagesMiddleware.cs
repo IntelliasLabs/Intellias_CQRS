@@ -22,23 +22,23 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Middlewares
         where TState : class
         where TProcessHandler : BaseProcessHandler
     {
-        private readonly ICommandBus<DefaultCommandBusOptions> commandBuse;
-        private readonly INotificationBus notificaitonBus;
+        private readonly ICommandBus<DefaultCommandBusOptions> commandBus;
+        private readonly INotificationBus notificationBus;
         private readonly IProcessStore<TProcessHandler> store;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PublishMessagesMiddleware{TState, TProcessHandler}"/> class.
         /// </summary>
-        /// <param name="commandBuse">Command bus.</param>
-        /// <param name="notificaitonBus">Notification bus.</param>
+        /// <param name="commandBus">Command bus.</param>
+        /// <param name="notificationBus">Notification bus.</param>
         /// <param name="store">Process manager command store.</param>
         public PublishMessagesMiddleware(
-            ICommandBus<DefaultCommandBusOptions> commandBuse,
-            INotificationBus notificaitonBus,
+            ICommandBus<DefaultCommandBusOptions> commandBus,
+            INotificationBus notificationBus,
             IProcessStore<TProcessHandler> store)
         {
-            this.commandBuse = commandBuse;
-            this.notificaitonBus = notificaitonBus;
+            this.commandBus = commandBus;
+            this.notificationBus = notificationBus;
             this.store = store;
         }
 
@@ -63,8 +63,8 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Middlewares
             Task<IExecutionResult> PublishMessageAsync(IMessage msg) =>
                 msg switch
                 {
-                    ICommand cmd => commandBuse.PublishAsync(cmd),
-                    Notification notificaiotn => notificaitonBus.PublishAsync(notificaiotn),
+                    ICommand cmd => commandBus.PublishAsync(cmd),
+                    Notification notification => notificationBus.PublishAsync(notification),
                     _ => throw new ArgumentException($"Invalid message type '{msg.GetType()}'."),
                 };
         }

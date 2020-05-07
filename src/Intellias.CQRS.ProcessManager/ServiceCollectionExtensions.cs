@@ -18,19 +18,27 @@ namespace Intellias.CQRS.ProcessManager
         /// Registers process handlers.
         /// </summary>
         /// <param name="services">Services collection.</param>
-        /// <param name="handlersAssemby">Assembly where to look for process manger handlers.</param>
+        /// <param name="handlersAssembly">Assembly where to look for process manger handlers.</param>
+        /// <param name="configure">Configures process handler options.</param>
         /// <returns>Service collection with registered types.</returns>
         public static IServiceCollection AddProcessHandlers(
             this IServiceCollection services,
-            Assembly handlersAssemby)
+            Assembly handlersAssembly,
+            Action<ProcessHandlerOptions> configure = null)
         {
-            foreach (var handler in handlersAssemby.GetTypes()
+            foreach (var handler in handlersAssembly.GetTypes()
                 .Where(s => s.IsClass && !s.IsAbstract && s.GetInterfaces().Any(i => i.Name == typeof(IProcessHandler<>).Name)))
             {
                 services.AddTransient(handler);
             }
 
+            var options = new ProcessHandlerOptions();
+
+            configure?.Invoke(options);
+
             return services
+                .AddSingleton(_ => options)
+                .AddTransient(typeof(IProcessMiddleware<,>), typeof(EnrichMessagesMiddleware<,>))
                 .AddTransient(typeof(IProcessMiddleware<,>), typeof(PersistMessagesMiddleware<,>))
                 .AddTransient(typeof(IProcessMiddleware<,>), typeof(PublishMessagesMiddleware<,>))
                 .AddTransient(typeof(IProcessMiddleware<,>), typeof(PrepareMessagesMiddleware<,>))

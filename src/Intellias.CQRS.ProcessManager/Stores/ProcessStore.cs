@@ -39,7 +39,7 @@ namespace Intellias.CQRS.ProcessManager.Stores
         }
 
         /// <inheritdoc/>
-        public Task MarkMessageAsPublishedAsync(string id, IMessage message)
+        public Task MarkMessageAsPublishedAsync(string id, AbstractMessage message)
         {
             var entity = new DynamicTableEntity(id, message.Id, "*", new Dictionary<string, EntityProperty>
             {
@@ -50,7 +50,7 @@ namespace Intellias.CQRS.ProcessManager.Stores
         }
 
         /// <inheritdoc/>
-        public Task PersistMessagesAsync(string id, IReadOnlyCollection<IMessage> messages)
+        public Task PersistMessagesAsync(string id, IReadOnlyCollection<AbstractMessage> messages)
         {
             if (messages.Count >= MaxBatchSize)
             {
@@ -83,7 +83,7 @@ namespace Intellias.CQRS.ProcessManager.Stores
             {
                 var isPublished = entity.Properties.TryGetValue(IsPublishedColumnName, out var published) && published.BooleanValue.GetValueOrDefault();
 
-                var message = (IMessage)AzureTableSerializer.Deserialize(entity);
+                var message = (AbstractMessage)AzureTableSerializer.Deserialize(entity);
 
                 processMessages.Add(new ProcessMessage(message, isPublished));
             }
