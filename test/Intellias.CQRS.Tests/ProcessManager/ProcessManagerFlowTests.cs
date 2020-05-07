@@ -20,18 +20,21 @@ namespace Intellias.CQRS.Tests.ProcessManager
 {
     public class ProcessManagerFlowTests
     {
-        private readonly ProcessHandlerExecutor executor;
         private readonly Fixture fixture;
+        private readonly string actorId;
         private readonly FakeCommandBus<DefaultCommandBusOptions> commandBus;
+        private readonly ProcessHandlerExecutor executor;
         private readonly Dictionary<Type, Dictionary<string, List<ProcessMessage>>> handlerStore =
             new Dictionary<Type, Dictionary<string, List<ProcessMessage>>>();
 
         public ProcessManagerFlowTests()
         {
+            fixture = new Fixture();
+            actorId = Guid.NewGuid().ToString();
             commandBus = new FakeCommandBus<DefaultCommandBusOptions>();
 
             var serviceProvider = new ServiceCollection()
-                .AddProcessHandlers(typeof(ProcessHandler1).Assembly)
+                .AddProcessHandlers(typeof(ProcessHandler1).Assembly, o => o.ActorId = actorId)
                 .AddSingleton(handlerStore)
                 .AddSingleton(typeof(IProcessStore<>), typeof(FakeProcessStore<>))
                 .AddSingleton<ICommandBus<DefaultCommandBusOptions>>(commandBus)
@@ -39,7 +42,6 @@ namespace Intellias.CQRS.Tests.ProcessManager
                 .BuildServiceProvider();
 
             executor = serviceProvider.GetService<ProcessHandlerExecutor>();
-            fixture = new Fixture();
         }
 
         [Fact]
@@ -51,13 +53,13 @@ namespace Intellias.CQRS.Tests.ProcessManager
 
             await executor.ExecuteAsync<ProcessHandler1>(@event);
 
-            var processCommnds = handlerStore[typeof(ProcessHandler1)][@event.Id];
-            processCommnds.Should()
+            var processCommands = handlerStore[typeof(ProcessHandler1)][@event.Id];
+            processCommands.Should()
                 .ContainSingle()
                 .Which.IsPublished.Should().BeTrue();
 
-            var publishedCommnds = commandBus.PublishedCommands;
-            publishedCommnds.Should().BeEquivalentTo(processCommnds
+            var publishedCommands = commandBus.PublishedCommands;
+            publishedCommands.Should().BeEquivalentTo(processCommands
                 .Select(s => s.Message)
                 .OfType<object>()
                 .ToArray());
@@ -75,12 +77,12 @@ namespace Intellias.CQRS.Tests.ProcessManager
             var isRequestProcessed = handlerStore.TryGetValue(typeof(ProcessHandler1), out var _);
             isRequestProcessed.Should().BeFalse();
 
-            var publishedCommnds = commandBus.PublishedCommands;
-            publishedCommnds.Should().BeEmpty();
+            var publishedCommands = commandBus.PublishedCommands;
+            publishedCommands.Should().BeEmpty();
         }
 
         [Fact]
-        public async Task Process_RetryedIntegrationEvent_CommandPublished()
+        public async Task Process_RetriedIntegrationEvent_CommandPublished()
         {
             var @event = fixture.Build<FakeCreatedIntegrationEvent>()
                 .With(s => s.IsReplay, false)
@@ -89,13 +91,13 @@ namespace Intellias.CQRS.Tests.ProcessManager
             await executor.ExecuteAsync<ProcessHandler1>(@event);
             await executor.ExecuteAsync<ProcessHandler1>(@event);
 
-            var processCommnds = handlerStore[typeof(ProcessHandler1)][@event.Id];
-            processCommnds.Should()
+            var processCommands = handlerStore[typeof(ProcessHandler1)][@event.Id];
+            processCommands.Should()
                 .ContainSingle()
                 .Which.IsPublished.Should().BeTrue();
 
-            var publishedCommnds = commandBus.PublishedCommands;
-            publishedCommnds.Should().BeEquivalentTo(processCommnds
+            var publishedCommands = commandBus.PublishedCommands;
+            publishedCommands.Should().BeEquivalentTo(processCommands
                 .Select(s => s.Message)
                 .OfType<object>()
                 .ToArray());
@@ -108,13 +110,13 @@ namespace Intellias.CQRS.Tests.ProcessManager
 
             await executor.ExecuteAsync<ProcessHandler2, FakeSnapshotQueryModel>(queryModel, s => s.First);
 
-            var processCommnds = handlerStore[typeof(ProcessHandler2)][$"{queryModel.First.EntryId}-{queryModel.First.EntryVersion}"];
-            processCommnds.Should()
+            var processCommands = handlerStore[typeof(ProcessHandler2)][$"{queryModel.First.EntryId}-{queryModel.First.EntryVersion}"];
+            processCommands.Should()
                 .ContainSingle()
                 .Which.IsPublished.Should().BeTrue();
 
-            var publishedCommnds = commandBus.PublishedCommands;
-            publishedCommnds.Should().BeEquivalentTo(processCommnds
+            var publishedCommands = commandBus.PublishedCommands;
+            publishedCommands.Should().BeEquivalentTo(processCommands
                 .Select(s => s.Message)
                 .OfType<object>()
                 .ToArray());
@@ -127,20 +129,20 @@ namespace Intellias.CQRS.Tests.ProcessManager
 
             await executor.ExecuteAsync<ProcessHandler2, CustomState>(state, s => s.Id);
 
-            var processCommnds = handlerStore[typeof(ProcessHandler2)][state.Id];
-            processCommnds.Should()
+            var processCommands = handlerStore[typeof(ProcessHandler2)][state.Id];
+            processCommands.Should()
                 .ContainSingle()
                 .Which.IsPublished.Should().BeTrue();
 
-            var publishedCommnds = commandBus.PublishedCommands;
-            publishedCommnds.Should().BeEquivalentTo(processCommnds
+            var publishedCommands = commandBus.PublishedCommands;
+            publishedCommands.Should().BeEquivalentTo(processCommands
                 .Select(s => s.Message)
                 .OfType<object>()
                 .ToArray());
         }
 
         [Fact]
-        public async Task Process_TwoStateHandelrs_CommandsPublished()
+        public async Task Process_TwoStateHandlers_CommandsPublished()
         {
             var @event = fixture.Build<FakeUpdatedIntegrationEvent>()
                 .With(s => s.IsReplay, false)
@@ -149,14 +151,29 @@ namespace Intellias.CQRS.Tests.ProcessManager
             await executor.ExecuteAsync<ProcessHandler1>(@event);
             await executor.ExecuteAsync<ProcessHandler2>(@event);
 
-            var processCommnds = handlerStore[typeof(ProcessHandler1)][@event.Id]
+            var processCommands = handlerStore[typeof(ProcessHandler1)][@event.Id]
                 .Union(handlerStore[typeof(ProcessHandler2)][@event.Id]);
 
-            var publishedCommnds = commandBus.PublishedCommands;
-            publishedCommnds.Should().BeEquivalentTo(processCommnds
+            var publishedCommands = commandBus.PublishedCommands;
+            publishedCommands.Should().BeEquivalentTo(processCommands
                 .Select(s => s.Message)
                 .OfType<object>()
                 .ToArray());
+        }
+
+        [Fact]
+        public async Task Process_CustomActorIdIsSpecified_CustomActorIdIsSet()
+        {
+            var @event = fixture.Build<FakeCreatedIntegrationEvent>()
+                .With(s => s.IsReplay, false)
+                .Create();
+
+            await executor.ExecuteAsync<ProcessHandler1>(@event);
+
+            var processCommands = handlerStore[typeof(ProcessHandler1)][@event.Id];
+            processCommands.Should()
+                .ContainSingle()
+                .Which.Message.Actor.UserId.Should().Be(actorId);
         }
     }
 }

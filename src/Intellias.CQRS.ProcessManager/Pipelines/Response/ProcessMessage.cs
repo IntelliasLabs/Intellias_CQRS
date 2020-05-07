@@ -12,7 +12,7 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Response
         /// </summary>
         /// <param name="message">Message.</param>
         /// <param name="isPublished">Is published.</param>
-        public ProcessMessage(IMessage message, bool isPublished = false)
+        public ProcessMessage(AbstractMessage message, bool isPublished = false)
         {
             Message = message;
             IsPublished = isPublished;
@@ -21,7 +21,7 @@ namespace Intellias.CQRS.ProcessManager.Pipelines.Response
         /// <summary>
         /// Message.
         /// </summary>
-        public IMessage Message { get; }
+        public AbstractMessage Message { get; }
 
         /// <summary>
         /// Is published.

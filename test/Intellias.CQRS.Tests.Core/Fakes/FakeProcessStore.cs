@@ -50,7 +50,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc/>
-        public Task PersistMessagesAsync(string id, IReadOnlyCollection<IMessage> messages)
+        public Task PersistMessagesAsync(string id, IReadOnlyCollection<AbstractMessage> messages)
         {
             if (store.TryGetValue(id, out var processMessages))
             {
@@ -69,7 +69,7 @@ namespace Intellias.CQRS.Tests.Core.Fakes
         }
 
         /// <inheritdoc/>
-        public Task MarkMessageAsPublishedAsync(string id, IMessage message)
+        public Task MarkMessageAsPublishedAsync(string id, AbstractMessage message)
         {
             var processMessages = store.TryGetValue(id, out var value) ? value : new List<ProcessMessage>();
 
