@@ -11,7 +11,7 @@ using MediatR;
 using Moq;
 using Xunit;
 
-namespace Intellias.CQRS.Tests.Core.EventHandlers.Tests
+namespace Intellias.CQRS.Tests.Core.EventHandlers
 {
     public class FakeMutableQueryModelEventHandlerTests : MutableQueryModelEventHandlerTests<FakeMutableEventHandler, FakeMutableQueryModel>
     {

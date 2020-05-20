@@ -7,7 +7,7 @@ using Intellias.CQRS.ProcessManager;
 using Intellias.CQRS.ProcessManager.Pipelines.Requests;
 using Intellias.CQRS.ProcessManager.Pipelines.Response;
 using Intellias.CQRS.Tests.Core.Commands;
-using Intellias.CQRS.Tests.Core.EventHandlers.Tests;
+using Intellias.CQRS.Tests.Core.EventHandlers;
 
 namespace Intellias.CQRS.Tests.ProcessManager.Infrastructure
 {

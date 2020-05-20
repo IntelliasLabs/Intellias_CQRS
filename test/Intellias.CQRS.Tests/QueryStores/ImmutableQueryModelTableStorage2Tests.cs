@@ -4,7 +4,7 @@ using FluentAssertions;
 using Intellias.CQRS.Core.Messages;
 using Intellias.CQRS.Persistence.AzureStorage.Common;
 using Intellias.CQRS.QueryStore.AzureTable.Immutable;
-using Intellias.CQRS.Tests.Core.EventHandlers.Tests;
+using Intellias.CQRS.Tests.Core.EventHandlers;
 using Intellias.CQRS.Tests.Core.Infrastructure.AssertionRules;
 using Intellias.CQRS.Tests.Utils.StorageAccount;
 using Microsoft.Azure.Cosmos.Table;

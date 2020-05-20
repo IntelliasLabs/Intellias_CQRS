@@ -509,7 +509,7 @@ namespace Intellias.CQRS.Tests.Persistence.AzureStorage.Common
             public string StringProperty { get; }
         }
 
-        private abstract class TestObject : IQueryModel
+        private abstract class TestObject
         {
             public string Id { get; set; }
 

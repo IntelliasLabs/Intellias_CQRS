@@ -10,7 +10,7 @@ using Intellias.CQRS.Messaging.AzureServiceBus.Commands;
 using Intellias.CQRS.ProcessManager;
 using Intellias.CQRS.ProcessManager.Pipelines.Response;
 using Intellias.CQRS.ProcessManager.Stores;
-using Intellias.CQRS.Tests.Core.EventHandlers.Tests;
+using Intellias.CQRS.Tests.Core.EventHandlers;
 using Intellias.CQRS.Tests.Core.Fakes;
 using Intellias.CQRS.Tests.ProcessManager.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;

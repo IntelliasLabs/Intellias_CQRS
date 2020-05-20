@@ -42,4 +42,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PerformenceTests\" />
+  </ItemGroup>
 </Project>
