@@ -130,34 +130,51 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
         {
             var files = new List<string>();
 
-            var dirs = Directory.GetDirectories(path).Select(x => Path.GetFullPath(x)).ToList();
-            foreach (var dir in dirs)
+            if (Directory.Exists(path) && !path.Contains("_git2_"))
             {
-                files.AddRange(GetProjectFiles(dir));
-            }
+                var dirs = Directory.GetDirectories(path).Select(x => Path.GetFullPath(x)).ToList();
+                foreach (var dir in dirs)
+                {
+                    if (Directory.Exists(dir))
+                    {
+                        files.AddRange(GetProjectFiles(dir));
+                    }
+                }
 
-            files.AddRange(dirs.SelectMany(dir => Directory.GetFiles(dir, "*.csproj")).ToList());
+                files.AddRange(dirs
+                    .Where(dir => Directory.Exists(dir))
+                    .Where(dir => !dir.Contains("_git2_"))
+                    .SelectMany(dir => Directory.GetFiles(dir, "*.csproj"))
+                    .ToList());
+            }
 
             return files;
         }
 
-        private static void DeleteDirectory(string directory)
+        private void DeleteDirectory(string directory)
         {
-            var files = Directory.GetFiles(directory);
-            var dirs = Directory.GetDirectories(directory);
-
-            foreach (var file in files)
+            if (!Directory.Exists(directory))
             {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
+                return;
             }
 
+            var files = ExecuteSkippingExceptions(() => Directory.GetFiles(directory), Array.Empty<string>());
+            foreach (var file in files)
+            {
+                ExecuteSkippingExceptions(() =>
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                });
+            }
+
+            var dirs = ExecuteSkippingExceptions(() => Directory.GetDirectories(directory), Array.Empty<string>());
             foreach (var dir in dirs)
             {
                 DeleteDirectory(dir);
             }
 
-            Directory.Delete(directory, false);
+            ExecuteSkippingExceptions(() => Directory.Delete(directory, false));
         }
 
         private void DotNet(string args)
@@ -214,6 +231,36 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
                 var master = repo.Branches["master"];
                 LibGit2Sharp.Commands.Checkout(repo, master);
             }
+        }
+
+        private void ExecuteSkippingExceptions(Action execute)
+        {
+            try
+            {
+                execute();
+            }
+            catch (Exception exception)
+            {
+                LogSkippedException(exception);
+            }
+        }
+
+        private TResult ExecuteSkippingExceptions<TResult>(Func<TResult> execute, TResult defaultValue)
+        {
+            try
+            {
+                return execute();
+            }
+            catch (Exception exception)
+            {
+                LogSkippedException(exception);
+                return defaultValue;
+            }
+        }
+
+        private void LogSkippedException(Exception exception)
+        {
+            this.output.WriteLine($"Skipping exception '{exception.GetType().Name}: {exception.Message}'.");
         }
     }
 }
