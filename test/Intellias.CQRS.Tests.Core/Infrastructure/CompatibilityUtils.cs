@@ -133,7 +133,10 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
             var dirs = Directory.GetDirectories(path).Select(x => Path.GetFullPath(x)).ToList();
             foreach (var dir in dirs)
             {
-                files.AddRange(GetProjectFiles(dir));
+                if (Directory.Exists(dir))
+                {
+                    files.AddRange(GetProjectFiles(dir));
+                }
             }
 
             files.AddRange(dirs.SelectMany(dir => Directory.GetFiles(dir, "*.csproj")).ToList());
