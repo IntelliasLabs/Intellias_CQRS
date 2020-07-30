@@ -151,27 +151,30 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
             return files;
         }
 
-        private static void DeleteDirectory(string directory)
+        private void DeleteDirectory(string directory)
         {
             if (!Directory.Exists(directory))
             {
                 return;
             }
 
-            var files = Directory.GetFiles(directory);
+            var files = ExecuteSkippingExceptions(() => Directory.GetFiles(directory), Array.Empty<string>());
             foreach (var file in files)
             {
-                File.SetAttributes(file, FileAttributes.Normal);
-                File.Delete(file);
+                ExecuteSkippingExceptions(() =>
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                });
             }
 
-            var dirs = Directory.GetDirectories(directory);
+            var dirs = ExecuteSkippingExceptions(() => Directory.GetDirectories(directory), Array.Empty<string>());
             foreach (var dir in dirs)
             {
                 DeleteDirectory(dir);
             }
 
-            Directory.Delete(directory, false);
+            ExecuteSkippingExceptions(() => Directory.Delete(directory, false));
         }
 
         private void DotNet(string args)
@@ -228,6 +231,36 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
                 var master = repo.Branches["master"];
                 LibGit2Sharp.Commands.Checkout(repo, master);
             }
+        }
+
+        private void ExecuteSkippingExceptions(Action execute)
+        {
+            try
+            {
+                execute();
+            }
+            catch (Exception exception)
+            {
+                LogSkippedException(exception);
+            }
+        }
+
+        private TResult ExecuteSkippingExceptions<TResult>(Func<TResult> execute, TResult defaultValue)
+        {
+            try
+            {
+                return execute();
+            }
+            catch (Exception exception)
+            {
+                LogSkippedException(exception);
+                return defaultValue;
+            }
+        }
+
+        private void LogSkippedException(Exception exception)
+        {
+            this.output.WriteLine($"Skipping exception '{exception.GetType().Name}: {exception.Message}'.");
         }
     }
 }
