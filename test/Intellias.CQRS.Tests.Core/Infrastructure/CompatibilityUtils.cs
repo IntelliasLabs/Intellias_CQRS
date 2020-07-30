@@ -143,15 +143,19 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
 
         private static void DeleteDirectory(string directory)
         {
-            var files = Directory.GetFiles(directory);
-            var dirs = Directory.GetDirectories(directory);
+            if (!Directory.Exists(directory))
+            {
+                return;
+            }
 
+            var files = Directory.GetFiles(directory);
             foreach (var file in files)
             {
                 File.SetAttributes(file, FileAttributes.Normal);
                 File.Delete(file);
             }
 
+            var dirs = Directory.GetDirectories(directory);
             foreach (var dir in dirs)
             {
                 DeleteDirectory(dir);

@@ -5,8 +5,8 @@
     <UserSecretsId>cqrs-tests-cbbf4ede-fb1b-4676-b6e0-78f8a7b2a0c7</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.11.0" />
-    <PackageReference Include="FluentAssertions" Version="5.10.2" />
+    <PackageReference Include="AutoFixture" Version="4.13.0" />
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="$(MicrosoftExtensionsPackageVersion)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(MicrosoftExtensionsPackageVersion)" />
