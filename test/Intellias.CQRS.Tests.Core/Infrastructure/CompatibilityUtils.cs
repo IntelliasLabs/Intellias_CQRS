@@ -130,7 +130,7 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
         {
             var files = new List<string>();
 
-            if (Directory.Exists(path))
+            if (Directory.Exists(path) && !path.Contains("_git2_"))
             {
                 var dirs = Directory.GetDirectories(path).Select(x => Path.GetFullPath(x)).ToList();
                 foreach (var dir in dirs)
