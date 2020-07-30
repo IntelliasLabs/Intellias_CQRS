@@ -141,7 +141,11 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
                     }
                 }
 
-                files.AddRange(dirs.Where(dir => Directory.Exists(dir)).SelectMany(dir => Directory.GetFiles(dir, "*.csproj")).ToList());
+                files.AddRange(dirs
+                    .Where(dir => Directory.Exists(dir))
+                    .Where(dir => !dir.Contains("_git2_"))
+                    .SelectMany(dir => Directory.GetFiles(dir, "*.csproj"))
+                    .ToList());
             }
 
             return files;
