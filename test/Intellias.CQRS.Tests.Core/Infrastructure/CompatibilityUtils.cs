@@ -153,7 +153,7 @@ namespace Intellias.CQRS.Tests.Core.Infrastructure
 
         private static void DeleteDirectory(string directory)
         {
-            if (!Directory.Exists(directory) || directory.Contains("_git2_"))
+            if (!Directory.Exists(directory))
             {
                 return;
             }
