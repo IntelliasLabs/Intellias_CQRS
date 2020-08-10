@@ -48,7 +48,7 @@ namespace Intellias.CQRS.Messaging.AzureServiceBus.Commands
             {
                 MessageId = command.Id,
                 ContentType = command.GetType().AssemblyQualifiedName,
-                PartitionKey = command.AggregateRootId,
+                PartitionKey = options.GetPartition(command),
                 CorrelationId = command.CorrelationId,
                 SessionId = options.GetPartition(command),
                 Label = command.GetType().Name
