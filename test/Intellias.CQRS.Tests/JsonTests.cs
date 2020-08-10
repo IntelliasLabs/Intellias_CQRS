@@ -48,7 +48,7 @@ namespace Intellias.CQRS.Tests
             {
                 MessageId = sample.Id,
                 ContentType = sample.GetType().AssemblyQualifiedName,
-                PartitionKey = sample.AggregateRootId,
+                PartitionKey = AbstractMessage.GlobalSessionId,
                 CorrelationId = sample.CorrelationId,
                 SessionId = AbstractMessage.GlobalSessionId,
                 Label = sample.GetType().Name
